@@ -1,28 +1,50 @@
-import os
+import os, re
 from smartsheet import Smartsheet
 from sodapy import Socrata
 sheet_client = Smartsheet(os.environ['SMARTSHEET_TOKEN'])
 socrata_client = Socrata("data.detroitmi.gov", os.environ['SODA_TOKEN'], os.environ['SODA_USER'], os.environ['SODA_PASS'])
 
 def clean_field(field):
-    field = field.replace(' ','_')
-    field = field.replace('?','_')
-    return field.lower()
+    # regex out bad characters
+    field = re.sub('[^A-Za-z0-9_]+', '_', field)
+    return field.lower().strip('_')
 
 class SheetToSocrata(object):
+    def __init__(self, sheet_id=37522882488196, socrata_id=None):
 
-    def __init__(self, sheet_id=1851354277799812, socrata_id=None):
+        # get a Sheet object from smartsheets
         sheet = sheet_client.Sheets.get_sheet(sheet_id)
+
+        # get an array of the sheet's columns
         self.columns = [c.to_dict() for c in sheet.columns]
+        # lookup table for Smartsheet columns
         self.smartsheet_cols = { c['id']: c['title'] for c in self.columns }
+
+        # get an array of the sheet's rows
         self.rows = [r.to_dict() for r in sheet.rows]
+        # get the sheet name
         self.name = sheet.name
-        self.four_by_four = socrata_id
+
+        # four_by_four and url if we have it
+        if socrata_id:
+            self.four_by_four = socrata_id
+            self.socrata_url = "https://data.detroitmi.gov/datasets/{}".format(self.four_by_four)
+        else:
+            self.four_by_four = None
+            self.socrata_url = None
+
+        # figure this out
         self.description = ""
+        # row identifier
+        self.unique_id_row = None
 
     def create_columns(self):
+        """Create a column object to give to create_dataset"""
         fields = []
-        # this will need building out
+
+        # to-do: build out this lookup table
+        # keys are Smartsheet column types
+        # values are Socrata column types
         type_map = {
             'TEXT_NUMBER': 'text',
             'PICKLIST': 'text',
@@ -30,39 +52,65 @@ class SheetToSocrata(object):
             'DATE': 'date',
             'DATETIME': 'date'
         }
+
+        # loop through Smartsheet column array
         for c in self.columns:
+            # if this column is the auto-number Unique ID, set that as the row identifier
+            if c['systemColumnType'] == 'AUTO_NUMBER':
+                self.unique_id_row = clean_field(c['title'])
+
+            # build up a dict to append to fields
             entry = {}
             entry['fieldName'] = clean_field(c['title'])
             entry['name'] = c['title']
             entry['dataTypeName'] = type_map[c['type']]
             fields.append(entry)
+
         return fields
 
     def create_dataset(self):
-        cols = self.create_columns()
-        response = socrata_client.create(self.name, description=self.description, columns=cols)
+        """Creates an empty working copy in Socrata from Smartsheet schema"""
+        # get a column object
+        column_obj = self.create_columns()
+        # create the dataset
+        response = socrata_client.create(self.name, description=self.description, columns=column_obj, row_identifier=self.unique_id_row)
+        # get the freshly-created four_by_four
         self.four_by_four = response['id']
+        # create a lookup table for Socrata columns
         self.socrata_cols = { c['fieldName']: c['name'] for c in response['columns'] }
-        return "https://data.detroitmi.gov/datasets/{}".format(response['id'])
+        # create the dataset URL
+        self.socrata_url = "https://data.detroitmi.gov/datasets/{}".format(response['id'])
 
-    def replace_data(self):
+    def load_data(self, method='upsert'):
+        """Loads rows into Socrata"""
+        # empty container to hold transformed rows
         data = []
+        # loop through array of Smartsheet rows
         for r in self.rows:
+            # build up dict to add to data
             this_row = {}
+            # for each cell in the row:
             for c in r['cells']:
                 if c['value']:
+                    # lookup the Smartsheet columnId to get the field name and assign to row dict
                     this_row[self.smartsheet_cols[c['columnId']]] = c['value']
+                # sometimes the data is a displayValue and not a value (dates)
                 elif c['displayValue']:
                     this_row[self.smartsheet_cols[c['columnId']]] = c['displayValue']
                 else:
                     pass
             data.append(this_row)
-        return socrata_client.replace(self.four_by_four, data)
+        if method == 'upsert':
+            return socrata_client.upsert(self.four_by_four, data)
+        elif method == 'replace':
+            return socrata_client.replace(self.four_by_four, data)
 
     def publish_dataset(self):
         return socrata_client.publish(self.four_by_four)
 
-class GeocodeAddressColumn(object):
-
-    def __init__(self, sheet_id=18101942039409):
-        pass
+if __name__ == "__main__":
+    sheet = SheetToSocrata(1851354277799812)
+    sheet.create_columns()
+    sheet.create_dataset()
+    sheet.load_data()
+    print(sheet.socrata_url)
