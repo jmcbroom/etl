@@ -1,0 +1,2 @@
+smartsheet_python_sdk==1.0.1
+python-Levenshtein==0.12.0
