@@ -2,6 +2,19 @@
 
 Tools for doing stuff with Smartsheets.
 
+### SheetToAGO
+
+**Doesn't work yet**
+
+Uploads a Smartsheet to ArcGIS Online (via a pandas dataframe.)
+
+flags:
+- `sheet_id` from Smartsheet
+
+```bash
+python smartsheets/ago.py --sheet_id=815144965040004 df_to_featureservice
+```
+
 ### SheetToSocrata
 
 Uploads a Smartsheet as a Socrata dataset.

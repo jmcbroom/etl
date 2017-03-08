@@ -4,7 +4,7 @@ from os import environ as env
 from arcgis import gis
 from smartsheet import Smartsheet
 
-smartsheet = Smartsheet(os.environ['SMARTSHEET_TOKEN'])
+smartsheet = Smartsheet(env['SMARTSHEET_TOKEN'])
 ago = gis.GIS("https://detroitmi.maps.arcgis.com", env['AGO_USER'], env['AGO_PASS'])
 
 # thanks 2 tom buckley
