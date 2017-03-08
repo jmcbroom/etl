@@ -1,7 +1,6 @@
-import json
-import requests
-import re
+import json, requests, re
 import Levenshtein
+import fire
 from urllib.parse import urlencode
 from os import environ
 
