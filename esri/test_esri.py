@@ -1,4 +1,4 @@
-from .context import Geocoder
+from . import Geocoder
 import unittest
 
 class GeocoderTest(unittest.TestCase):

@@ -1,1 +1,1 @@
-from esri.esri import Geocoder
+from esri.geocoder import Geocoder
