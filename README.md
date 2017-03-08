@@ -1,5 +1,7 @@
 # etl
-ETL repository for DoIT work
+ETL repository for DoIT work.
+
+Using [python-fire](https://github.com/google/python-fire) to expose these classes to the command line.
 
 ## smartsheets
 
@@ -31,6 +33,9 @@ flags:
 ```bash
 python smartsheet/enrich.py --sheet_id=815144965040004 --address_col=address geocode_rows
 ```
+
+### Should also add:
+- Smartsheet to ArcGIS Online Feature Service
 
 ## esri
 
