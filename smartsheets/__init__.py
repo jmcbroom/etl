@@ -1,1 +1,2 @@
-from smartsheets.smartsheets import SheetToSocrata
+from smartsheets.socrata import SheetToSocrata
+from smartsheets.enrich import EnrichSheetAddresses

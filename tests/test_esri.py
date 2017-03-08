@@ -1,9 +1,9 @@
-from .context import esri
+from .context import Geocoder
 import unittest
 
 class GeocoderTest(unittest.TestCase):
     def test(self):
-        coder = esri.Geocoder()
+        coder = Geocoder()
 
         # test a bad address
         self.assertEqual(coder.geocode("123 Fake Street"), None)

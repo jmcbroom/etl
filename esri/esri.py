@@ -24,7 +24,10 @@ OPTS = {
 def split(address):
     """Split addresses and input into numbers and the street name"""
     m = re.match('(^[0-9]+)\s([0-9a-zA-Z\s]+)', address)
-    return m.group(1), m.group(2)
+    if m:
+        return m.group(1), m.group(2)
+    else:
+        return None
 
 class Geocoder(object):
     """An Esri geocoder."""
@@ -65,6 +68,8 @@ class Geocoder(object):
         if response['features'] and len(response['features']) > 0:
             best_match = None
             distance_to_beat = 2000
+            if split(address) == None:
+                return None
             house_num, street_name = split(address)
             for f in response['features']:
                 in_num, in_name = f['attributes']['house_number'], f['attributes']['street_name']

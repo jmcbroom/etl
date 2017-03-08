@@ -1,4 +1,4 @@
-import os, re
+import os, re, fire
 from smartsheet import Smartsheet
 from sodapy import Socrata
 sheet_client = Smartsheet(os.environ['SMARTSHEET_TOKEN'])
@@ -49,12 +49,14 @@ class SheetToSocrata(object):
             'TEXT_NUMBER': 'text',
             'PICKLIST': 'text',
             'CONTACT_LIST': 'text',
+            'CHECKBOX': 'text',
             'DATE': 'date',
             'DATETIME': 'date'
         }
 
         # loop through Smartsheet column array
         for c in self.columns:
+            print(c)
             # if this column is the auto-number Unique ID, set that as the row identifier
             if c['systemColumnType'] == 'AUTO_NUMBER':
                 self.unique_id_row = clean_field(c['title'])
@@ -80,6 +82,7 @@ class SheetToSocrata(object):
         self.socrata_cols = { c['fieldName']: c['name'] for c in response['columns'] }
         # create the dataset URL
         self.socrata_url = "https://data.detroitmi.gov/datasets/{}".format(response['id'])
+        return self.socrata_url
 
     def load_data(self, method='upsert'):
         """Loads rows into Socrata"""
@@ -109,8 +112,4 @@ class SheetToSocrata(object):
         return socrata_client.publish(self.four_by_four)
 
 if __name__ == "__main__":
-    sheet = SheetToSocrata(1851354277799812)
-    sheet.create_columns()
-    sheet.create_dataset()
-    sheet.load_data()
-    print(sheet.socrata_url)
+    fire.Fire(SheetToSocrata)
