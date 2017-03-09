@@ -11,6 +11,20 @@ Requires Python 3.5+ and preferably the Anaconda install.
 
 ### `.env` / environment variables
 
+```bash
+# Smartsheet
+export SMARTSHEET_TOKEN=
+
+# Socrata
+export SODA_TOKEN=
+export SODA_PASS=
+export SODA_USER=
+
+# ArcGIS Online
+export AGO_USER=
+export AGO_PASS=
+```
+
 ## tools
 - smartsheets
 - esri
