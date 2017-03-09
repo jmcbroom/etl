@@ -16,7 +16,7 @@ class SheetToAGO(object):
     def sheet_as_csv(self):
         res = smartsheet.Sheets.get_sheet_as_csv(self.sheet_id, './')
 
-    def csv_to_featureservice(self):
+    def sheet_to_ago(self):
         self.sheet_as_csv()
         csv_path = "{}/{}.csv".format(os.getcwd(), self.title)
         print(csv_path)

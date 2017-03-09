@@ -4,15 +4,13 @@ Tools for doing stuff with Smartsheets.
 
 ### SheetToAGO
 
-**Doesn't work yet**
-
-Uploads a Smartsheet to ArcGIS Online (via a pandas dataframe.)
+Uploads a Smartsheet to ArcGIS Online as a CSV. From there, you can publish with location based on the fields.
 
 flags:
 - `sheet_id` from Smartsheet
 
 ```bash
-python smartsheets/ago.py --sheet_id=815144965040004 df_to_featureservice
+python smartsheets/ago.py --sheet_id=815144965040004 sheet_to_ago
 ```
 
 ### SheetToSocrata
