@@ -26,9 +26,11 @@ class EnrichSheetAddresses(object):
             if c.title == self.address_col:
                 self.address_col_index = c.index
 
-    def add_columns(self, columns=['Matched_ParcelID', 'Matched_Address', 'Matched_Latitude', 'Matched_Longitude'], at_index=0):
+    def add_columns(self, columns=['Matched_ParcelID', 'Matched_Address', 'Matched_Latitude', 'Matched_Longitude'], at_index=None):
         if self.address_col_index:
             at_index = self.address_col_index
+        else:
+            at_index = 0
         to_add = []
         for c in columns:
             new_col = smartsheet.models.Column({
@@ -63,17 +65,18 @@ class EnrichSheetAddresses(object):
             if result and result['attributes']['Loc_name'] == 'AddressPointGe':
                 pid_cell.value = result['attributes']['User_fld']
                 match_cell.value = result['attributes']['Match_addr'][:-7]
-                lat_cell.value = str(round(result['location']['x'], 5))
-                lon_cell.value = str(round(result['location']['y'], 5))
+                lat_cell.value = str(round(result['location']['y'], 5))
+                lon_cell.value = str(round(result['location']['x'], 5))
             else:
-                best_match = self.geocoder.match_to_parcel(address, result)
-                if best_match:
-                    pid_cell.value = best_match['attributes']['parcel_id']
-                    match_cell.value = "{} {}".format(best_match['attributes']['house_number'], best_match['attributes']['street_name'])
-                    lat_cell.value = str(round(best_match['geometry']['x'], 5))
-                    lon_cell.value = str(round(best_match['geometry']['y'], 5))
-                else:
-                    pass
+                pass
+                # best_match = self.geocoder.match_to_parcel(address, result)
+                # if best_match:
+                #     pid_cell.value = best_match['attributes']['parcel_id']
+                #     match_cell.value = "{} {}".format(best_match['attributes']['house_number'], best_match['attributes']['street_name'])
+                #     lat_cell.value = str(round(best_match['geometry']['x'], 5))
+                #     lon_cell.value = str(round(best_match['geometry']['y'], 5))
+                # else:
+                #     pass
             if pid_cell.value != None and match_cell.value != None:
                 print(r.to_dict())
                 r.set_column(match_cell.column_id, match_cell)
