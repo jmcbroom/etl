@@ -23,6 +23,10 @@ export SODA_USER=
 # ArcGIS Online
 export AGO_USER=
 export AGO_PASS=
+
+# SeeClickFix Organization Endpoint
+export SCF_USER=
+export SCF_PASS=
 ```
 
 ## tools
@@ -30,4 +34,4 @@ export AGO_PASS=
 - esri
 
 ## workflows
-- SeeClickFix
+- seeclickfix aka improve detroit
