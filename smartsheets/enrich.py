@@ -77,7 +77,6 @@ class EnrichSheetAddresses(object):
                 else:
                     pass
             if pid_cell.value != None and match_cell.value != None:
-                print(r.to_dict())
                 r.set_column(match_cell.column_id, match_cell)
                 r.set_column(pid_cell.column_id, pid_cell)
                 r.set_column(lat_cell.column_id, lat_cell)
