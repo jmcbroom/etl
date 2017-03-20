@@ -1,5 +1,4 @@
-# Ugly hack to allow absolute import from the root folder
-# whatever its name is. Please forgive the heresy.
+# ref: https://stackoverflow.com/questions/6323860/sibling-package-imports/10131358
 if __name__ == "__main__" and __package__ is None:
     from sys import path
     from os.path import dirname as dir
@@ -7,12 +6,11 @@ if __name__ == "__main__" and __package__ is None:
     path.append(dir(path[0]))
     __package__ = "smartsheets"
 
-import esri
-import fire
+import esri, fire
+from os import environ as env
 from smartsheet import Smartsheet
-import os
 
-smartsheet = Smartsheet(os.environ['SMARTSHEET_TOKEN'])
+smartsheet = Smartsheet(env['SMARTSHEET_API_TOKEN'])
 
 class EnrichSheetAddresses(object):
 
@@ -22,15 +20,16 @@ class EnrichSheetAddresses(object):
         self.name = self.sheet.name
         self.geocoder = esri.Geocoder()
         self.address_col = address_col
+
+    def get_address_index(self):
         for c in self.sheet.columns:
             if c.title == self.address_col:
-                self.address_col_index = c.index
+                return c.index
+            else:
+                return 0
 
-    def add_columns(self, columns=['Matched_ParcelID', 'Matched_Address', 'Matched_Latitude', 'Matched_Longitude'], at_index=None):
-        if self.address_col_index:
-            at_index = self.address_col_index
-        else:
-            at_index = 0
+    def add_columns(self, columns=['_ParcelID', '_Address', '_Latitude', '_Longitude']):
+        at_index = self.get_address_index() + 1
         to_add = []
         for c in columns:
             new_col = smartsheet.models.Column({
@@ -45,15 +44,15 @@ class EnrichSheetAddresses(object):
 
     def geocode_rows(self):
         self.add_columns()
-        match_col_id = self.added_columns['Matched_Address']
-        pid_col_id = self.added_columns['Matched_ParcelID']
-        lat_col_id = self.added_columns['Matched_Latitude']
-        lon_col_id = self.added_columns['Matched_Longitude']
+        match_col_id = self.added_columns['_Address']
+        pid_col_id = self.added_columns['_ParcelID']
+        lat_col_id = self.added_columns['_Latitude']
+        lon_col_id = self.added_columns['_Longitude']
 
         # have to get_sheet again, because we've updated the rows!
         self.sheet = smartsheet.Sheets.get_sheet(self.sheet_id)
         for r in self.sheet.rows:
-            address = r.cells[self.address_col_index].value
+            address = r.cells[self.get_address_index()].value
             if address == None:
                 pass
             result = self.geocoder.geocode(address)
@@ -61,22 +60,22 @@ class EnrichSheetAddresses(object):
             match_cell = r.get_column(match_col_id)
             lat_cell = r.get_column(lat_col_id)
             lon_cell = r.get_column(lon_col_id)
-
             if result and result['attributes']['Loc_name'] == 'AddressPointGe':
                 pid_cell.value = result['attributes']['User_fld']
                 match_cell.value = result['attributes']['Match_addr'][:-7]
                 lat_cell.value = str(round(result['location']['y'], 5))
                 lon_cell.value = str(round(result['location']['x'], 5))
+            # top match wasn't the AddressPoint - get top parcel match
+            # maybe call to slack
             else:
-                pass
-                # best_match = self.geocoder.match_to_parcel(address, result)
-                # if best_match:
-                #     pid_cell.value = best_match['attributes']['parcel_id']
-                #     match_cell.value = "{} {}".format(best_match['attributes']['house_number'], best_match['attributes']['street_name'])
-                #     lat_cell.value = str(round(best_match['geometry']['x'], 5))
-                #     lon_cell.value = str(round(best_match['geometry']['y'], 5))
-                # else:
-                #     pass
+                best_match = self.geocoder.match_to_parcel(address, result)
+                if best_match:
+                    pid_cell.value = best_match['attributes']['parcel_id']
+                    match_cell.value = "{} {}".format(best_match['attributes']['house_number'], best_match['attributes']['street_name'])
+                    lat_cell.value = str(round(best_match['geometry']['y'], 5))
+                    lon_cell.value = str(round(best_match['geometry']['x'], 5))
+                else:
+                    pass
             if pid_cell.value != None and match_cell.value != None:
                 print(r.to_dict())
                 r.set_column(match_cell.column_id, match_cell)
