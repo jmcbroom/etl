@@ -1,7 +1,7 @@
 import os, re, fire
 from smartsheet import Smartsheet
 from sodapy import Socrata
-sheet_client = Smartsheet(os.environ['SMARTSHEET_TOKEN'])
+sheet_client = Smartsheet(os.environ['SMARTSHEET_API_TOKEN'])
 socrata_client = Socrata("data.detroitmi.gov", os.environ['SODA_TOKEN'], os.environ['SODA_USER'], os.environ['SODA_PASS'])
 
 def clean_field(field):

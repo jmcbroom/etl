@@ -2,7 +2,6 @@ import json, requests, re
 import Levenshtein
 import fire
 from urllib.parse import urlencode
-from os import environ
 
 ROOT = "https://gis.detroitmi.gov/arcgis/rest/services"
 
@@ -86,3 +85,6 @@ class Geocoder(object):
                     pass
         if best_match:
             return best_match
+
+if __name__ == "__main__":
+    fire.Fire(Geocoder)
