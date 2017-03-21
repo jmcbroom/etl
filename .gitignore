@@ -2,3 +2,4 @@
 .cache/
 *.pyo
 *.pyc
+*.ipynb_checkpoints
