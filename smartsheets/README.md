@@ -1,6 +1,8 @@
 ## `smartsheets`
 
-Tools for doing stuff with Smartsheets.
+Tools for doing stuff with Smartsheets. Mostly using the Smartsheet Python SDK:
+
+https://github.com/smartsheet-platform/smartsheet-python-sdk
 
 ### SheetToAGO
 
@@ -19,6 +21,7 @@ Uploads a Smartsheet as a Socrata dataset.
 
 flags:
 - `sheet_id` from Smartsheet
+- `socrata_4x4` from Socrata, if you want to update a dataset.
 
 ```bash
 python smartsheets/socrata.py --sheet_id=815144965040004 create-dataset
@@ -26,13 +29,13 @@ python smartsheets/socrata.py --sheet_id=815144965040004 create-dataset
 python smartsheets/socrata.py --sheet_id=815144965040004 --socrata_id=qs6k-wd5n load-data
 ```
 
-### EnrichSheetAddresses
+### GeocodeSheet
 
 Adds four columns to a Smartsheet with addresses in it:
-- `Matched_ParcelID`
-- `Matched_Address`
-- `Matched_Latitude`
-- `Matched_Longitude`
+- `_ParcelID`
+- `_Address`
+- `_Latitude`
+- `_Longitude`
 
 flags:
 - `sheet_id` from Smartsheet

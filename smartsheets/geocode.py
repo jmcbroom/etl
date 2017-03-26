@@ -12,7 +12,7 @@ from smartsheet import Smartsheet
 
 smartsheet = Smartsheet(env['SMARTSHEET_API_TOKEN'])
 
-class EnrichSheetAddresses(object):
+class GeocodeSheet(object):
 
     def __init__(self, sheet_id=7881523794864004, address_col='address'):
         self.sheet_id = sheet_id
@@ -84,4 +84,4 @@ class EnrichSheetAddresses(object):
                 smartsheet.Sheets.update_rows(self.sheet_id, [r])
 
 if __name__ == "__main__":
-    fire.Fire(EnrichSheetAddresses)
+    fire.Fire(GeocodeSheet)

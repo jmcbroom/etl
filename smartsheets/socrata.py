@@ -10,7 +10,7 @@ def clean_field(field):
     return field.lower().strip('_')
 
 class SheetToSocrata(object):
-    def __init__(self, sheet_id=37522882488196, socrata_id=None):
+    def __init__(self, sheet_id=37522882488196, socrata_4x4=None):
 
         # get a Sheet object from smartsheets
         sheet = sheet_client.Sheets.get_sheet(sheet_id)
@@ -25,12 +25,12 @@ class SheetToSocrata(object):
         # get the sheet name
         self.name = sheet.name
 
-        # four_by_four and url if we have it
-        if socrata_id:
-            self.four_by_four = socrata_id
-            self.socrata_url = "https://data.detroitmi.gov/datasets/{}".format(self.four_by_four)
+        # 4x4 and url if we have it
+        if socrata_4x4:
+            self.4x4 = socrata_4x4
+            self.socrata_url = "https://data.detroitmi.gov/datasets/{}".format(self.4x4)
         else:
-            self.four_by_four = None
+            self.4x4 = None
             self.socrata_url = None
 
         # figure this out
@@ -76,8 +76,8 @@ class SheetToSocrata(object):
         column_obj = self.create_columns()
         # create the dataset
         response = socrata_client.create(self.name, description=self.description, columns=column_obj, row_identifier=self.unique_id_row)
-        # get the freshly-created four_by_four
-        self.four_by_four = response['id']
+        # get the freshly-created 4x4
+        self.4x4 = response['id']
         # create a lookup table for Socrata columns
         self.socrata_cols = { c['fieldName']: c['name'] for c in response['columns'] }
         # create the dataset URL
@@ -104,12 +104,12 @@ class SheetToSocrata(object):
                     pass
             data.append(this_row)
         if method == 'upsert':
-            return socrata_client.upsert(self.four_by_four, data)
+            return socrata_client.upsert(self.4x4, data)
         elif method == 'replace':
-            return socrata_client.replace(self.four_by_four, data)
+            return socrata_client.replace(self.4x4, data)
 
     def publish_dataset(self):
-        return socrata_client.publish(self.four_by_four)
+        return socrata_client.publish(self.4x4)
 
 if __name__ == "__main__":
     fire.Fire(SheetToSocrata)
