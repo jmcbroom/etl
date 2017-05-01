@@ -50,7 +50,7 @@ if __name__ == "__main__":
     features = []
 
     # fetch all pages of issues
-    for i in range(1, 3 + 1, 1):
+    for i in range(1, paginate['pages'] + 1, 1):
         print("Fetching page {} of {}".format(i, paginate['pages']))
         try:
             page_features = scf_get_features(scf_org_api + '&page={}'.format(i))

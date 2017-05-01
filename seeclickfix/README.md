@@ -30,6 +30,7 @@ Some stats we're interested in tracking:
 - How many issues of each type are opened?
 - How many days pass from when an issue is created to when it's closed? Is this time within the Service Level Agreements different departments commit to?
 - What types of issues are most likely to be re-opened? To be duplicates?
+- How many issues are closed because they are out of jurisdiction?
 
 Two ways we want to do analysis:
 1. Within a custom date range, illustrated in `02_analyze_range.ipynb`
