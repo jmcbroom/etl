@@ -1,8 +1,8 @@
-import requests, json, csv
+import requests, json, csv, os
 from flatten_dict import flatten
 
-SCF_USER = env['SCF_USER']
-SCF_PASS = env['SCF_PASS']
+SCF_USER = os.environ['SCF_USER']
+SCF_PASS = os.environ['SCF_PASS']
 
 # flatten_dict helper
 def underscore_reducer(k1,k2):
@@ -82,7 +82,7 @@ def scf_pagination(url):
     return resp['metadata']['pagination']
 
 if __name__ == "__main__":
-    scf_org_api = 'http://seeclickfix.com/api/v2/organizations/507/issues?per_page=20&status=open,closed,acknowledged,archived'
+    scf_org_api = 'https://seeclickfix.com/api/v2/organizations/507/issues?per_page=20&status=open,closed,acknowledged,archived'
     paginate = scf_pagination(scf_org_api)
     features = []
 

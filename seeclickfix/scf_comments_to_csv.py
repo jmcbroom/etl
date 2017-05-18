@@ -4,6 +4,7 @@ import requests, json, csv
 SCF_USER = os.environ['SCF_USER']
 SCF_PASS = os.environ['SCF_PASS']
 
+# define fields to pull
 fieldnames = [
     'id',
     'status',
@@ -13,18 +14,19 @@ fieldnames = [
 ]
 
 def flatten_comment(issue):
-    """ Create single key/value dict from array of dicts """
+    """Create single key/value dict from array of comments"""
     flat_comment = {}
     comment = issue['comments']
     for c in comment:
         if c['comment_type'] == "Issue Closed":
             flat_comment['comment_type_issue_closed'] = c['comment']
         else:
-            pass
+            flat_comment['comment_type_issue_closed'] = ""
+
     return flat_comment
 
 def scf_get_features(url):
-    """ Create list of dicts, where each dict is a single scf issue """
+    """Create list of dicts, where each dict is a single scf issue"""
     features = []
     ask = requests.get(url, auth=(SCF_USER, SCF_PASS))
     resp = json.loads(ask.text)
@@ -39,13 +41,13 @@ def scf_get_features(url):
     return features
 
 def scf_pagination(url):
-    """ Get metadata """
+    """Get metadata"""
     ask = requests.get(url, auth=(SCF_USER, SCF_PASS))
     resp = json.loads(ask.text)
     return resp['metadata']['pagination']
 
 if __name__ == "__main__":
-    scf_org_api = 'http://seeclickfix.com/api/v2/organizations/507/issues?per_page=20&status=closed'
+    scf_org_api = 'https://seeclickfix.com/api/v2/organizations/507/issues?per_page=20&status=closed,archived'
     paginate = scf_pagination(scf_org_api)
     features = []
 
