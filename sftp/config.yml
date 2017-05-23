@@ -20,7 +20,7 @@ contact:
   email: soandso@detroitmi.gov
   name: Someone
 socrata:
-  view:
+  view: ocp
   category: Government
   tags:
     - contracts
@@ -84,4 +84,3 @@ socrata:
       type: text
   row_label: Contract
   time_period:
-  
