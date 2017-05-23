@@ -1,0 +1,87 @@
+name: City of Detroit Contracts
+backend: postgres
+db: etl
+table: ocp
+description: >
+  Type your
+  multiline description here.
+disclaimer: >
+  Type your
+  multiline
+  disclaimer here.
+website: https://cityofdetroit.github.io/data-resources/datasets/
+updates_every: day
+license: Public Domain
+agency: Office of Contracting and Procurement (OCP)
+attribution: Office of Contracting and Procurement (OCP)
+source_link:
+image:
+contact:
+  email: soandso@detroitmi.gov
+  name: Someone
+socrata:
+  view:
+  category: Government
+  tags:
+    - contracts
+    - vendors
+    - finance
+    - procurement
+  row_identifier: contract_contract_id
+  permission: private
+  columns:
+    contract_nigp_code:
+      expression: contract_nigp_code
+      human: Contract NIGP Code
+      type: text
+    contract_contract_id:
+      expression: contract_contract_id
+      human: Contract ID
+      type: text
+    company_company_name:
+      expression: company_company_name
+      human: Company Name
+      type: text
+    company_city:
+      expression: company_city
+      human: Company City
+      type: text
+    company_state:
+      expression: company_state
+      human: Company State
+      type: text
+    contract_contract_purpose:
+      expression: contract_contract_purpose
+      human: Contract Purpose
+      type: text
+    contract_value:
+      expression: contract_value
+      human: Contract Amount ($)
+      type: number
+    contract_effective_date:
+      expression: contract_effective_date
+      human: Contract Effective Date
+      type: date
+    contract_contract_expiration_date:
+      expression: contract_contract_expiration_date
+      human: Contract Expiration Date
+      type: date
+    contract_document:
+      expression: contract_document
+      human: Contract Document Link
+      type: text
+    contract_status:
+      expression: contract_status
+      human: Contract Status
+      type: text
+    contract_contract_agreement_type:
+      expression: contract_contract_agreement_type
+      human: Contract Agreement Type
+      type: text
+    contract_document_name:
+      expression: contract_document_name
+      human: Contract Document Name
+      type: text
+  row_label: Contract
+  time_period:
+  
