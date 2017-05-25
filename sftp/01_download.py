@@ -13,14 +13,14 @@ cnopts = pysftp.CnOpts()
 cnopts.hostkeys = None
 
 with pysftp.Connection(os.environ['SFTP_HOST'], port=2222, username=os.environ['SFTP_USER'], password=os.environ['SFTP_PASS'], cnopts=cnopts) as sftp:
-    print('Connected to server')
+  print('Connected to server')
 
-    if sftp.isfile(remote_path): # returns bool
-        sftp.get(remote_path, preserve_mtime=True)
-        print('Copied remote file to local dir')
+  if sftp.isfile(remote_path): # returns bool
+    sftp.get(remote_path, preserve_mtime=True)
+    print('Copied remote file to local dir')
 
-    else:
-        print('No file found at {}'.format(remote_path))
+  else:
+    print('No file found at {}'.format(remote_path))
 
 # create a dataframe from the local copy
 df = pandas.read_csv(file_path)
@@ -42,12 +42,36 @@ def make_float(value):
 # format money col
 df['contract_value'] = df['contract_value'].apply(lambda x: make_float(x))
 
-# format date cols as actual datetimes
-df['contract_effective_date'] = pandas.to_datetime(df['contract_effective_date'])
-df['contract_contract_expiration_date'] = pandas.to_datetime(df['contract_contract_expiration_date'])
+def clean_company(value):
+  """Capitalize name, remove commas and end punctuation"""
+  value = value.replace(",", "")
+  if value.endswith("."):
+    value = value[:-1]
+  else:
+    value = value    
+  return value.upper().strip()
 
-# confirm col datetypes are good
-print(df.dtypes)
+# format company name col
+df['company_company_name'] = df['company_company_name'].apply(lambda x: clean_company(x))
+
+# uppercase other cols for consistency
+df['company_city'] = df['company_city'].str.upper()
+df['company_state'] = df['company_state'].str.upper()
+df['contract_contract_purpose'] = df['contract_contract_purpose'].str.upper()
+
+def abbreviate_state(value):
+  """Abbreviate Michigan to MI"""
+  if value == "MICHIGAN":
+    value = "MI"
+  else: 
+    pass
+  return value
+
+# format state col
+df['company_state'] = df['company_state'].apply(lambda x: abbreviate_state(x))
+
+# sort dataframe alphabetically by codes, then by amount largest to smallest
+df = df.sort_values(by=['contract_nigp_code','contract_value'], ascending=[True,False])
 
 # write the dataframe to a central db
 odo.odo(df, 'postgresql://gisteam@localhost/etl::ocp')

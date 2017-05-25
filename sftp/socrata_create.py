@@ -4,7 +4,7 @@ import sodapy
 from sqlalchemy import create_engine
 
 # accept a config.yml as first argument
-with open(sys.argv[1], 'r') as f:
+with open('./config.yml', 'r') as f:
     config = yaml.load(f)
 
 conf_cols = config['socrata']['columns']

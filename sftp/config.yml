@@ -20,7 +20,7 @@ contact:
   email: soandso@detroitmi.gov
   name: Someone
 socrata:
-  view: ocp
+  view: ocp_socrata
   category: Government
   tags:
     - contracts
@@ -56,20 +56,16 @@ socrata:
       type: text
     contract_value:
       expression: contract_value
-      human: Contract Amount ($)
-      type: number
+      human: Contract Amount
+      type: money
     contract_effective_date:
       expression: contract_effective_date
       human: Contract Effective Date
-      type: date
+      type: calendar_date
     contract_contract_expiration_date:
       expression: contract_contract_expiration_date
       human: Contract Expiration Date
-      type: date
-    contract_document:
-      expression: contract_document
-      human: Contract Document Link
-      type: text
+      type: calendar_date
     contract_status:
       expression: contract_status
       human: Contract Status
@@ -78,9 +74,9 @@ socrata:
       expression: contract_contract_agreement_type
       human: Contract Agreement Type
       type: text
-    contract_document_name:
-      expression: contract_document_name
-      human: Contract Document Name
+    contract_document:
+      expression: contract_document
+      human: Contract Document Link
       type: text
   row_label: Contract
   time_period:
