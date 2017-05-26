@@ -20,6 +20,7 @@ contact:
   email: soandso@detroitmi.gov
   name: Someone
 socrata:
+  id: itv9-b6jk
   view: ocp_socrata
   category: Government
   tags:
