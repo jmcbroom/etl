@@ -31,7 +31,9 @@ elif config['backend'] == 'mysql':
 
 # drop view if exists and create new one
 conn.execute("drop view if exists {}".format(config['socrata']['view']))
-res = conn.execute(create_view_statement)
+conn.execute(create_view_statement)
+
+res = conn.execute("select * from {}".format(config['socrata']['view']))
 
 # get number of rows in view
 count_query = conn.execute("select count(*) from {}".format(config['socrata']['view']))
@@ -57,15 +59,7 @@ resultset = []
 for row in res:
     resultset.append(dict(row))
 
-for i in range(0, len(resultset), 10000):
-    try:
-        print("Replacing record {}".format(i))
-        r = client.replace(config['socrata']['id'], resultset[i:i+10000])
-        print(r)
-    except:
-        print("Something went wrong on record {}".format(i))
-        r = client.replace(config['socrata']['id'], resultset[i:i+10000])
-        print(r)
+client.replace(config['socrata']['id'], resultset)
  
 # stop the timer       
 end_time = time()

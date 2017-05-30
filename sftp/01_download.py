@@ -70,6 +70,13 @@ def abbreviate_state(value):
 # format state col
 df['company_state'] = df['company_state'].apply(lambda x: abbreviate_state(x))
 
+# replace some NaNs with column-specific text
+df['contract_document'] = df['contract_document'].fillna("No document")
+df['contract_nigp_code'] = df['contract_nigp_code'].fillna("No code")
+
+# replace all other NaNs with empty strings
+df = df.fillna('')
+
 # sort dataframe alphabetically by codes, then by amount largest to smallest
 df = df.sort_values(by=['contract_nigp_code','contract_value'], ascending=[True,False])
 
