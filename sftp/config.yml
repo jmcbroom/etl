@@ -3,12 +3,13 @@ backend: postgres
 db: etl
 table: ocp
 description: >
-  Type your
-  multiline description here.
+  This dataset includes Open Contracts between the City of Detroit and its' vendors. 
+  Contracts are sorted by NIGP Code, an industry standard for classifying services and products procured by local governments. 
+  This dataset does not include contracts for personal services between the City and individuals, closed or historical contracts, 
+  contracts less than $25k, or contracts involving the Detroit Water and Sewerage Department (DWSD). 
+  When possible, a link to the original contract document in PDF format is provided.
 disclaimer: >
-  Type your
-  multiline
-  disclaimer here.
+  This dataset updates daily Monday - Friday, it does not update on the weekends.
 website: https://cityofdetroit.github.io/data-resources/datasets/
 updates_every: day
 license: Public Domain
@@ -17,8 +18,8 @@ attribution: Office of Contracting and Procurement (OCP)
 source_link:
 image:
 contact:
-  email: soandso@detroitmi.gov
-  name: Someone
+  email: iet@detroitmi.gov
+  name: IET Team
 socrata:
   id: itv9-b6jk
   view: ocp_socrata
