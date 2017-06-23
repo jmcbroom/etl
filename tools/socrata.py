@@ -8,7 +8,7 @@ soda_token = os.environ['SODA_TOKEN']
 soda_user = os.environ['SODA_USER']
 soda_pass = os.environ['SODA_PASS']
 
-FILEROOT = "/home/jimmy/Work/etl/"
+FILEROOT = os.environ['ETL_ROOT']
 
 class Dataset(object):
     def __init__(self, dir='process/dlba/sidelots'):

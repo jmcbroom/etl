@@ -42,4 +42,4 @@ merged_df = pandas.merge(sidelot_df, buyer_df, on='address', how='inner')
 merged_df['closing_date'] = merged_df['closing_date'].apply(lambda x: pandas.to_datetime(x))
 
 import odo
-odo.odo(merged_df, 'postgresql://{}@localhost/{}::dlba_sidelot'.format(env['PG_USER'], clienv['PG_DB']))
+odo.odo(merged_df, 'postgresql://{}@localhost/{}::dlba_sidelot'.format(env['PG_USER'], env['PG_DB']))
