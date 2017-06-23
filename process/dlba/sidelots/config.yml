@@ -1,0 +1,55 @@
+name: Side Lot Sales
+backend: postgres
+db: etl
+table: dlba_sidelot
+description: >
+  Side Lot Sales
+disclaimer: >
+  This is not production data.
+website: https://cityofdetroit.github.io/data-resources/datasets/
+updates_every: day
+license:
+agency: Detroit Land Bank Authority
+attribution:
+source_link:
+image:
+contact:
+  email: mcbroomj@detroitmi.gov
+  name: Jimmy McBroom
+socrata:
+  id: 99ge-u65t
+  view: dlba_sidelot_socrata
+  category: "Property & Parcels"
+  tags:
+    - sidelot
+  row_identifier: parcel_id
+  permission: private
+  # column mapping, used by the create script
+  columns:
+    address:
+      expression: address
+      human: Address
+      type: text
+    closing_date:
+      expression: replace(to_char(closing_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: Closing Date
+      type: calendar_date
+    parcel_id:
+      expression: parcel_id
+      human: Parcel ID
+      type: text
+    sale_price:
+      expression: sale_price
+      human: Sale Price
+      type: text
+    sold_to:
+      expression: deed_name
+      human: Purchaser
+      type: text
+    location:
+      expression: CASE WHEN lat is null THEN null ELSE concat('location (', lat, ',', lon, ')') END
+      human: Incident Location
+      type: location
+  # not automatable
+  row_label: Sale
+  time_period:
