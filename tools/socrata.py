@@ -15,6 +15,7 @@ class Dataset(object):
         self.directory = FILEROOT + dir
         with open(self.directory + '/config.yml', 'r') as f:
             self.conf = yaml.load(f)
+        self.name = self.conf['name']
         self.cols = self.conf['socrata']['columns']
         self.view = self.conf['socrata']['view']
         self.table = self.conf['table']
@@ -29,6 +30,12 @@ class Dataset(object):
 
         # and connect to Socrata
         self.soda_connection = sodapy.Socrata('data.detroitmi.gov', soda_token, soda_user, soda_pass, timeout=5400)
+        
+    def desc(self):
+        print("Dataset:\n\t{}".format(self.name))
+        print("Socrata URL:\n\thttps://data.detroitmi.gov/resource/{}".format(self.socrata_id))
+        print("Table/View:\n\t{} {}".format(self.table, self.view))
+        print("Number of Columns:\n\t{}".format(len(self.cols)))
 
     def count_socrata(self):
         count = self.soda_connection.get(self.socrata_id, select='count({}) as count'.format(self.conf['socrata']['row_identifier']))
@@ -46,8 +53,8 @@ class Dataset(object):
         os.system("export FILEROOT={}; bash {}/download.sh".format(self.directory, self.directory))
 
     def update(self):
-        print(self.conf['scripts']['download'])
-        os.system(self.conf['scripts']['download'])
+        print("running {}/update.sh".format(self.directory))
+        os.system("export FILEROOT={}; bash {}/update.sh".format(self.directory, self.directory))
 
     def create_dataset(self):
         socrata_columns = [
