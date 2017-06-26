@@ -30,7 +30,7 @@ class Dataset(object):
 
         # and connect to Socrata
         self.soda_connection = sodapy.Socrata('data.detroitmi.gov', soda_token, soda_user, soda_pass, timeout=5400)
-        
+
     def desc(self):
         print("Dataset:\n\t{}".format(self.name))
         print("Socrata URL:\n\thttps://data.detroitmi.gov/resource/{}".format(self.socrata_id))
@@ -110,7 +110,7 @@ class Dataset(object):
 
     def create_db_view(self):
         columns = [ "{} as {}".format(self.cols[i]['expression'], i) for i in self.cols ]
-        create_view_statement = """create view {} as ( select {} from {} )""".format(self.view, ", \n".join(columns), self.table)
+        create_view_statement = """drop view if exists {}; create view {} as ( select {} from {} )""".format(self.view, self.view, ", \n".join(columns), self.table)
         self.db_connection.execute(create_view_statement)
         return create_view_statement
 
