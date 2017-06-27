@@ -1,0 +1,75 @@
+name: Upcoming Demolitions
+backend: postgres
+db: etl
+table: dlba_upcoming_demos
+description: >
+  Upcoming Demolitions
+disclaimer: >
+  This is not production data.
+website: https://cityofdetroit.github.io/data-resources/datasets/
+updates_every: day
+license:
+agency: Detroit Land Bank Authority
+attribution:
+source_link:
+image:
+contact:
+  email: iet@detroitmi.gov
+  name: IET Team
+socrata:
+  id: tsqq-qtet
+  view: dlba_upcoming_demos_socrata
+  category: "Property & Parcels"
+  tags:
+    - sidelot
+  row_identifier: parcel_id
+  permission: private
+  # column mapping, used by the create script
+  columns:
+    address:
+      expression: address
+      human: Address
+      type: text
+    parcel_id:
+      expression: parcel_id
+      human: Address
+      type: text
+    contractor_name:
+      expression: contractor_name
+      human: Contractor Name
+      type: text
+    price:
+      expression: price
+      human: Price
+      type: money
+    demolish_by_date:
+      expression: replace(to_char(demo_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: Projected Demolition Date
+      type: calendar_date
+    commercial_building:
+      expression: commercial_building
+      human: Commercial Demo
+      type: text
+    council_district:
+      expression: council_district
+      human: Council District
+      type: text
+    latitude:
+      expression: latitude
+      human: Latitude
+      type: number
+    longitude:
+      expression: longitude
+      human: Longitude
+      type: number
+    location:
+      expression: CASE WHEN latitude is null THEN null ELSE concat('location (', latitude, ',', longitude, ')') END
+      human: Location
+      type: location
+    neighborhood:
+      expression: neighborhood
+      human: Neighborhood
+      type: text
+  # not automatable
+  row_label: Demolition
+  time_period:
