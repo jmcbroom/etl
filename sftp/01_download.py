@@ -1,5 +1,6 @@
 import os, pysftp, pandas, odo
 from datetime import datetime
+from slack import SlackMessage
 
 # get todays date and format as MMDDYYYY string
 today = datetime.today().strftime('%m%d%Y')
@@ -20,7 +21,15 @@ with pysftp.Connection(os.environ['SFTP_HOST'], port=2222, username=os.environ['
     print('Copied remote file to local dir')
 
   else:
-    print('No file found at {}'.format(remote_path))
+    # send a message to Slack if we don't find a file
+    missing_file = {
+      'text': "No file found at {}. Didn't update City of Detroit Contracts dataset today.".format(remote_path),
+      'attachments': None
+     }
+
+    missing_msg = SlackMessage(missing_file)
+    missing_msg.send()
+
 
 # create a dataframe from the local copy
 df = pandas.read_csv(file_path)
