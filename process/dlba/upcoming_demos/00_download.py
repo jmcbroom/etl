@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import simple_salesforce
 from os import environ as env
 

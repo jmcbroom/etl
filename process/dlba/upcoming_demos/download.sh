@@ -1,2 +1,3 @@
+!#/bin/bash
 psql -d $PG_DB -c 'drop table dlba_upcoming_demos cascade'
-python $FILEROOT/00_download.py
+/home/gisteam/anaconda3/bin/python $FILEROOT/00_download.py
