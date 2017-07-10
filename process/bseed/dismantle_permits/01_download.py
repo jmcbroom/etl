@@ -4,12 +4,12 @@ import pandas
 import odo
 from os import environ as env
 
-engine = sqlalchemy.create_engine('oracle://{}:{}@{}:{}/{}').format(env['TM_USER'], env['TM_PASS'], env['TM_HOST'], env['TM_PORT'], env['TM_DB'])
+engine = sqlalchemy.create_engine('oracle://{}:{}@{}:{}/{}'.format(env['TM_USER'], env['TM_PASS'], env['TM_HOST'], env['TM_PORT'], env['TM_DB']))
 conn = engine.connect()
 print('Connected to Tidemark', conn)
 
-# get 3 types of inspections after 01/2014 from CASE_ACTION
-actions = conn.execute("select * from CASE_ACTION where CSA_DATE3 > DATE '2014-01-01' and ACTION_DESCRIPTION in ('Final Grade Inspection', 'Open Hole Demo Inspection', 'Winter Grade Inspection')")
+# get 3 types of inspections on and after 01/2014 from CASE_ACTION (note open hole type needs a trailing white space)
+actions = conn.execute("select * from CASE_ACTION where CSA_DATE3 >= DATE '2014-01-01' and ACTION_DESCRIPTION in ('Final Grade Inspection', 'Open Hole Demo Inspection ', 'Winter Grade Inspection')")
 
 # format the results as a dataframe
 caseaction_df = pandas.DataFrame(actions.fetchall())
@@ -70,8 +70,6 @@ action_parcels_df['clean_parcel_no'] = action_parcels_df['prc_parcel_no'].apply(
 # add a new col with a unique id
 action_parcels_df['unique_id'] = action_parcels_df['csa_id'] + "_" + action_parcels_df['prc_parcel_no']
 
-# sort everything by inspection date, most recent to oldest 
-action_parcels_df = action_parcels_df.sort_values(by=['csa_date3'], ascending=[False])
-
 # send the dataframe to postgres
 odo.odo(action_parcels_df, 'postgresql://{}@localhost/{}::bseed_dismantle_permits'.format(env['PG_USER'], env['PG_DB']))
+print('Wrote the dataframe to postgres table: bseed_dismantle_permits')
