@@ -1,0 +1,118 @@
+name: All Dismantle Permits
+backend: postgres
+db: etl
+table: bseed_dismantle_permits
+description: >
+  BSEED inspection data since 1/1/2014 for Open Holes, Winter Grade and Final Grade inspection types.
+disclaimer: >
+  This is a private dataset and not production data. "EMG" case types (aka emergency demos) may not be fully captured here because the permits are pulled later.
+website: https://cityofdetroit.github.io/data-resources/datasets/
+updates_every: day
+license:
+agency: BSEED
+attribution:
+source_link:
+image:
+contact:
+  email: iet@detroitmi.gov
+  name: IET Team
+socrata:
+  id: 
+  view: bseed_dismantle_permits
+  category: "Property & Parcels"
+  tags:
+    - permits
+    - demolitions
+    - dismantle
+  row_identifier: unique_id
+  permission: private
+  # column mapping, used by the create script
+  columns:
+    unique_id:
+      expression: unique_id
+      human: Unique ID
+      type: text
+    csa_id:
+      expression: csa_id
+      human: CSA ID
+      type: text
+    prc_parcel_no:
+      expression: prc_parcel_no
+      human: Tidemark Parcel No
+      type: text
+    clean_parcel_no:
+      expression:
+      human: Clean Parcel No
+      type: text
+    csm_case_no:
+      expression: csm_case_no
+      human: CSM Case No
+      type: text
+    case_type:
+      expression: case_type
+      human: Case Type
+      type: text
+    action_description:
+      expression: action_description
+      human: Action Description
+      type: text
+    actn_menu_id:
+      expression: actn_menu_id
+      human: Action Menu ID
+      type: text
+    actn_code:
+      expression: actn_code
+      human: Action Code
+      type: text
+    csa_creation_date:
+      expression: csa_creation_date
+      human: CSA Creation Date
+      type: calendar_date
+    csa_date1:
+      expression: csa_date1
+      human: CSA Date 1
+      type: calendar_date
+    csa_date2:
+      expression: csa_date2
+      human: CSA Date 2
+      type: calendar_date
+    csa_date3:
+      expression: csa_date3
+      human: CSA Date 3 (Inspection Date)
+      type: calendar_date
+    csa_disp:
+      expression: csa_disp
+      human: CSA Disposition (Inspection Pass/Fail)
+      type: text
+    csa_assigned_to:
+      expression: csa_assigned_to
+      human: CSA Assigned To
+      type: text
+    csa_done_by:
+      expression: csa_done_by
+      human: CSA Done By
+      type: text
+    csa_updated:
+      expression: csa_updated
+      human: CSA Updated
+      type: calendar_date
+    csa_updateby:
+      expression: csa_updateby
+      human: CSA Updated By
+      type: text
+    csa_x_coord:
+      expression: csa_x_coord
+      human: CSA X Coord (Latitude)
+      type: number
+    csa_y_coord:
+      expression: csa_y_coord
+      human: CSA Y Coord (Longitude)
+      type: number
+    location:
+      expression: CASE WHEN csa_x_coord is null THEN null ELSE concat('location (', csa_x_coord, ',', csa_y_coord, ')') END
+      human: Location
+      type: location
+  # not automatable
+  row_label: Permit
+  time_period: 1/1/2014 - present
+  
