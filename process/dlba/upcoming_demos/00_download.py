@@ -7,6 +7,7 @@ SF = simple_salesforce.Salesforce(env['SF_USER'], env['SF_PASS'], env['SF_TOKEN'
 lookup = {
     'Address__c': 'address',
     'DEMO_Planned_Knock_Down_Date__c': 'demo_date',
+    'Socrata_Projected_Knocked_By_Date__c': 'socrata_demo_date',
     'Socrata_Reported_Price__c': 'price',
     'Parcel_ID__c': 'parcel_id',
     'Demo_Contractor_TEXT_ONLY__c': 'contractor_name',
@@ -21,7 +22,7 @@ lookup = {
 
 query = """
 Select {} from Case where
-    Socrata_Projected_Knocked_By_Date__c != null 
+    Socrata_Projected_Knocked_By_Date__c >= TODAY
         AND
     Socrata_Reported_Price__c > 0
         AND
@@ -36,6 +37,16 @@ import pandas
 df = pandas.DataFrame.from_records(res['records'])
 df.rename(columns=lookup, inplace=True)
 df.drop('attributes', inplace=True, axis=1)
+
+# if demo_date col has null values, fill them with socrata_demo_dates, then drop extra col
+df['demo_date'].fillna(df['socrata_demo_date'], inplace=True)
+df.drop('socrata_demo_date', inplace=True, axis=1)
+
+# filter out demo_dates that are in the past
+# THIS ISNT ACTUALLY WORKING
+today = pandas.to_datetime('today')
+df['demo_date'] = pandas.to_datetime(df['demo_date'])
+df[df['demo_date'] >= today]
 
 import odo
 odo.odo(df, 'postgresql://{}@localhost/{}::dlba_upcoming_demos'.format(env['PG_USER'], env['PG_DB']))
