@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sqlalchemy
 import cx_Oracle
 import pandas

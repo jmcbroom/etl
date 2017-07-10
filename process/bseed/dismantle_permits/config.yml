@@ -18,7 +18,7 @@ contact:
   email: iet@detroitmi.gov
   name: IET Team
 socrata:
-  id: 'u5fu-jb97'
+  id: u5fu-jb97
   view: bseed_dismantle_permits_socrata
   category: "Property & Parcels"
   tags:
