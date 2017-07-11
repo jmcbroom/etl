@@ -31,6 +31,9 @@ print('Joined actions and parcels for a total of {} rows and {} columns'.format(
 
 # clean Tidemark parcel nums to standard format
 def clean_pnum(pnum):
+    # first, change double spaces to a single white space
+    pnum = pnum.replace('  ', ' ')
+    
     # it's zeroes; return nothing
     if pnum in ['0', '00', '000']:
         return None
