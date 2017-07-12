@@ -12,22 +12,28 @@ print('Connected to Tidemark', conn)
 # get 3 types of inspections on and after 01/2014 from CASE_ACTION (note open hole type needs a trailing white space)
 actions = conn.execute("select * from CASE_ACTION where CSA_DATE3 >= DATE '2014-01-01' and ACTION_DESCRIPTION in ('Final Grade Inspection', 'Open Hole Demo Inspection ', 'Winter Grade Inspection')")
 
-# format the results as a dataframe
+# format results as a dataframe
 caseaction_df = pandas.DataFrame(actions.fetchall())
 caseaction_df.columns = actions.keys()
 print('Fetched {} actions'.format(caseaction_df.shape[0]))
 
-# get everything from CASE_PARCEL
+# get everything from CASE_PARCEL, format results as a df
 parcels = conn.execute("select * from CASE_PARCEL")
 
-# format the results as a dataframe
 caseparcel_df = pandas.DataFrame(parcels.fetchall())
 caseparcel_df.columns = parcels.keys()
 print('Fetched {} parcels'.format(caseparcel_df.shape[0]))
 
-# join actions to parcels
-action_parcels_df = caseaction_df.merge(caseparcel_df, on='csm_caseno', how='inner')
-print('Joined actions and parcels for a total of {} rows and {} columns'.format(action_parcels_df.shape[0], action_parcels_df.shape[1]))
+# get everything from CASE_ADDRESS, format results as a df
+addresses = conn.execute("select * from CASE_ADDRESS")
+
+caseaddr_df = pandas.DataFrame(addresses.fetchall())
+caseaddr_df.columns = addresses.keys()
+print('Fetched {} addresses'.format(caseaddr_df.shape[0]))
+
+# merge all three dataframes together
+df = caseaction_df.merge(caseparcel_df, on='csm_caseno', how='left').merge(caseaddr_df, on='csm_caseno', how='left')
+print('Joined actions to parcels and addresses for a total of {} rows and {} columns'.format(df.shape[0], df.shape[1]))
 
 # clean Tidemark parcel nums to standard format
 def clean_pnum(pnum):
@@ -69,11 +75,14 @@ def clean_pnum(pnum):
         return ward + lot.zfill(6) + end
 
 # add a new col with clean parcels
-action_parcels_df['clean_parcel_no'] = action_parcels_df['prc_parcel_no'].apply(lambda x: clean_pnum(x))
+df['clean_parcel_no'] = df['prc_parcel_no'].apply(lambda x: clean_pnum(x))
 
 # add a new col with a unique id
-action_parcels_df['unique_id'] = action_parcels_df['csa_id'] + "_" + action_parcels_df['prc_parcel_no']
+df['unique_id'] = df['csa_id'] + "_" + df['prc_parcel_no']
+
+# add a new col with the full street address
+df['street_address'] = df['csm_st_nmbr'] + " " + df['csm_st_name']
 
 # send the dataframe to postgres
-odo.odo(action_parcels_df, 'postgresql://{}@localhost/{}::bseed_dismantle_permits'.format(env['PG_USER'], env['PG_DB']))
+odo.odo(df, 'postgresql://{}@localhost/{}::bseed_dismantle_permits'.format(env['PG_USER'], env['PG_DB']))
 print('Wrote the dataframe to postgres table: bseed_dismantle_permits')

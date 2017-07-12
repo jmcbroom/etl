@@ -45,6 +45,10 @@ socrata:
       expression: clean_parcel_no
       human: Clean Parcel No
       type: text
+    street_address:
+      expression: street_address
+      human: Street Address
+      type: text
     csm_caseno:
       expression: csm_caseno
       human: CSM Case No
@@ -64,6 +68,10 @@ socrata:
     csa_disp:
       expression: csa_disp
       human: CSA Disposition (Inspection Pass/Fail)
+      type: text
+    csa_notes:
+      expression: csa_notes
+      human: CSA Notes
       type: text
     actn_menu_id:
       expression: actn_menu_id
