@@ -4,3 +4,4 @@
 *.pyo
 *.pyc
 *.ipynb_checkpoints
+*.bz2
