@@ -37,7 +37,7 @@ create table dah_joined (
     payment_date timestamp,
     payment_status text,
     collection_status text,
-    grafitti_status text,
+    -- grafitti_status text,
     violation_address text,
     parcelno text,
     propaddr text,
@@ -72,6 +72,7 @@ insert into dah_joined (
     hearing_date,
     hearing_time,
     violation_code,
+    violation_description,
     fine_amount,
     late_fee,
     discount_amount,
@@ -80,17 +81,28 @@ insert into dah_joined (
 select
     "ZTicketID",
     "TicketNumber",
-    "AgencyID",
-    "ZTicketUserID",
-    "ViolStreetNumber",
-    "ViolStreetName",
-    "ViolZipCode",
+    -- agency_name
+    (select "AgencyName" from dah_agency ag where ag."AgencyID" = z."AgencyID"),
+    -- inspector_name
+    (select concat_ws(s."UserFirstName", s."UserLastName") from dah_security s where z."ZTicketUserID" = s."SecurityID"),
+    -- violation_street_number
+    (select "StreetNumber" from dah_violator_address va where va."ViolatorID" = z."ZTicketID"),
+    -- violation_street_name
+    (select "StreetName" from dah_violator_address va where va."ViolatorID" = z."ZTicketID"),
+    -- violation_zip_code
+    (select "ZipCode" from dah_violator_address va where va."ViolatorID" = z."ZTicketID"),
     "IssueDate"::timestamp,
     "IssueTime",
     "CourtDate",
     "CourtTime",
-    "ViolDescID",
-    (select "OrigFineAmt",
+    -- court_time
+    -- (select "CourtTime" from dah_courttime ct where z."CourtTime"::integer = ct."CourtTime"::integer),
+    -- violation_code
+    (select "OrdLaw" from dah_ordinance od where z."ViolDescID" = od."OrdID"),
+    -- violation_description
+    (select "OrdDescription" from dah_ordinance od where z."ViolDescID" = od."OrdID"),
+    -- fine_amount
+    (select "OffFineAmt" from dah_cityfines cf where z."OrigFineAmt" = cf."OffFinID"),
     "LateFee",
     "DiscAmt",
     "RemediationCost"
@@ -123,22 +135,17 @@ from dah_payments p where j.ticket_id = p."ZticketID";
 update dah_joined j set
 	payment_amount = (select sum("PaymentAmt") from dah_payments where "ZticketID" = j.ticket_id);
 
--- lookup original fine amount
-update dah_joined j set
-	fine_amount = (select "OffFineAmt" from dah_cityfines cf where j.fine_amount = cf."OffFinID");
-
-
 -- -- PICK UP HERE!
 
 -- compute judgment amount
 -- Sum of "OrigFineAmt", "AdminFee", "StateFee", "LateFee" and "RemediationCost" minus "DiscAmt"
-update dah_joined j
-	set judgment_amount = (
-		fine_amount + 
-		admin_fee +
-		state_fee +
-		late_fee +
-		remediation_cost -
-		discount_amount);
+-- update dah_joined j
+-- 	set judgment_amount = (
+-- 		fine_amount + 
+-- 		admin_fee +
+-- 		state_fee +
+-- 		late_fee +
+-- 		remediation_cost -
+-- 		discount_amount);
 	
-select * from dah_joined j order by random() limit 100;
+-- select * from dah_joined j order by random() limit 100;
