@@ -1,9 +1,11 @@
+#!/usr/bin/env python
 import simple_salesforce
 import pandas
 import odo
 from os import environ as env
 
 SF = simple_salesforce.Salesforce(env['SF_USER'], env['SF_PASS'], env['SF_TOKEN'])
+print('Connected to SF ', SF)
 
 lookup = {
     'Address__c': 'address',
@@ -45,6 +47,8 @@ df = pandas.DataFrame.from_records(res['records'])
 df.rename(columns=lookup, inplace=True)
 df.drop('attributes', inplace=True, axis=1)
 
+print('Created dataframe ', df.shape)
+
 # create new cols - prioritize bseed inspection date, if that's null use demo inspection date
 df['open_hole_date'] = df['bseed_open_hole'].fillna(df['demo_open_hole'])
 df['winter_grade_date'] = df['bseed_winter_grade'].fillna(df['demo_winter_grade'])
@@ -52,3 +56,4 @@ df['final_grade_date'] = df['bseed_final_grade'].fillna(df['demo_final_grade'])
 
 # send it to postgres
 odo.odo(df, 'postgresql://{}@localhost/{}::dlba_comm_demos'.format(env['PG_USER'], env['PG_DB']))
+print('Sent to postgres')
