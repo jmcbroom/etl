@@ -1,37 +1,25 @@
 # etl
 ETL repository for DoIT work.
 
-Using [python-fire](https://github.com/google/python-fire) to expose these classes to the command line.
-
 ## Setup
 
 Requires Python 3.5+ and preferably the Anaconda install.
 
 `pip -r requirements.txt` to install Python dependencies.
 
-### `.env` / environment variables
+Copy `sample.env` to `.env` and add your secrets.
 
-```bash
-# Smartsheet
-export SMARTSHEET_TOKEN=
+## Process
 
-# Socrata
-export SODA_TOKEN=
-export SODA_PASS=
-export SODA_USER=
+Workflows for getting data from various departments, cleaning it, and writing it to a central database. From there, datasets can be published to our Socrata open data portal, ESRI products, or other places.
 
-# ArcGIS Online
-export AGO_USER=
-export AGO_PASS=
+Generally involves:
+- Python or SQL scripts to access the source data, process it, and write it to a db table (usually Postgres)
+- Config file to define metadata and map fields from a db view to Socrata, or someplace else
+- Shell scripts to schedule automatic updates via `cron`
 
-# SeeClickFix Organization Endpoint
-export SCF_USER=
-export SCF_PASS=
-```
+## Tools
 
-## tools
-- smartsheets
-- esri
+Tools for connecting to and working with various platforms and softwares. We use [python-fire](https://github.com/google/python-fire) to expose these classes to the command line.
 
-## workflows
-- seeclickfix aka improve detroit
+More explanations soon.
