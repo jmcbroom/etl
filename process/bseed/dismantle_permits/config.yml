@@ -1,0 +1,115 @@
+name: Dismantle Permits
+backend: postgres
+db: etl
+table: bseed_dismantle_permits
+description: >
+  BSEED data about Open Hole, Winter Grade and Final Grade inspection types for Dismantle permits since 1/1/2014.
+  This dataset is privately shared and used by the demolition program.
+disclaimer: >
+  "EMG" case types (aka emergency demos) are not currently captured here because the permits are pulled later through a different process.
+website: https://cityofdetroit.github.io/data-resources/datasets/
+updates_every: day
+license: Public Domain
+agency: BSEED
+attribution:
+source_link:
+image:
+contact:
+  email: iet@detroitmi.gov
+  name: IET Team
+socrata:
+  id: u5fu-jb97
+  view: bseed_dismantle_permits_socrata
+  category: "Property & Parcels"
+  tags:
+    - permits
+    - demolitions
+    - dismantle
+  row_identifier: unique_id
+  permission: private
+  # column mapping, used by the create script
+  columns:
+    unique_id:
+      expression: unique_id
+      human: Unique ID
+      type: text
+    csa_id:
+      expression: csa_id
+      human: CSA ID
+      type: text
+    prc_parcel_no:
+      expression: prc_parcel_no
+      human: Tidemark Parcel No
+      type: text
+    clean_parcel_no:
+      expression: clean_parcel_no
+      human: Clean Parcel No
+      type: text
+    street_address:
+      expression: street_address
+      human: Street Address
+      type: text
+    csm_caseno:
+      expression: csm_caseno
+      human: CSM Case No
+      type: text
+    case_type:
+      expression: case_type
+      human: Case Type
+      type: text
+    action_description:
+      expression: action_description
+      human: Action Description
+      type: text
+    csa_date3:
+      expression: replace(to_char(csa_date3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: CSA Date 3 (Inspection Date)
+      type: calendar_date
+    csa_disp:
+      expression: csa_disp
+      human: CSA Disposition (Inspection Pass/Fail)
+      type: text
+    csa_notes:
+      expression: csa_notes
+      human: CSA Notes
+      type: text
+    actn_menu_id:
+      expression: actn_menu_id
+      human: Action Menu ID
+      type: text
+    actn_code:
+      expression: actn_code
+      human: Action Code
+      type: text
+    csa_creation_date:
+      expression: replace(to_char(csa_creation_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: CSA Creation Date
+      type: calendar_date
+    csa_date1:
+      expression: replace(to_char(csa_date1::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: CSA Date 1
+      type: calendar_date
+    csa_date2:
+      expression: replace(to_char(csa_date2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: CSA Date 2
+      type: calendar_date
+    csa_updated:
+      expression: replace(to_char(csa_updated::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: CSA Updated At
+      type: calendar_date
+    csa_updated_by:
+      expression: csa_updated_by
+      human: CSA Updated By
+      type: text
+    csa_assigned_to:
+      expression: csa_assigned_to
+      human: CSA Assigned To
+      type: text
+    csa_done_by:
+      expression: csa_done_by
+      human: CSA Done By
+      type: text
+  # not automatable
+  row_label: Permit
+  time_period: 1/1/2014 - present
+  

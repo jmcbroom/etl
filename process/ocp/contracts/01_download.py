@@ -57,7 +57,7 @@ def clean_company(value):
   if value.endswith("."):
     value = value[:-1]
   else:
-    value = value    
+    value = value
   return value.upper().strip()
 
 # format company name col
@@ -72,7 +72,7 @@ def abbreviate_state(value):
   """Abbreviate Michigan to MI"""
   if value == "MICHIGAN":
     value = "MI"
-  else: 
+  else:
     pass
   return value
 
@@ -90,4 +90,4 @@ df = df.fillna('')
 df = df.sort_values(by=['contract_nigp_code','contract_value'], ascending=[True,False])
 
 # write the dataframe to a central db
-odo.odo(df, 'postgresql://gisteam@localhost/etl::ocp')
+odo.odo(df, 'postgresql://{}@localhost/{}::ocp'.format(os.environ['PG_USER'], os.environ['PG_DB']))

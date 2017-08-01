@@ -1,0 +1,37 @@
+import sqlalchemy
+
+user = env['DAH_USER']
+password = ENV['DAH_PASS']
+host = env['DAH_HOST']
+db = env['DAH_DB']
+
+dah_engine = sqlalchemy.create_engine('mssql+pymssql://{}:{}@{}/{}'.format(user, password, host, db))
+dah_connection = dah_engine.connect()
+print(dah_connection)
+local_pg_engine = sqlalchemy.create_engine('postgresql+psycopg2://jimmy@localhost/local')
+pg_conn = local_pg_engine.connect()
+print(pg_conn)
+
+lookup = {
+    'payments': 'tblDAHPayments',
+    'ztickets': 'tblZTickets',
+    'dispadjourn': 'tblDispAdjourn',
+    'cityfines': 'tblDAHCityFines',
+    'blight_ticket_svc_cost': 'tblDAHBlightTicketServiceCostTransactions',
+    'reschedule': 'tblReSchedule',
+    'courttime': 'tblCourtTime',
+    'agency': 'tblAgency',
+    'ordinance': 'tblDAHOrdinance',
+    'streets': 'tblStreets',
+    'violator_address': 'tblDAHViolatorAddress',
+    'state': 'tblState',
+    'violator_info': 'tblDAHViolatorInfo',
+    'security': 'tblSecurity',
+    'country': 'tblDAHCountry',
+    'disp_type': 'tblDAHDispType'
+}
+
+import pandas as pd, odo
+for k, v in lookup.items():
+    df = pd.read_sql("select * from SWEETSpower.{}".format(v), dah_connection)
+    odo.odo(df, 'postgresql://jimmy@localhost/local::dah_{}'.format(k))
