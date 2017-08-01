@@ -1,5 +1,5 @@
 echo "Beginning CAD update..."
-python $FILEROOT/01_get_updates.py
+$ANA_PYTHON $FILEROOT/01_get_updates.py
 echo "Anonymizing new locations..."
 psql -d $PG_DB < $FILEROOT/02_anonymize_updates.sql
 echo "Inserting new data into main table..."

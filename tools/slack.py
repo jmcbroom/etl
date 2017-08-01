@@ -1,19 +1,35 @@
-import os, json, requests
+from slackclient import SlackClient
 
-# class ETLAlert(object):
+from os import environ as env
+
+slack_token = env["SLACK_API_TOKEN"]
+sc = SlackClient(slack_token)
+
 class SlackMessage(object):
   def __init__(self, data):
     self.data = data
-
+  
   def send(self):
-    slack_data = self.data
-    response = requests.post(os.environ['SLACK_WEBHOOK'], data=json.dumps(slack_data), headers={'Content-Type': 'application/json'})
-    if response.status_code != 200:
-      raise ValueError(
-        'Request to Slack returned an error %s, the response is:\n%s'
-        % (response.status_code, response.text)
-        )
+    m = sc.api_call(
+      "chat.postMessage",
+      channel="#z_etl",
+      text=self.data['text']
+    )
+    self.channel = m['channel']
+    self.ts = m['ts']
+  
+  def react_success(self):
+    r = sc.api_call(
+      "reactions.add",
+      channel = self.channel,
+      name = "thumbsup",
+      timestamp = self.ts
+    )
 
-if __name__ == "__main__":
-  msg = SlackMessage({'text': "Testing this module"})
-  msg.send()
+  def react_fail(self):
+    r = sc.api_call(
+      "reactions.add",
+      channel = self.channel,
+      name = "suspect",
+      timestamp = self.ts
+    )

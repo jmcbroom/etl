@@ -86,14 +86,15 @@ class Dataset(object):
                                self.socrata_count,
                                self.view_count)
         }
-        msg = SlackMessage(msg_txt)
-        msg.send()
+        self.msg = SlackMessage(msg_txt)
+        self.msg.send()
         
     def replace(self):
         self.send_update_msg('REPLACE')
         rows = self.db_connection.execute("select * from {}".format(self.view))
         replace_payload = [ dict(row) for row in rows ]
         job = self.soda_connection.replace( self.socrata_id, replace_payload )
+        self.msg.react_success()
         return job
 
     def upsert(self):
@@ -105,8 +106,10 @@ class Dataset(object):
                 r = self.soda_connection.upsert(self.socrata_id, upsert_payload[i:i+20000])
                 print(r)
             except:
+                self.msg.react_fail()
                 print("Something went wrong on record {}".format(i))
                 self.soda_connection.upsert(self.socrata_id, upsert_payload[i:i+20000])
+        self.msg.react_success()
 
     def create_db_view(self):
         columns = [ "{} as {}".format(self.cols[i]['expression'], i) for i in self.cols ]

@@ -1,4 +1,7 @@
-import sqlalchemy, odo, pandas, os, re, math, csv
+import sqlalchemy
+import odo 
+import pandas
+import os, re, math, csv
 
 user = os.environ['CAD_USER']
 pword = os.environ['CAD_PASS']
