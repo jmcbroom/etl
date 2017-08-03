@@ -173,10 +173,22 @@ update dah_joined j
 update dah_joined j
     set payment_status = (
         CASE 
-            WHEN () THEN 'NO PAYMENT APPLIED'
-            WHEN () THEN 'PARTIAL PAYMENT APPLIED'
-            WHEN () THEN 'PAID IN FULL'
+            WHEN j.payment_amount = 0 THEN 'NO PAYMENT APPLIED'
+            WHEN j.payment_amount > 0 and j.balance_due > 0 THEN 'PARTIAL PAYMENT APPLIED'
+            WHEN j.balance_due = 0 THEN 'PAID IN FULL'
+            ElSE null
         END
     );
-	
+
+-- create collection status
+update dah_joined j
+    set collection_status = (
+        select da."CollectionFlag",
+            CASE da."CollectionFlag"
+                WHEN da."CollectionFlag" = 1 THEN 'IN COLLECTION'
+                ElSE null
+            END,
+        from dah_dispadjourn da where da."ZTicketID" = j.ticket_id);
+    );
+
 -- select * from dah_joined j order by random() limit 100;
