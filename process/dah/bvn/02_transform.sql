@@ -94,9 +94,15 @@ select
     "IssueDate"::timestamp,
     "IssueTime",
     "CourtDate",
-    "CourtTime",
     -- court_time
-    -- (select "CourtTime" from dah_courttime ct where z."CourtTime"::integer = ct."CourtTime"::integer),
+    (CASE 
+      WHEN "CourtTime" = 1.0 THEN '9:00 AM'
+      WHEN "CourtTime" = 2.0 THEN '10:30 AM'
+      WHEN "CourtTime" = 3.0 THEN '1:30 PM'
+      WHEN "CourtTime" = 4.0 THEN '3:00 PM'
+      WHEN "CourtTime" = 5.0 THEN '6:00 PM'
+      ELSE null
+    END),
     -- violation_code
     (select "OrdLaw" from dah_ordinance od where z."ViolDescID" = od."OrdID"),
     -- violation_description
@@ -135,17 +141,42 @@ from dah_payments p where j.ticket_id = p."ZticketID";
 update dah_joined j set
 	payment_amount = (select sum("PaymentAmt") from dah_payments where "ZticketID" = j.ticket_id);
 
--- -- PICK UP HERE!
-
 -- compute judgment amount
 -- Sum of "OrigFineAmt", "AdminFee", "StateFee", "LateFee" and "RemediationCost" minus "DiscAmt"
--- update dah_joined j
--- 	set judgment_amount = (
--- 		fine_amount + 
--- 		admin_fee +
--- 		state_fee +
--- 		late_fee +
--- 		remediation_cost -
--- 		discount_amount);
+update dah_joined j
+	set judgment_amount = (
+		fine_amount + 
+		admin_fee +
+		state_fee +
+		late_fee +
+		clean_up_cost -
+		discount_amount);
+
+-- compute balance due
+update dah_joined j
+    set balance_due = (judgment_amount - payment_amount);
+
+-- compute payment date
+update dah_joined j set
+	payment_date = (select max("PaymentDt") from dah_payments where "ZticketID" = j.ticket_id);
+
+-- create disposition string
+update dah_joined j 
+    set disposition = 
+    concat_ws(' ',
+        (select dt."Distype" from dah_disp_type dt where da."RespType" = dt."DispositionID"), 
+        'by',
+	    (select dt."Distype" from dah_disp_type dt where da."DispositionID" = dt."DispositionID"))
+	from dah_dispadjourn da where da."ZTicketID" = j.ticket_id;
+
+-- create payment status
+update dah_joined j
+    set payment_status = (
+        CASE 
+            WHEN () THEN 'NO PAYMENT APPLIED'
+            WHEN () THEN 'PARTIAL PAYMENT APPLIED'
+            WHEN () THEN 'PAID IN FULL'
+        END
+    );
 	
 -- select * from dah_joined j order by random() limit 100;
