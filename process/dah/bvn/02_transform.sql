@@ -11,6 +11,7 @@ create table dah_joined (
     violation_street_number text,
     violation_street_name text,
     violation_zip_code text,
+    violator_id bigint,
     mailing_address_str_number text,
     mailing_address_str_name text,
     city text,
@@ -67,6 +68,7 @@ insert into dah_joined (
     violation_street_number,
     violation_street_name,
     violation_zip_code,
+    violator_id,
     ticket_issued_date,
     ticket_issued_time,
     hearing_date,
@@ -75,6 +77,8 @@ insert into dah_joined (
     violation_description,
     fine_amount,
     late_fee,
+    admin_fee,
+    state_fee,
     discount_amount,
     clean_up_cost
 )
@@ -84,16 +88,21 @@ select
     -- agency_name
     (select "AgencyName" from dah_agency ag where ag."AgencyID" = z."AgencyID"),
     -- inspector_name
-    (select concat_ws(s."UserFirstName", s."UserLastName") from dah_security s where z."ZTicketUserID" = s."SecurityID"),
+    (select concat_ws(' ', s."UserFirstName", s."UserLastName") from dah_security s where z."ZTicketUserID" = s."SecurityID"),
     -- violation_street_number
-    (select "StreetNumber" from dah_violator_address va where va."ViolatorID" = z."ZTicketID"),
+    "ViolStreetNumber",
     -- violation_street_name
-    (select "StreetName" from dah_violator_address va where va."ViolatorID" = z."ZTicketID"),
+    (select "StreetName" from dah_streets s where s."StreetID" = z."ViolStreetName"),
     -- violation_zip_code
-    (select "ZipCode" from dah_violator_address va where va."ViolatorID" = z."ZTicketID"),
+    "ViolZipCode",
+    (select "FileID" from dah_violator_info vi where vi."ZTicketID" = z."ZTicketID" ),
     "IssueDate"::timestamp,
     "IssueTime",
-    "CourtDate",
+    -- court_date - account for rescheduling
+    (CASE
+    WHEN ("ZTicketID" in (select "ZTicketID" from dah_reschedule)) THEN (select "ReScheduleDate" from dah_reschedule r where z."ZTicketID" = r."ZTicketID" order by "ReScheduleDate" desc limit 1)
+    ELSE "CourtDate"
+    END),
     -- court_time
     (CASE 
       WHEN "CourtTime" = 1.0 THEN '9:00 AM'
@@ -110,9 +119,11 @@ select
     -- fine_amount
     (select "OffFineAmt" from dah_cityfines cf where z."OrigFineAmt" = cf."OffFinID"),
     "LateFee",
+    "AdminFee",
+    "JSA",
     "DiscAmt",
     "RemediationCost"
-from dah_ztickets z where z."VoidTicket" = 0;
+from dah_ztickets z where z."VoidTicket" = 0 order by random() limit 1000;
 
 -- join violator info
 update dah_joined j set
@@ -127,10 +138,10 @@ update dah_joined j set
     state = (select "StateAbrev" from dah_state s where s."StateID" = a."StateID"),
     zip_code = a."ZipCode",
     non_us_str_code = a."NonUsCity",
-    country = (select "CountryDesc" from dah_country c where c."CountryID" = a."CountryID")
-from dah_violator_address a where a."ViolatorID" = j.ticket_id;
+    country = (select "CountryDesc" from dah_country c where c."CountryID"::text = a."CountryID"::text)
+from dah_violator_address a where a."ViolatorID" = j.violator_id;
 
--- join dah payments
+join dah payments
 update dah_joined j set
 	admin_fee = p."AdminFee",
 	state_fee = p."StateFee"
@@ -163,10 +174,12 @@ update dah_joined j set
 -- create disposition string
 update dah_joined j 
     set disposition = 
-    concat_ws(' ',
+    (select concat_ws(' ',
         (select dt."Distype" from dah_disp_type dt where da."RespType" = dt."DispositionID"), 
         'by',
-	    (select dt."Distype" from dah_disp_type dt where da."DispositionID" = dt."DispositionID"))
+	    (select dt."Distype" from dah_disp_type dt where da."DispositionID" = dt."DispositionID")
+        )
+    )
 	from dah_dispadjourn da where da."ZTicketID" = j.ticket_id;
 
 -- create payment status
@@ -176,19 +189,17 @@ update dah_joined j
             WHEN j.payment_amount = 0 THEN 'NO PAYMENT APPLIED'
             WHEN j.payment_amount > 0 and j.balance_due > 0 THEN 'PARTIAL PAYMENT APPLIED'
             WHEN j.balance_due = 0 THEN 'PAID IN FULL'
-            ElSE null
+            ELSE null
         END
     );
 
 -- create collection status
 update dah_joined j
-    set collection_status = (
-        select da."CollectionFlag",
-            CASE da."CollectionFlag"
-                WHEN da."CollectionFlag" = 1 THEN 'IN COLLECTION'
-                ElSE null
-            END,
-        from dah_dispadjourn da where da."ZTicketID" = j.ticket_id);
-    );
+    set collection_status = 'In collections' where j.ticket_id in 
+    (select "ZTicketID" from dah_dispadjourn where "CollectionFlag" = 1);
+
+-- create violation address
+update dah_joined j
+    set violation_address = concat_ws(' ', violation_street_number, violation_street_name);
 
 -- select * from dah_joined j order by random() limit 100;
