@@ -1,0 +1,202 @@
+name: Blight Violations
+backend: postgres
+db: etl
+table: dah_bvn
+description: >
+  This dataset shows Blight Tickets that have been issued to property owners who have violated City of Detroit ordinances that govern how property owners must maintain 
+  the exterior of their property. Blight Violation Notices (BVN), or Blight Tickets, are issued by city inspectors, police officers, neighborhood city hall managers and other city officials 
+  who investigate complaints of blight and managed by the Department of Administrative Hearings.
+disclaimer: >
+website: https://cityofdetroit.github.io/data-resources/datasets/
+updates_every: day
+license: Public Domain
+agency: DAH
+attribution:
+source_link:
+image:
+contact:
+  email: iet@detroitmi.gov
+  name: IET Team
+socrata:
+  id: 
+  view: dah_bvn_socrata
+  category: "Property & Parcels"
+  tags:
+    - blight
+    - violations
+  row_identifier: ticket_id
+  permission: private
+  # column mapping, used by the create script
+  columns:
+    ticket_id:
+      expression: ticket_id
+      human: Ticket ID
+      type: number
+    ticket_number:
+      expression: ticket_number
+      human: Ticket Number
+      type: text
+    agency_name:
+      expression: agency_name
+      human: Agency Name
+      type: text
+    inspector_name:
+      expression: inspector_name
+      human: Inspector Name
+      type: text
+    violator_name:
+      expression: violator_name
+      human: Violator Name
+      type: text
+    violator_id:
+      expression: violator_id
+      human: Violator ID
+      type: number
+    violation_street_number:
+      expression: violation_street_number
+      human: Violation Street Number
+      type: text
+    violation_street_name:
+      expression: violation_street_name
+      human: Violation Street Name
+      type: text
+    violation_zip_code:
+      expression: violation_zip_code
+      human: Violation Zip Code
+      type: text
+    mailing_address_str_number:
+      expression: mailing_address_str_number
+      human: Mailing Address Street Number
+      type: text
+    mailing_address_str_name:
+      expression: mailing_address_str_name
+      human: Mailing Address Street Name
+      type: text
+    city:
+      expression: city
+      human: Mailing Address City
+      type: text
+    state:
+      expression: state
+      human: Mailing Address State
+      type: text
+    zip_code:
+      expression: zip_code
+      human: Mailing Address Zip Code
+      type: text
+    non_us_str_code:
+      expression: non_us_str_code
+      human: Mailing Address Non-USA Code
+      type: text
+    country:
+      expression: country
+      human: Mailing Address Country
+      type: text
+    ticket_issued_date:
+      expression: ticket_issued_date
+      human: Ticket Issued Date
+      type: calendar_date
+    ticket_issued_time:
+      expression: ticket_issued_time
+      human: Ticket Issued Time
+      type: text
+    hearing_date:
+      expression: hearing_date
+      human: Hearing Date
+      type: calendar_date
+    hearing_time:
+      expression: hearing_time
+      human: Hearing Time
+      type: text
+    violation_code:
+      expression: violation_code
+      human: Violation Code
+      type: text
+    violation_description:
+      expression: violation_description
+      human: Violation Description
+      type: text
+    disposition:
+      expression: disposition
+      human: Disposition
+      type: text
+    fine_amount:
+      expression: fine_amount
+      human: Fine Amount
+      type: money
+    admin_fee:
+      expression: admin_fee
+      human: Admin Fee
+      type: money
+    state_fee:
+      expression: state_fee
+      human: State Fee
+      type: money
+    late_fee:
+      expression: late_fee
+      human: Late Fee
+      type: money
+    discount_amount:
+      expression: discount_amount
+      human: Discount Amount
+      type: money
+    clean_up_cost:
+      expression: clean_up_cost
+      human: Clean Up Cost
+      type: money
+    judgment_amount:
+      expression: judgement_amount
+      human: Judgment Amount (Total Due)
+      type: money
+    payment_amount:
+      expression: payment_amount
+      human: Payment Amount (Sum of All Payments)
+      type: money
+    balance_due: 
+      expression: balance_due
+      human: Balance Due
+      type: money
+    payment_date:
+      expression: payment_date
+      human: Payment Date (Most Recent)
+      type: money
+    payment_status:
+      expression: payment_status
+      human: Payment Status
+      type: text
+    collection_status:
+      expression: collection_status
+      human: Collection Status
+      type: text
+    violation_address:
+      expression: violation_address
+      human: Violation Address
+      type: text
+    parcelno:
+      expression: parcelno
+      human: Violation Parcel ID
+      type: text
+    propaddr:
+      expression: propaddr
+      human: Violation Property Address
+      type: text
+    legaldesc:
+      expression: legaldesc
+      human: Violation Property Legal Description
+      type: text
+    latitude:
+      expression: latitude
+      human: Violation Latitude
+      type: number
+    longitude:
+      expression: longitude
+      human: Violation Longitude
+      type: number
+    location:
+      expression: CASE WHEN latitude is null THEN null ELSE concat('location (', latitude, ',', longitude, ')') END
+      human: Violation Location
+      type: location
+  # not automatable
+  row_label: Ticket
+  time_period:
+  
