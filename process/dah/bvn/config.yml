@@ -3,9 +3,9 @@ backend: postgres
 db: etl
 table: dah_bvn
 description: >
-  This dataset shows Blight Tickets that have been issued to property owners who have violated City of Detroit ordinances that govern how property owners must maintain 
-  the exterior of their property. Blight Violation Notices (BVN), or Blight Tickets, are issued by city inspectors, police officers, neighborhood city hall managers and other city officials 
-  who investigate complaints of blight and managed by the Department of Administrative Hearings.
+  This dataset shows Blight Violation Notices (BVN), or Blight Tickets, that have been issued to property owners who have violated City of Detroit ordinances that govern how property owners must maintain 
+  the exterior of their property. Blight Tickets are issued by city inspectors, police officers, neighborhood city hall managers and other city officials 
+  who investigate complaints of blight and are managed by the Department of Administrative Hearings.
 disclaimer: >
 website: https://cityofdetroit.github.io/data-resources/datasets/
 updates_every: day
