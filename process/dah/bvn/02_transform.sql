@@ -122,8 +122,9 @@ select
     "AdminFee",
     "JSA",
     "DiscAmt",
-    "RemediationCost"
-from dah_ztickets z where z."VoidTicket" = 0 order by random() limit 1000;
+    -- remediation cost
+    (select sum("ServiceCost") from dah_blight_ticket_svc_cost bts where z."ZTicketID" = bts."ZTicketID" and bts."ServiceType" = 6)
+from dah_ztickets z where z."VoidTicket" = 0; -- order by random() limit 10000;
 
 -- join violator info
 update dah_joined j set
@@ -141,7 +142,7 @@ update dah_joined j set
     country = (select "CountryDesc" from dah_country c where c."CountryID"::text = a."CountryID"::text)
 from dah_violator_address a where a."ViolatorID" = j.violator_id;
 
-join dah payments
+-- join dah payments
 update dah_joined j set
 	admin_fee = p."AdminFee",
 	state_fee = p."StateFee"
@@ -156,16 +157,16 @@ update dah_joined j set
 -- Sum of "OrigFineAmt", "AdminFee", "StateFee", "LateFee" and "RemediationCost" minus "DiscAmt"
 update dah_joined j
 	set judgment_amount = (
-		fine_amount + 
-		admin_fee +
-		state_fee +
-		late_fee +
-		clean_up_cost -
-		discount_amount);
+		COALESCE(fine_amount, 0) + 
+		COALESCE(admin_fee, 0) + 
+		COALESCE(state_fee, 0) + 
+		COALESCE(late_fee, 0) + 
+		COALESCE(clean_up_cost, 0) -
+		COALESCE(discount_amount, 0));
 
 -- compute balance due
 update dah_joined j
-    set balance_due = (judgment_amount - payment_amount);
+    set balance_due = (judgment_amount - COALESCE(payment_amount, 0));
 
 -- compute payment date
 update dah_joined j set
@@ -186,9 +187,12 @@ update dah_joined j
 update dah_joined j
     set payment_status = (
         CASE 
+            WHEN 
+            (j.disposition LIKE 'Not responsible%' OR
+                j.disposition LIKE 'Responsible (Fine Waived)%') THEN 'NO PAYMENT DUE'
             WHEN j.payment_amount = 0 THEN 'NO PAYMENT APPLIED'
             WHEN j.payment_amount > 0 and j.balance_due > 0 THEN 'PARTIAL PAYMENT APPLIED'
-            WHEN j.balance_due = 0 THEN 'PAID IN FULL'
+            WHEN j.balance_due::integer <= 0 THEN 'PAID IN FULL'
             ELSE null
         END
     );
@@ -201,5 +205,3 @@ update dah_joined j
 -- create violation address
 update dah_joined j
     set violation_address = concat_ws(' ', violation_street_number, violation_street_name);
-
--- select * from dah_joined j order by random() limit 100;
