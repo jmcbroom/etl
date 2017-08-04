@@ -145,7 +145,7 @@ socrata:
       human: Clean Up Cost
       type: money
     judgment_amount:
-      expression: judgement_amount
+      expression: judgment_amount
       human: Judgment Amount (Total Due)
       type: money
     payment_amount:
