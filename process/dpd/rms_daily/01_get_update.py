@@ -10,7 +10,18 @@ rms_connection = rms_engine.connect()
 
 tablename = "vwRMS_Portal"
 
-df = pandas.read_sql("select * from dbo.{}".format(tablename), rms_connection)
+def get_max_crimeid():
+  engine = sqlalchemy.create_engine("postgresql+psycopg2://{}@localhost/{}".format(os.environ['PG_USER'], os.environ['PG_DB']))
+  connection = engine.connect()
+  # get max crimeid for current dataset
+  query = "select max(incident_date) from rms"
+  res = connection.execute(query)
+  max_crimeid = res.fetchone()[0]
+  return max_crimeid
+  
+print("Getting incidents after {}...".format(get_max_crimeid()))
+
+df = pandas.read_sql("select * from dbo.{} where incident_date > '{}'".format(tablename, get_max_crimeid()), rms_connection)
       
 print("{} incidents found...".format(len(df)))
 
