@@ -17,7 +17,7 @@ contact:
   email: crimeintelligencebureau@detroitmi.gov
   name: Crime Intelligence Unit
 socrata:
-  id:
+  id: irnv-4sjd
   api_id:
   view: rms_daily_socrata
   category: Public Safety
