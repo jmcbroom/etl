@@ -1,1 +1,1 @@
-from etl.socrata import SocrataDs
+from etl.salesforce import SfReport
