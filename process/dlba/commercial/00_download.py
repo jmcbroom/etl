@@ -76,6 +76,10 @@ def getContractorName(obj):
 
 df['demo_contractor_name'] = df['Demolition_Contractor__r'].apply(lambda x: getContractorName(x))
 
+# drop relational cols after creating new ones bc postgres can't process OrderedDicts
+del df['DBA_COM_Property__r']
+del df['Demolition_Contractor__r']
+
 # add new cols - prioritize bseed inspection approval date, if that's null use demo inspection date
 df['open_hole_date'] = df['bseed_com_open_hole_approved'].fillna(df['open_hole_approved_dt'])
 df['winter_grade_date'] = df['bseed_com_winter_grade_approved'].fillna(df['winter_grade_approved_dt'])
