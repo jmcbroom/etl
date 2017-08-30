@@ -39,7 +39,7 @@ socrata:
       human: Status
       type: text
     contractor_name:
-      expression: contractor_name
+      expression: demo_contractor_name
       human: Contractor Name
       type: text
     env_group_number:
