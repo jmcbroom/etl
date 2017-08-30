@@ -85,8 +85,8 @@ df['open_hole_date'] = df['bseed_com_open_hole_approved'].fillna(df['open_hole_a
 df['winter_grade_date'] = df['bseed_com_winter_grade_approved'].fillna(df['winter_grade_approved_dt'])
 df['final_grade_date'] = df['bseed_com_final_grade_approved'].fillna(df['final_grade_approved_dt'])
 
-# add new col - sum knock and abatement costs for total demo cost
-df['total_demo_cost'] = df['demo_cost_abatement'] + df['demo_cost_knock']
+# add new col - sum knock and abatement costs for total demo cost, make 0 if NaN
+df['total_demo_cost'] = df['demo_cost_abatement'].fillna(0) + df['demo_cost_knock'].fillna(0)
 
 # if already knocked down, zero out projected demo dt
 df.loc[df.status.isin(['Demolished']), 'demo_proj_demo_dt'] = None
