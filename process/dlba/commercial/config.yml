@@ -71,15 +71,15 @@ socrata:
       human: Final Grade Inspection Approval Date
       type: calendar_date
     abatement_cost:
-      expression: demo_cost_abatement
+      expression: CASE WHEN demo_cost_abatement is 'NaN' THEN null ELSE demo_cost_abatement
       human: Abatement Cost
       type: money
     knock_cost:
-      expression: demo_cost_knock
+      expression: CASE WHEN demo_cost_knock is 'NaN' THEN null ELSE demo_cost_knock
       human: Knock Down Cost
       type: money
     total_cost:
-      expression: total_demo_cost
+      expression: CASE WHEN total_demo_cost is 'NaN' THEN null ELSE total_demo_cost
       human: Total Demo Cost
       type: money
     council_district:
