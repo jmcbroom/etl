@@ -16,7 +16,7 @@ contact:
   email: iet@detroitmi.gov
   name: IET Team
 socrata:
-  id: b84s-7dbv
+  id:
   view: dlba_comm_demos_socrata
   category: "Property & Parcels"
   tags:
@@ -38,26 +38,26 @@ socrata:
       expression: status
       human: Status
       type: text
-    demo_date:
-      expression: replace(to_char(demo_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
-      human: Demolished Date
-      type: calendar_date
-    projected_demo_date:
-      expression: replace(to_char(socrata_demo_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
-      human: Projected Knock Down Date
-      type: calendar_date
     contractor_name:
       expression: contractor_name
       human: Contractor Name
       type: text
-    price:
-      expression: price
-      human: Price
-      type: money
-    env_group_no:
-      expression: env_group_no
+    env_group_number:
+      expression: env_group_number
       human: Environmental Survey Group Number
       type: text
+    demo_proceed_date:
+      expression: replace(to_char(demo_ntp_dt::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: Notice to Proceed with Demo Date
+      type: calendar_date
+    projected_demo_date:
+      expression: replace(to_char(demo_proj_demo_dt::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: Projected Knock Down Date
+      type: calendar_date
+    demo_date:
+      expression: replace(to_char(knock_start_dt::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: Demolished Date
+      type: calendar_date
     open_hole_date:
       expression: replace(to_char(open_hole_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
       human: Open Hole Inspection Approval Date
@@ -70,6 +70,18 @@ socrata:
       expression: replace(to_char(final_grade_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
       human: Final Grade Inspection Approval Date
       type: calendar_date
+    abatement_cost:
+      expression: demo_cost_abatement
+      human: Abatement Cost
+      type: money
+    knock_cost:
+      expression: demo_cost_knock
+      human: Knock Down Cost
+      type: money
+    total_cost:
+      expression: total_demo_cost
+      human: Total Demo Cost
+      type: money
     council_district:
       expression: council_district
       human: Council District
