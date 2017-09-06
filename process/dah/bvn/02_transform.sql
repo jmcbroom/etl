@@ -19,7 +19,7 @@ create table dah_joined (
     zip_code text,
     non_us_str_code text,
     country text,
-    ticket_issued_date timestamp,
+    violation_date timestamp,
     ticket_issued_time text,
     hearing_date timestamp,
     hearing_time text,
@@ -48,17 +48,10 @@ create table dah_joined (
     location text);
 
 -- create indices on helper tables. speeds up ze joins
-drop index if exists dah_joined_zticket_idx;
-create index dah_joined_zticket_idx on dah_joined using btree(ticket_id);
-
-drop index if exists dah_violator_info_idx;
-create index dah_violator_info_idx on dah_violator_info using btree("ZTicketID");
-
-drop index if exists dah_violator_address_idx;
-create index dah_violator_address_idx on dah_violator_address using btree("ViolatorID");
-
-drop index if exists dah_payment_id_idx;
-create index dah_payment_id_idx on dah_payments using btree("ZticketID");
+create index if not exists dah_joined_zticket_idx on dah_joined using btree(ticket_id);
+create index if not exists dah_violator_info_idx on dah_violator_info using btree("ZTicketID");
+create index if not exists dah_violator_address_idx on dah_violator_address using btree("ViolatorID");
+create index if not exists dah_payment_id_idx on dah_payments using btree("ZticketID");
 
 insert into dah_joined (
     ticket_id,
@@ -69,7 +62,7 @@ insert into dah_joined (
     violation_street_name,
     violation_zip_code,
     violator_id,
-    ticket_issued_date,
+    violation_date,
     ticket_issued_time,
     hearing_date,
     hearing_time,
@@ -124,7 +117,11 @@ select
     "DiscAmt",
     -- remediation cost
     (select sum("ServiceCost") from dah_blight_ticket_svc_cost bts where z."ZTicketID" = bts."ZTicketID" and bts."ServiceType" = 6)
-from dah_ztickets z where z."VoidTicket" = 0; -- order by random() limit 10000;
+from dah_ztickets z where z."VoidTicket" = 0; -- order by random() limit 5000;
+
+-- new fine amt
+update dah_joined j set fine_amount = z."NewFineAmt" from dah_ztickets z
+    where j.ticket_id = z."ZTicketID" and z."NewFineAmt" > 0;
 
 -- join violator info
 update dah_joined j set
@@ -148,11 +145,6 @@ update dah_joined j set
 	state_fee = p."StateFee"
 from dah_payments p where j.ticket_id = p."ZticketID";
 
--- compute payment amount
--- Sum all rows with "PaymentAmt" for a unique "ZTicketID"
-update dah_joined j set
-	payment_amount = (select sum("PaymentAmt") from dah_payments where "ZticketID" = j.ticket_id);
-
 -- compute judgment amount
 -- Sum of "OrigFineAmt", "AdminFee", "StateFee", "LateFee" and "RemediationCost" minus "DiscAmt"
 update dah_joined j
@@ -163,6 +155,14 @@ update dah_joined j
 		COALESCE(late_fee, 0) + 
 		COALESCE(clean_up_cost, 0) -
 		COALESCE(discount_amount, 0));
+
+-- compute payment amount
+-- Sum all rows with "PaymentAmt" for a unique "ZTicketID"
+update dah_joined j set
+	payment_amount = (select sum("PaymentAmt") from dah_payments where "ZticketID" = j.ticket_id);
+update dah_joined j set
+    payment_amount = judgment_amount
+        where j.ticket_id in (select "ZticketID" from dah_payments where "PymtKnd" = 2);
 
 -- compute balance due
 update dah_joined j
@@ -183,6 +183,16 @@ update dah_joined j
     )
 	from dah_dispadjourn da where da."ZTicketID" = j.ticket_id;
 
+-- if disposition is "not responsible", 
+-- set payment and judgement to $0 (because might be refunded)
+update dah_joined j set 
+    payment_amount = 0, 
+    judgment_amount = 0, 
+    admin_fee = 0, 
+    state_fee = 0,
+    balance_due = 0
+where disposition like 'Not resp%';
+
 -- create payment status
 update dah_joined j
     set payment_status = (
@@ -192,16 +202,30 @@ update dah_joined j
                 j.disposition LIKE 'Responsible (Fine Waived)%') THEN 'NO PAYMENT DUE'
             WHEN j.payment_amount = 0 THEN 'NO PAYMENT APPLIED'
             WHEN j.payment_amount > 0 and j.balance_due > 0 THEN 'PARTIAL PAYMENT APPLIED'
-            WHEN j.balance_due::integer <= 0 THEN 'PAID IN FULL'
+            WHEN j.ticket_id in (select "ZticketID" from dah_payments where "PymtKnd" = 2) THEN 'PAID IN FULL'
             ELSE null
         END
     );
 
+-- zero out balance due where no payment due
+update dah_joined j set
+    balance_due = 0 where j.payment_status = 'NO PAYMENT DUE';
+
 -- create collection status
 update dah_joined j
     set collection_status = 'In collections' where j.ticket_id in 
-    (select "ZTicketID" from dah_dispadjourn where "CollectionFlag" = 1);
+    (select "ZTicketID" from dah_dispadjourn where "CollectionFlag" != 'NaN');
 
 -- create violation address
 update dah_joined j
     set violation_address = concat_ws(' ', violation_street_number, violation_street_name);
+
+-- join on parcel address
+update dah_joined j set 
+    parcelno = a.parcelno,
+    propaddr = a.propaddr,
+    legaldesc = a.legaldesc,
+    latitude = ST_Y(ST_Transform(ST_Centroid(wkb_geometry), 4326)),
+    longitude = ST_X(ST_Transform(ST_Centroid(wkb_geometry), 4326))
+from base.joined a
+    where trim(lower(j.violation_address)) = trim(lower(a.propaddr));

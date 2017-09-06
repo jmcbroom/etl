@@ -18,6 +18,10 @@ class Dataset(object):
         self.name = self.conf['name']
         self.cols = self.conf['socrata']['columns']
         self.view = self.conf['socrata']['view']
+        if "view_where" not in self.conf['socrata'].keys():
+            self.view_where = "1 = 1"
+        else:
+            self.view_where = self.conf['socrata']['view_where']
         self.table = self.conf['table']
         self.socrata_id = self.conf['socrata']['id']
 
@@ -113,7 +117,7 @@ class Dataset(object):
 
     def create_db_view(self):
         columns = [ "{} as {}".format(self.cols[i]['expression'], i) for i in self.cols ]
-        create_view_statement = """drop view if exists {}; create view {} as ( select {} from {} )""".format(self.view, self.view, ", \n".join(columns), self.table)
+        create_view_statement = """drop view if exists {}; create view {} as ( select {} from {} where {})""".format(self.view, self.view, ", \n".join(columns), self.table, self.view_where)
         self.db_connection.execute(create_view_statement)
         return create_view_statement
     

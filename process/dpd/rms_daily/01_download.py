@@ -9,8 +9,8 @@ rms_engine = sqlalchemy.create_engine('mssql+pymssql://{}:{}@{}/{}'.format(user,
 rms_connection = rms_engine.connect()
 
 tablename = "vwRMS_Portal"
-
-df = pandas.read_sql("""select * from dbo.{}""".format(tablename), rms_connection)
+  
+df = pandas.read_sql("select * from dbo.{}".format(tablename), rms_connection)
       
 print("{} incidents found...".format(len(df)))
 
@@ -56,4 +56,4 @@ df['y'] = df['geoy'].apply(lambda x: float(x)/100)
 df.drop(['geox', 'geoy'], axis=1, inplace=True)
 
 # send it to Postgres
-odo.odo(df, 'postgresql://{}/{}::rms_update'.format(os.environ['PG_CONNSTR'], os.environ['PG_DB']))
+odo.odo(df, 'postgresql://{}/{}::rms'.format(os.environ['PG_CONNSTR'], os.environ['PG_DB']))

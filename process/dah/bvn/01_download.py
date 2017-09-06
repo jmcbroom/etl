@@ -1,14 +1,15 @@
 import sqlalchemy
+from os import environ as env
 
 user = env['DAH_USER']
-password = ENV['DAH_PASS']
+password = env['DAH_PASS']
 host = env['DAH_HOST']
 db = env['DAH_DB']
 
 dah_engine = sqlalchemy.create_engine('mssql+pymssql://{}:{}@{}/{}'.format(user, password, host, db))
 dah_connection = dah_engine.connect()
 print(dah_connection)
-local_pg_engine = sqlalchemy.create_engine('postgresql+psycopg2://jimmy@localhost/local')
+local_pg_engine = sqlalchemy.create_engine('postgresql+psycopg2://gisteam@localhost/etl')
 pg_conn = local_pg_engine.connect()
 print(pg_conn)
 
@@ -34,4 +35,5 @@ lookup = {
 import pandas as pd, odo
 for k, v in lookup.items():
     df = pd.read_sql("select * from SWEETSpower.{}".format(v), dah_connection)
-    odo.odo(df, 'postgresql://jimmy@localhost/local::dah_{}'.format(k))
+    pg_conn.execute("drop table if exists dah_{}".format(k))
+    odo.odo(df, 'postgresql://gisteam@localhost/etl::dah_{}'.format(k))

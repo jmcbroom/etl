@@ -19,7 +19,8 @@ contact:
 socrata:
   id: 6gdg-y3kf
   api_id: 
-  view: rms_socrata
+  view: rms_public_socrata
+  view_where: ibr_date is not null
   category: Public Safety
   tags:
     - police
@@ -27,7 +28,7 @@ socrata:
     - "911"
     - "calls for service"
   row_identifier: uniq
-  permission: private
+  permission: public
   # column mapping, used by the create script
   columns:
     uniq:
@@ -57,6 +58,14 @@ socrata:
     state_offense_code:
       expression: state_offense_code
       human: State Offense Code
+      type: text
+    arrest_charge:
+      expression: arr_chrg
+      human: Arrest Charge
+      type: text
+    charge_description:
+      expression: chrgdesc
+      human: Charge Description
       type: text
     incident_timestamp:
       expression: replace(to_char(concat(incident_date, ' ', left(incident_time, 2), ':', right(incident_time, 2), ':00')::timestamp, 'YYYY-MM-DD HH24:MI:SS.000'), ' ', 'T')
