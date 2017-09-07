@@ -1,7 +1,7 @@
 name: Blight Violations
 backend: postgres
 db: etl
-table: dah_joined
+table: dah_bvn
 description: >
   This dataset shows Blight Violation Notices (BVN), or Blight Tickets, that have been issued to property owners who have violated City of Detroit ordinances that govern how property owners must maintain 
   the exterior of their property. Blight Tickets are issued by city inspectors, police officers, neighborhood city hall managers and other city officials 
@@ -18,7 +18,7 @@ contact:
   email: iet@detroitmi.gov
   name: IET Team
 socrata:
-  id: a857-6w92
+  id: ti6p-wcg4
   view: dah_bvn_socrata
   category: "Property & Parcels"
   tags:
@@ -97,7 +97,7 @@ socrata:
       human: Violation Date
       type: calendar_date
     ticket_issued_time:
-      expression: ticket_issued_time
+      expression: right(ticket_issued_time, 8)
       human: Ticket Issued Time
       type: text
     hearing_date:
@@ -121,39 +121,39 @@ socrata:
       human: Disposition
       type: text
     fine_amount:
-      expression: fine_amount
+      expression: CASE fine_amount WHEN 'NaN' THEN null ELSE fine_amount END
       human: Fine Amount
       type: money
     admin_fee:
-      expression: admin_fee
+      expression: CASE admin_fee WHEN 'NaN' THEN null ELSE admin_fee END
       human: Admin Fee
       type: money
     state_fee:
-      expression: state_fee
+      expression: CASE state_fee WHEN 'NaN' THEN null ELSE state_fee END
       human: State Fee
       type: money
     late_fee:
-      expression: late_fee
+      expression: CASE late_fee WHEN 'NaN' THEN null ELSE late_fee END
       human: Late Fee
       type: money
     discount_amount:
-      expression: discount_amount
+      expression: CASE discount_amount WHEN 'NaN' THEN null ELSE discount_amount END
       human: Discount Amount
       type: money
     clean_up_cost:
-      expression: clean_up_cost
+      expression: CASE clean_up_cost WHEN 'NaN' THEN null ELSE clean_up_cost END
       human: Clean Up Cost
       type: money
     judgment_amount:
-      expression: judgment_amount
+      expression: CASE judgment_amount WHEN 'NaN' THEN null ELSE judgment_amount END
       human: Judgment Amount (Total Due)
       type: money
     payment_amount:
-      expression: payment_amount
+      expression: CASE payment_amount WHEN 'NaN' THEN null ELSE payment_amount END
       human: Payment Amount (Sum of All Payments)
       type: money
     balance_due: 
-      expression: balance_due
+      expression: CASE balance_due WHEN 'NaN' THEN null ELSE balance_due END
       human: Balance Due
       type: money
     payment_date:
@@ -175,14 +175,6 @@ socrata:
     parcelno:
       expression: parcelno
       human: Violation Parcel ID
-      type: text
-    propaddr:
-      expression: propaddr
-      human: Violation Property Address
-      type: text
-    legaldesc:
-      expression: legaldesc
-      human: Violation Property Legal Description
       type: text
     latitude:
       expression: latitude

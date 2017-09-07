@@ -30,6 +30,7 @@ lookup = {
     'security': 'tblSecurity',
     'country': 'tblDAHCountry',
     'disp_type': 'tblDAHDispType'
+    'payment_type': 'tblDAHPaymentType'
 }
 
 import pandas as pd, odo
