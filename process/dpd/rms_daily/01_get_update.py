@@ -50,6 +50,17 @@ def anonymize_location(value):
 # apply address function
 df['address'] = df['address'].apply(lambda x: anonymize_location(x)[1])
 
+def spell_ouil(value):
+    if value == 'OUIL':
+        value = 'OPERATING UNDER THE INLFUENCE OF LIQUOR OR DRUGS'
+    else:
+        pass
+
+    return value
+
+# apply ouil function
+df['offense_category'] = df['offense_category'].apply(lambda x: spell_ouil(x))
+
 # convert GEOX and GEOY to X, Y for making a point
 df['x'] = df['geox'].apply(lambda x: float(x)/100)
 df['y'] = df['geoy'].apply(lambda x: float(x)/100)
