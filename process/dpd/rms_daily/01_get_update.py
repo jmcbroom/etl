@@ -52,7 +52,7 @@ df['address'] = df['address'].apply(lambda x: anonymize_location(x)[1])
 
 def spell_ouil(value):
     if value == 'OUIL':
-        value = 'OPERATING UNDER THE INLFUENCE OF LIQUOR OR DRUGS'
+        value = 'OPERATING UNDER THE INFLUENCE OF LIQUOR OR DRUGS'
     else:
         pass
 
