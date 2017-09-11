@@ -11,6 +11,9 @@ create index etl_rms_crimeid_idx on rms using btree(dpdcrimeid);
 drop index if exists etl_rms_update_crimeid_idx;
 create index etl_rms_update_crimeid_idx on rms using btree(dpdcrimeid);
 
+alter table rms_update add column anonymized boolean;
+update rms_update set anonymized = 'f';
+
 -- make a point from X and Y, then drop columns
 update rms_update set geom = st_setsrid(st_makepoint(x, y), 2898);
 alter table rms_update drop column x;
@@ -40,7 +43,10 @@ alter table rms_update add column zip_code varchar(10);
 update rms_update r set zip_code = z.zipcode from base.zip_codes z where st_contains(z.wkb_geometry, r.geom);
 
 -- grab existing geometry from rms
-update rms_update set geom = (select geom from rms where rms_update.dpdcrimeid = rms.dpdcrimeid limit 1);
+update rms_update set 
+	anonymized = 't', 
+	geom = (select geom from rms where rms_update.dpdcrimeid = rms.dpdcrimeid limit 1)
+	where rms_update.dpdcrimeid in (select dpdcrimeid from rms where rms.geom is not null);
 
 -- for those that didn't have existing geom, create new point
 update rms_update r set geom =
@@ -51,11 +57,11 @@ update rms_update r set geom =
 				st_buffer(st_closestpoint(c.geom, r.geom), 150) -- 150 feet from the snapped point
 			), 1)
 	)).geom
-	from base.centerline c where r.close_rd_gid = c.gid and r.geom is null;
-
+	from base.centerline c where r.close_rd_gid = c.gid and r.anonymized = 'f';
 
 -- drop road col
 alter table rms_update drop column close_rd_gid;
+alter table rms_update drop column anonymized;
 
 -- add x and y back in
 alter table rms_update add column lon double precision;
