@@ -2,7 +2,7 @@
 -- let's create our master table
 drop table if exists dah_bvn cascade;
 
-create table  (
+create table dah_bvn (
     ticket_id bigint,
     ticket_number text,
     agency_name text,
@@ -115,7 +115,7 @@ select
     "DiscAmt",
     -- remediation cost
     (select sum("ServiceCost") from dah_blight_ticket_svc_cost bts where z."ZTicketID" = bts."ZTicketID" and bts."ServiceType" = 6)
-from dah_ztickets z where z."VoidTicket" = 0 --order by random() limit 5000;
+from dah_ztickets z where z."VoidTicket" = 0; --order by random() limit 5000;
 
 -- new fine amt
 update dah_bvn j set fine_amount = z."NewFineAmt" from dah_ztickets z

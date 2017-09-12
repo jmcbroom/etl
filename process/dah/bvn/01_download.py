@@ -30,11 +30,13 @@ lookup = {
     'security': 'tblSecurity',
     'country': 'tblDAHCountry',
     'disp_type': 'tblDAHDispType'
-    'payment_type': 'tblDAHPaymentType'
+    # 'payment_type': 'tblDAHPaymentType'
 }
 
 import pandas as pd, odo
 for k, v in lookup.items():
     df = pd.read_sql("select * from SWEETSpower.{}".format(v), dah_connection)
+    print("{} to dataframe".format(v))
     pg_conn.execute("drop table if exists dah_{}".format(k))
     odo.odo(df, 'postgresql://gisteam@localhost/etl::dah_{}'.format(k))
+    print("{} in postgres".format(k))

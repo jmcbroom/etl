@@ -1,3 +1,3 @@
-!#/bin/bash
+#!/bin/bash
 psql -d $PG_DB -c "drop table if exists ocp cascade;"
-python ${FILEROOT}/01_download.py
+/home/gisteam/anaconda3/bin/python ${FILEROOT}/01_download.py
