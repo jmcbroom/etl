@@ -12,8 +12,9 @@ FILEROOT = os.environ['ETL_ROOT']
 
 class Dataset(object):
     def __init__(self, dir='dlba/sidelots'):
+        print(dir)
         self.directory = FILEROOT + 'process/' + dir
-        with open(self.directory + '/config.yml', 'r') as f:
+        with open(self.directory + "/config.yml", 'r') as f:
             self.conf = yaml.load(f)
         self.name = self.conf['name']
         self.cols = self.conf['socrata']['columns']
@@ -79,6 +80,11 @@ class Dataset(object):
 
         self.socrata_id = new_dataset['id']
         self.soda_connection.publish(self.socrata_id)
+
+    def delete_all_rows(self):
+        rows = self.db_connection.execute("select * from {} limit 1".format(self.view))
+        job = self.soda_connection.replace( self.socrata_id, [ dict(row) for row in rows ] )
+        return job
 
     def send_update_msg(self, method):
         self.count_socrata()

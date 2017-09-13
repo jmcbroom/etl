@@ -1,0 +1,174 @@
+name: Parcel Points Ownership
+backend: postgres
+db: etl
+table: assessor.joined
+epsg: 2898
+description: >
+  Parcel point file with ownership, assessment, and taxable value information. If you need the shapefiles, go to this dataset: https://data.detroitmi.gov/Property-Parcels/Parcel-Map/fxkw-udwfdisclaimer: >
+website: https://cityofdetroit.github.io/data-resources/datasets/
+updates_every: day
+license:
+agency: Assessors Division
+attribution:
+source_link:
+image:
+contact:
+  email: iet@detroitmi.gov
+  name: IET
+mapbox:
+  slug: parcel_points
+  view: assessor.joined
+  columns:
+    - ST_Centroid(wkb_geometry) as wkb_geometry
+    - parcelno
+    - propaddr
+    - taxpayer1
+    - saledate
+    - saleprice
+socrata:
+  id: eijm-6nr4
+  api_id: 
+  view: parcel_points_ownership
+  category: "Property & Parcels"
+  tags:
+    - parcels
+    - assess
+    - owner
+    - tax
+    - value
+    - address
+    - location
+  row_identifier: parcelno
+  permission: public
+  # column mapping, used by the create script
+  columns:
+    parcelno:
+      expression: parcelno
+      human: ParcelNo
+      type: text
+    propaddr:
+      expression: propaddr
+      human: PropAddr
+      type: text
+    saledate:
+      expression: replace(to_char(saledate, 'YYYY-MM-DD HH24:MI:SS.000'), ' ', 'T') 
+      human: SaleDate
+      type: calendar_date
+    saleprice:
+      expression: saleprice
+      human: Last Sale Price
+      type: text
+    propno:
+      expression: propno
+      human: House Number
+      type: number
+    propdir:
+      expression: propdir
+      human: Street Direction
+      type: text
+    propstr:
+      expression: propstr
+      human: Street Name
+      type: text
+    propzip:
+      expression: zipcode
+      human: Zip Code
+      type: text
+    taxpayer:
+      expression: taxpayer1
+      human: Owner/Taxpayer
+      type: text
+    taxpayer2:
+      expression: taxpayer2
+      human: Owner/Taxpayer 2
+      type: text
+    tpaddr:
+      expression: taxpaddr
+      human: Taxpayer Address
+      type: text
+    tpcity:
+      expression: taxpcity
+      human: Taxpayer City
+      type: text
+    tpstate: 
+      expression: taxpstate
+      human: Taxpayer State
+      type: text
+    tpzip:
+      expression: taxpzip
+      human: Taxpayer Zip Code
+      type: text
+    propclass:
+      expression: propclass
+      human: Property Class
+      type: text
+    taxstatus:
+      expression: taxstatus
+      human: Tax Status
+      type: text
+    sqft:
+      expression: totalsqft
+      human: Total Square Footage
+      type: number 
+    acreage:
+      expression: totalacreage
+      human: Total Acres
+      type: number
+    frontage:
+      expression: frontage
+      human: Frontage
+      type: number
+    depth:
+      expression: depth
+      human: Depth
+      type: number
+    pre:
+      expression: pre
+      human: PRE
+      type: text
+    cibyrbuilt:
+      expression: cibyrbuilt
+      human: CIBYrBuilt
+      type: text
+    resyrbuilt:
+      expression: resyrbuilt
+      human: Year Built
+      type: text
+    isimproved:
+      expression: isimproved
+      human: Is Improved
+      type: number
+    sev:
+      expression: sev
+      human: State Equalized Value
+      type: number
+    av:
+      expression: av
+      human: Assessed Value
+      type: number
+    tv:
+      expression: tv
+      human: Total Value
+      type: number
+    ward:
+      expression: ward
+      human: Ward
+      type: number
+    legaldesc:
+      expression: legaldesc
+      human: LegalDesc
+      type: text
+    latitude:
+      expression: st_y(st_centroid(st_transform(wkb_geometry, 4326)))
+      human: Latitude
+      type: number
+    longitude:
+      expression: st_x(st_centroid(st_transform(wkb_geometry, 4326)))
+      human: Longitude
+      type: number
+    location:
+      expression: concat('location(', st_y(st_centroid(st_transform(wkb_geometry, 4326))), ',' , st_x(st_centroid(st_transform(wkb_geometry, 4326))), ')')
+      human: Location
+      type: location
+  row_label: Parcel
+  time_period:

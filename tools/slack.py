@@ -19,10 +19,26 @@ class SlackMessage(object):
     self.ts = m['ts']
   
   def react_success(self):
-    r = sc.api_call(
+        r = sc.api_call(
       "reactions.add",
       channel = self.channel,
       name = "thumbsup",
+      timestamp = self.ts
+    )
+
+  def react_custom(self, emoji):
+    r = sc.api_call(
+      "reactions.add",
+      channel = self.channel,
+      name = emoji,
+      timestamp = self.ts
+    )
+
+  def react_uploaded(self):
+    r = sc.api_call(
+      "reactions.add",
+      channel = self.channel,
+      name = "100",
       timestamp = self.ts
     )
 
