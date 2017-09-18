@@ -7,3 +7,4 @@ class Dataset(object):
     with open("{}/config.yml".format(directory), 'r') as f:
       self.conf = yaml.load(f)
     print(self.conf)
+    
