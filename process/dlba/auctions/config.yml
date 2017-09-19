@@ -1,6 +1,7 @@
 name: DLBA Auctions Closed
 backend: postgres
 db: etl
+epsg: 4326
 table: dlba.auction_sold
 description: >
   DLBA Auction Sales http://www.buildingdetroit.org/our-programs/auction-program/
@@ -15,6 +16,12 @@ image:
 contact:
   email: iet@detroitmi.gov
   name: IET Team
+esri:
+  slug: auctions_closed
+  view: dlba.auction_sold_socrata
+  columns:
+    - ST_SetSRID(ST_MakePoint(acct_longitude, acct_latitude),4326) as wkb_geometry
+    - '*'
 socrata:
   id: tgwk-njih
   view: dlba.auction_sold_socrata

@@ -2,6 +2,7 @@ name: Side Lot Sales
 backend: postgres
 db: etl
 table: dlba.side_lots
+epsg: 4326
 description: >
   DLBA Side Lot Sales http://www.buildingdetroit.org/our-programs/side-lot-sales/
 disclaimer: >
@@ -15,6 +16,12 @@ image:
 contact:
   email: iet@detroitmi.gov
   name: IET Team
+esri:
+  slug: side_lot_sales
+  view: dlba.side_lots_socrata
+  columns:
+    - ST_SetSRID(ST_MakePoint(acct_longitude, acct_latitude),4326) as wkb_geometry
+    - '*'
 socrata:
   id: mfsk-uw55
   view: dlba.side_lots_socrata

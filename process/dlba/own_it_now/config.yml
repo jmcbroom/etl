@@ -2,6 +2,7 @@ name: Own It Now Sales
 backend: postgres
 db: etl
 table: dlba.own_it_now
+epsg: 4326
 description: >
   DLBA Own It Now http://www.buildingdetroit.org/own-it-now/
 disclaimer: >
@@ -15,6 +16,12 @@ image:
 contact:
   email: iet@detroitmi.gov
   name: IET Team
+esri:
+  slug: own_it_now_sales
+  view: dlba.own_it_now_socrata
+  columns:
+    - ST_SetSRID(ST_MakePoint(acct_longitude, acct_latitude),4326) as wkb_geometry
+    - '*'
 socrata:
   id: pyf3-v3vc
   view: dlba.own_it_now_socrata
