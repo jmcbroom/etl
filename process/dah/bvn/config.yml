@@ -18,6 +18,12 @@ image:
 contact:
   email: iet@detroitmi.gov
   name: IET Team
+esri:
+  slug: blight_notices
+  view: dah_bvn_socrata
+  columns:
+    - ST_SetSRID(ST_MakePoint(longitude, latitude),4326) as wkb_geometry
+    - '*'
 mapbox:
   slug: blight_notices
   view: dah_bvn_socrata
