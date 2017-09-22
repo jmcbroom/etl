@@ -5,22 +5,23 @@
 #   - Longitude__c
 #   - Neighborhood__c
 #   - Council_District__c
-# Case:
-#   - Id
-#   - Program__c
-#   - Address__c
-#   - DEMO_Planned_Knock_Down_Date__c
-#   - Socrata_Projected_Knocked_By_Date__c
-#   - Socrata_Reported_Price__c
-#   - Parcel_ID__c
-#   - Demo_Contractor_TEXT_ONLY__c
-#   - ACCT_Latitude__c
-#   - ACCT_Longitude__c
-#   - Council_District__c
-#   - Non_HHF_Commercial_Demo__c
-#   - Socrata_Price_Type__c
-#   - DEMO_NTP_Date__c
-#   - Neighborhood__c
+Case:
+  - Id
+  - Program__c
+  - Address__c
+  - DEMO_Planned_Knock_Down_Date__c
+  - Socrata_Projected_Knocked_By_Date__c
+  - Socrata_Reported_Price__c
+  - Parcel_ID__c
+  - Demo_Contractor_TEXT_ONLY__c
+  - ACCT_Latitude__c
+  - ACCT_Longitude__c
+  - Council_District__c
+  - Non_HHF_Commercial_Demo__c
+  - Socrata_Price_Type__c
+  - DEMO_NTP_Date__c
+  - Neighborhood__c
+  - Status
 DLBA_Activity__c:
   - Id
   - DLBA_Activity_Type__c
@@ -29,6 +30,7 @@ DLBA_Activity__c:
   - RecordTypeId
   - Actual_Closing_Date__c
   - Sale_Status__c
+  - Listing_Date__c
 # Prospective_Buyer__c:
 #   - Id
 #   - Final_Sale_Price__c
@@ -59,5 +61,3 @@ DLBA_Activity__c:
 #   - ENV_Group_Number__c
 #   - Knock_Start_Dt__c
 #   - Demolition_Contractor__c
-
-

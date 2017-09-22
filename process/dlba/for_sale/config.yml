@@ -1,0 +1,77 @@
+name: DLBA Properties for Sale
+backend: postgres
+db: etl
+table: dlba.side_lots
+epsg: 4326
+description: >
+  DLBA Properties for sale and available for purchase through three programs: Auction, Own It Now, and Rehabbed and Ready. Learn more at http://www.buildingdetroit.org/
+disclaimer: >
+website: https://cityofdetroit.github.io/data-resources/datasets/
+updates_every: day
+license:
+agency: Detroit Land Bank Authority
+attribution:
+source_link:
+image:
+contact:
+  email: iet@detroitmi.gov
+  name: IET Team
+esri:
+  slug: for_sale
+  view: dlba.for_sale_socrata
+  columns:
+    - ST_SetSRID(ST_MakePoint(acct_longitude, acct_latitude),4326) as wkb_geometry
+    - '*'
+socrata:
+  id: 
+  view: dlba.for_sale_socrata
+  category: "Property & Parcels"
+  tags:
+    - landbank
+    - for sale
+    - auction
+    - own it now
+    - rehabbed and ready
+  row_identifier: parcel_id
+  permission: public
+  # column mapping, used by the create script
+  columns:
+    address:
+      expression: address
+      human: Address
+      type: text
+    parcel_id:
+      expression: parcel_id
+      human: Parcel ID
+      type: text
+    program:
+      expression: program
+      human: Program
+      type: text
+    listing_date:
+      expression: concat_ws('T', listing_date, '00:00:00.000Z')
+      human: Listing Date
+      type: calendar_date
+    neighborhood:
+      expression: neighborhood
+      human: Neighborhood
+      type: text
+    council_district:
+      expression: council_district
+      human: Council District
+      type: number
+    acct_latitude:
+      expression: acct_latitude
+      human: Latitude
+      type: number
+    acct_longitude:
+      expression: acct_longitude
+      human: Longitude
+      type: number
+    location:
+      expression: CASE WHEN acct_latitude is null THEN null ELSE concat('location (', acct_latitude, ',', acct_longitude, ')') END
+      human: Location
+      type: location
+  # not automatable
+  row_label: Property For Sale
+  time_period: 
