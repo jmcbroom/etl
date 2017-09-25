@@ -1,0 +1,16 @@
+Sales:
+  id: id
+  pnum: parcel_no
+  saledate: sale_date
+  saleprice: sale_price
+  terms: terms
+  instr: instrument
+  grantor: grantor
+  grantee: grantee
+  addresscombined: address
+Legals:
+  pnum: parcel_no
+  legal: legaldesc
+
+
+
