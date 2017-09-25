@@ -1,0 +1,315 @@
+name: Dangerous Buildings
+backend: postgres
+db: etl
+table: bseed_dangerous_bldgs
+description: >
+  BSEED data about DNG case types aka dangerous buildings. This dataset is privately shared and used by BSEED.
+disclaimer: >
+website: https://cityofdetroit.github.io/data-resources/datasets/
+updates_every: day
+license: Public Domain
+agency: BSEED
+attribution:
+source_link:
+image:
+contact:
+  email: iet@detroitmi.gov
+  name: IET Team
+socrata:
+  id: 
+  view: bseed_dangerous_bldgs_socrata
+  category: "Property & Parcels"
+  tags:
+    - dangerous buildings
+    - inspections
+  row_identifier: csm_caseno
+  permission: private
+  # column mapping, used by the create script
+  columns:
+    csm_caseno:
+      expression: csm_caseno
+      human: csm_caseno
+      type: text
+    case_type:
+      expression: case_type
+      human: case_type
+      type: text
+    prc_parcel_no:
+      expression: prc_parcel_no
+      human: prc_parcel_no
+      type: text
+    parcel_no:
+      expression: clean_parcel_no
+      human: Clean Parcel No
+      type: text
+    street_address:
+      expression: clean_st_address
+      human: Clean Street Address
+      type: text
+    csm_description:
+      expression: csm_description
+      human: csm_description
+      type: text
+    csm_target_date:
+      expression: replace(to_char(csm_target_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: csm_target_date
+      type: calendar_date
+    prc_avp_no:
+      expression: prc_avp_no
+      human: prc_avp_no
+      type: text
+    csm_expr_date:
+      expression: replace(to_char(csm_expr_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: csm_expr_date
+      type: calendar_date
+    csm_finaled_date:
+      expression: replace(to_char(csm_finaled_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: csm_finaled_date
+      type: calendar_date
+    csm_issued_date:
+      expression: replace(to_char(csm_issued_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: csm_issued_date
+      type: calendar_date
+    csm_name_first:
+      expression: csm_name_first
+      human: csm_name_first
+      type: text
+    csm_name_last:
+      expression: csm_name_last
+      human: csm_name_last
+      type: text
+    csm_name_mi:
+      expression: csm_name_mi
+      human: csm_name_mi
+      type: text
+    csm_projname:
+      expression: csm_projname
+      human: csm_projname
+      type: text
+    csm_recd_by:
+      expression: csm_recd_by
+      human: csm_recd_by
+      type: text
+    csm_recd_date:
+      expression: replace(to_char(csm_recd_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: csm_recd_date
+      type: calendar_date
+    csm_status:
+      expression: csm_status
+      human: csm_status
+      type: text
+    csm_frozen:
+      expression: csm_frozen
+      human: csm_frozen
+      type: text
+    csm_auto_cond:
+      expression: csm_auto_cond
+      human: csm_auto_cond
+      type: text
+    csm_updateby:
+      expression: csm_updateby
+      human: csm_updateby
+      type: text
+    csm_updated:
+      expression: csm_updated
+      human: csm_updated
+      type: text
+    csm_projno:
+      expression: csm_projno
+      human: csm_projno
+      type: text
+    csm_mastno:
+      expression: csm_mastno
+      human: csm_mastno
+      type: text
+    csm_tracking_no:
+      expression: csm_mastno
+      human: csm_mastno
+      type: text
+    st_no:
+      expression: st_no
+      human: st_no
+      type: text
+    st_dir:
+      expression: st_dir
+      human: st_dir
+      type: text
+    st_name:
+      expression: st_name
+      human: st_name
+      type: text
+    sec:
+      expression: sec
+      human: sec
+      type: number
+    bldg_id:
+      expression: bldg_id
+      human: bldg_id
+      type: number
+    type:
+      expression: type
+      human: type
+      type: text
+    emg:
+      expression: emg
+      human: emg
+      type: text
+    fire:
+      expression: fire
+      human: fire
+      type: text
+    ntp_emg_demo_dt3:
+      expression: replace(to_char(ntp_emg_demo_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: ntp_emg_demo_dt3
+      type: calendar_date
+    db_comp_insp_dt3:
+      expression: replace(to_char(db_comp_insp_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: db_comp_insp_dt3
+      type: calendar_date
+    db_comp_insp_disp:
+      expression: db_comp_insp_disp
+      human: db_comp_insp_disp
+      type: text
+    db_comp_reinsp_dt3:
+      expression: replace(to_char(db_comp_reinsp_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: db_comp_reinsp_dt3
+      type: calendar_date
+    db_comp_reinsp_disp:
+      expression: db_comp_reinsp_disp
+      human: db_comp_reinsp_disp
+      type: text
+    tract_comp_dt3:
+      expression: replace(to_char(tract_comp_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: tract_comp_dt3
+      type: calendar_date
+    tract_comp_disp:
+      expression: tract_comp_disp
+      human: tract_comp_disp
+      type: text
+    off_hear_schd_dt2:
+      expression: replace(to_char(off_hear_schd_dt2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: off_hear_schd_dt2
+      type: calendar_date
+    off_hear_held_dt3:
+      expression: replace(to_char(off_hear_held_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      humam: off_hear_held_dt3
+      type: calendar_date
+    off_hear_disp:
+      expression: off_hear_disp
+      human: off_hear_disp
+      type: text
+    off_rehear_schd_dt2:
+      expression: replace(to_char(off_rehear_schd_dt2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: off_rehear_schd_dt2
+      type: calendar_date
+    off_rehear_held_dt3:
+      expression: replace(to_char(off_rehear_held_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: off_rehear_held_dt3
+      type: calendar_date
+    off_rehear_disp:
+      expression: off_rehear_disp
+      human: off_rehear_disp
+      type: text
+    cc_hear_schd_dt2:
+      expression: replace(to_char(cc_hear_schd_dt2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: cc_hear_schd_dt2
+      type: calendar_date
+    cc_hear_held_dt3:
+      expression: replace(to_char(cc_hear_held_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: cc_hear_held_dt3
+      type: calendar_date
+    cc_hear_disp:
+      expression: cc_hear_disp
+      human: cc_hear_disp
+      type: text
+    cc_rehear_schd_dt2:
+      expression: replace(to_char(cc_rehear_schd_dt2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: cc_rehear_schd_dt2
+      type: calendar_date
+    cc_rehear_held_dt3:
+      expression: replace(to_char(cc_rehear_held_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: cc_rehear_held_dt3
+      type: calendar_date
+    cc_rehear_disp:
+      expression: cc_rehear_disp
+      human: cc_rehear_disp
+      type: text
+    stat_insp_dt2:
+      expression: replace(to_char(stat_insp_dt2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: stat_insp_dt2
+      type: calendar_date
+    stat_insp_dt3:
+      expression: replace(to_char(stat_insp_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: stat_insp_dt3
+      type: calendar_date
+    stat_insp_disp:
+      expression: stat_insp_disp
+      human: stat_insp_disp
+      type: text
+    PERMIT_#:
+      expression: PERMIT_#
+      human: PERMIT_#
+      type: text
+    demo_vendor:
+      expression: demo_vendor
+      human: demo_vendor
+      type: text
+    CONTRACT_#:
+      expression: CONTRACT_#
+      human: CONTRACT_#
+      type: text
+    knock_down_req:
+      expression: replace(to_char(knock_down_req::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: knock_down_req
+      type: calendar_date
+    knock_down_comp:
+      expression: replace(to_char(knock_down_comp::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: knock_down_comp
+      type: calendar_date
+    open_hole_req:
+      expression: replace(to_char(open_hole_req::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: open_hole_req
+      type: calendar_date
+    open_hole_comp:
+      expression: replace(to_char(open_hole_comp::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: open_hole_comp
+      type: calendar_date
+    winter_grade_req:
+      expression: replace(to_char(winter_grade_req::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: winter_grade_req
+      type: calendar_date
+    winter_grade_comp:
+      expression: replace(to_char(winter_grade_comp::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: winter_grade_comp
+      type: calendar_date
+    final_grade_req:
+      expression: replace(to_char(final_grade_req::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: final_grade_req
+      type: calendar_date
+    final_grade_comp:
+      expression: replace(to_char(final_grade_comp::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: final_grade_comp
+      type: calendar_date
+    DEMO:
+      expression: DEMO
+      human: DEMO
+      type: text
+    PARCEL_#:
+      expression: PARCEL_#
+      human: PARCEL_#
+      type: text
+    status:
+      expression: status
+      human: status
+      type: text
+    up_date:
+      expression: replace(to_char(up_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: up_date
+      type: calendar_date
+    up_date_by:
+      expression: up_date_by
+      human: up_date_by
+      type: text
+  # not automatable
+  row_label: DNG Case
+  time_period:
