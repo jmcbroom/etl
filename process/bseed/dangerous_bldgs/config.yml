@@ -16,7 +16,7 @@ contact:
   email: iet@detroitmi.gov
   name: IET Team
 socrata:
-  id: 
+  id: dpf8-my7p
   view: bseed_dangerous_bldgs_socrata
   category: "Property & Parcels"
   tags:
@@ -123,8 +123,8 @@ socrata:
       human: csm_mastno
       type: text
     csm_tracking_no:
-      expression: csm_mastno
-      human: csm_mastno
+      expression: csm_tracking_no
+      human: csm_tracking_no
       type: text
     st_no:
       expression: st_no
@@ -192,7 +192,7 @@ socrata:
       type: calendar_date
     off_hear_held_dt3:
       expression: replace(to_char(off_hear_held_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
-      humam: off_hear_held_dt3
+      human: off_hear_held_dt3
       type: calendar_date
     off_hear_disp:
       expression: off_hear_disp
@@ -246,17 +246,9 @@ socrata:
       expression: stat_insp_disp
       human: stat_insp_disp
       type: text
-    PERMIT_#:
-      expression: PERMIT_#
-      human: PERMIT_#
-      type: text
     demo_vendor:
       expression: demo_vendor
       human: demo_vendor
-      type: text
-    CONTRACT_#:
-      expression: CONTRACT_#
-      human: CONTRACT_#
       type: text
     knock_down_req:
       expression: replace(to_char(knock_down_req::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
@@ -290,14 +282,6 @@ socrata:
       expression: replace(to_char(final_grade_comp::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
       human: final_grade_comp
       type: calendar_date
-    DEMO:
-      expression: DEMO
-      human: DEMO
-      type: text
-    PARCEL_#:
-      expression: PARCEL_#
-      human: PARCEL_#
-      type: text
     status:
       expression: status
       human: status

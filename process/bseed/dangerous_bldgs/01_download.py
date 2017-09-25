@@ -86,5 +86,5 @@ dng_blds_df['clean_st_address'] = np_concat(dng_blds_df['st_no'], dng_blds_df['s
 dng_blds_df['DEMO'] = np.where(pandas.notnull(dng_blds_df['final_grade_comp']), 'Demolished', '')
 
 # send the dataframe to postgres
-odo.odo(df, 'postgresql://{}@localhost/{}::bseed_dangerous_bldgs'.format(env['PG_USER'], env['PG_DB']))
+odo.odo(dng_blds_df, 'postgresql://{}@localhost/{}::bseed_dangerous_bldgs'.format(env['PG_USER'], env['PG_DB']))
 print('Sent to postgres')
