@@ -57,7 +57,7 @@ socrata:
     prc_avp_no:
       expression: prc_avp_no
       human: prc_avp_no
-      type: text
+      type: number
     csm_expr_date:
       expression: replace(to_char(csm_expr_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
       human: csm_expr_date
@@ -125,7 +125,7 @@ socrata:
     csm_tracking_no:
       expression: csm_tracking_no
       human: csm_tracking_no
-      type: text
+      type: number
     st_no:
       expression: st_no
       human: st_no
@@ -141,7 +141,7 @@ socrata:
     sec:
       expression: sec
       human: sec
-      type: number
+      type: text
     bldg_id:
       expression: bldg_id
       human: bldg_id
