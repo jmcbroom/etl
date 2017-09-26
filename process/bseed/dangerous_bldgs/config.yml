@@ -51,7 +51,7 @@ socrata:
       human: csm_description
       type: text
     csm_target_date:
-      expression: replace(to_char(csm_target_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE csm_target_date WHEN 'NaN' THEN null ELSE replace(to_char(csm_target_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: csm_target_date
       type: calendar_date
     prc_avp_no:
@@ -59,15 +59,15 @@ socrata:
       human: prc_avp_no
       type: number
     csm_expr_date:
-      expression: replace(to_char(csm_expr_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE csm_expr_date WHEN 'NaN' THEN null ELSE replace(to_char(csm_expr_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: csm_expr_date
       type: calendar_date
     csm_finaled_date:
-      expression: replace(to_char(csm_finaled_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE csm_finaled_date WHEN 'NaN' THEN null ELSE replace(to_char(csm_finaled_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: csm_finaled_date
       type: calendar_date
     csm_issued_date:
-      expression: replace(to_char(csm_issued_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE csm_issued_date WHEN 'NaN' THEN null ELSE replace(to_char(csm_issued_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: csm_issued_date
       type: calendar_date
     csm_name_first:
@@ -91,7 +91,7 @@ socrata:
       human: csm_recd_by
       type: text
     csm_recd_date:
-      expression: replace(to_char(csm_recd_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE csm_recd_date WHEN 'NaN' THEN null ELSE replace(to_char(csm_recd_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: csm_recd_date
       type: calendar_date
     csm_status:
@@ -159,11 +159,11 @@ socrata:
       human: fire
       type: text
     ntp_emg_demo_dt3:
-      expression: replace(to_char(ntp_emg_demo_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE ntp_emg_demo_dt3 WHEN 'NaN' THEN null ELSE replace(to_char(ntp_emg_demo_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: ntp_emg_demo_dt3
       type: calendar_date
     db_comp_insp_dt3:
-      expression: replace(to_char(db_comp_insp_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE db_comp_insp_dt3 WHEN 'NaN' THEN null ELSE replace(to_char(db_comp_insp_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: db_comp_insp_dt3
       type: calendar_date
     db_comp_insp_disp:
@@ -171,7 +171,7 @@ socrata:
       human: db_comp_insp_disp
       type: text
     db_comp_reinsp_dt3:
-      expression: replace(to_char(db_comp_reinsp_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE db_comp_reinsp_dt3 WHEN 'NaN' THEN null ELSE replace(to_char(db_comp_reinsp_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: db_comp_reinsp_dt3
       type: calendar_date
     db_comp_reinsp_disp:
@@ -179,7 +179,7 @@ socrata:
       human: db_comp_reinsp_disp
       type: text
     tract_comp_dt3:
-      expression: replace(to_char(tract_comp_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE tract_comp_dt3 WHEN 'NaN' THEN null ELSE replace(to_char(tract_comp_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: tract_comp_dt3
       type: calendar_date
     tract_comp_disp:
@@ -187,11 +187,11 @@ socrata:
       human: tract_comp_disp
       type: text
     off_hear_schd_dt2:
-      expression: replace(to_char(off_hear_schd_dt2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE off_hear_schd_dt2 WHEN 'NaN' THEN null ELSE replace(to_char(off_hear_schd_dt2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: off_hear_schd_dt2
       type: calendar_date
     off_hear_held_dt3:
-      expression: replace(to_char(off_hear_held_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE csm_expr_date WHEN 'NaN' THEN null ELSE replace(to_char(off_hear_held_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: off_hear_held_dt3
       type: calendar_date
     off_hear_disp:
@@ -199,11 +199,11 @@ socrata:
       human: off_hear_disp
       type: text
     off_rehear_schd_dt2:
-      expression: replace(to_char(off_rehear_schd_dt2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE off_rehear_schd_dt2 WHEN 'NaN' THEN null ELSE replace(to_char(off_rehear_schd_dt2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: off_rehear_schd_dt2
       type: calendar_date
     off_rehear_held_dt3:
-      expression: replace(to_char(off_rehear_held_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE off_rehear_held_dt3 WHEN 'NaN' THEN null ELSE replace(to_char(off_rehear_held_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: off_rehear_held_dt3
       type: calendar_date
     off_rehear_disp:
@@ -211,11 +211,11 @@ socrata:
       human: off_rehear_disp
       type: text
     cc_hear_schd_dt2:
-      expression: replace(to_char(cc_hear_schd_dt2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE cc_hear_schd_dt2 WHEN 'NaN' THEN null ELSE replace(to_char(cc_hear_schd_dt2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: cc_hear_schd_dt2
       type: calendar_date
     cc_hear_held_dt3:
-      expression: replace(to_char(cc_hear_held_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE cc_hear_held_dt3 WHEN 'NaN' THEN null ELSE replace(to_char(cc_hear_held_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: cc_hear_held_dt3
       type: calendar_date
     cc_hear_disp:
@@ -223,11 +223,11 @@ socrata:
       human: cc_hear_disp
       type: text
     cc_rehear_schd_dt2:
-      expression: replace(to_char(cc_rehear_schd_dt2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE cc_rehear_schd_dt2 WHEN 'NaN' THEN null ELSE replace(to_char(cc_rehear_schd_dt2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: cc_rehear_schd_dt2
       type: calendar_date
     cc_rehear_held_dt3:
-      expression: replace(to_char(cc_rehear_held_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE cc_rehear_held_dt3 WHEN 'NaN' THEN null ELSE replace(to_char(cc_rehear_held_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: cc_rehear_held_dt3
       type: calendar_date
     cc_rehear_disp:
@@ -235,11 +235,11 @@ socrata:
       human: cc_rehear_disp
       type: text
     stat_insp_dt2:
-      expression: replace(to_char(stat_insp_dt2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE stat_insp_dt2 WHEN 'NaN' THEN null ELSE replace(to_char(stat_insp_dt2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: stat_insp_dt2
       type: calendar_date
     stat_insp_dt3:
-      expression: replace(to_char(stat_insp_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE stat_insp_dt3 WHEN 'NaN' THEN null ELSE replace(to_char(stat_insp_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: stat_insp_dt3
       type: calendar_date
     stat_insp_disp:
@@ -251,35 +251,35 @@ socrata:
       human: demo_vendor
       type: text
     knock_down_req:
-      expression: replace(to_char(knock_down_req::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE knock_down_req WHEN 'NaN' THEN null ELSE replace(to_char(knock_down_req::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: knock_down_req
       type: calendar_date
     knock_down_comp:
-      expression: replace(to_char(knock_down_comp::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE knock_down_comp WHEN 'NaN' THEN null ELSE replace(to_char(knock_down_comp::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: knock_down_comp
       type: calendar_date
     open_hole_req:
-      expression: replace(to_char(open_hole_req::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE open_hole_req WHEN 'NaN' THEN null ELSE replace(to_char(open_hole_req::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: open_hole_req
       type: calendar_date
     open_hole_comp:
-      expression: replace(to_char(open_hole_comp::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE open_hole_comp WHEN 'NaN' THEN null ELSE replace(to_char(open_hole_comp::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: open_hole_comp
       type: calendar_date
     winter_grade_req:
-      expression: replace(to_char(winter_grade_req::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE winter_grade_req WHEN 'NaN' THEN null ELSE replace(to_char(winter_grade_req::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: winter_grade_req
       type: calendar_date
     winter_grade_comp:
-      expression: replace(to_char(winter_grade_comp::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE winter_grade_comp WHEN 'NaN' THEN null ELSE replace(to_char(winter_grade_comp::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: winter_grade_comp
       type: calendar_date
     final_grade_req:
-      expression: replace(to_char(final_grade_req::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE final_grade_req WHEN 'NaN' THEN null ELSE replace(to_char(final_grade_req::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: final_grade_req
       type: calendar_date
     final_grade_comp:
-      expression: replace(to_char(final_grade_comp::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE final_grade_comp WHEN 'NaN' THEN null ELSE replace(to_char(final_grade_comp::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: final_grade_comp
       type: calendar_date
     status:
@@ -287,7 +287,7 @@ socrata:
       human: status
       type: text
     up_date:
-      expression: replace(to_char(up_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      expression: CASE up_date WHEN 'NaN' THEN null ELSE replace(to_char(up_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: up_date
       type: calendar_date
     up_date_by:
