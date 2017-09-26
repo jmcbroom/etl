@@ -22,7 +22,7 @@ bg_df = pandas.DataFrame(bg.fetchall())
 bg_df.columns = bg.keys()
 
 # outer join where CASEMAIN.csm_caseno = BG_INV_ANLY.dng_case_no
-bg_df.rename(columns={'dng_case_no': 'csm_caseno'}, inplace=True)
+bg_df.rename(columns={'dng_case_no': 'csm_caseno', 'PERMIT_#': 'permit_number', 'CONTRACT_#': 'contract_number', 'PARCEL_#': 'tidemark_parcel_number'}, inplace=True)
 dng_blds_df = pandas.merge(cm_df, bg_df, how="outer", on="csm_caseno")
 
 print('Fetched and joined CASEMAIN and BG_INV_ANLY, cleaning data...')
@@ -82,8 +82,8 @@ np_concat = np.vectorize(concat)
 # add a new col with clean street address
 dng_blds_df['clean_st_address'] = np_concat(dng_blds_df['st_no'], dng_blds_df['st_dir'], dng_blds_df['st_name'])
 
-# add col DEMO and set to "Demolished" if final_grade_comp is not Null
-dng_blds_df['DEMO'] = np.where(pandas.notnull(dng_blds_df['final_grade_comp']), 'Demolished', '')
+# add col demo and set to "Demolished" if final_grade_comp is not Null
+dng_blds_df['demolished'] = np.where(pandas.notnull(dng_blds_df['final_grade_comp']), 'Demolished', '')
 
 # send the dataframe to postgres
 odo.odo(dng_blds_df, 'postgresql://{}@localhost/{}::bseed_dangerous_bldgs'.format(env['PG_USER'], env['PG_DB']))

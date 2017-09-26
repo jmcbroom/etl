@@ -16,7 +16,7 @@ contact:
   email: iet@detroitmi.gov
   name: IET Team
 socrata:
-  id: dpf8-my7p
+  id: 
   view: bseed_dangerous_bldgs_socrata
   category: "Property & Parcels"
   tags:
@@ -293,6 +293,22 @@ socrata:
     up_date_by:
       expression: up_date_by
       human: up_date_by
+      type: text
+    demolished:
+      expression: demolished
+      human: demolished
+      type: text
+    permit_number:
+      expression: permit_number
+      human: permit_number
+      type: text
+    contract_number:
+      expression: contract_number
+      human: contract_number
+      type: text
+    tidemark_parcel_number:
+      expression: tidemark_parcel_number
+      human: tidemark_parcel_number
       type: text
   # not automatable
   row_label: DNG Case
