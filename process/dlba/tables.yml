@@ -1,10 +1,10 @@
-# Account:
-#   - Id
-#   - Name
-#   - Latitude__c
-#   - Longitude__c
-#   - Neighborhood__c
-#   - Council_District__c
+Account:
+  - Id
+  - Name
+  - Latitude__c
+  - Longitude__c
+  - Neighborhood__c
+  - Council_District__c
 Case:
   - Id
   - Program__c
@@ -31,33 +31,33 @@ DLBA_Activity__c:
   - Actual_Closing_Date__c
   - Sale_Status__c
   - Listing_Date__c
-# Prospective_Buyer__c:
-#   - Id
-#   - Final_Sale_Price__c
-#   - Purchaser_Type__c
-#   - Name
-#   - Buyer_Status__c
-#   - DLBA_Activity__c
-# RecordType:
-#   - Id
-#   - Name
-#   - Description
-# DBA_Commercial_Demo__c:
-#   - Name
-#   - Commercial_Demo_Status__c
-#   - BSEED_COM_Final_Grade_Approved__c
-#   - BSEED_COM_Open_Hole_Approved__c
-#   - BSEED_COM_Winter_Grade_Approved__c
-#   - DBA_Received_EMG_Letter_Date__c
-#   - Final_Grade_Approved_Dt__c
-#   - Open_Hole_Approved_Dt__c
-#   - Winter_Grade_Approved_Dt__c
-#   - Demo_Cost_Abatement__c
-#   - Demo_Cost_Knock__c
-#   - Demo_NtP_Dt__c
-#   - Demo_Proj_Demo_Dt__c
-#   - Demo_Pulled_Date__c
-#   - ENV_Demo_Proceed_Dt__c
-#   - ENV_Group_Number__c
-#   - Knock_Start_Dt__c
-#   - Demolition_Contractor__c
+Prospective_Buyer__c:
+  - Id
+  - Final_Sale_Price__c
+  - Purchaser_Type__c
+  - Name
+  - Buyer_Status__c
+  - DLBA_Activity__c
+RecordType:
+  - Id
+  - Name
+  - Description
+DBA_Commercial_Demo__c:
+  - Name
+  - Commercial_Demo_Status__c
+  - BSEED_COM_Final_Grade_Approved__c
+  - BSEED_COM_Open_Hole_Approved__c
+  - BSEED_COM_Winter_Grade_Approved__c
+  - DBA_Received_EMG_Letter_Date__c
+  - Final_Grade_Approved_Dt__c
+  - Open_Hole_Approved_Dt__c
+  - Winter_Grade_Approved_Dt__c
+  - Demo_Cost_Abatement__c
+  - Demo_Cost_Knock__c
+  - Demo_NtP_Dt__c
+  - Demo_Proj_Demo_Dt__c
+  - Demo_Pulled_Date__c
+  - ENV_Demo_Proceed_Dt__c
+  - ENV_Group_Number__c
+  - Knock_Start_Dt__c
+  - Demolition_Contractor__c

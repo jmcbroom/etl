@@ -1,7 +1,7 @@
 name: DLBA Properties for Sale
 backend: postgres
 db: etl
-table: dlba.side_lots
+table: dlba.for_sale
 epsg: 4326
 description: >
   DLBA Properties for sale and available for purchase through three programs: Auction, Own It Now, and Rehabbed and Ready. Learn more at http://www.buildingdetroit.org/
@@ -23,7 +23,7 @@ esri:
     - ST_SetSRID(ST_MakePoint(acct_longitude, acct_latitude),4326) as wkb_geometry
     - '*'
 socrata:
-  id: 
+  id: gfhb-f4i5
   view: dlba.for_sale_socrata
   category: "Property & Parcels"
   tags:
