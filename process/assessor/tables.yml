@@ -11,6 +11,29 @@ Sales:
 Legals:
   pnum: parcel_no
   legal: legaldesc
+ParcelMaster:
+  pnum: parcel_no
+  propstreetcombined: address
+  ownername1: owner1
+  ownername2: owner2
+  ownerstreetaddr: owner_street
+  ownercity: owner_city
+  ownerstate: owner_state
+  ownerzip: owner_zip
+  ownercountry: owner_country
+  lastSaleDate: last_sale_date
+  lastSalePrice: last_sale_price
+  lastTermsOfSale: last_terms_of_sale
+  esttcv: estimated_true_cash_value
+  landvalue: land_value
+  totalacres: total_acres
+  frontage: frontage
+  avdepth: depth
+  landvalue: land_value
+  bldgimprval: improved_value
+  cib_yearbuilt: year_built
+  cib_stories: num_stories
+  taxpayname: taxpayname
 
 
 

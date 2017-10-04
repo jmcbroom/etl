@@ -26,7 +26,7 @@ mapbox:
     - saledate
     - saleprice
 socrata:
-  id: eijm-6nr4
+  id: dxgi-9s8s
   api_id: 
   view: parcel_points_ownership
   category: "Property & Parcels"
@@ -38,81 +38,121 @@ socrata:
     - value
     - address
     - location
-  row_identifier: parcelno
+  row_identifier: objectid
   permission: public
   # column mapping, used by the create script
   columns:
-    parcelno:
-      expression: parcelno
-      human: ParcelNo
-      type: text
-    propaddr:
-      expression: propaddr
-      human: PropAddr
-      type: text
-    saledate:
-      expression: replace(to_char(saledate, 'YYYY-MM-DD HH24:MI:SS.000'), ' ', 'T') 
-      human: SaleDate
-      type: calendar_date
-    saleprice:
-      expression: saleprice
-      human: Last Sale Price
-      type: text
-    propno:
-      expression: propno
-      human: House Number
+    objectid:
+      expression: objectid
+      human: ObjectID
       type: number
-    propdir:
-      expression: propdir
-      human: Street Direction
+    parcelnum:
+      expression: parcelnum
+      human: Parcel Number
       type: text
-    propstr:
-      expression: propstr
-      human: Street Name
+    address:
+      expression: address
+      human: Address
       type: text
-    propzip:
-      expression: zipcode
+    zip_code:
+      expression: zip_code
       human: Zip Code
       type: text
+    council_district:
+      expression: council_district
+      human: Council District
+      type: text
+    zoning:
+      expression: zoning_rev
+      human: Zoning
+      type: text
+    owner1:
+      expression: owner1
+      human: Owner
+      type: text
+    owner2:
+      expression: owner2
+      human: Owner 2
+      type: text
     taxpayer:
-      expression: taxpayer1
-      human: Owner/Taxpayer
+      expression: taxpayer_name
+      human: Taxpayer
       type: text
-    taxpayer2:
-      expression: taxpayer2
-      human: Owner/Taxpayer 2
+    owner_street:
+      expression: owner_street
+      human: Owner Street Address
       type: text
-    tpaddr:
-      expression: taxpaddr
-      human: Taxpayer Address
+    owner_city:
+      expression: owner_city
+      human: Owner City
       type: text
-    tpcity:
-      expression: taxpcity
-      human: Taxpayer City
+    owner_state: 
+      expression: owner_state
+      human: Owner State
       type: text
-    tpstate: 
-      expression: taxpstate
-      human: Taxpayer State
+    owner_zip: 
+      expression: owner_zip
+      human: Owner Zip Code
       type: text
-    tpzip:
-      expression: taxpzip
-      human: Taxpayer Zip Code
+    owner_country:
+      expression: owner_country
+      human: Owner Country
       type: text
-    propclass:
-      expression: propclass
+    last_sale_date:
+      expression: replace(to_char(last_sale_date, 'YYYY-MM-DD HH24:MI:SS.000'), ' ', 'T') 
+      human: SaleDate
+      type: calendar_date
+    last_sale_price:
+      expression: case when null then null else last_sale_price end
+      human: Last Sale Price
+      type: money
+    last_terms_of_sale:
+      expression: last_terms_of_sale
+      human: Last Terms of Sale
+      type: text
+    estimated_true_cash_value:
+      expression: estimated_true_cash_value
+      human: Est. True Cash Value
+      type: number
+    land_value:
+      expression: land_value
+      human: Land Value
+      type: number
+    land_assessed_value:
+      expression: land_assessed_value
+      human: Land Assessed Value
+      type: number
+    building_assessed_value:
+      expression: building_assessed_value
+      human: Building Assessed Value
+      type: number
+    assessed_value:
+      expression: assessed_value
+      human: Total Assessed Value
+      type: number
+    taxable_value:
+      expression: taxable_value
+      human: Taxable Value
+      type: number
+    improved_value:
+      expression: improved_value
+      human: Improved Value
+      type: number
+    sev:
+      expression: sev
+      human: State Equalized Value
+      type: number
+    pre:
+      expression: pre
+      human: Principal Residence Exemption
+      type: number
+    property_class:
+      expression: property_class
       human: Property Class
       type: text
-    taxstatus:
-      expression: taxstatus
-      human: Tax Status
-      type: text
-    sqft:
-      expression: totalsqft
-      human: Total Square Footage
-      type: number 
-    acreage:
-      expression: totalacreage
-      human: Total Acres
+    total_acres:
+      expression: total_acres
+      human: Total Acreage
       type: number
     frontage:
       expression: frontage
@@ -122,41 +162,21 @@ socrata:
       expression: depth
       human: Depth
       type: number
-    pre:
-      expression: pre
-      human: PRE
-      type: text
-    cibyrbuilt:
-      expression: cibyrbuilt
-      human: CIBYrBuilt
-      type: text
-    resyrbuilt:
-      expression: resyrbuilt
+    year_built:
+      expression: year_built
       human: Year Built
       type: text
-    isimproved:
-      expression: isimproved
-      human: Is Improved
+    num_buildings:
+      expression: num_buildings
+      human: Number of Buildings
       type: number
-    sev:
-      expression: sev
-      human: State Equalized Value
-      type: number
-    av:
-      expression: av
-      human: Assessed Value
-      type: number
-    tv:
-      expression: tv
-      human: Total Value
-      type: number
-    ward:
-      expression: ward
-      human: Ward
+    num_stories:
+      expression: num_stories
+      human: Number of Stories
       type: number
     legaldesc:
       expression: legaldesc
-      human: LegalDesc
+      human: Legal Description
       type: text
     latitude:
       expression: st_y(st_centroid(st_transform(wkb_geometry, 4326)))

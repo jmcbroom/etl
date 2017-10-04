@@ -1,5 +1,6 @@
 from os import environ as env
 import yaml, simple_salesforce, sqlalchemy
+import pandas, odo
 
 with open('/home/gisteam/etl/process/dlba/tables.yml', 'r') as f:
     tables = yaml.load(f)
