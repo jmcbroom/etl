@@ -191,7 +191,7 @@ socrata:
       human: off_hear_schd_dt2
       type: calendar_date
     off_hear_held_dt3:
-      expression: CASE csm_expr_date WHEN 'NaN' THEN null ELSE replace(to_char(off_hear_held_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
+      expression: CASE off_hear_held_dt3 WHEN 'NaN' THEN null ELSE replace(to_char(off_hear_held_dt3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') END
       human: off_hear_held_dt3
       type: calendar_date
     off_hear_disp:
