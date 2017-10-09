@@ -1,0 +1,147 @@
+name: Asbestos Abatement (MDEQ Report)
+backend: postgres
+db: etl
+table: dlba_asbestos_abatement
+description: >
+  Private report prepared for MDEQ by DLBA and DBA about asbestos abatement inspections.
+disclaimer: >
+website: https://cityofdetroit.github.io/data-resources/datasets/
+updates_every: day
+license:
+agency: Detroit Building Authority
+attribution:
+source_link:
+image:
+contact:
+  email: iet@detroitmi.gov
+  name: IET Team
+socrata:
+  id: 
+  view: dlba_asbestos_abatement_socrata
+  category: "Property & Parcels"
+  tags:
+    - demolition
+    - asbestos abatement
+  row_identifier: parcel_id
+  permission: public
+  # column mapping, used by the create script
+  columns:
+    address:
+      expression: address
+      human: Address
+      type: text
+    parcel_id:
+      expression: parcel_id
+      human: Parcel ID
+      type: text
+    bseed_final_grade_approved:
+      expression: bseed_final_grade_approved
+      human: BSEED Final Grade Approved
+      type: text
+    demo_final_grade_approved:
+      expression: demo_final_grade_approved
+      human: Demo Final Grade Approved
+      type: text
+    abatement_sub_contractor:
+      expression: abatement_sub_contractor
+      human: Abatement Sub Contractor
+      type: text
+    asb_inspectors_name:
+      expression: asb_inspectors_name
+      human: ASB Inspectors Name
+      type: text
+    asb_verifiers_name:
+      expression: asb_verifiers_name
+      human: ASB Verifiers Name
+      type: text
+    asb_abatement_verification_contractor_name:
+      expression: asb_abatement_verification_contractor_name
+      human: ASB Abatement Verification Contractor Name
+      type: text
+    demo_batch_contractor_name:
+      expression: demo_batch_contractor_name_del1_name
+      human: Demo Batch Contractor Name
+      type: text
+    demo_asb_abatement_contractor_name:
+      expression: demo_asb_abatement_contractor_name
+      human: Demo ASB Abatement Contractor Name
+      type: text
+    demo_asb_survey_contractor_name:
+      expression: demo_asb_survey_contractor_name
+      human: Demo ASB Survey Contractor Name
+      type: text
+    demo_contractor_proceed_date:
+      expression: replace(to_char(demo_contractor_proceed_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: Demo Contractor Proceed Date
+      type: calendar_date
+    asb_abatement_start_date:
+      expression: replace(to_char(asb_abatement_start_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: ASB Abatement Start Date
+      type: calendar_date
+    demo_asb_abatement_date:
+      expression: replace(to_char(demo_asb_abatement_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: Demo ASB Abatement Date
+      type: calendar_date
+    asb_post_abatement_insp_date:
+      expression: replace(to_char(asb_post_abatement_insp_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: ASB Post Abatement Inspection Date
+      type: calendar_date
+    demo_asb_post_abatement_approval_date:
+      expression: replace(to_char(demo_asb_post_abatement_approval_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: ASB Post Abatement Inspection Approval Date
+      type: calendar_date
+    demo_asb_post_abatement_failed_date:
+      expression: replace(to_char(demo_asb_post_abatement_failed_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: ASB Post Abatement Inspection Failed Date
+      type: calendar_date
+    asb_post_abatement_notes:
+      expression: asb_post_abatement_notes
+      human: ASB Post Abatement Notes
+      type: text
+    asb_post_abatement_times_failed:
+      expression: asb_post_abatement_times_failed
+      human: ASB Post Abatement Times Failed
+      type: text
+    asb_post_abatement_verification_status:
+      expression: asb_post_abatement_verification_status
+      human: ASB Post Abatement Verification Status
+      type: text
+    demo_planned_knock_down_date:
+      expression: replace(to_char(demo_planned_knock_down_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: Demo Planned Knock Down Date
+      type: calendar_date
+    demo_knock_down_date:
+      expression: replace(to_char(demo_knock_down_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: Demo Knock Down Date
+      type: calendar_date
+    socrata_projected_knocked_by_date:
+      expression: replace(to_char(socrata_projected_knocked_by_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+      human: Socrata Projected Knock Down Date
+      type: calendar_date
+    asb_document_url:
+      expression: asb_document_url
+      human: ASB Document URL
+      type: text
+    asb_post_abatement_document_url:
+      expression: asb_post_abatement_document_url
+      human: ASB Post Abatement Document URL
+      type: text
+    zip_code:
+      expression: zip_code
+      human: Zip Code
+      type: text
+    latitude:
+      expression: latitude
+      human: Latitude
+      type: number
+    longitude:
+      expression: longitude
+      human: Longitude
+      type: number
+    location:
+      expression: CASE WHEN latitude is null THEN null ELSE concat('location (', latitude, ',', longitude, ')') END
+      human: Location
+      type: location
+  # not automatable
+  row_label: DLBA Property
+  time_period:
