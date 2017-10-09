@@ -16,7 +16,7 @@ contact:
   email: iet@detroitmi.gov
   name: IET Team
 socrata:
-  id: 
+  id: vnrt-n46x
   view: dlba_asbestos_abatement_socrata
   category: "Property & Parcels"
   tags:
@@ -50,8 +50,8 @@ socrata:
       expression: asb_inspectors_name
       human: ASB Inspectors Name
       type: text
-    asb_verifiers_name:
-      expression: asb_verifiers_name
+    asb_verifier_name:
+      expression: asb_verifier_name
       human: ASB Verifiers Name
       type: text
     asb_abatement_verification_contractor_name:
@@ -99,9 +99,9 @@ socrata:
       human: ASB Post Abatement Notes
       type: text
     asb_post_abatement_times_failed:
-      expression: asb_post_abatement_times_failed
+      expression: CASE asb_post_abatement_times_failed WHEN 'NaN' THEN null ELSE asb_post_abatement_times_failed END
       human: ASB Post Abatement Times Failed
-      type: text
+      type: number
     asb_post_abatement_verification_status:
       expression: asb_post_abatement_verification_status
       human: ASB Post Abatement Verification Status
