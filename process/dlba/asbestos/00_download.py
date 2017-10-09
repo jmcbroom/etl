@@ -7,7 +7,7 @@ from os import environ as env
 SF = simple_salesforce.Salesforce(env['SF_USER'], env['SF_PASS'], env['SF_TOKEN'])
 print('Connected to SF ', SF)
 
-# lookup fields from the dba comm demo object and related property account
+# lookup fields from the case object and related property
 lookup = {
     'Address__c': 'address',
     'Parcel_ID__c': 'parcel_id',
