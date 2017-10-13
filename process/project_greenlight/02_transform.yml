@@ -1,4 +1,5 @@
 - delete from police.greenlight where status is null;
+- delete from police.greenlight where status in ('Red', 'Yellow')
 - drop view if exists police.greenlight_socrata;
 - >- 
     create view
@@ -13,5 +14,5 @@
           longitude,
           ')'
         ) as location
-      from police.greenlight )
+      from police.greenlight where trim(status) = 'Green' )
     
