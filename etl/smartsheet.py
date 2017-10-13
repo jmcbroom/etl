@@ -1,9 +1,7 @@
 import smartsheet
 smartsheet = smartsheet.Smartsheet()
 
-import odo
 import pandas as pd
-
 from etl.utils import clean_column, df_to_pg
 
 # # thanks tom buckley: https://gist.github.com/tombuckley/3c1eeb56f46904dbb143ac398ea79b40

@@ -1,0 +1,14 @@
+socrata:
+  columns:
+    Address:
+      field: address
+      type: text
+    Business Name:
+      field: business_name
+      type: text
+    Location:
+      field: location
+      type: location
+  id: vrh6-6pvj
+  name: Project Greenlight Locations
+  table: police.greenlight_socrata
