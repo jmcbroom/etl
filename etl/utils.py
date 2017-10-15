@@ -34,8 +34,10 @@ def exec_psql_query(conn, query, verbose=False):
   conn.execute(query)
   
 def add_geom_column(conn, table, geom_col, schema='public', proj=4326, geom_type='Geometry'):
+  # add geometry column (if not exists)
   query = "alter table {}.{} add column if not exists {} geometry({}, {});".format(schema, table, geom_col, geom_type, proj)
   exec_psql_query(conn, query, verbose=True)
+  # create index on that column (if not exists)
   index = "create index if not exists {}_geom_idx on {}.{} using gist({});".format(table, schema, table, geom_col)
   exec_psql_query(conn, index, verbose=True)
 
@@ -43,9 +45,13 @@ def geocode_addresses(conn, table, add_col='address', geom_col='geom'):
   # get values
   addresses = conn.execute("select {} from {} where {} is null".format(add_col, table, geom_col))
   values = addresses.fetchall()
+  # loop through values from column
   for v in values:
+    # send to direccion.Address
     g = Address(v[0], notify_fail=True)
+    # geocode it
     loc = g.geocode()
+    # update to set geom_col equal to point result from direccion
     query = "update {} set {} = ST_SetSRID(ST_MakePoint({}, {}), 4326) where {} = '{}'".format(
       table, 
       geom_col,

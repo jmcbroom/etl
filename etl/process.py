@@ -8,8 +8,9 @@ class Process(object):
   def __init__(self, directory="project_greenlight"):
     self.basedir = "{}/{}".format(DATA_DIR, directory)
     with open("{}/00_metadata.yml".format(self.basedir), 'r') as f:
-      self.metadata = yaml.load(f)
-    self.schema = self.metadata['schema']
+      m = yaml.load(f)
+    self.schema = m['schema']
+    self.name = m['name']
   
   def extract(self):
     from etl import Smartsheet as smartsheet
@@ -19,15 +20,26 @@ class Process(object):
       if src == 'smartsheet':
         s = smartsheet(config['id'])
         s.to_postgres(self.schema, config['table'])
+      # stub these out for future work
+      elif src == 'database':
+        pass
+      elif src == 'salesforce':
+        pass
+      else:
+        print("I don't know this source type: {}".format(src))
 
   def transform(self):
     with open("{}/02_transform.yml".format(self.basedir), 'r') as f:
       self.t = yaml.load(f)
-    # geocode column if exists
+
+    # if there's a geocode transform...
     if self.t['geocode']:
       opts = self.t['geocode']
+      # add geometry column and index, specified in YML
       add_geom_column(connection, opts['table'], opts['geom_col'], self.schema)
+      # loop through addresses, send to direccion.Address & populate geom column
       geocode_addresses(connection, "{}.{}".format(self.schema, opts['table']), opts['add_col'], opts['geom_col'])
+
     # execute array of custom sql
     for statement in self.t['sql']:
       exec_psql_query(connection, statement, verbose=True)
@@ -39,7 +51,7 @@ class Process(object):
       print(self.l)
     for dest, cfg in self.l.items():
       if dest == 'socrata':
-        cfg['name'] = self.metadata['name']
+        cfg['name'] = self.name
         s = Socrata(cfg)
         if not cfg['id']:
           cfg['id'] = s.create_dataset()
@@ -47,3 +59,9 @@ class Process(object):
             self.l['socrata']['id'] = cfg['id']
             yaml.dump(self.l, g, default_flow_style=False)
         s.replace()
+      elif dest == 'arcgis-online':
+        pass
+      elif dest == 'mapbox':
+        pass
+      else:
+        print("I don't know this destination type: {}".format(dest))
