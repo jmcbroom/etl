@@ -4,7 +4,6 @@ soda_token = os.environ['SODA_TOKEN']
 soda_user = os.environ['SODA_USER']
 soda_pass = os.environ['SODA_PASS']
 soda_connection = sodapy.Socrata('data.detroitmi.gov', soda_token, soda_user, soda_pass, timeout=54000)
-print(soda_connection)
 
 import sqlalchemy
 engine = sqlalchemy.create_engine('postgresql+psycopg2://{}/{}'.format(os.environ['PG_CONNSTR'], os.environ['PG_DB']))

@@ -1,10 +1,8 @@
 import os, yaml
+from .utils import connect_to_pg, add_geom_column, geocode_addresses, exec_psql_query
 
 DATA_DIR = '/home/jimmy/Work/etl/process'
-
-import sqlalchemy
-engine = sqlalchemy.create_engine('postgresql+psycopg2://{}/{}'.format(os.environ['PG_CONNSTR'], os.environ['PG_DB']))
-connection = engine.connect()
+connection = connect_to_pg()
 
 class Process(object):
   def __init__(self, directory="project_greenlight"):
@@ -25,9 +23,14 @@ class Process(object):
   def transform(self):
     with open("{}/02_transform.yml".format(self.basedir), 'r') as f:
       self.t = yaml.load(f)
-    for statement in self.t:
-      print(statement)
-      connection.execute(statement)
+    # geocode column if exists
+    if self.t['geocode']:
+      opts = self.t['geocode']
+      add_geom_column(connection, opts['table'], opts['geom_col'], self.schema)
+      geocode_addresses(connection, "{}.{}".format(self.schema, opts['table']), opts['add_col'], opts['geom_col'])
+    # execute array of custom sql
+    for statement in self.t['sql']:
+      exec_psql_query(connection, statement, verbose=True)
 
   def load(self):
     from etl import Socrata

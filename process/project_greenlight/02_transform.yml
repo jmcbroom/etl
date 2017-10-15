@@ -1,18 +1,23 @@
-- delete from police.greenlight where status is null;
-- delete from police.greenlight where status in ('Red', 'Yellow')
-- drop view if exists police.greenlight_socrata;
-- >- 
-    create view
-    police.greenlight_socrata as
-    ( select 
-        address, 
-        business_name, 
-        concat(
-          'location (',
-          latitude, 
-          ',', 
-          longitude,
-          ')'
-        ) as location
-      from police.greenlight where trim(status) = 'Green' )
+geocode:
+  table: greenlight
+  add_col: address
+  geom_col: geom
+sql:
+  - delete from police.greenlight where status is null;
+  - delete from police.greenlight where status in ('Red', 'Yellow')
+  - drop view if exists police.greenlight_socrata;
+  - >- 
+      create view
+      police.greenlight_socrata as
+      ( select 
+          address, 
+          business_name, 
+          concat(
+            'location (',
+            ST_Y(ST_Centroid(geom)), 
+            ',', 
+            ST_X(ST_Centroid(geom)),
+            ')'
+          ) as location
+        from police.greenlight where trim(status) = 'Green' )
     
