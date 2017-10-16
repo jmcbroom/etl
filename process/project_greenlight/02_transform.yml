@@ -1,10 +1,11 @@
-geocode:
-  table: greenlight
-  add_col: address
-  geom_col: geom
-sql:
+- sql:
   - delete from police.greenlight where status is null;
-  - delete from police.greenlight where status in ('Red', 'Yellow')
+  - delete from police.greenlight where status in ('Red', 'Yellow');
+- geocode:
+    table: greenlight
+    add_col: address
+    geom_col: geom
+- sql:
   - drop view if exists police.greenlight_socrata;
   - >- 
       create view

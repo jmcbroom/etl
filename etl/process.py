@@ -31,18 +31,16 @@ class Process(object):
   def transform(self):
     with open("{}/02_transform.yml".format(self.basedir), 'r') as f:
       self.t = yaml.load(f)
-
-    # if there's a geocode transform...
-    if self.t['geocode']:
-      opts = self.t['geocode']
-      # add geometry column and index, specified in YML
-      add_geom_column(connection, opts['table'], opts['geom_col'], self.schema)
-      # loop through addresses, send to direccion.Address & populate geom column
-      geocode_addresses(connection, "{}.{}".format(self.schema, opts['table']), opts['add_col'], opts['geom_col'])
-
-    # execute array of custom sql
-    for statement in self.t['sql']:
-      exec_psql_query(connection, statement, verbose=True)
+    for step in self.t:
+      for k, v in step.items():
+        if k == 'geocode':
+          # add geometry column and index, specified in YML
+          add_geom_column(connection, v['table'], v['geom_col'], self.schema)
+          # loop through addresses, send to direccion.Address & populate geom column
+          geocode_addresses(connection, "{}.{}".format(self.schema, v['table']), v['add_col'], v['geom_col'])
+        if k == 'sql':
+          for statement in v:
+            exec_psql_query(connection, statement, verbose=True)
 
   def load(self):
     from etl import Socrata
