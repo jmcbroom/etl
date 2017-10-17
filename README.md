@@ -43,17 +43,25 @@ Roadmap:
 
 ### 02_transform.yml
 
-```yml
-geocode:
-  table: <the table with the addresses>
+An array of steps. Think of this like steps in a recipe.
 
-sql:
+```yml
+- sql:
+  - delete from ...
+- geocode:
+    table: <the table with the addresses>
+- sql:
   - 'update...'
   - 'create view...'
-  - 'insert...'
 ```
 
-Right now, you can only geocode and do SQL.
+Supported options:
+- `geocode`: provide a table, address column, and geometry column
+- `sql`: execute a list of custom SQL statements
+
+Roadmap:
+- `anonymize`?
+- `join`?
 
 ### 03_load.yml
 
