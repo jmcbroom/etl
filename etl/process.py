@@ -43,10 +43,9 @@ class Process(object):
             exec_psql_query(connection, statement, verbose=True)
 
   def load(self):
-    from etl import Socrata
+    from etl import Socrata, AgoLayer
     with open("{}/03_load.yml".format(self.basedir), 'r') as f:
       self.l = yaml.load(f)
-      print(self.l)
     for dest, cfg in self.l.items():
       if dest == 'socrata':
         cfg['name'] = self.name
@@ -58,7 +57,8 @@ class Process(object):
             yaml.dump(self.l, g, default_flow_style=False)
         s.replace()
       elif dest == 'arcgis-online':
-        pass
+        l = AgoLayer(cfg)
+        l.publish()
       elif dest == 'mapbox':
         pass
       else:

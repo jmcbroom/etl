@@ -21,4 +21,13 @@
             ')'
           ) as location
         from police.greenlight where trim(status) = 'Green' )
+  - drop view if exists police.greenlight_arcgis;
+  - >- 
+      create view
+      police.greenlight_arcgis as
+      ( select 
+          address, 
+          business_name, 
+          geom
+        from police.greenlight where trim(status) = 'Green' )
     

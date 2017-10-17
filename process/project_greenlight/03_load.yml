@@ -1,3 +1,7 @@
+arcgis-online:
+  id: b827c82731294708b500f7c10b3240b1
+  file: project_greenlight.json
+  table: police.greenlight_arcgis
 socrata:
   columns:
     Address:

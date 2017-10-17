@@ -1,6 +1,8 @@
 import re
 import odo
 from os import environ as env
+import os
+import sys
 
 import sqlalchemy
 
@@ -32,6 +34,10 @@ def exec_psql_query(conn, query, verbose=False):
   if verbose:
     print(query)
   conn.execute(query)
+
+def psql_to_geojson(table, outfile='test.json', insr=4326, outsr=4326):
+  ogr = "ogr2ogr -f GeoJSON {} -s_srs epsg:{} -t_srs epsg:{} pg:dbname={} {}".format(outfile, insr, outsr, env['PG_DB'], table)
+  return os.system(ogr)
   
 def add_geom_column(conn, table, geom_col, schema='public', proj=4326, geom_type='Geometry'):
   # add geometry column (if not exists)
