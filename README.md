@@ -65,16 +65,26 @@ Roadmap:
 
 ### 03_load.yml
 
-```
-destination:
-  options...
-destination_two:
-  options...
-```
-
 Currently supported options for `destination`:
 - `socrata`: A Socrata dataset
+- `arcgis-online`: An ArcGIS Online feature layer
 
 Roadmap:
-- `arcgis-online`: An ArcGIS Online feature layer
 - `mapbox`: A Mapbox tileset
+
+```
+socrata:
+  columns:
+    <human name>:
+      field: <column>
+      type: <Socrata data type>
+  id: <Socrata 4x4; if blank, create new dataset>
+  name: <name of dataset>
+  table: <table or view to upload>
+arcgis-online:
+  table: <table or view to upload>
+  id: <ArcGIS Online id; if blank, create new layer>
+  file: <filename>
+```
+
+
