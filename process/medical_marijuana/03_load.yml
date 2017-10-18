@@ -1,0 +1,17 @@
+socrata:
+  columns:
+    Address:
+      field: address
+      type: text
+    Business Name:
+      field: name
+      type: text
+    Location:
+      field: location
+      type: location
+    Status:
+      field: action
+      type: text
+  id: pecw-f2g5
+  name: Medical Marijuana Centers
+  table: bseed.mmcc_socrata

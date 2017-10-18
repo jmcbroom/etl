@@ -57,14 +57,17 @@ def geocode_addresses(conn, table, add_col='address', geom_col='geom'):
     g = Address(v[0], notify_fail=True)
     # geocode it
     loc = g.geocode()
-    # update to set geom_col equal to point result from direccion
-    query = "update {} set {} = ST_SetSRID(ST_MakePoint({}, {}), 4326) where {} = '{}'".format(
-      table, 
-      geom_col,
-      loc['location']['x'],
-      loc['location']['y'],
-      add_col,
-      v[0]
-      )
-    exec_psql_query(conn, query, verbose=True)
+    if loc:
+      # update to set geom_col equal to point result from direccion
+      query = "update {} set {} = ST_SetSRID(ST_MakePoint({}, {}), 4326) where {} = '{}'".format(
+        table, 
+        geom_col,
+        loc['location']['x'],
+        loc['location']['y'],
+        add_col,
+        v[0]
+        )
+      exec_psql_query(conn, query, verbose=True)
+    else:
+      pass
   

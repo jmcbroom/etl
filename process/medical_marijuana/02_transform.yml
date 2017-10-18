@@ -1,0 +1,25 @@
+- sql:
+  - delete from bseed.mmcc where action is null;
+- geocode:
+    table: mmcc
+    add_col: location
+    geom_col: geom
+- sql:
+  - drop view if exists bseed.mmcc_socrata
+  - >- 
+      create view
+      bseed.mmcc_socrata as
+      ( select 
+          trim(mmcc_business_name) as name,
+          location as address,
+          action,
+          case when geom is null then null else
+            concat(
+              'location (',
+              ST_Y(ST_Centroid(geom)), 
+              ',', 
+              ST_X(ST_Centroid(geom)),
+              ')'
+            ) 
+          end as location
+        from bseed.mmcc )
