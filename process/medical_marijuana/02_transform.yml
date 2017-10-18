@@ -23,3 +23,13 @@
             ) 
           end as location
         from bseed.mmcc )
+  - drop view if exists bseed.mmcc_arcgis;
+  - >- 
+      create view
+      bseed.mmcc_arcgis as
+      ( select 
+          trim(mmcc_business_name) as name,
+          location as address,
+          action,
+          geom
+        from bseed.mmcc where geom is not null)
