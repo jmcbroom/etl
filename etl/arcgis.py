@@ -28,10 +28,10 @@ class AgoLayer(object):
     psql_to_geojson(self.params['table'], self.params['file'])
     if not self.params['id']:
       item = upload(gis, self.params['file'])
-      os.system("rm {}".format(self.params['file']))
       self.item = item.publish()
+      # to do: write back new item id to .yml file
     else:
-      psql_to_geojson(self.params['table'], self.params['file'])
       overwrite(gis, self.params['id'], self.params['file'])
+    # remove GeoJSON file
     os.system("rm {}".format(self.params['file']))
 

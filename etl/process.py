@@ -14,19 +14,23 @@ class Process(object):
   
   def extract(self):
     from etl import Smartsheet as smartsheet
+    from etl import SfTable
     with open("{}/01_extract.yml".format(self.basedir), 'r') as f:
       self.e = yaml.load(f)
-    for src, config in self.e.items():
-      if src == 'smartsheet':
-        s = smartsheet(config['id'])
-        s.to_postgres(self.schema, config['table'])
-      # stub these out for future work
-      elif src == 'database':
-        pass
-      elif src == 'salesforce':
-        pass
-      else:
-        print("I don't know this source type: {}".format(src))
+    for source in self.e:
+      for srctype, params in source.items():
+        if srctype == 'smartsheet':
+          s = smartsheet(params['id'])
+          s.to_postgres(self.schema, params['table'])
+        # stub these out for future work
+        elif srctype == 'database':
+          pass
+        elif srctype == 'salesforce':
+          params['schema'] = self.schema
+          q = SfTable(params)
+          q.to_postgres()
+        else:
+          print("I don't know this source type: {}".format(srctype))
 
   def transform(self):
     with open("{}/02_transform.yml".format(self.basedir), 'r') as f:
