@@ -25,19 +25,21 @@ gl.load()
 
 ### 01_extract.yml
 
+An array of sources to be extracted. The key is the source type, and its options get passed to the source's class.
+
 ```yml
-source:
-  options...
-source_two:
-  options...
+- source:
+    options...
+- source_two:
+    options...
 ```
 
 Currently supported options for `source`:
-- `smartsheet`: A Smartsheet
+- `smartsheet` from `smartsheet.py` : A Smartsheet 
+- `salesforce` from `salesforce.py` : A Salesforce query
 
 Roadmap:
 - `database`: Database table(s) from: SQL Server, Oracle...
-- `salesforce`: A Salesforce query
 - `googlesheet`: A Google Sheet
 - `airtable`: Table(s) from an Airtable base
 
