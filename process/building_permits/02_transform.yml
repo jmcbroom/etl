@@ -1,0 +1,2 @@
+- sql:
+  - drop view if exists bseed.bldg_permits_socrata;

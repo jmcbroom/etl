@@ -1,0 +1,5 @@
+database:
+  db_type: oracle
+  table: BG_BLD_DET_F
+  prefix: TM
+  
