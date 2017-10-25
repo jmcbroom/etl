@@ -17,8 +17,7 @@ def get_table_as_df(dbType, dbTable, connString):
   return df
 
 def make_db_connection_string(dbType, envPrefix):
-  connection_string = dbType + '://'
-  # then concat prefix with '_USER' etc to mock env variable format to be formatted into template literal?
+  connection_string = dbtype + "://{}:{}@{}:{}/{}.format(env['" + envPrefix + "_USER'], env['" + envPrefix + "_PASS'], env['" + envPrefix + "_HOST'], env['" + envPrefix + "_PORT'], env['" + envPrefix + "_DB'])"
 
   return connection_string
 
