@@ -3,32 +3,32 @@ import cx_Oracle
 import pandas
 import odo
 from os import environ as env
+from etl.utils import df_to_pg
 
-def get_table_as_df(dbType, dbTable, connString):
-  if db_type == 'oracle':
-    engine = sqlalchemy.create_engine('{}'.format(connString))
-    conn = engine.connect()
-    res = conn.execute('select * from {}'.format(table))
-    df = pandas.DataFrame(res.fetchall())
-    df.columns = res.keys
-  elif db_type == 'sqlserver':
-    pass
-
+def get_table_as_df(dbTable, connString):
+  engine = sqlalchemy.create_engine(connString)
+  conn = engine.connect()
+  df = pandas.read_sql("select * from {}".format(dbTable), conn)
   return df
 
 def make_db_connection_string(dbType, envPrefix):
-  connection_string = dbtype + "://{}:{}@{}:{}/{}.format(env['" + envPrefix + "_USER'], env['" + envPrefix + "_PASS'], env['" + envPrefix + "_HOST'], env['" + envPrefix + "_PORT'], env['" + envPrefix + "_DB'])"
-
+  # translate from our YML to SQLAlchemy's connection string prefix
+  dbTypeLookup = { 
+    'oracle': 'oracle',
+    'sql-server': 'mssql+pymssql'
+  }
+  suffixes = ['USER', 'PASS', 'HOST', 'PORT', 'DB']
+  connection_string = dbTypeLookup[dbType] + "://{}:{}@{}:{}/{}".format(*[ env["{}_{}".format(envPrefix, s)] for s in suffixes ])
   return connection_string
 
-class Database(object):
-  def __init__(self, db_type, table, prefix):
-    self.db_type = db_type
-    self.table = table
-    self.prefix = prefix
+class DbTable(object):
+  def __init__(self, dbtype, source, destination, prefix):
+    self.dbType = dbtype
+    self.dbTable = source
+    self.prefix = prefix.upper()
+    self.schema, self.table = destination.split(".")
 
   def to_postgres(self):
-  	self.conn = make_db_connection_string(self.db_type, self.prefix)
-  	self.df = get_table_as_df(self.db_type, self.table, self.conn)
-
-  	odo.odo(df, "postgres://{}@localhost/{}::{}".format(env['PG_USER'], env['PG_DB'], self.table))
+    self.conn = make_db_connection_string(self.dbType, self.prefix)
+    self.df = get_table_as_df(self.dbTable, self.conn)
+    df_to_pg(self.df, self.schema, self.table)

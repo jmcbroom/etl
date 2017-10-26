@@ -1,7 +1,7 @@
 import os, yaml
 from .utils import connect_to_pg, add_geom_column, geocode_addresses, exec_psql_query
 
-DATA_DIR = '/home/jimmy/Work/etl/process'
+DATA_DIR = '/home/gisteam/etl_pkg/process'
 connection = connect_to_pg()
 
 class Process(object):
@@ -15,6 +15,7 @@ class Process(object):
   def extract(self):
     from etl import Smartsheet as smartsheet
     from etl import SfTable
+    from etl import DbTable
     with open("{}/01_extract.yml".format(self.basedir), 'r') as f:
       self.e = yaml.load(f)
     for source in self.e:
@@ -24,7 +25,8 @@ class Process(object):
           s.to_postgres(self.schema, params['table'])
         # stub these out for future work
         elif srctype == 'database':
-          pass
+          t = DbTable(params['type'], params['source'], params['destination'], params['prefix'])
+          t.to_postgres()
         elif srctype == 'salesforce':
           params['schema'] = self.schema
           q = SfTable(params)

@@ -1,0 +1,5 @@
+- database:
+    type: sql-server
+    source: NEZList
+    destination: assessor.nezlist
+    prefix: assess
