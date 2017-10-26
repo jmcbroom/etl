@@ -1,0 +1,9 @@
+arcgis-online:
+  id: 143abb5489d44564b031483c3118d143
+  file: angels_night.json
+  table: fire.angels_night_ago
+  # name: Angel's Night Live
+  # description: Live view of vwAngelNight_2017_UN
+  # tags:
+  #   - fire
+  #   - angels night

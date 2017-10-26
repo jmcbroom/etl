@@ -8,7 +8,10 @@ import os
 
 gis = GIS("https://detroitmi.maps.arcgis.com", env['AGO_USER'], env['AGO_PASS'])
 
-def upload(gis, filepath):
+def upload(gis, filepath, params):
+  metadata={'title':params['title'],
+            'description':params['description'],
+            'tags':','.join(params['tags'])}
   item = gis.content.add({"type": "GeoJson"}, filepath)
   return item
 
@@ -27,7 +30,7 @@ class AgoLayer(object):
   def publish(self):
     psql_to_geojson(self.params['table'], self.params['file'])
     if not self.params['id']:
-      item = upload(gis, self.params['file'])
+      item = upload(gis, self.params['file'], self.params)
       self.item = item.publish()
       # to do: write back new item id to .yml file
     else:

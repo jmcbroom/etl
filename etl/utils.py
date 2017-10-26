@@ -35,6 +35,10 @@ def exec_psql_query(conn, query, verbose=False):
     print(query)
   conn.execute(query)
 
+def drop_table_if_exists(conn, table):
+  query = "drop table if exists {} cascade".format(table)
+  exec_psql_query(conn, query, verbose=True)
+
 def psql_to_geojson(table, outfile='test.json', insr=4326, outsr=4326):
   ogr = "ogr2ogr -f GeoJSON {} -s_srs epsg:{} -t_srs epsg:{} pg:dbname={} {}".format(outfile, insr, outsr, env['PG_DB'], table)
   return os.system(ogr)

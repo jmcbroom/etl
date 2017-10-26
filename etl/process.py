@@ -1,5 +1,5 @@
 import os, yaml
-from .utils import connect_to_pg, add_geom_column, geocode_addresses, exec_psql_query
+from .utils import connect_to_pg, add_geom_column, geocode_addresses, exec_psql_query, drop_table_if_exists
 
 DATA_DIR = '/home/gisteam/etl_pkg/process'
 connection = connect_to_pg()
@@ -11,6 +11,10 @@ class Process(object):
       m = yaml.load(f)
     self.schema = m['schema']
     self.name = m['name']
+    if m['notify'] == 'true':
+      self.notify = True
+    else:
+      self.notify = False
   
   def extract(self):
     from etl import Smartsheet as smartsheet
@@ -22,10 +26,11 @@ class Process(object):
       for srctype, params in source.items():
         if srctype == 'smartsheet':
           s = smartsheet(params['id'])
+          drop_table_if_exists(connection, "{}.{}".format(self.schema, params['table']))
           s.to_postgres(self.schema, params['table'])
-        # stub these out for future work
         elif srctype == 'database':
           t = DbTable(params['type'], params['source'], params['destination'], params['prefix'])
+          drop_table_if_exists(connection, params['destination'])
           t.to_postgres()
         elif srctype == 'salesforce':
           params['schema'] = self.schema
@@ -50,9 +55,11 @@ class Process(object):
 
   def load(self):
     from etl import Socrata, AgoLayer
+    self.destinations = []
     with open("{}/03_load.yml".format(self.basedir), 'r') as f:
       self.l = yaml.load(f)
     for dest, cfg in self.l.items():
+      self.destinations.append(dest)
       if dest == 'socrata':
         cfg['name'] = self.name
         s = Socrata(cfg)
