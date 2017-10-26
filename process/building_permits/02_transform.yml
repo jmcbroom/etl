@@ -5,9 +5,15 @@
       bseed.bldg_permits_socrata as
       ( select 
           permit_no,
-          permit_issued,
-          permit_expire,
-          permit_completed,
+          case when permit_issued is null then null else
+                concat(replace(permit_issued::text, ' ', 'T'), 'Z')
+          end as permit_issued,
+          case when permit_expire is null then null else
+                concat(replace(permit_expire::text, ' ', 'T'), 'Z')
+          end as permit_expire,
+          case when permit_completed is null then null else
+                concat(replace(permit_completed::text, ' ', 'T'), 'Z')
+          end as permit_completed,
           permit_status,
           site_address,
           between1,
@@ -18,11 +24,11 @@
           case_description,
           legal_use,
           case estimated_cost when 'NaN' then null else estimated_cost end,
-          parcel_size,
+          case parcel_size when 'NaN' then null else parcel_size end,
           parcel_cluster_sector,
-          stories,
-          parcel_floor_area,
-          parcel_ground_area,
+          case stories when 'NaN' then null else stories end,
+          case parcel_floor_area when 'NaN' then null else parcel_floor_area end,
+          case parcel_ground_area when 'NaN' then null else parcel_ground_area end,
           prc_aka_address,
           bld_permit_type,
           bld_permit_desc,
@@ -37,7 +43,7 @@
           csm_caseno,
           csf_created_by,
           seq_no,
-          case pcf_amount_due when 'NaN' then null else pcf_amount_due end,
+          case pcf_amt_due when 'NaN' then null else pcf_amt_due end,
           owner_last_name,
           owner_first_name,
           owner_address1,

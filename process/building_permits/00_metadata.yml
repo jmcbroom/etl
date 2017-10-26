@@ -1,2 +1,3 @@
 name: Building Permits
 schema: bseed
+notify: 'yes'

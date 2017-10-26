@@ -11,7 +11,8 @@ class Process(object):
       m = yaml.load(f)
     self.schema = m['schema']
     self.name = m['name']
-    if m['notify'] == 'true':
+    print(m)
+    if m['notify'] == 'yes':
       self.notify = True
     else:
       self.notify = False
@@ -68,7 +69,7 @@ class Process(object):
           with open('{}/03_load.yml'.format(self.basedir), 'w') as g:
             self.l['socrata']['id'] = cfg['id']
             yaml.dump(self.l, g, default_flow_style=False)
-        s.replace()
+        s.update()
       elif dest == 'arcgis-online':
         l = AgoLayer(cfg)
         l.publish()

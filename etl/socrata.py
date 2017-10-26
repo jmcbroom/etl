@@ -21,7 +21,7 @@ class Socrata(object):
             self.config['name'],
             description = '',
             columns = columns,
-            row_identifier = None,
+            row_identifier = self.config['row_identifier'] or None,
             tags = [],
             category = None
         )
@@ -29,8 +29,19 @@ class Socrata(object):
         soda_connection.publish(self.id)
         return self.id
     
-    def replace(self):
+    def update(self):
         rows = db_connection.execute("select * from {}".format(self.config['table']))
-        replace_payload = [ dict(row) for row in rows ]
-        job = soda_connection.replace( self.id, replace_payload )
-        return job
+        payload = [ dict(row) for row in rows ]
+        print(len(payload))
+        # payload = payload[0:10]
+        if self.config['method'] == 'replace':
+            job = soda_connection.replace( self.id, payload )
+            return job
+        elif self.config['method'] == 'upsert':
+            for i in range(0, len(payload), 20000):
+                try:
+                    r = soda_connection.upsert(self.id, payload[i:i+20000])
+                    print(r)
+                except:
+                    print("Something went wrong on record {}".format(i))
+                    soda_connection.upsert(self.id, payload[i:i+20000])
