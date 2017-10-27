@@ -16,7 +16,7 @@
           timeroute, 
           timefini, 
           primeunit, 
-          ltrim(closecode, 'F') as closecode, 
+          trim(ltrim(closecode, 'F'))::integer as closecode, 
           cancelled, 
           calltime, 
           district, 
@@ -28,4 +28,4 @@
           "TableName", 
           inmain_notes, 
           st_transform(st_setsrid(st_makepoint(geox,geoy), 2898), 4326) as geom 
-        from fire.angels_night);
+        from fire.angels_night order by random());
