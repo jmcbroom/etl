@@ -30,7 +30,10 @@ class Process(object):
           drop_table_if_exists(connection, "{}.{}".format(self.schema, params['table']))
           s.to_postgres(self.schema, params['table'])
         elif srctype == 'database':
-          t = DbTable(params['type'], params['source'], params['destination'], params['prefix'])
+          if not params['columns']:
+            t = DbTable(params['type'], params['source'], '*', params['destination'], params['prefix'])
+          else:
+            t = DbTable(params['type'], params['source'], params['columns'], params['destination'], params['prefix'])
           drop_table_if_exists(connection, params['destination'])
           t.to_postgres()
         elif srctype == 'salesforce':

@@ -5,10 +5,12 @@ import odo
 from os import environ as env
 from etl.utils import df_to_pg
 
-def get_table_as_df(dbTable, connString):
+def get_table_as_df(query, connString):
   engine = sqlalchemy.create_engine(connString)
   conn = engine.connect()
-  df = pandas.read_sql("select * from {}".format(dbTable), conn)
+  print(query)
+  df = pandas.read_sql(query, conn)
+  df.replace({u'\u0000': ''}, regex=True, inplace=True)
   return df
 
 def make_db_connection_string(dbType, envPrefix):
@@ -22,13 +24,18 @@ def make_db_connection_string(dbType, envPrefix):
   return connection_string
 
 class DbTable(object):
-  def __init__(self, dbtype, source, destination, prefix):
+  def __init__(self, dbtype, source, columns, destination, prefix):
     self.dbType = dbtype
     self.dbTable = source
     self.prefix = prefix.upper()
     self.schema, self.table = destination.split(".")
+    if type(columns) is list:
+      self.query_all = "select {} from {}".format(",".join(columns), self.dbTable)
+    else:
+      self.query_all = "select * from {}".format(self.dbTable)
+    print(self.query_all)
 
   def to_postgres(self):
     self.conn = make_db_connection_string(self.dbType, self.prefix)
-    self.df = get_table_as_df(self.dbTable, self.conn)
+    self.df = get_table_as_df(self.query_all, self.conn)
     df_to_pg(self.df, self.schema, self.table)
