@@ -1,0 +1,11 @@
+arcgis-online:
+  id:
+  file: parcels.json
+  table: assessor.parcels_accela
+  title: Accela Parcels
+  description: description
+  access: org
+  tags:
+    - iet
+    - bseed
+    - parcels

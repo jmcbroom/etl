@@ -1,7 +1,7 @@
 socrata:
   columns:
     Amount Due:
-      field: pcf_amount_due
+      field: pcf_amt_due
       type: money
     Between:
       field: between1
