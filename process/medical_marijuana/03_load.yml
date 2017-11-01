@@ -15,6 +15,7 @@ socrata:
   id: pecw-f2g5
   name: Medical Marijuana Centers
   table: bseed.mmcc_socrata
+  method: replace
 arcgis-online:
   id: c15c471f1a534e88b29d1783e8604937
   file: medical_marijuana.json

@@ -1,9 +1,9 @@
 import os, yaml
-from .utils import connect_to_pg, add_geom_column, geocode_addresses, exec_psql_query, drop_table_if_exists
+from .utils import connect_to_pg, add_geom_column, exec_psql_query, drop_table_if_exists
 
 from etl.slack import SlackMessage
 
-DATA_DIR = '/home/gisteam/etl_pkg/process'
+DATA_DIR = './process'
 connection = connect_to_pg()
 
 class Process(object):
@@ -20,15 +20,15 @@ class Process(object):
       self.notify = False
   
   def extract(self):
-    from etl import Smartsheet as smartsheet
-    from etl import SfTable
-    from etl import DbTable
+    from .smartsheet import Smartsheet
+    from .salesforce import SfTable
+    from .database import DbTable
     with open("{}/01_extract.yml".format(self.basedir), 'r') as f:
       self.e = yaml.load(f)
     for source in self.e:
       for srctype, params in source.items():
         if srctype == 'smartsheet':
-          s = smartsheet(params['id'])
+          s = Smartsheet(params['id'])
           drop_table_if_exists(connection, "{}.{}".format(self.schema, params['table']))
           s.to_postgres(self.schema, params['table'])
         elif srctype == 'database':
@@ -51,16 +51,18 @@ class Process(object):
     for step in self.t:
       for k, v in step.items():
         if k == 'geocode':
+          from etl.geocode import GeocodeTable
           # add geometry column and index, specified in YML
-          add_geom_column(connection, v['table'], v['geom_col'], self.schema)
+          add_geom_column(connection, v['table'], v['geom_col'])
           # loop through addresses, send to direccion.Address & populate geom column
-          geocode_addresses(connection, "{}.{}".format(self.schema, v['table']), v['add_col'], v['geom_col'])
+          GeocodeTable(v['table'], v['add_col'], v['geom_col']).geocode_rows()
         if k == 'sql':
           for statement in v:
             exec_psql_query(connection, statement, verbose=True)
 
   def load(self):
-    from etl import Socrata, AgoLayer
+    from .socrata import Socrata
+    from .arcgis import AgoLayer
     self.destinations = []
     with open("{}/03_load.yml".format(self.basedir), 'r') as f:
       self.l = yaml.load(f)
@@ -84,7 +86,7 @@ class Process(object):
         print("I don't know this destination type: {}".format(dest))
 
   def update(self):
-    if self.proc.notify:
+    if self.notify:
       msg = SlackMessage({"text": "Starting update: {}".format(self.proc.name)})
       msg.send()
     self.extract()
