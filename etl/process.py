@@ -1,6 +1,8 @@
 import os, yaml
 from .utils import connect_to_pg, add_geom_column, geocode_addresses, exec_psql_query, drop_table_if_exists
 
+from etl.slack import SlackMessage
+
 DATA_DIR = '/home/gisteam/etl_pkg/process'
 connection = connect_to_pg()
 
@@ -80,3 +82,17 @@ class Process(object):
         pass
       else:
         print("I don't know this destination type: {}".format(dest))
+
+  def update(self):
+    if self.proc.notify:
+      msg = SlackMessage({"text": "Starting update: {}".format(self.proc.name)})
+      msg.send()
+    self.extract()
+    self.transform()
+    self.load()
+    if self.notify:
+      for d in self.destinations:
+        if d == 'arcgis-online':
+          msg.react('briefcase')
+        elif d == 'socrata':
+          msg.react('umbrella')
