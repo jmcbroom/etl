@@ -6,6 +6,8 @@ from .utils import connect_to_pg
 
 ago = gis.GIS("https://detroitmi.maps.arcgis.com", env['AGO_USER'], env['AGO_PASS'])
 composite = geocoding.get_geocoders(ago)[0]
+address_points = geocoding.get_geocoders(ago)[1]
+street_centerline = geocoding.get_geocoders(ago)[2]
 
 class GeocodeTable(object):
   def __init__(self, table, addr_col='address', geom_col='geom'):
