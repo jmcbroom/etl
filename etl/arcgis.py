@@ -9,10 +9,11 @@ import os
 gis = GIS("https://detroitmi.maps.arcgis.com", env['AGO_USER'], env['AGO_PASS'])
 
 def upload(gis, filepath, params):
-  metadata={'title':params['title'],
+  item_properties ={'title':params['title'],
             'description':params['description'],
-            'tags':','.join(params['tags'])}
-  item = gis.content.add({"type": "GeoJson"}, filepath)
+            'tags':','.join(params['tags']),
+            'type': 'GeoJson'}
+  item = gis.content.add(item_properties, filepath)
   return item
 
 def overwrite(gis, id, filepath):

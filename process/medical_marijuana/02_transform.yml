@@ -1,7 +1,7 @@
 - sql:
   - delete from bseed.mmcc where action is null;
 - geocode:
-    table: mmcc
+    table: bseed.mmcc
     add_col: location
     geom_col: geom
 - sql:

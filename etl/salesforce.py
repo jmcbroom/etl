@@ -7,7 +7,7 @@ from os import environ as env
 
 SF = simple_salesforce.Salesforce(env['SF_USER'], env['SF_PASS'], env['SF_TOKEN'])
 
-local_engine = sqlalchemy.create_engine("postgresql://{}@localhost/{}".format(env['PG_USER'], env['PG_DB']))
+local_engine = sqlalchemy.create_engine("postgresql://{}/{}".format(env['PG_CONNSTR'], env['PG_DB']))
 local_connection = local_engine.connect()
 
 class SfTable(object):

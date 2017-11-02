@@ -2,7 +2,7 @@
   - delete from police.greenlight where status is null;
   - delete from police.greenlight where status in ('Red', 'Yellow');
 - geocode:
-    table: greenlight
+    table: police.greenlight
     add_col: address
     geom_col: geom
 - sql:
@@ -29,5 +29,5 @@
           address, 
           business_name, 
           geom
-        from police.greenlight where trim(status) = 'Green' )
+        from police.greenlight where trim(status) = 'Green' and geom is not null)
     
