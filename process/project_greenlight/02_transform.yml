@@ -29,5 +29,5 @@
           address, 
           business_name, 
           geom
-        from police.greenlight where trim(status) = 'Green' )
+        from police.greenlight where trim(status) = 'Green' and geom is not null)
     
