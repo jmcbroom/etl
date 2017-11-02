@@ -160,7 +160,7 @@
           case when BSEED_COM_Winter_Grade_Approved__c is null then Winter_Grade_Approved_Dt__c else
               BSEED_COM_Winter_Grade_Approved__c
           end as winter_grade_date,
-          case when (Demo_Cost_Abatement__c+Demo_Cost_Knock__c) is 'NaN' then null else (Demo_Cost_Abatement__c+Demo_Cost_Knock__c) as total_demo_cost,
+          case when (Demo_Cost_Abatement__c+Demo_Cost_Knock__c) is 'NaN' then null else (Demo_Cost_Abatement__c+Demo_Cost_Knock__c) end as total_demo_cost,
           case when DBA_COM_Property__r.Latitude__c is null then null else
               concat(
                   'location (',
