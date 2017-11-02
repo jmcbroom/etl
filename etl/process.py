@@ -22,7 +22,6 @@ class Process(object):
   def extract(self):
     from .smartsheet import Smartsheet
     from .salesforce import SfTable
-    from .database import DbTable
     with open("{}/01_extract.yml".format(self.basedir), 'r') as f:
       self.e = yaml.load(f)
     for source in self.e:
@@ -32,6 +31,7 @@ class Process(object):
           drop_table_if_exists(connection, "{}.{}".format(self.schema, params['table']))
           s.to_postgres(self.schema, params['table'])
         elif srctype == 'database':
+          from .database import DbTable
           if not params['columns']:
             t = DbTable(params['type'], params['source'], '*', params['destination'], params['prefix'])
           else:
