@@ -1,0 +1,6 @@
+socrata:
+  name: Asbestos Abatement (MDEQ Report)
+  id: vnrt-n46x
+  table: dlba.asbestos_socrata
+  method: replace
+  columns:
