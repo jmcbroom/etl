@@ -1,4 +1,4 @@
-socrata:
+- to: Socrata
   columns:
     Address:
       field: address
@@ -16,7 +16,7 @@ socrata:
   name: Medical Marijuana Centers
   table: bseed.mmcc_socrata
   method: replace
-arcgis-online:
+- to: ArcGIS Online
   id: c15c471f1a534e88b29d1783e8604937
   file: medical_marijuana.json
   table: bseed.mmcc_arcgis
