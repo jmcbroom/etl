@@ -1,12 +1,7 @@
 import re
-import odo
 from os import environ as env
 import os
 import sys
-
-import sqlalchemy
-
-from direccion import Address
 
 def clean_column(column):
   remove = "().?&'#"
@@ -23,11 +18,11 @@ def clean_column(column):
   return column.lower()
 
 def df_to_pg(df, schema, table):
+  import odo
   odo.odo(df, 'postgresql://{}/{}::{}'.format(env['PG_CONNSTR'], env['PG_DB'], table), schema=schema)
 
 def connect_to_pg():
-  cstr = 'postgresql+psycopg2://{}/{}'.format(env['PG_CONNSTR'], env['PG_DB'])
-  print(cstr)
+  import sqlalchemy
   engine = sqlalchemy.create_engine('postgresql+psycopg2://{}/{}'.format(env['PG_CONNSTR'], env['PG_DB']))
   connection = engine.connect()
   return connection
