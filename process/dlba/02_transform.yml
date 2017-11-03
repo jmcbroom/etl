@@ -6,7 +6,6 @@
           Address__c, 
           Parcel_ID__c,
           BSEED_Final_Grade_Approved__c,
-          BSEED_Final_Grade_Approved__c,
           DEMO_Final_Grade_Approved_Date__c,
           DEMO_Batch_Contractor_Name_del1__r.Name,
           Abatement_Sub_Contractor__c,
