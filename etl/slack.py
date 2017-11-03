@@ -25,3 +25,11 @@ class SlackMessage(object):
       name = emoji,
       timestamp = self.ts
     )
+
+  def comment(self, message):
+    r = sc.api_call(
+      "chat.postMessage",
+      channel="#z_etl",
+      text=message,
+      thread_ts=self.ts
+    )
