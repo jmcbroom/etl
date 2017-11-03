@@ -19,7 +19,7 @@ class GeocodeTable(object):
   
   def geocode_rows(self):
     conn = connect_to_pg()
-    res = conn.execute("select {} from {}".format(self.addr_col, self.table))
+    res = conn.execute("select distinct {} from {}".format(self.addr_col, self.table))
     self.rows = [ r[0] for r in res.fetchall() ]
 
     # iterate through batches of 1000
