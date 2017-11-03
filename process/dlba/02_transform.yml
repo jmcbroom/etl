@@ -1,8 +1,7 @@
 - sql:
   - drop view if exists dlba.asbestos_socrata;
   - >- 
-      create view
-      dlba.asbestos_socrata
+      create view dlba.asbestos_socrata as
       ( select 
           Address__c, 
           Parcel_ID__c,
@@ -68,8 +67,7 @@
 - sql:
   - drop view if exists dlba.auction_sold_socrata;
   - >- 
-      create view
-      dlba.auction_sold_socrata
+      create view dlba.auction_sold_socrata as
       ( select 
           case when a.Actual_Closing_Date__c is null then null else
               concat_ws('T', a.Actual_Closing_Date__c, '00:00:00.000Z')
@@ -104,8 +102,7 @@
 - sql:
   - drop view if exists dlba.commercial_demos_socrata
   - >- 
-      create view
-      dlba.commercial_demos_socrata
+      create view dlba.commercial_demos_socrata as
       ( select
           Name,
           Commercial_Demo_Status__c,
@@ -178,25 +175,168 @@
 - sql:
   - drop view if exists dlba.for_sale_socrata
   - >- 
-      create view
-      dlba.for_sale_socrata
+      create view dlba.for_sale_socrata as
+      ( select 
+          c.Address__c,
+          c.Parcel_ID__c,
+          c.Program__c,
+          case when a.Listing_Date__c is null then null else
+              concat_ws('T', a.Listing_Date__c, '00:00:00.000Z')
+          end as a.Listing_Date__c,
+          c.Neighbhorhood__c,
+          c.Council_District__c,
+          c.ACCT_Latitude__c,
+          c.ACCT_Longitude__c,
+          case when c.ACCT_Latitude__c is null then null else
+              concat(
+                  'location (',
+                  c.ACCT_Latitude__c,
+                  ',',
+                  c.ACCT_Longitude__c,
+                  ')'
+              )
+           end as location
+        from dlba.dlba_activity a
+        inner join dlba.case c on a.Case__c = c.Id
+        where (a.RecordTypeId = '012j0000000xtGoAAI'
+            or a.DLBA_Activity_Type__c in ('Demo Pull Sale', 'Demo Pull for Demo Sale', 'Renovation Sale', 'Own It Now', 'Own It Now - Bundled Property', 'Auction - Bundled Property'))
+            and a.Listing_Date__c::timestamp < now() + interval '1 day'
+            and a.Sale_Status__c = 'For Sale on Site'
+            and c.Status__c = 'For Sale'
+            and c.Address__c not like '%Fake St%' )
 - sql:
   - drop view if exists dlba.own_it_now_socrata
   - >- 
-      create view
-      dlba.own_it_now_socrata
+      create view dlba.own_it_now_socrata as
+      ( select 
+          case when a.Actual_Closing_Date__c is null then null else
+              concat_ws('T', a.Actual_Closing_Date__c, '00:00:00.000Z')
+          end as a.Actual_Closing_Date__c,
+          a.Sale_Status__c,
+          c.Address__c,
+          c.Parcel_ID__c,
+          c.Program__c,
+          c.Neighborhood__c,
+          c.Council_District__c,
+          c.ACCT_Latitude__c,
+          c.ACCT_Longitude__c,
+          pb.Buyer_Status__c,
+          case when pb.Final_Sale_Price__c is 'NaN' then null else pb.Final_Sale_Price__c end,
+          pb.Purchaser_Type__c,
+          case when c.ACCT_Latitude__c is null then null else
+              concat(
+                  'location (',
+                  c.ACCT_Latitude__c,
+                  ',',
+                  c.ACCT_Longitude__c,
+                  ')'
+              )
+           end as location
+       from dlba.dlba_activity a
+       inner join dlba.case c on a.Case__c = c.Id
+       inner join dlba.prospective_buyer pb on pb.DLBA_Activity__c = a.Id
+       where a.DLBA_Activity_Type__c in ('Demo Pull Sale', 'Demo Pull for Demo Sale', 'Own It Now', 'Own It Now - Bundled Property')
+           and a.Actual_Closing_Date__c is not null
+           and pb.Buyer_Status__c = 'Selected'
+           and c.Address__c not like '%Fake St%' )
 - sql:
   - drop view if exists dlba.side_lots_socrata
   - >- 
-      create view
-      dlba.side_lots_socrata
+      create view dlba.side_lots_socrata as 
+      ( select
+          a.Actual_Closing_Date__c,
+          a.Sale_Status__c,
+          c.Address__c,
+          c.Parcel_ID__c,
+          c.Program__c,
+          c.Neighborhood__c,
+          c.Council_District__c,
+          c.ACCT_Latitude__c,
+          c.ACCT_Longitude__c,
+          pb.Buyer_Status__c,
+          pb.Final_Sale_Price__c,
+          pb.Purchaser_Type__c,
+          case when c.ACCT_Latitude__c is null then null else
+              concat(
+                  'location (',
+                  c.ACCT_Latitude__c,
+                  ',',
+                  c.ACCT_Longitude__c,
+                  ')'
+              )
+           end as location
+        from dlba.dlba_activity a
+        inner join dlba.case c on a.Case__c = c.Id
+        inner join dlba.prospective_buyer pb on pb.DLBA_Activity__c = a.Id
+        where a.RecordTypeId = '012j0000000xtGvAAI'
+            and a.Actual_Closing_Date__c is not null
+            and pb.Buyer_Status__c = 'Selected'
+            and c.Address__c not like '%Fake St%' )
 - sql:
   - drop view if exists dlba.upcoming_demos_socrata
   - >- 
-      create view
-      dlba.upcoming_demos_socrata
+      create view dlba.upcoming_demos_socrata as 
+      ( select 
+          Address__c,
+          case when DEMO_Planned_Knock_Down_Date__c is null then Socrata_Projected_Knocked_By_Date__c else DEMO_Planned_Knock_Down_Date__C end as DEMO_Planned_Knock_Down_Date,
+          Socrata_Projected_Knocked_By_Date__c,
+          case when Socrata_Reported_Price__c is 'NaN' then null else Socrata_Reported_Price__c end,
+          Parcel_ID__c,
+          Demo_Contractor_TEXT_ONLY__c,
+          ACCT_Latitude__c,
+          ACCT_Longitude__c,
+          Council_District__c,
+          Non_HHF_Commercial_Demo__c,
+          Socrata_Price_Type__c,
+          DEMO_NTP_Date__c,
+          Neighborhood__c,
+          case when ACCT_Latitude__c is null then null else
+              concat(
+                  'location (',
+                  ACCT_Latitude__c,
+                  ',',
+                  ACCT_Longitude__c,
+                  ')'
+              )
+           end as location
+        from dlba.case
+        where Socrata_Projected_Knocked_By_Date__c is not null
+            and Socrata_Reported_Price__c > 0
+            and Demo_Contractor_TEXT_ONLY__c <> ''
+            and Status__c = 'Demo Contracted' )
 - sql:
+  - drop view if exists dlba.completed_demos_socrata
+  - >-
+      create view dlba.completed_demos_socrata as
+      ( select
+          Address__c,
+          Parcel_ID__c,
+          Demo_Contractor_TEXT_ONLY__c,
+          case when Socrata_Reported_Price__c is 'NaN' then null else Socrata_Reported_Price__c end,
+          case when DEMO_Knock_Down_Date__c is null then null else
+              replace(to_char(DEMO_Knock_Down_Date__cc::timestamp, 'YYYY-MM-DD HH24:MI:SS'), '', 'T')
+          end as DEMO_Knock_Down_Date__c,
+          Non_HHF_Commercial_Demo__c,
+          Council_District__c,
+          Neighborhood__c,
+          ACCT_Latitude__c,
+          ACCT_Longitude__c,
+                    case when ACCT_Latitude__c is null then null else
+              concat(
+                  'location (',
+                  ACCT_Latitude__c,
+                  ',',
+                  ACCT_Longitude__c,
+                  ')'
+              )
+           end as location
+      from dlba.case
+      where DEMO_Knock_Down_Date__c >= date '2014-01-01'
+          and Socrata_Reported_Price__c > 0
+          and Demo_Contractor_TEXT_ONLY__c <> '' )
+- sql:
+  # TBD - eventual goal to concat upcoming, pipeline and completed into single dataset with "status" col like comm demos
   - drop view if exists dlba.residential_demos_socrata
   - >- 
-      create view
-      dlba.residential_demos_socrata
+      create view dlba.residential_demos_socrata as
+      ( select )
