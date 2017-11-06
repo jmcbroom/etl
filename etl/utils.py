@@ -2,6 +2,7 @@ import re
 from os import environ as env
 import os
 import sys
+import sqlalchemy
 
 def clean_column(column):
   remove = "().?&'#"
@@ -22,7 +23,6 @@ def df_to_pg(df, schema, table):
   odo.odo(df, 'postgresql://{}/{}::{}'.format(env['PG_CONNSTR'], env['PG_DB'], table), schema=schema)
 
 def connect_to_pg():
-  import sqlalchemy
   engine = sqlalchemy.create_engine('postgresql+psycopg2://{}/{}'.format(env['PG_CONNSTR'], env['PG_DB']))
   connection = engine.connect()
   return connection
@@ -30,7 +30,7 @@ def connect_to_pg():
 def exec_psql_query(conn, query, verbose=False):
   if verbose:
     print(query)
-  conn.execute(query)
+  conn.execute(sqlalchemy.text(query))
 
 def drop_table_if_exists(conn, table):
   query = "drop table if exists {} cascade".format(table)

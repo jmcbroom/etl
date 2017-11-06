@@ -46,6 +46,7 @@ class Process(object):
         elif srctype == 'salesforce':
           from .salesforce import SfTable
           params['schema'] = self.schema
+          drop_table_if_exists(connection, params['destination'])
           q = SfTable(params)
           q.to_postgres()
 
@@ -53,19 +54,17 @@ class Process(object):
           print("I don't know this source type: {}".format(srctype))
 
   def transform(self):
-    for step in self.t:
-      for k, v in step.items():
+    for s in self.t:
+      if s['type'] == 'geocode':
+        from etl.geocode import GeocodeTable
+        # add geometry column and index, specified in YML
+        add_geom_column(connection, s['table'], s['geom_col'])
+        # batch geocode addresses
+        GeocodeTable(s['table'], s['add_col'], s['geom_col']).geocode_rows()
 
-        if k == 'geocode':
-          from etl.geocode import GeocodeTable
-          # add geometry column and index, specified in YML
-          add_geom_column(connection, v['table'], v['geom_col'])
-          # batch geocode addresses
-          GeocodeTable(v['table'], v['add_col'], v['geom_col']).geocode_rows()
-
-        if k == 'sql':
-          for statement in v:
-            exec_psql_query(connection, statement, verbose=True)
+      if s['type'] == 'sql':
+        for statement in s['statements']:
+          exec_psql_query(connection, statement, verbose=True)
 
   def load(self):
     self.destinations = [ d['to'] for d in self.l ]
