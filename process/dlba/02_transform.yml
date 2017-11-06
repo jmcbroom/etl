@@ -43,58 +43,34 @@
     - drop view if exists dlba.commercial_demos_socrata
     - create view dlba.commercial_demos_socrata as
         ( select
-            name,
-            commercial_demo_status,
-            case when bseed_com_final_grade_approved is null then null else
-                replace(to_char(bseed_com_final_grade_approved::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as bseed_com_final_grade_approved,
-            case when bseed_com_open_hole_approved is null then null else
-                replace(to_char(bseed_com_open_hole_approved::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as bseed_com_open_hole_approved,
-            case when bseed_com_winter_grade_approved is null then null else
-                replace(to_char(bseed_com_winter_grade_approved::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as bseed_com_winter_grade_approved,
-            case when final_grade_approved_dt is null then null else
-                replace(to_char(final_grade_approved_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as final_grade_approved_dt,
-            case when open_hole_approved_dt is null then null else
-                replace(to_char(open_hole_approved_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as open_hole_approved_dt,
-            case when winter_grade_approved_dt is null then null else
-                replace(to_char(winter_grade_approved_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as winter_grade_approved_dt,
-            case when demo_cost_abatement = 'NaN' then 0 else demo_cost_abatement end,
-            case when demo_cost_knock = 'NaN' then 0 else demo_cost_knock end,
+            dba_com_property_name as address,
+            dba_com_property_parcel_id as parcel_id,
+            commercial_demo_status as status,
+            case when demo_cost_abatement = 'NaN' then 0 else demo_cost_abatement end as abatement_cost,
+            case when demo_cost_knock = 'NaN' then 0 else demo_cost_knock end as demo_cost,
             case when demo_ntp_dt is null then null else
                 replace(to_char(demo_ntp_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as demo_ntp_dt,
+            end as demo_proceed_date,
             case when demo_proj_demo_dt is null then null else
                 replace(to_char(demo_proj_demo_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as demo_proj_demo_dt,
-            case when demo_pulled_date is null then null else
-                replace(to_char(demo_pulled_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as demo_pulled_date,
-            case when env_demo_proceed_dt is null then null else
-                replace(to_char(env_demo_proceed_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as env_demo_proceed_dt,
+            end as projected_demo_date,
             env_group_number,
             case when knock_start_dt is null then null else
                 replace(to_char(knock_start_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as knock_start_dt,
+            end as demo_date,
             demolition_contractor,
-            dba_com_property_latitude,
-            dba_com_property_longitude,
-            dba_com_property_name,
-            dba_com_property_neighborhood,
-            dba_com_property_council_district,
-            case when bseed_com_final_grade_approved is null then final_grade_approved_dt else
-                bseed_com_final_grade_approved
+            dba_com_property_latitude as latitude,
+            dba_com_property_longitude as longitude,
+            dba_com_property_neighborhood as neighborhood,
+            dba_com_property_council_district as council_district,
+            case when bseed_com_final_grade_approved is null then replace(to_char(final_grade_approved_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T') else
+                replace(to_char(bseed_com_final_grade_approved::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
             end as final_grade_date,
-            case when bseed_com_open_hole_approved is null then open_hole_approved_dt else
-                bseed_com_open_hole_approved
+            case when bseed_com_open_hole_approved is null then replace(to_char(open_hole_approved_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T') else
+                replace(to_char(bseed_com_open_hole_approved::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
             end as open_hole_date,
-            case when bseed_com_winter_grade_approved is null then winter_grade_approved_dt else
-                bseed_com_winter_grade_approved
+            case when bseed_com_winter_grade_approved is null then replace(to_char(winter_grade_approved_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T') else
+                replace(to_char(bseed_com_winter_grade_approved::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
             end as winter_grade_date,
             case when (demo_cost_abatement+demo_cost_knock) = 'NaN' then null else (demo_cost_abatement+demo_cost_knock) end as total_demo_cost,
             case when dba_com_property_latitude is null then null else
@@ -110,7 +86,7 @@
         where (knock_start_dt::timestamp >= date '2014-01-01'
             or knock_start_dt is null)
             and commercial_demo_status in ('Demo Contracted', 'Demolished', 'Demo Pipeline') 
-            and demo_pulled_date is not null )
+            and demo_pulled_date is null )
     - drop view if exists dlba.for_sale_socrata
     - create view dlba.for_sale_socrata as
         ( select 
@@ -138,7 +114,7 @@
             where (a.recordtypeid = '012j0000000xtGoAAI'
                 or a.dlba_activity_type in ('Demo Pull Sale', 'Demo Pull for Demo Sale', 'Renovation Sale', 'Own It Now', 'Own It Now - Bundled Property', 'Auction - Bundled Property'))
                 and a.listing_date::timestamp < now() + interval '1 day'
-                and a.sale_status = 'For Sale on Site'
+                and a.sale_status = 'For Sale On Site'
                 and c.status = 'For Sale'
                 and c.address not like '%Fake St%' )
     - drop view if exists dlba.own_it_now_socrata
@@ -209,7 +185,11 @@
     - create view dlba.upcoming_demos_socrata as 
         ( select 
             address,
-            case when demo_planned_knock_down_date is null then socrata_projected_knocked_by_date else demo_planned_knock_down_date end as demo_planned_knock_down_date,
+            case 
+                when demo_planned_knock_down_date is null 
+                then socrata_projected_knocked_by_date 
+                else demo_planned_knock_down_date 
+            end as demo_planned_knock_down_date,
             socrata_projected_knocked_by_date,
             case when socrata_reported_price = 'NaN' then null else socrata_reported_price end,
             parcel_id,
@@ -263,3 +243,86 @@
         where demo_knock_down_date::timestamp >= date '2014-01-01'
             and socrata_reported_price > 0
             and demo_contractor_text_only <> '' )
+    - drop view if exists dlba.asbestos_socrata
+    - create view dlba.asbestos_socrata as ( select
+            address,
+            parcel_id,
+            bseed_final_grade_approved,
+            demo_final_grade_approved_date,
+            demo_batch_contractor_name_del1_name,
+            abatement_sub_contractor,
+            demo_asb_abatement_contractor_name,
+            demo_asb_survey_contractor_name,
+            asb_inspectors_name,
+            asb_abatement_verification_contractor_name,
+            asb_verifier_name,
+            case when demo_contractor_proceed_date is null then null else
+                replace(to_char(demo_contractor_proceed_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as demo_contractor_proceed_date,
+            case when asb_abatement_start_date is null then null else
+                replace(to_char(asb_abatement_start_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as asb_abatement_start_date,
+            case when demo_asb_abatement_date is null then null else
+                replace(to_char(demo_asb_abatement_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as demo_asb_abatement_date,
+            case when asb_post_abatement_insp_date is null then null else
+                replace(to_char(asb_post_abatement_insp_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as asb_post_abatement_insp_date,
+            asb_post_abatement_notes,
+            case when asb_post_abatement_times_failed = 'NaN' then null else asb_post_abatement_times_failed end,
+            asb_post_abatement_verification_status,
+            case when demo_planned_knock_down_date is null then null else
+                replace(to_char(demo_planned_knock_down_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as demo_planned_knock_down_date,
+            case when demo_knock_down_date is null then null else
+                replace(to_char(demo_knock_down_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as demo_knock_down_date,
+            case when socrata_projected_knocked_by_date is null then null else
+                replace(to_char(socrata_projected_knocked_by_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as socrata_projected_knocked_by_date,
+            asb_document_url,
+            asb_post_abatement_document_url,
+            property_longitude,
+            property_latitude,
+            property_zip_code,
+            case when property_latitude is null then null else
+                concat(
+                    'location (',
+                    property_latitude,
+                    ',',
+                    property_longitude,
+                ')'
+                )
+            end as location
+        from dlba.case where asb_abatement_verification_contractor_name is not null
+            and demo_contractor_proceed_date is not null
+            and bseed_final_grade_approved is null
+            and demo_final_grade_approved_date is null )
+    - drop view if exists dlba.completed_demos_socrata
+    - create view dlba.completed_demos_socrata as (
+        select 
+        address,
+        parcel_id,
+        demo_contractor_text_only as contractor_name,
+        socrata_reported_price as price,
+        demo_knock_down_date,
+        non_hhf_commercial_demo,
+        council_district,
+        neighborhood,
+        property_latitude,
+        property_longitude,
+        case when property_latitude is null then null else
+            concat(
+                'location (',
+                property_latitude,
+                ',',
+                property_longitude,
+            ')'
+            )
+        end as location
+        from dlba.case
+        where demo_knock_down_date::timestamp >= date '2014-01-01'
+        and socrata_reported_price > 0
+        and demo_contractor_text_only != ''
+        )
+

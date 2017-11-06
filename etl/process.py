@@ -12,7 +12,8 @@ class Process(object):
     self.refresh()
     self.process_name = self.m['name']
     self.schema = self.m['schema']
-    self.notify = True
+    self.msg = SlackMessage({"text": "Starting update: {}".format(self.process_name)})
+    self.msg.send()
   
   def refresh(self):
     with open("{}/00_metadata.yml".format(self.basedir), 'r') as f:
@@ -74,14 +75,16 @@ class Process(object):
         from .socrata import Socrata
         s = Socrata(d)
         s.update()
-        self.msg.react('dart')
+        if self.msg:
+          self.msg.react('dart')
         # self.msg.comment('Updated Socrata')
 
       elif destination == 'ArcGIS Online':
         from .arcgis import AgoLayer
         l = AgoLayer(d)
         l.publish()
-        self.msg.react('globe_with_meridians')
+        if self.msg:
+          self.msg.react('globe_with_meridians')
         # self.msg.comment('Updated ArcGIS Online')
 
       elif destination == 'Mapbox':
@@ -91,9 +94,6 @@ class Process(object):
         print("I don't know this destination type: {}".format(destination))
 
   def update(self):
-    if self.notify:
-      self.msg = SlackMessage({"text": "Starting update: {}".format(self.process_name)})
-      self.msg.send()
     self.extract()
     self.transform()
     self.load()

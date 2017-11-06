@@ -8,6 +8,9 @@
       - Longitude__c
       - Neighborhood__c
       - Council_District__c
+      - Current_Status__c
+      - Related_Property_Case__r.Id
+      - RecordTypeId
 - salesforce:
     object: Case
     destination: dlba.case
@@ -30,12 +33,12 @@
       - Status
       - BSEED_Final_Grade_Approved__c
       - DEMO_Final_Grade_Approved_Date__c
-      # - DEMO_Batch_Contractor_Name_del1__r.Name
+      - DEMO_Batch_Contractor_Name_del1__r.Name
       - Abatement_Sub_Contractor__c
-      # - DEMO_ASB_Abatement_Contractor__r.Name
-      # - DEMO_ASB_Survey_Contractor__r.Name
+      - DEMO_ASB_Abatement_Contractor__r.Name
+      - DEMO_ASB_Survey_Contractor__r.Name
       - ASB_Inspectors_Name__c
-      # - ASB_Abatement_Verification_Contractor__r.Name
+      - ASB_Abatement_Verification_Contractor__r.Name
       - ASB_Verifier_Name__c
       - Demo_Contractor_Proceed_Date__c
       - ASB_Abatement_Start_Date__c
@@ -52,6 +55,9 @@
       - Property__r.Longitude__c
       - Property__r.Latitude__c
       - Property__r.ZIP_Code__c
+      - DEMO_ASB_Survey_Status__c
+      - DEMO_Pulled_Date__c
+      - RecordTypeId
 - salesforce:
     object: DLBA_Activity__c
     destination: dlba.activity
@@ -83,7 +89,7 @@
       - Description
 - salesforce:
     object: DBA_Commercial_Demo__c
-    destination: dlba.dba_comm_demo
+    destination: dlba.dba_commercial_demo
     fields:
       - Name
       - Commercial_Demo_Status__c
@@ -103,6 +109,7 @@
       - ENV_Group_Number__c
       - Knock_Start_Dt__c
       - Demolition_Contractor__c
+      - DBA_COM_Property__r.Parcel_ID__c
       - DBA_COM_Property__r.Latitude__c
       - DBA_COM_Property__r.Longitude__c
       - DBA_COM_Property__r.Name

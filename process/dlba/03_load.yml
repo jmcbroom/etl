@@ -5,88 +5,88 @@
   method: replace
   columns:
     Address:
-      field: Address__c
+      field: address
       type: text
     Parcel ID:
-      field: Parcel_ID__c
+      field: parcel_id
       type: text
     Demo Contractor Proceed Date:
-      field: Demo_Contractor_Proceed_Date__c
+      field: demo_contractor_proceed_date
       type: calendar_date
     Demo Planned Knock Down Date:
-      field: DEMO_Planned_Knock_Down_Date__c
+      field: demo_planned_knock_down_date
       type: calendar_date
     Socrata Projected Knock Down Date:
-      field: Socrata_Projected_Knocked_By_Date__c
+      field: socrata_projected_knocked_by_date
       type: calendar_date
     Demo Knock Down Date:
-      field: DEMO_Knock_Down_Date__C
+      field: demo_knock_down_date
       type: calendar_date
     Demo Final Grade Approved:
-      field: DEMO_Final_Grade_Approved_Date__c
+      field: demo_final_grade_approved_date
       type: text
     BSEED Final Grade Approved:
-      field: BSEED_Final_Grade_Approved__c
+      field: bseed_final_grade_approved
       type: text
     Demo Batch Contractor Name:
-      field: DEMO_Batch_Contractor_Name_del1__r.Name
+      field: demo_batch_contractor_name_del1_name
       type: text
     Demo ASB Abatement Contractor Name:
-      field: DEMO_ASB_Abatement_Contractor__r.Name
+      field: demo_asb_abatement_contractor_name
       type: text
     Abatement Sub Contractor:
-      field: Abatement_Sub_Contractor__c
+      field: abatement_sub_contractor
       type: text
     Demo ASB Survey Contractor Name:
-      field: DEMO_ASB_Survey_Contractor__r.Name
+      field: demo_asb_survey_contractor_name
       type: text
     ASB Inspectors Name:
-      field: ASB_Inspectors_Name__c
+      field: asb_inspectors_name
       type: text
     ASB Verifiers Name:
-      field: ASB_Verifier_Name__c
+      field: asb_verifier_name
       type: text
     ASB Abatement Verification Contractor Name:
-      field: DEMO_ASB_Abatement_Verification_Contractor__r.Name
+      field: demo_asb_abatement_verification_contractor_name
       type: text
     ASB Abatement Start Date:
-      field: ASB_Abatement_Start_Date__c
+      field: asb_abatement_start_date
       type: calendar_date
     Demo ASB Abatement Date:
-      field: DEMO_ASB_Abatement_Date__c
+      field: demo_asb_abatement_date
       type: calendar_date
     ASB Document URL:
-      field: ASB_Document_URL__c
+      field: asb_document_url
       type: text
     ASB Post Abatement Inspection Date:
-      field: ASB_Post_Abatement_Insp_Date__c
+      field: asb_post_abatement_insp_date
       type: calendar_date
     ASB Post Abatement Inspection Approval Date:
-      field: DEMO_ASB_Post_Abatement_Approval_Date__c
+      field: demo_asb_post_abatement_approval_date
       type: calendar_date
     ASB Post Abatement Inspection Failed Date:
-      field: Demo_ASB_Post_Abatement_Failed_Date__c
+      field: demo_asb_post_abatement_failed_date
       type: calendar_date
     ASB Post Abatement Times Failed:
-      field: ASB_Post_Abatement_Times_Failed__c
+      field: asb_post_abatement_times_failed
       type: number
     ASB Post Abatement Verification Status:
-      field: ASB_Post_Abatement_Verification_Status__c
+      field: asb_post_abatement_verification_status
       type: text
     ASB Post Abatement Notes:
-      field: ASB_Post_Abatement_Notes__c
+      field: asb_post_abatement_notes
       type: text
     ASB Post Abatement Document URL:
-      field: ASB_Post_Abatement_Document_URL__c
+      field: asb_post_abatement_document_url
       type: text
     Zip Code:
-      field: Property__r.ZIP_Code__c
+      field: property_zip_code
       type: text
     Latitude:
-      field: Property__r.Latitude__c
+      field: property_latitude
       type: number
     Longitude:
-      field: Property__r.Longitude__c
+      field: property_longitude
       type: number
     Location:
       field: location
@@ -95,13 +95,13 @@
   name: DLBA Auctions Closed
   id: tgwk-njih
   table: dlba.auction_sold_socrata
-  method:
+  method: replace
   columns:
     Address:
-      field: Address__c
+      field: Address
       type: text
     Parcel ID:
-      field: Parcel_ID__c
+      field: Parcel_ID
       type: text
     Final Sale Price:
       field: 
@@ -139,264 +139,264 @@
 - to: Socrata
   name: Commercial Demolitions
   id: hyeb-fsy5
-  table: dlba.commerical_demos_socrata
-  method:
+  table: dlba.commercial_demos_socrata
+  method: replace
   columns:
     Address:
-      field: Address__c
+      field: address
       type: text
     Parcel ID:
-      field: Parcel_ID__c
+      field: parcel_id
       type: text
     Status:
-      field:
+      field: commercial_demo_status
       type: text
     Contractor Name:
-      field:
+      field: demolition_contractor
       type: text
     Environmental Survey Group Number:
-      field:
+      field: env_group_number
       type: text
     Notice to Proceed with Demo Date:
-      field:
+      field: demo_ntp_dt
       type: calendar_date
     Projected Knock Down Date:
-      field:
+      field: demo_proj_demo_dt
       type: calendar_date
     Demolished Date:
-      field:
+      field: knock_start_dt
       type: calendar_date
     Open Hole Inspection Approval Date:
-      field:
+      field: open_hole_date
       type: calendar_date
     Winter Grade Inspection Approval Date:
-      field:
+      field: winter_grade_date
       type: calendar_date
     Final Grade Inspection Approval Date:
-      field:
+      field: final_grade_date
       type: calendar_date
     Abatement Cost:
-      field: 
+      field: demo_cost_abatement
       type: money
     Knock Down Cost:
-      field:
+      field: demo_cost_knock
       type: money
     Total Demo Cost:
-      field: 
+      field: total_demo_cost
       type: money
     Council District:
-      field: 
+      field: dba_com_property_council_district
       type: number
     Neighborhood:
-      field:
+      field: dba_com_property_neighborhood
       type: text
     Latitude:
-      field:
+      field: dba_com_property_latitude
       type: number
     Longitude:
-      field:
+      field: dba_com_property_longitude
       type: number
     Location:
-      field:
+      field: location
       type: location
 - to: Socrata
   name: DLBA Properties for Sale
   id: gfhb-f4i5
   table: dlba.for_sale_socrata
-  method:
+  method: replace
   columns:
     Address:
-      field: Address__c
+      field: address
       type: text
     Parcel ID:
-      field: Parcel_ID__c
+      field: parcel_id
       type: text
     Program:
-      field: 
+      field: program
       type: text
     Listing Date:
-      field:
+      field: listing_date
       type: calendar_date
     Council District:
-      field: 
+      field: council_district
       type: number
     Neighborhood:
-      field:
+      field: neighborhood
       type: text
     Latitude:
-      field:
+      field: latitude
       type: number
     Longitude:
-      field:
+      field: longitude
       type: number
     Location:
-      field:
+      field: location
       type: location
 - to: Socrata
   name: Own It Now Sales
   id: pyf3-v3vc
   table: dlba.own_it_now_socrata
-  method:
+  method: replace
   columns:
     Address:
-      field: Address__c
+      field: address
       type: text
     Parcel ID:
-      field: Parcel_ID__c
+      field: parcel_id
       type: text
     Final Sale Price:
-      field:
+      field: final_sale_price
       type: money
     Closing Date:
-      field:
+      field: actual_closing_date
       type: calendar_date
     Sale Status:
-      field:
+      field: sale_status
       type: text
     Buyer Status:
-      field:
+      field: buyer_status
       type: text
     Purchaser Type:
-      field:
+      field: purchaser_type
       type: text
     Program:
-      field:
+      field: program
       type: text
     Council District:
-      field: 
+      field: council_district
       type: number
     Neighborhood:
-      field:
+      field: neighborhood
       type: text
     Latitude:
-      field:
+      field: acct_latitude
       type: number
     Longitude:
-      field:
+      field: acct_longitude
       type: number
     Location:
-      field:
+      field: location
       type: location
 - to: Socrata
   name: Side Lot Sales
   id: mfsk-uw55
   table: dlba.side_lots_socrata
-  method:
+  method: replace
   columns:
     Address:
-      field: Address__c
+      field: address
       type: text
     Parcel ID:
-      field: Parcel_ID__c
+      field: parcel_id
       type: text
     Final Sale Price:
-      field: 
+      field: final_sale_price
       type: money
     Closing Date:
-      field:
+      field: actual_closing_date
       type: calendar_date
     Sale Status:
-      field:
+      field: sale_status
       type: text
     Buyer Status:
-      field:
+      field: buyer_status
       type: text
     Purchaser Type:
-      field:
+      field: purchaser_type
       type: text
     Program:
-      field:
+      field: program
       type: text
     Council District:
-      field: 
+      field: council_district
       type: number
     Neighborhood:
-      field:
+      field: neighborhood
       type: text
     Latitude:
-      field:
+      field: acct_latitude
       type: number
     Longitude:
-      field:
+      field: acct_longitude
       type: number
     Location:
-      field:
+      field: location
       type: location
 - to: Socrata
   name: Upcoming Demolitions
   id: tsqq-qtet
   table: dlba.upcoming_demos_socrata
-  method:
+  method: replace
   columns:
     Address:
-      field: Address__c
+      field: address
       type: text
     Parcel ID:
-      field: Parcel_ID__c
+      field: parcel_id
       type: text
     Contractor Name:
-      field:
+      field: demo_contractor_text_only
       type: text
-    Price:
-      field:
+    Price: 
+      field: socrata_reported_price
       type: money
     Projected Demolished By Date:
-      field:
+      field: demo_planned_knock_down_date
       type: calendar_date
     Commercial Building:
-      field:
+      field: non_hhf_commercial_demo
       type: text
     Council District:
-      field: 
+      field: council_district
       type: number
     Neighborhood:
-      field:
+      field: neighborhood
       type: text
     Latitude:
-      field:
+      field: acct_latitude
       type: number
     Longitude:
-      field:
+      field: acct_longitude
       type: number
     Location:
-      field:
+      field: location
       type: location
 - to: Socrata
   name: Detroit Demolitions
   id: rv44-e9di
   table: dlba.completed_demos_socrata
-  method:
+  method: replace
   columns:
     Address:
-      field: Address__c
+      field: address
       type: text
     Parcel ID:
-      field: Parcel_ID__c
+      field: parcel_id
       type: text
     Contractor Name:
-      field:
+      field: contractor_name
       type: text
     Price:
-      field:
+      field: price
       type: money
     Demolition Date:
-      field:
+      field: demo_knock_down_date
       type: calendar_date
     Commercial Building:
-      field:
+      field: non_hhf_commercial_demo
       type: text
     Council District:
-      field: 
+      field: council_district
       type: number
     Neighborhood:
-      field:
+      field: neighborhood
       type: text
     Latitude:
-      field:
+      field: property_latitude
       type: number
     Longitude:
-      field:
+      field: property_longitude
       type: number
     Location:
-      field:
+      field: location
       type: location
