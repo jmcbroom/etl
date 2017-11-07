@@ -400,3 +400,33 @@
     Location:
       field: location
       type: location
+- to: Socrata
+  name: Demolition Pipeline
+  id: dyp9-69zf
+  table: dlba.demo_pipeline_socrata
+  method: replace
+  columns:
+    Address:
+      field: address
+      type: text
+    Parcel ID:
+      field: parcel_id
+      type: text
+    Council District:
+      field: council_district
+      type: number
+    Commercial Building:
+      field: commercial_demolition
+      type: text
+    Neighborhood:
+      field: neighborhood
+      type: text
+    Latitude:
+      field: property_latitude
+      type: number
+    Longitude:
+      field: property_longitude
+      type: number
+    Location:
+      field: location
+      type: location
