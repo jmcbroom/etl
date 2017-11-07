@@ -1,5 +1,0 @@
-- database:
-    type: oracle
-    prefix: tm
-    source: BG_BLD_DET_F
-    destination: bseed.bldg_permits

@@ -1,0 +1,15 @@
+- database:
+    type: oracle
+    prefix: tm
+    source: BG_BLD_DET_F
+    destination: bseed.bldg_permits
+- database:
+    type: oracle
+    prefix: tm
+    source: CASEMAIN
+    destination: bseed.tm_casemain
+- database:
+    type: oracle
+    prefix: tm
+    source: BG_ANN_ADD_ACT
+    destination: bseed.tm_inspections
