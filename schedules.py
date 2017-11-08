@@ -2,11 +2,12 @@ import schedule
 import time
 import etl
 
-def angels_night_update():
-  an = etl.Process('angels_night')
-  an.update()
+def run(process):
+  p = etl.Process(process)
+  p.update()
 
-schedule.every(5).minutes.do(angels_night_update)
+schedule.every(5).minutes.do(run('angels_night'))
+schedule.every.tuesday.do(run('medical_marijuana'))
 
 while True:
     schedule.run_pending()
