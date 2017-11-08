@@ -1,4 +1,43 @@
-socrata:
+- to: Socrata
+  id: 3eiz-c5du
+  name: Annual Inspections
+  table: bseed.annual_inspections_socrata
+  method: replace
+  row_identifier:
+  columns:
+    Address:
+      field: address
+      type: text
+    Action Date:
+      field: action_date
+      type: calendar_date
+    Action Description:
+      field: action_description
+      type: text
+    Result:
+      field: result
+      type: text
+    Case Number:
+      field: case_number
+      type: text
+    Parcel Number:
+      field: parcel_assess
+      type: text
+    Owner:
+      field: owner
+      type: text
+    Project Name:
+      field: project_name
+      type: text
+    Location:
+      field: location
+      type: location
+- to: Socrata
+  id: xmj6-5bf9
+  name: Building Permits
+  table: bseed.bldg_permits_socrata
+  method: replace
+  row_identifier: permit_no
   columns:
     Amount Due:
       field: pcf_amt_due
@@ -153,8 +192,3 @@ socrata:
     Subdivision:
       field: subdevision
       type: text
-  id: xmj6-5bf9
-  name: Building Permits
-  table: bseed.bldg_permits_socrata
-  method: replace
-  row_identifier: permit_no

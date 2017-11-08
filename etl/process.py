@@ -12,8 +12,8 @@ class Process(object):
     self.refresh()
     self.process_name = self.m['name']
     self.schema = self.m['schema']
-    self.msg = SlackMessage({"text": "Starting update: {}".format(self.process_name)})
-    self.msg.send()
+    # self.msg = SlackMessage({"text": "Starting update: {}".format(self.process_name)})
+    # self.msg.send()
   
   def refresh(self):
     with open("{}/00_metadata.yml".format(self.basedir), 'r') as f:
@@ -37,7 +37,7 @@ class Process(object):
 
         elif srctype == 'database':
           from .database import DbTable
-          if not params['columns']:
+          if 'columns' not in params.keys():
             t = DbTable(params['type'], params['source'], '*', params['destination'], params['prefix'])
           else:
             t = DbTable(params['type'], params['source'], params['columns'], params['destination'], params['prefix'])
@@ -68,23 +68,22 @@ class Process(object):
           exec_psql_query(connection, statement, verbose=True)
 
   def load(self):
-    self.destinations = [ d['to'] for d in self.l ]
     for d in self.l:
       destination = d.pop('to', None)
       if destination == 'Socrata':
         from .socrata import Socrata
         s = Socrata(d)
         s.update()
-        if self.msg:
-          self.msg.react('dart')
+        # if self.msg:
+        #   self.msg.react('dart')
         # self.msg.comment('Updated Socrata')
 
       elif destination == 'ArcGIS Online':
         from .arcgis import AgoLayer
         l = AgoLayer(d)
         l.publish()
-        if self.msg:
-          self.msg.react('globe_with_meridians')
+        # if self.msg:
+        #   self.msg.react('globe_with_meridians')
         # self.msg.comment('Updated ArcGIS Online')
 
       elif destination == 'Mapbox':

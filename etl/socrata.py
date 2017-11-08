@@ -14,14 +14,20 @@ class Socrata(object):
         self.config = params
         if params['id']:
             self.id = params['id']
+        else:
+            self.id = None
     
     def create_dataset(self):
         columns = [ {"fieldname": v['field'], "name": k, "dataTypeName": v['type'] } for k,v in self.config['columns'].items() ]
+        if 'row_identifier' in self.config.keys():
+            row_identifier = self.config['row_identifier']
+        else:
+            row_identifier = None
         ds = soda_connection.create(
             self.config['name'],
             description = '',
             columns = columns,
-            row_identifier = self.config['row_identifier'] or None,
+            row_identifier = row_identifier,
             tags = [],
             category = None
         )
@@ -33,7 +39,9 @@ class Socrata(object):
         rows = db_connection.execute("select * from {}".format(self.config['table']))
         payload = [ dict(row) for row in rows ]
         print(len(payload))
-        # payload = payload[0:10]
+        if self.id == None:
+            self.id = self.create_dataset
+            job = soda_connection.replace( self.id, payload )
         if self.config['method'] == 'replace':
             job = soda_connection.replace( self.id, payload )
             return job

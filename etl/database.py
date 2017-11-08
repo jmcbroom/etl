@@ -8,7 +8,6 @@ from etl.utils import df_to_pg
 def get_table_as_df(query, connString):
   engine = sqlalchemy.create_engine(connString)
   conn = engine.connect()
-  print(query)
   df = pandas.read_sql(query, conn)
   df.replace({u'\u0000': ''}, regex=True, inplace=True)
   return df
