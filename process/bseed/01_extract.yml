@@ -13,6 +13,11 @@
     prefix: tm
     source: BG_ANN_ADD_ACT
     destination: bseed.tm_inspections
+- database:
+    type: oracle
+    prefix: tm
+    source: CASE_ACTION
+    destination: bseed.tm_caseaction
     
 # # # 
 # This was just for the parcel clean up

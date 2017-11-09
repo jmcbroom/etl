@@ -30,7 +30,7 @@
             parcel_assess,
             owner,
             project_name,
-                  case when geom is null then null else
+            case when geom is null then null else
                   concat(
                   'location (',
                   ST_Y(ST_Centroid(geom)), 
@@ -104,4 +104,43 @@
             contractor_zip
             from bseed.bldg_permits )
  
-  
+# Dismantle Permits
+- type: sql
+  statements:
+      - create view 
+            bseed.dismantle_permits_socrata as
+            ( select
+            concat_ws(ca.csa_id, '_', cm.prc_parcel_no) as unique_id,
+            cm.prc_parcel_no,
+            pn.cleaned as parcel_number,
+            ca.street_address,
+            ca.csm_caseno,
+            ca.case_type,
+            ca.action_description,
+            case when ca.csa_date3 is null then null else
+                  replace(to_char(ca.csa_date3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+            end as csa_date3,
+            ca.csa_disp,
+            ca.csa_notes,
+            ca.actn_menu_id,
+            ca.actn_code,
+            case when ca.csa_creation_date is null then null else
+                  replace(to_char(ca.csa_creation_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+            end as csa_creation_date,
+            case when ca.csa_date1 is null then null else
+                  replace(to_char(ca.csa_date1::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+            end as csa_date1,
+            case when ca.csa_date2 is null then null else
+                  replace(to_char(ca.csa_date2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+            end as csa_date2,
+            case when ca.csa_updated is null then null else
+                  replace(to_char(ca.csa_updated::timestap, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+            end as csa_updated,
+            ca.csa_updated_by,
+            ca.csa_assigned_to,
+            ca.csa_done_by
+            from bseed.tm_caseaction ca
+            inner join bseed.tm_casemain cm on ca.csm_caseno = cm.csm_caseno
+            inner join bseed.pnum_lookup pn on cm.prc_parcel_no = pn.dirty
+            where ca.csa_date3 > Date '2014-01-01'
+            and ca.action_description in ('Final Grade Inspection', 'Open Hole Inspection ', 'Winter Grade Inspection'))
