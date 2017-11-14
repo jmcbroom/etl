@@ -7,17 +7,20 @@ from etl.slack import SlackMessage
 msg = SlackMessage({"text": "ETL thread for 2017/11/13"})
 msg.send()
 
-def run(process):
-  p = etl.Process(process)
+def run(process, notify=False):
   try:
+    p = etl.Process(process)
     p.update()
-  except Error:
-    msg.comment("Error on {}".format(process))
+    if notify:
+      msg.comment("Update successful: *{}*".format(process))
+  except Exception as e:
+    msg.comment("Error: *{}*\n > `{}`".format(process, e))
 
 
 schedule.every(5).minutes.do(run, process='angels_night')
+# schedule.every.day.do(run, process='bseed', notify=True)
 # schedule.every.tuesday.do(run('medical_marijuana'))
 
 while True:
-    schedule.run_pending()
-    time.sleep(1)
+  schedule.run_pending()
+  time.sleep(1)
