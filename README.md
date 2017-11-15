@@ -38,7 +38,6 @@ gl.load()
 ```yml
 name: <Title that describes this process, eg 'DLBA datasets'>
 schema: <Postgres schema, eg 'dlba'>
-notify: <'yes'|'no'>
 ```
 
 ### 01_extract.yml
@@ -127,3 +126,13 @@ Roadmap:
   file: <Filename>
   table: <Postgres view to load the data from, eg fire.angels_night_ago>
 ```
+## Scheduling jobs
+
+We define jobs in `schedules.py` using [Schedule](https://schedule.readthedocs.io/en/stable/).
+
+Schedule a new process like this:
+```python
+schedule.every.day.do(run, process='bseed', notify=True)
+```
+
+Wnen notify is `true`, we send success or error messages to Slack's #z_etl.
