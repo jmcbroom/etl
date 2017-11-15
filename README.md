@@ -45,7 +45,7 @@ notify: <'yes'|'no'>
 
 An array of data sources to be extracted. 
 
-Supported options:
+Supported sources:
 - `database` from `database.py`: An Oracle or SQLServer database
 - `salesforce` from `salesforce.py`: A Salesforce query
 - `smartsheet` from `smartsheet.py`: A Smartsheet
@@ -103,7 +103,7 @@ Roadmap:
 
 ### 03_load.yml
 
-Currently supported options for `destination`:
+Supported destinations:
 - `Socrata`: A Socrata dataset
 - `ArcGIS Online`: An ArcGIS Online feature layer
 
