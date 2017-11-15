@@ -18,6 +18,39 @@
     prefix: tm
     source: CASE_ACTION
     destination: bseed.tm_caseaction
+    where: >-
+        (date '1980-01-01' < CSA_DATE1 and CSA_DATE1 < date '2025-01-01')
+        and
+        (date '1980-01-01' < CSA_DATE2 and CSA_DATE2 < date '2025-01-01')
+        and
+        (date '2014-01-01' < CSA_DATE3 and CSA_DATE3 < date '2025-01-01')
+        and
+        (date '1980-01-01' < CSA_CREATION_DATE and CSA_CREATION_DATE < date '2025-01-01')
+- database:
+    type: oracle
+    prefix: tm
+    source: BG_ELV_DET_F
+    destination: bseed.tm_elevator
+- database:
+    type: oracle
+    prefix: tm
+    source: BG_PLM_DET_F
+    destination: bseed.tm_plumbing
+- database:
+    type: oracle
+    prefix: tm
+    source: BG_ELE_DET_F
+    destination: bseed.tm_electrical
+- database:
+    type: oracle
+    prefix: tm
+    source: BG_BPV_DET_F
+    destination: bseed.tm_boiler
+- database:
+    type: oracle
+    prefix: tm
+    source: BG_MEC_DET_F
+    destination: bseed.tm_mechanical
     
 # # # 
 # This was just for the parcel clean up
