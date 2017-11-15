@@ -37,10 +37,12 @@ class Process(object):
 
         elif srctype == 'database':
           from .database import DbTable
+          if 'where' not in params.keys():
+            params['where'] = "1=1"
           if 'columns' not in params.keys():
-            t = DbTable(params['type'], params['source'], '*', params['destination'], params['prefix'])
+            t = DbTable(params['type'], params['source'], '*', params['destination'], params['prefix'], params['where'])
           else:
-            t = DbTable(params['type'], params['source'], params['columns'], params['destination'], params['prefix'])
+            t = DbTable(params['type'], params['source'], params['columns'], params['destination'], params['prefix'], params['where'])
           drop_table_if_exists(connection, params['destination'])
           t.to_postgres()
 
