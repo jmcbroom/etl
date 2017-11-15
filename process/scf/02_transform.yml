@@ -1,0 +1,58 @@
+- type: sql
+  statements:
+    - drop view if exists scf.submitted_issues_public_socrata
+    - create view scf.submitted_issues_public_socrata as
+            ( select
+              id,
+              status,
+              summary,
+              description,
+              rating,
+              vote_count,
+              report_method,
+              created_at,
+              acknowledged_at,
+              closed_at,
+              reopened_at,
+              updated_at,
+              html_url,
+              address,
+              case when lat is null then null else
+                concat(
+                  'location (',
+                  lat,
+                  ',',
+                  lng,
+                  ')'
+                )
+              end as location
+            from scf.submitted issues
+            where summary is not like '%Abandoned Vehicle%;
+    - drop view if exists scf.submitted_issues_private_socrata
+    - create view scf.submitted_issues_private_socrata as
+            ( select
+              id,
+              status,
+              summary,
+              description,
+              rating,
+              vote_count,
+              report_method,
+              created_at,
+              acknowledged_at,
+              closed_at,
+              reopened_at,
+              updated_at,
+              html_url,
+              address,
+              case when lat is null then null else
+                concat(
+                  'location (',
+                  lat,
+                  ',',
+                  lng,
+                  ')'
+                )
+              end as location
+            from scf.submitted issues;
+ 

@@ -1,0 +1,25 @@
+# what source data do we need to extract in order to create our views, and where do we extract it from?
+# currently 4 top-level options: a database (like Oracle, SQLServer, etc), Salesforce, Smartsheet or an API endpoint (eg SeeClickFix)
+- database:
+    type: type of db, eg 'oracle' or 'sql-server'
+    prefix: origin database prefix, eg 'tm' for Tidemark
+    source: origin table name, eg CASEMAIN
+    destination: postgres schema and table name, eg bseed.casemain
+    fields:
+      - optional
+      - list
+      - of
+      - columns
+      - if no fields, we'll select *
+- salesforce:
+    object: SF object, eg Case
+    destination: postgres schema and table name, eg dlba.account
+    fields:
+      - optional
+      - list
+      - of
+      - columns
+      - if no fields, we'll select *
+- smartsheet: 
+    id: smartsheet id
+    table: postgres schema and table name, eg mmcc
