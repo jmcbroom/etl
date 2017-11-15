@@ -4,8 +4,8 @@ from urllib.parse import urlencode
 from os import environ as env
 import json
 import pandas
-from utils import df_to_pg
-
+import collections
+from utils import df_to_p
 from pprint import pprint
 
 SCF_API = "https://seeclickfix.com/api/v2/organizations/507/issues?"
@@ -27,36 +27,19 @@ fieldnames = [
     'comments_count',
     'vote_count',
     'report_method',
-    'url',
+    'html_url',
     'priority_code',
     'assignee_id',
     'assignee_role',
     'assignee_name',
-    'active_service_request_status',
-    'active_service_request_sla_expires_at',
-    'active_service_request_last_assigned_at',
-    'active_service_request_created_at',
-    'active_service_request_accepted_at',
-    'active_service_request_started_at',
-    'active_service_request_resumed_at',
-    'active_service_request_finished_at',
-    'active_service_request_closed_at',
-    'active_service_request_reopened_at',
-    'active_service_request_assignee_role',
-    'active_service_request_assignee_id',
-    'active_service_request_assignee_name',
     'reporter_id',
     'reporter_name',
     'reporter_role',
     'agent_id',
     'agent_name',
     'agent_role',
-    'request_type_id',
-    'request_type_title',
     'canonical_issue_id'
 ]
-
-import collections
 
 def flatten(d, parent_key='', sep='_'):
     items = []
