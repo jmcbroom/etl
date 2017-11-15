@@ -9,7 +9,8 @@ def get_table_as_df(query, connString):
   engine = sqlalchemy.create_engine(connString)
   conn = engine.connect()
   df = pandas.read_sql(query, conn)
-  df.replace({u'\u0000': ''}, regex=True, inplace=True)
+  print("{} rows fetched".format(len(df)))
+  # df.replace({u'\u0000': ''}, regex=True, inplace=True)
   return df
 
 def make_db_connection_string(dbType, envPrefix):
@@ -23,15 +24,15 @@ def make_db_connection_string(dbType, envPrefix):
   return connection_string
 
 class DbTable(object):
-  def __init__(self, dbtype, source, columns, destination, prefix):
+  def __init__(self, dbtype, source, columns, destination, prefix, where="1=1"):
     self.dbType = dbtype
     self.dbTable = source
     self.prefix = prefix.upper()
     self.schema, self.table = destination.split(".")
     if type(columns) is list:
-      self.query_all = "select {} from {}".format(",".join(columns), self.dbTable)
+      self.query_all = "select {} from {} where {}".format(",".join(columns), self.dbTable, where)
     else:
-      self.query_all = "select * from {}".format(self.dbTable)
+      self.query_all = "select * from {} where {}".format(self.dbTable, where)
     print(self.query_all)
 
   def to_postgres(self):
