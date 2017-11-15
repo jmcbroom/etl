@@ -33,7 +33,7 @@
       field: location
       type: location
 - to: Socrata
-  id: xmj6-5bf9
+  id: xw2a-a7tf
   name: Building Permits
   table: bseed.bldg_permits_socrata
   method: replace
@@ -190,7 +190,7 @@
       field: stories
       type: number
     Subdivision:
-      field: subdevision
+      field: subdivision
       type: text
 - to: Socrata
   id: u5fu-jb97
