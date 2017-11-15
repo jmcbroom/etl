@@ -1,0 +1,15 @@
+- database:
+    type: 
+    prefix: 
+    source:
+    destination: 
+    fields:
+      - 
+- salesforce:
+    object:
+    destination:
+    fields:
+      - 
+- smartsheet: 
+    id:
+    table:

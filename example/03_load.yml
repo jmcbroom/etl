@@ -1,0 +1,14 @@
+- to: Socrata
+  id:
+  name:
+  table:
+  method:
+  row_identifier:
+  columns:
+    Human Name:
+      field:
+      type:
+- to: ArcGIS Online
+  id:
+  file:
+  table:
