@@ -1,0 +1,51 @@
+- type: sql
+  # add anonymization column and set to False
+  - alter table pubsafe.cad_update add column is_anon boolean
+  - update pubsafe.cad_update set is_anon = 'f'
+
+  # trim cities
+  - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'DETROIT$', ''))
+  - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'ALLE$', ''))
+  - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'DEAR$', ''))
+  - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'ECOR$', ''))
+  - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'FERN$', ''))
+  - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'GROS$', ''))
+  - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'HAMT$', ''))
+  - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'HAZE$', ''))
+  - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'HIGH$', ''))
+  - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'REDF$', ''))
+  - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'RIVE$', ''))
+  - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'ROYA$', ''))
+  - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'SOUT$', ''))
+  - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'WARR$', ''))
+
+- type: lookup
+    table: pubsafe.cad_update
+    field: incident_address
+    file: geo_misfits.yml
+    on: match
+    set_flag: false
+
+- type: lookup
+    table: pubsafe.cad_update
+    field: incident_address
+    file: redacted_words.yml
+    on: contain
+    set_flag: true
+
+# Fuzz text field
+- type: anonymize_text_location
+    table: pubsafe.cad_update
+    field: incident_address
+    set_flag: true
+
+# Add geometry here
+- type: sql
+  - select AddGeometryColumn('pubsafe', 'cad_update', 'geom', 2898, 'POINT', 2)
+  - create index etl_cad_update_geom_idx on pubsafe.cad_update using gist(geom)
+  - update pubsafe.cad_update set geom = st_setsrid(st_makepoint(geox, geoy), 2898) where geox > 0 and geoy > 0
+
+# Fuzz geometry
+- type: anonymize_geometry
+    table: pubsafe.cad_update
+    against: base.centerline

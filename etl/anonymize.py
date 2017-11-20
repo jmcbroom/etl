@@ -48,7 +48,7 @@ class AnonTextLocation(object):
     query = "select {} from {}".format(self.column, self.table)
     rows = connection.execute(query).fetchall()
     if self.set_flag:
-      update = "update {} set {} = '{}', anonymized = 't' where {} = '{}'"
+      update = "update {} set {} = '{}', is_anon = 't' where {} = '{}'"
     else:
       update = "update {} set {} = '{}' where {} = '{}'"
     for r in rows:
