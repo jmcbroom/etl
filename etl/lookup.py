@@ -77,9 +77,9 @@ class LookupValues(object):
                         where c.{} = m.unique_misfit
                         and m.anon_return is not null""".format(self.table, self.field, self.field)
         
-        # redact bad words before anonymizing, is anonymized is true
+        # redact bad words before anonymizing, is anonymized remains false
         redaction_lookup = """update {}
-                            set {} = {}, is_anon = 'true'
+                            set {} = {}
                             where {} = {}""".format(self.table, self.field, redact_location(v), self.field, v)
 
         for q in [addr_lookup, place_lookup, redact_location]:
