@@ -76,7 +76,7 @@ class Process(object):
         for statement in s['statements']:
           exec_psql_query(connection, statement, verbose=True)
 
-      if s['type'] = 'anonymize_text_location':
+      if s['type'] == 'anonymize_text_location':
         from etl.anonymize import AnonTextLocation
         atl = AnonTextLocation(s['table'], s['column'], s['set_flag'])
         atl.anonymize()
@@ -85,6 +85,12 @@ class Process(object):
         from etl.anonymize import AnonGeometry
         ag = AnonGeometry(s['table'], s['against'])
         ag.anonymize()
+
+      if s['type'] == 'lookup':
+        print(s)
+        from etl.lookup import LookupValues
+        look = LookupValues(s['table'], s['lookup_field'], s['file'], s['match_field'], s['method'], s['set_flag'])
+        look.lookup()
 
   def load(self):
     for d in self.l:
