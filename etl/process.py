@@ -1,8 +1,6 @@
 import os, yaml
 from .utils import connect_to_pg, add_geom_column, exec_psql_query, drop_table_if_exists
 
-from etl.slack import SlackMessage
-
 DATA_DIR = './process'
 connection = connect_to_pg()
 
@@ -12,9 +10,7 @@ class Process(object):
     self.refresh()
     self.process_name = self.m['name']
     self.schema = self.m['schema']
-    # self.msg = SlackMessage({"text": "Starting update: {}".format(self.process_name)})
-    # self.msg.send()
-  
+
   def refresh(self):
     with open("{}/00_metadata.yml".format(self.basedir), 'r') as f:
       self.m = yaml.load(f)
@@ -37,12 +33,23 @@ class Process(object):
 
         elif srctype == 'database':
           from .database import DbTable
+
+          # assign params['where']
           if 'where' not in params.keys():
             params['where'] = "1=1"
+          elif type(params['where']) is str:
+            pass
+          elif type(params['where']) is dict:
+            w = params['where']
+            value = connection.execute("select {} from {}".format(w['value'], w['table'])).fetchone()[0]
+            clause = "{} {} {}".format(w['field'], w['condition'], value)
+            params['where'] = clause
+
           if 'columns' not in params.keys():
             t = DbTable(params['type'], params['source'], '*', params['destination'], params['prefix'], params['where'])
           else:
             t = DbTable(params['type'], params['source'], params['columns'], params['destination'], params['prefix'], params['where'])
+
           drop_table_if_exists(connection, params['destination'])
           t.to_postgres()
 

@@ -1,0 +1,11 @@
+- database:
+    type: sql-server
+    prefix: cad
+    source: vw_DP_CAD
+    destination: pubsafe.cad_update
+    where:
+        field: inci_id
+        condition: ">"
+        value: max(inci_id)
+        table: pubsafe.cad
+    
