@@ -76,6 +76,16 @@ class Process(object):
         for statement in s['statements']:
           exec_psql_query(connection, statement, verbose=True)
 
+      if s['type'] = 'anonymize_text_location':
+        from etl.anonymize import AnonTextLocation
+        atl = AnonTextLocation(s['table'], s['column'], s['set_flag'])
+        atl.anonymize()
+
+      if s['type'] == 'anonymize_geometry':
+        from etl.anonymize import AnonGeometry
+        ag = AnonGeometry(s['table'], s['against'])
+        ag.anonymize()
+
   def load(self):
     for d in self.l:
       destination = d.pop('to', None)
