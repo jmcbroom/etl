@@ -1,0 +1,56 @@
+# Add geometry and make a point for new incidents
+- type: sql
+  statements:
+    - alter table pubsafe.rms_update rename column "Address" to address
+    - alter table pubsafe.rms_update rename column "DPDCRIMEID" to dpdcrimeid
+    - select AddGeometryColumn('pubsafe', 'rms_update', 'geom', 2898, 'POINT', 2)
+    - create index if not exists etl_rms_update_geom_idx on pubsafe.rms_update using gist(geom)
+    - create index if not exists rms_update_dpdcrimeid_idx on pubsafe.rms_update using btree(dpdcrimeid)
+    - create index if not exists rms_dpdcrimeid_idx on pubsafe.rms using btree(dpdcrimeid)
+    - create index if not exists rms_update_addr_idx on pubsafe.rms_update using btree(address)
+    - update pubsafe.rms_update set geom = st_setsrid(st_makepoint(geox/100, geoy/100), 2898) 
+        where geox > 0 and geoy > 0 and dpdcrimeid not in (select dpdcrimeid from pubsafe.rms)
+
+# Stamp with District/Neighborhood/Block/ZipCode
+- type: sql
+  statements:
+    - alter table pubsafe.rms_update add column block_id varchar(50);
+    - update pubsafe.rms_update r set block_id = b.geoid10 from base.blocks_2010 b where st_contains(b.geom, r.geom);
+    - alter table pubsafe.rms_update add column neighborhood varchar(100);
+    - update pubsafe.rms_update r set neighborhood = n.name from base.neighborhoods n where st_contains(n.wkb_geometry, r.geom);
+    - alter table pubsafe.rms_update add column council_district integer;
+    - update pubsafe.rms_update r set council_district = d.districts::integer from base.council_districts d where st_contains(d.wkb_geometry, r.geom);
+
+# Fuzz geometry for new incidents
+- type: anonymize_geometry
+  table: pubsafe.rms_update
+  against: base.centerline
+
+# Pull over previously anonymized geometry & stamped fields
+- type: sql
+  statements:
+    - update pubsafe.rms_update u set
+        geom = r.geom,
+        block_id = r.block_id,
+        neighborhood = r.neighborhood,
+        council_district = r.council_district
+        from pubsafe.rms r
+        where r.dpdcrimeid = u.dpdcrimeid
+        and u.dpdcrimeid in (select dpdcrimeid from pubsafe.rms)
+
+# Fuzz text location
+- type: anonymize_text_location
+  table: pubsafe.rms_update
+  column: address
+  set_flag: False
+
+- type: sql
+  statements:
+    - drop table if exists rms_old cascade
+    - alter table pubsafe.rms rename to rms_old
+    - alter table pubsafe.rms_update rename to rms
+    - create view...
+    - create view...
+
+
+

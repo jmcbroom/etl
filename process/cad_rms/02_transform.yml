@@ -75,12 +75,16 @@
     - alter table pubsafe.cad_update drop column if exists geox
     - alter table pubsafe.cad_update drop column if exists geoy
     - alter table pubsafe.cad_update drop column if exists is_anon
+    - alter table pubsafe.cad_update drop column if exists notes
+    - insert into pubsafe.cad (select * from pubsafe.cad_update)
+    - drop table if exists pubsafe.cad_update
+    - drop view if exists pubsafe.cad_socrata
     - create view pubsafe.cad_socrata as (
         select 
           inci_id as incident_id,
           agency,
           incident_address,
-          zip_code,
+          zip as zip_code,
           priority,
           callcode,
           calldescription,
@@ -114,24 +118,4 @@
               ) 
           END as location from pubsafe.cad
       )
-    block_id:
-      expression: block_id
-      human: Census Block GEOID
-      type: text
-    council_district:
-      expression: council_district
-      human: Council District
-      type: text
-    longitude:
-      expression: lon
-      human: Longitude
-      type: number
-    latitude:
-      expression: lat
-      human: Latitude
-      type: number
-    location:
-      expression: CASE WHEN lat is null THEN null ELSE concat('location (', lat, ',', lon, ')') END
-      human: Incident Location
-      type: location
 
