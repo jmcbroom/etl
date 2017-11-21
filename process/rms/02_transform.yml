@@ -3,6 +3,7 @@
   statements:
     - alter table pubsafe.rms_update rename column "Address" to address
     - alter table pubsafe.rms_update rename column "DPDCRIMEID" to dpdcrimeid
+    - alter table pubsafe.rms_update add column uniq serial primary key
     - select AddGeometryColumn('pubsafe', 'rms_update', 'geom', 2898, 'POINT', 2)
     - create index if not exists etl_rms_update_geom_idx on pubsafe.rms_update using gist(geom)
     - create index if not exists rms_update_dpdcrimeid_idx on pubsafe.rms_update using btree(dpdcrimeid)
@@ -20,6 +21,8 @@
     - update pubsafe.rms_update r set neighborhood = n.name from base.neighborhoods n where st_contains(n.wkb_geometry, r.geom);
     - alter table pubsafe.rms_update add column council_district integer;
     - update pubsafe.rms_update r set council_district = d.districts::integer from base.council_districts d where st_contains(d.wkb_geometry, r.geom);
+    - alter table pubsafe.rms_update add column zip_code varchar(10);
+    - update pubsafe.rms_update r set zip_code = z.zipcode from base.zip_codes z where st_contains(z.wkb_geometry, r.geom);
 
 # Fuzz geometry for new incidents
 - type: anonymize_geometry
@@ -46,11 +49,48 @@
 
 - type: sql
   statements:
+    - update rms_update set "Offense Description" = 'OPERATING UNDER THE INFLUENCE OF LIQUOR OR DRUGS' where "Offense Description" = 'OUIL'
     - drop table if exists rms_old cascade
     - alter table pubsafe.rms rename to rms_old
     - alter table pubsafe.rms_update rename to rms
-    - create view...
-    - create view...
+    # Now we create 2 views off of "rms"
+    - create view pubsafe.rms_socrata_private as (
+      select
+        uniq,
+        dpdcrimeid as crime_id,
+        report_number,
+        address,
+        "Offense Description" as offense_description,
+        "Offense Category" as offense_category,
+        "State Offense Code" as state_offense_code,
+        arr_chrg as arrest_charge,
+        chrgdesc as charge_description,
+        replace(to_char(concat("Incident Date", ' ', left("Incident Time", 2), ':', right("Incident Time", 2), ':00')::timestamp, 'YYYY-MM-DD HH24:MI:SS.000'), ' ', 'T') as incident_timestamp,
+        "Incident Time" as incident_time,
+        extract(dow from concat("Incident Date", ' ', left("Incident Time", 2), ':', right("Incident Time", 2), ':00')::timestamp) + 1 as day_of_week,
+        left("Incident Time", 2)::integer as hour_of_day,
+        right("Incident Date", 4)::integer as year,
+        scout_car_area,
+        precinct,
+        block_id,
+        neighborhood,
+        council_district,
+        zip_code,
+        ST_X(ST_Transform(geom, 4326)) as lon,
+        ST_Y(ST_Transform(geom, 4326)) as lat,
+        replace(to_char(ibr_date::timstamp, 'YYYY-MM-DD HH24:MI:SS.000'), ' ', 'T') as ibr_date
+        CASE
+          WHEN geom is null
+            THEN null
+          ELSE
+            concat(
+              'location (',
+              ST_Y(ST_Transform(geom, 4326)),
+              ',',
+              ST_X(ST_Transform(geom, 4326)),
+              ')'
+            )
+        END as location from pubsafe.rms)
 
 
 
