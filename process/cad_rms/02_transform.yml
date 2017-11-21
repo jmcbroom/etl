@@ -17,8 +17,8 @@
     - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'ROYA$', ''))
     - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'SOUT$', ''))
     - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'WARR$', ''))
-    - <remove apartments>
-    - <remove double white space>
+    - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'APT[\s#A-Za-z0-9]+$', ''))
+    - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, '[\s]{2,}', ''))
 - type: lookup
   table: pubsafe.cad_update
   lookup_field: incident_address
@@ -49,6 +49,14 @@
     - update pubsafe.cad_update set geom = st_setsrid(st_makepoint(geox, geoy), 2898) where geox > 0 and geoy > 0
 
 # Stamp with District/Neighborhood/Block/ZipCode
+- type: sql
+  statements:
+    - alter table pubsafe.cad_update add column block_id varchar(50);
+    - update pubsafe.cad_update r set block_id = b.geoid10 from base.blocks_2010 b where st_contains(b.geom, r.geom);
+    - alter table pubsafe.cad_update add column neighborhood varchar(100);
+    - update pubsafe.cad_update r set neighborhood = n.name from base.neighborhoods n where st_contains(n.wkb_geometry, r.geom);
+    - alter table pubsafe.cad_update add column council_district integer;
+    - update pubsafe.cad_update r set council_district = d.districts::integer from base.council_districts d where st_contains(d.wkb_geometry, r.geom);
 
 # Fuzz text location
 - type: anonymize_text_location
@@ -64,7 +72,5 @@
 - type: sql
   statements:
     - update pubsafe.cad_update set incident_address = 'Location Redacted' where is_anon = 'f'
-#   - insert into pubsafe.cad (select * from pubsafe.cad_update)
-    - 'alter table pubsafe.cad_update drop column geox'
-    - 'alter table pubsafe.cad_update drop column geoy'
-
+    - alter table pubsafe.cad_update drop column if exists geox
+    - alter table pubsafe.cad_update drop column if exists geoy
