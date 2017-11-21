@@ -61,7 +61,11 @@
         report_number,
         address,
         "Offense Description" as offense_description,
-        "Offense Category" as offense_category,
+        CASE
+          WHEN "Offense Category" = 'OUIL' 
+            THEN 'OPERATING UNDER THE INFLUENCE OF LIQUOR OR DRUGS'
+          ELSE "Offense Category" 
+        END as offense_category,
         "State Offense Code" as state_offense_code,
         arr_chrg as arrest_charge,
         chrgdesc as charge_description,
@@ -91,6 +95,47 @@
               ')'
             )
         END as location from pubsafe.rms)
-
-
-
+    - create view pubsafe.rms_socrata_public as (
+      select
+        uniq,
+        dpdcrimeid as crime_id,
+        report_number,
+        address,
+        "Offense Description" as offense_description,
+        CASE
+          WHEN "Offense Category" = 'OUIL' 
+            THEN 'OPERATING UNDER THE INFLUENCE OF LIQUOR OR DRUGS'
+          ELSE "Offense Category" 
+        END as offense_category,
+        "State Offense Code" as state_offense_code,
+        arr_chrg as arrest_charge,
+        chrgdesc as charge_description,
+        replace(to_char(concat("Incident Date", ' ', left("Incident Time", 2), ':', right("Incident Time", 2), ':00')::timestamp, 'YYYY-MM-DD HH24:MI:SS.000'), ' ', 'T') as incident_timestamp,
+        "Incident Time" as incident_time,
+        extract(dow from concat("Incident Date", ' ', left("Incident Time", 2), ':', right("Incident Time", 2), ':00')::timestamp) + 1 as day_of_week,
+        left("Incident Time", 2)::integer as hour_of_day,
+        right("Incident Date", 4)::integer as year,
+        scout_car_area,
+        precinct,
+        block_id,
+        neighborhood,
+        council_district,
+        zip_code,
+        ST_X(ST_Transform(geom, 4326)) as lon,
+        ST_Y(ST_Transform(geom, 4326)) as lat,
+        replace(to_char(ibr_date::timstamp, 'YYYY-MM-DD HH24:MI:SS.000'), ' ', 'T') as ibr_date
+        CASE
+          WHEN geom is null
+            THEN null
+          ELSE
+            concat(
+              'location (',
+              ST_Y(ST_Transform(geom, 4326)),
+              ',',
+              ST_X(ST_Transform(geom, 4326)),
+              ')'
+            )
+        END as location 
+        from pubsafe.rms
+        where irb_date is not null)
+    )

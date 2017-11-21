@@ -1,70 +1,65 @@
 - to: Socrata
+  id: 
+  name: DPD All Crime Incidents
+  table: pubsafe.rms_socrata_public
+  method: upsert
   columns:
-    Incident ID:
-      field: incident_id
+    Crime ID:
+      field: crime_id
       type: text
-    Agency:
-      field: agency
+    Report #:
+      field: report_number
       type: text
     Incident Address:
-      field: incident_address
+      field: address
       type: text
-    Zip Code:
-      field: zip_code
+    Offense Description:
+      field: offense_description
       type: text
-    Priority:
-      field: priority
+    Offense Category:
+      field: offense_category
       type: number
-    Call Code:
-      field: callcode
+    Arrest Charge:
+      field: arrest_charge
       type: text
-    Call Description:
-      field: calldescription
+    Charge Description:
+      field: charge_description
       type: text
-    Category:
-      field: category
+    State Offense Code:
+      field: state_offense_code
       type: text
-    Call Time:
-      field: call_timestamp
+    Incident Date & Time:
+      field: incident_timestamp
       type: calendar_date
-    Time of Call:
-      field: time_of_call
+    Incident Time (24h):
+      field: incident_time
       type: text
-    Precinct/Scout Car Area:
-      field: precinct_sca
+    Day of Week (Sunday is 1):
+      field: day_of_week
+      type: number
+    Hour of Day:
+      field: hour_of_day
+      type: number
+    Year:
+      field: year
+      type: number
+    Scout Car Area:
+      field: scout_car_area
       type: text
-    Responding Unit:
-      field: respondingunit
-      type: text
-    Officer Initiated:
-      field: officerinitiated
-      type: text
-    Intake Time:
-      field: intaketime
-      type: number
-    Dispatch Time:
-      field: dispatchtime
-      type: number
-    Travel Time:
-      field: traveltime
-      type: number
-    Total Response Time:
-      field: totalresponsetime
-      type: number
-    Time On Scene:
-      field: time_on_scene
-      type: number
-    Total Time:
-      field: totaltime
-      type: number
-    Neighborhood:
-      field: neighborhood
+    Precinct:
+      field: precinct
       type: text
     Census Block GEOID:
       field: block_id
       type: text
+    Neighborhood:
+      field: neighborhood
+      type: text
     Council District:
       field: council_district
+      type: text
+    Zip Code:
+      field: zip_code
       type: text
     Longitude:
       field: lon
@@ -72,10 +67,85 @@
     Latitude:
       field: lat
       type: number
+    IBR Report Date:
+      field: ibr_date
+      type: calendar_date
     Incident Location:
       field: location
       type: location
-  id: wgv9-drfc
-  name: 911 Calls for Service
-  table: pubsafe.cad_socrata
+- to: Socrata
+  id: 
+  name: DPD All Crime Incidents (Private View)
+  table: pubsafe.rms_socrata_private
   method: upsert
+  columns:
+    Crime ID:
+      field: crime_id
+      type: text
+    Report #:
+      field: report_number
+      type: text
+    Incident Address:
+      field: address
+      type: text
+    Offense Description:
+      field: offense_description
+      type: text
+    Offense Category:
+      field: offense_category
+      type: number
+    Arrest Charge:
+      field: arrest_charge
+      type: text
+    Charge Description:
+      field: charge_description
+      type: text
+    State Offense Code:
+      field: state_offense_code
+      type: text
+    Incident Date & Time:
+      field: incident_timestamp
+      type: calendar_date
+    Incident Time (24h):
+      field: incident_time
+      type: text
+    Day of Week (Sunday is 1):
+      field: day_of_week
+      type: number
+    Hour of Day:
+      field: hour_of_day
+      type: number
+    Year:
+      field: year
+      type: number
+    Scout Car Area:
+      field: scout_car_area
+      type: text
+    Precinct:
+      field: precinct
+      type: text
+    Census Block GEOID:
+      field: block_id
+      type: text
+    Neighborhood:
+      field: neighborhood
+      type: text
+    Council District:
+      field: council_district
+      type: text
+    Zip Code:
+      field: zip_code
+      type: text
+    Longitude:
+      field: lon
+      type: number
+    Latitude:
+      field: lat
+      type: number
+    IBR Report Date:
+      field: ibr_date
+      type: calendar_date
+    Incident Location:
+      field: location
+      type: location
+      
