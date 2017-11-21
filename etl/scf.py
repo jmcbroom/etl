@@ -5,7 +5,7 @@ from os import environ as env
 import json
 import pandas
 import collections
-from utils import df_to_p
+from utils import df_to_pg
 from pprint import pprint
 
 SCF_API = "https://seeclickfix.com/api/v2/organizations/507/issues?"
