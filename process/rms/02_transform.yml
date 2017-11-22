@@ -63,7 +63,11 @@
         "Report Number" as report_number,
         address,
         "Offense Description" as offense_description,
-        "Offense Category" as offense_category,
+        CASE
+          WHEN "Offense Category" = 'OUIL' 
+            THEN 'OPERATING UNDER THE INFLUENCE OF LIQUOR OR DRUGS'
+          ELSE "Offense Category" 
+        END as offense_category,
         "State Offense Code" as state_offense_code,
         arr_chrg as arrest_charge,
         chrgdesc as charge_description,
@@ -130,6 +134,3 @@
               ')'
             )
         END as location from pubsafe.rms where ibr_date is not null)
-
-
-
