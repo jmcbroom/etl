@@ -9,6 +9,8 @@ import sqlalchemy
 engine = sqlalchemy.create_engine('postgresql+psycopg2://{}/{}'.format(os.environ['PG_CONNSTR'], os.environ['PG_DB']))
 db_connection = engine.connect()
 
+from pprint import pprint
+
 class Socrata(object):
     def __init__(self, params):
         self.config = params
@@ -39,6 +41,7 @@ class Socrata(object):
         rows = db_connection.execute("select * from {}".format(self.config['table']))
         payload = [ dict(row) for row in rows ]
         print(len(payload))
+        pprint(payload[0])
         if self.id == None:
             self.id = self.create_dataset
             job = soda_connection.replace( self.id, payload )
