@@ -60,6 +60,15 @@ class Process(object):
           q = SfTable(params)
           q.to_postgres()
 
+        elif srctype == 'api':
+          if params['domain'] == 'seeclickfix':
+            from .scf import Seeclickfix
+            drop_table_if_exists(connection, params['destination'])
+            s = Seeclickfix()
+            s.to_postgres()
+          else:
+            pass
+
         else:
           print("I don't know this source type: {}".format(srctype))
 
