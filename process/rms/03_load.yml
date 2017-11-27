@@ -1,13 +1,16 @@
 - to: Socrata
-  id: 
-  name: DPD All Crime Incidents
-  table: pubsafe.rms_socrata_public
-  method: upsert
+  id: irnv-4sjd
+  name: "DPD: All Crime Incidents, December 6, 2016 - Present (Private View)"
+  table: pubsafe.rms_socrata_private
+  method: replace
   columns:
+    Unique ID:
+      field: uniq
+      type: number
     Crime ID:
       field: crime_id
       type: text
-    Report #:
+    Report Number:
       field: report_number
       type: text
     Incident Address:
@@ -18,7 +21,7 @@
       type: text
     Offense Category:
       field: offense_category
-      type: number
+      type: text
     Arrest Charge:
       field: arrest_charge
       type: text
@@ -57,15 +60,15 @@
       type: text
     Council District:
       field: council_district
-      type: text
+      type: number
     Zip Code:
       field: zip_code
       type: text
     Longitude:
-      field: lon
+      field: longitude
       type: number
     Latitude:
-      field: lat
+      field: latitude
       type: number
     IBR Report Date:
       field: ibr_date
@@ -74,15 +77,18 @@
       field: location
       type: location
 - to: Socrata
-  id: 
-  name: DPD All Crime Incidents (Private View)
-  table: pubsafe.rms_socrata_private
-  method: upsert
+  id: 6gdg-y3kf
+  name: "DPD: All Crime Incidents, December 6, 2016 - Present"
+  table: pubsafe.rms_socrata_public
+  method: replace
   columns:
+    Unique ID:
+      field: uniq
+      type: number
     Crime ID:
       field: crime_id
       type: text
-    Report #:
+    Report Number:
       field: report_number
       type: text
     Incident Address:
@@ -93,7 +99,7 @@
       type: text
     Offense Category:
       field: offense_category
-      type: number
+      type: text
     Arrest Charge:
       field: arrest_charge
       type: text
@@ -132,15 +138,15 @@
       type: text
     Council District:
       field: council_district
-      type: text
+      type: number
     Zip Code:
       field: zip_code
       type: text
     Longitude:
-      field: lon
+      field: longitude
       type: number
     Latitude:
-      field: lat
+      field: latitude
       type: number
     IBR Report Date:
       field: ibr_date
@@ -148,4 +154,3 @@
     Incident Location:
       field: location
       type: location
-      
