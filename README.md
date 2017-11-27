@@ -48,9 +48,10 @@ Supported sources:
 - `database` from `database.py`: An Oracle or SQLServer database
 - `salesforce` from `salesforce.py`: A Salesforce query
 - `smartsheet` from `smartsheet.py`: A Smartsheet
+- `api` for now specificially from `scf.py`: An endpoint of open 311 data
 
 Roadmap:
-- `api` from `scf.py`: An endpoint to SeeClickFix Open 311
+- `api` support for other domains
 - `airtable`?
 - `googlesheet`?
 
@@ -74,6 +75,10 @@ Roadmap:
 - smartsheet: 
     id: <Smartsheet id>
     table: <Postgres table name, eg mmcc>
+
+- api:
+    domain: <String that tells us which api, eg seeclickfix>
+    destination: <Postgres table name, eg scf.issues>
 ```
 
 ### 02_transform.yml
@@ -83,9 +88,10 @@ An array of steps to clean the data, which can include casting data types, geoco
 Supported options:
 - `sql`: execute a list of custom SQL statements
 - `geocode`: provide a table, address column, and geometry column
+- `anonymize_geometry`: provide a table and a base to compare against, eg the centerline
+- `anonymize_text_location`: provide a table, address column and set flag to keep track of which records have been anonymized
 
 Roadmap:
-- `anonymize`?
 - `join`?
 
 ```yml
@@ -98,6 +104,15 @@ Roadmap:
   table: <Postgres table or view, eg bseed.mmcc>
   add_col: <Existing address field>
   geom_col: <Geometry field name to be created>
+
+- type: anonymize_geometry
+  table: <Postgres table or view, eg rms_update>
+  against: <Postgres table, eg base.centerline>
+
+- type: anonymize_text_location
+  table: <Postgres table or view, eg rms_update>
+  column: <Existing address field>
+  set_flag: <Bool>
 ```
 
 ### 03_load.yml
