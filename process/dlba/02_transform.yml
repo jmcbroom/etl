@@ -266,16 +266,16 @@
             c.asb_verifier_name,
             case when c.demo_contractor_proceed_date is null then null else
                 replace(to_char(c.demo_contractor_proceed_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as c.demo_contractor_proceed_date,
+            end as demo_contractor_proceed_date,
             case when c.asb_abatement_start_date is null then null else
                 replace(to_char(c.asb_abatement_start_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as c.asb_abatement_start_date,
+            end as asb_abatement_start_date,
             case when c.demo_asb_abatement_date is null then null else
                 replace(to_char(c.demo_asb_abatement_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as c.demo_asb_abatement_date,
+            end as demo_asb_abatement_date,
             case when c.asb_post_abatement_insp_date is null then null else
                 replace(to_char(c.asb_post_abatement_insp_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as c.asb_post_abatement_insp_date,
+            end as asb_post_abatement_insp_date,
             c.asb_post_abatement_notes,
             case when c.asb_post_abatement_times_failed = 'NaN' then null else c.asb_post_abatement_times_failed end,
             c.asb_post_abatement_verification_status,
@@ -309,7 +309,7 @@
                 )
             end as location
         from dlba.case c
-        inner join dba_commercial_demo d on d.related_case = c.id
+        inner join dlba.dba_commercial_demo d on d.related_case = c.id
         where c.asb_abatement_verification_contractor_name is not null
             and c.demo_contractor_proceed_date is not null
             and c.bseed_final_grade_approved is null
