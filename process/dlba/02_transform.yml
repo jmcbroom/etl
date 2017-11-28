@@ -1,5 +1,6 @@
 - type: sql
   statements:
+    # auctions sold
     - drop view if exists dlba.auction_sold_socrata
     - create view dlba.auction_sold_socrata as
             ( select
@@ -40,6 +41,7 @@
             and a.sale_status = 'Closed'
             and pb.buyer_status = 'Selected'
             and c.address not like '%Fake St%' );
+    # commercial demos
     - drop view if exists dlba.commercial_demos_socrata
     - create view dlba.commercial_demos_socrata as
         ( select
@@ -87,6 +89,7 @@
             or knock_start_dt is null)
             and commercial_demo_status in ('Demo Contracted', 'Demolished', 'Demo Pipeline') 
             and demo_pulled_date is null )
+    # for sale
     - drop view if exists dlba.for_sale_socrata
     - create view dlba.for_sale_socrata as
         ( select 
@@ -117,6 +120,7 @@
                 and a.sale_status = 'For Sale On Site'
                 and c.status = 'For Sale'
                 and c.address not like '%Fake St%' )
+    # own it now sold
     - drop view if exists dlba.own_it_now_socrata
     - create view dlba.own_it_now_socrata as
         ( select 
@@ -150,6 +154,7 @@
             and a.actual_closing_date is not null
             and pb.buyer_status = 'Selected'
             and c.address not like '%Fake St%' )
+    # side lots sold
     - drop view if exists dlba.side_lots_socrata
     - create view dlba.side_lots_socrata as 
         ( select
@@ -181,6 +186,7 @@
                 and a.actual_closing_date is not null
                 and pb.buyer_status = 'Selected'
                 and c.address not like '%Fake St%' )
+    # upcoming demos
     - drop view if exists dlba.upcoming_demos_socrata
     - create view dlba.upcoming_demos_socrata as 
         ( select 
@@ -215,6 +221,7 @@
                 and socrata_reported_price > 0
                 and demo_contractor_text_only <> ''
                 and status = 'Demo Contracted' )
+    # completed demos
     - drop view if exists dlba.completed_demos_socrata
     - create view dlba.completed_demos_socrata as
         ( select
@@ -243,61 +250,71 @@
         where demo_knock_down_date::timestamp >= date '2014-01-01'
             and socrata_reported_price > 0
             and demo_contractor_text_only <> '' )
+    # asbestos mdeq report
     - drop view if exists dlba.asbestos_socrata
     - create view dlba.asbestos_socrata as ( select
-            address,
-            parcel_id,
-            bseed_final_grade_approved,
-            demo_final_grade_approved_date,
-            demo_batch_contractor_name_del1_name,
-            abatement_sub_contractor,
-            demo_asb_abatement_contractor_name,
-            demo_asb_survey_contractor_name,
-            asb_inspectors_name,
-            asb_abatement_verification_contractor_name,
-            asb_verifier_name,
-            case when demo_contractor_proceed_date is null then null else
-                replace(to_char(demo_contractor_proceed_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as demo_contractor_proceed_date,
-            case when asb_abatement_start_date is null then null else
-                replace(to_char(asb_abatement_start_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as asb_abatement_start_date,
-            case when demo_asb_abatement_date is null then null else
-                replace(to_char(demo_asb_abatement_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as demo_asb_abatement_date,
-            case when asb_post_abatement_insp_date is null then null else
-                replace(to_char(asb_post_abatement_insp_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
-            end as asb_post_abatement_insp_date,
-            asb_post_abatement_notes,
-            case when asb_post_abatement_times_failed = 'NaN' then null else asb_post_abatement_times_failed end,
-            asb_post_abatement_verification_status,
-            case when demo_planned_knock_down_date is null then null else
-                replace(to_char(demo_planned_knock_down_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            c.address,
+            c.parcel_id,
+            c.bseed_final_grade_approved,
+            c.demo_final_grade_approved_date,
+            c.demo_batch_contractor_name_del1_name,
+            c.abatement_sub_contractor,
+            c.demo_asb_abatement_contractor_name,
+            c.demo_asb_survey_contractor_name,
+            c.asb_inspectors_name,
+            c.asb_abatement_verification_contractor_name,
+            c.asb_verifier_name,
+            case when c.demo_contractor_proceed_date is null then null else
+                replace(to_char(c.demo_contractor_proceed_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as c.demo_contractor_proceed_date,
+            case when c.asb_abatement_start_date is null then null else
+                replace(to_char(c.asb_abatement_start_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as c.asb_abatement_start_date,
+            case when c.demo_asb_abatement_date is null then null else
+                replace(to_char(c.demo_asb_abatement_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as c.demo_asb_abatement_date,
+            case when c.asb_post_abatement_insp_date is null then null else
+                replace(to_char(c.asb_post_abatement_insp_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as c.asb_post_abatement_insp_date,
+            c.asb_post_abatement_notes,
+            case when c.asb_post_abatement_times_failed = 'NaN' then null else c.asb_post_abatement_times_failed end,
+            c.asb_post_abatement_verification_status,
+            case when c.demo_planned_knock_down_date is null then null else
+                replace(to_char(c.demo_planned_knock_down_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
             end as demo_planned_knock_down_date,
-            case when demo_knock_down_date is null then null else
-                replace(to_char(demo_knock_down_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            case when c.demo_knock_down_date is null then null else
+                replace(to_char(c.demo_knock_down_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
             end as demo_knock_down_date,
-            case when socrata_projected_knocked_by_date is null then null else
-                replace(to_char(socrata_projected_knocked_by_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            case when c.socrata_projected_knocked_by_date is null then null else
+                replace(to_char(c.socrata_projected_knocked_by_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
             end as socrata_projected_knocked_by_date,
-            asb_document_url,
-            asb_post_abatement_document_url,
-            property_longitude,
-            property_latitude,
-            property_zip_code,
-            case when property_latitude is null then null else
+            case when c.demo_asb_post_abatement_failed_date is null then null else
+                replace(to_char(c.demo_asb_post_abatement_failed_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as demo_asb_post_abatement_failed_date,
+            case when d.asb_post_abatement_passed_date is null then null else
+                replace(to_char(d.asb_post_abatement_passed_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as demo_asb_post_abatement_approval_date,
+            c.asb_document_url,
+            c.asb_post_abatement_document_url,
+            c.property_longitude,
+            c.property_latitude,
+            c.property_zip_code,
+            case when c.property_latitude is null then null else
                 concat(
                     'location (',
-                    property_latitude,
+                    c.property_latitude,
                     ',',
-                    property_longitude,
+                    c.property_longitude,
                 ')'
                 )
             end as location
-        from dlba.case where asb_abatement_verification_contractor_name is not null
-            and demo_contractor_proceed_date is not null
-            and bseed_final_grade_approved is null
-            and demo_final_grade_approved_date is null )
+        from dlba.case c
+        inner join dba_commercial_demo d on d.related_case = c.id
+        where c.asb_abatement_verification_contractor_name is not null
+            and c.demo_contractor_proceed_date is not null
+            and c.bseed_final_grade_approved is null
+            and c.demo_final_grade_approved_date is null )
+    # completed demos
     - drop view if exists dlba.completed_demos_socrata
     - create view dlba.completed_demos_socrata as (
         select 
@@ -324,6 +341,7 @@
         where demo_knock_down_date::timestamp >= date '2014-01-01'
         and socrata_reported_price > 0
         and demo_contractor_text_only != '')
+    # demo pipeline
     - drop view if exists dlba.demo_pipeline_socrata
     - create view dlba.demo_pipeline_socrata as (
         select 
@@ -346,4 +364,3 @@
             and c.demo_knock_down_date is null
             and c.demo_pulled_date is null
             and c.recordtypeid in ('012j0000000xtGbAAI', '012j0000000zM27AAE', '012j0000000xtGcAAI'))
-

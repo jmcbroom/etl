@@ -15,8 +15,6 @@
     object: Case
     destination: dlba.case
     fields:
-      # - DEMO_ASB_Post_Abatement_Approval_Date__c
-      # - Demo_ASB_Post_Abatement_Failed_Date__c
       - ACCT_Latitude__c
       - ACCT_Longitude__c
       - ASB_Abatement_Start_Date__c
@@ -37,6 +35,7 @@
       - DEMO_ASB_Abatement_Date__c
       - DEMO_ASB_Survey_Contractor__r.Name
       - DEMO_ASB_Survey_Status__c
+      - Demo_ASB_Post_Abatement_Failed_Date__c
       - DEMO_Batch_Contractor_Name_del1__r.Name
       - DEMO_Final_Grade_Approved_Date__c
       - DEMO_Knock_Down_Date__c
@@ -91,6 +90,7 @@
     object: DBA_Commercial_Demo__c
     destination: dlba.dba_commercial_demo
     fields:
+      - ASB_Post_Abatement_Passed_Date__c
       - BSEED_COM_Final_Grade_Approved__c
       - BSEED_COM_Open_Hole_Approved__c
       - BSEED_COM_Winter_Grade_Approved__c
@@ -101,7 +101,7 @@
       - DBA_COM_Property__r.Name
       - DBA_COM_Property__r.Neighborhood__c
       - DBA_COM_Property__r.Parcel_ID__c
-      - DBA_Received_EMG_Letter_Date__c
+      - DBA_Received_EMG_Letter_Date__c   
       - Demo_Cost_Abatement__c
       - Demo_Cost_Knock__c
       - Demo_NtP_Dt__c
@@ -114,4 +114,5 @@
       - Knock_Start_Dt__c
       - Name
       - Open_Hole_Approved_Dt__c
+      - Related_Case__c
       - Winter_Grade_Approved_Dt__c
