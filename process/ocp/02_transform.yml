@@ -1,0 +1,7 @@
+- type: sql
+  statements:
+    - drop view if exists ocp.contracts_socrata
+    - create view ocp.contracts_socrata as (
+      select ...
+      from ocp.contracts )
+      

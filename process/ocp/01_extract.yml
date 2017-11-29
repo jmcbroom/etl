@@ -1,0 +1,4 @@
+- sftp:
+    host: novatus
+    destination: ocp.contracts
+    

@@ -69,6 +69,9 @@ class Process(object):
           else:
             pass
 
+        elif srctype == 'sftp':
+          pass
+
         else:
           print("I don't know this source type: {}".format(srctype))
 
