@@ -1,0 +1,80 @@
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.payments 
+    source: tblDAHPayments
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.ztickets 
+    source: tblZTickets
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.dispadjourn 
+    source: tblDispAdjourn
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.cityfines 
+    source: tblDAHCityFines
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.blight_ticket_svc_cost 
+    source: tblDAHBlightTicketServiceCostTransactions
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.reschedule 
+    source: tblReSchedule
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.courttime 
+    source: tblCourtTime
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.agency 
+    source: tblAgency
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.ordinance 
+    source: tblDAHOrdinance
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.streets 
+    source: tblStreets
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.violator_address 
+    source: tblDAHViolatorAddress
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.state 
+    source: tblState
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.violator_info 
+    source: tblDAHViolatorInfo
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.security 
+    source: tblSecurity
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.country 
+    source: tblDAHCountry
+- database:
+    type: sql-server
+    prefix: dah
+    destination: dah.disp_type 
+    source: tblDAHDispType
