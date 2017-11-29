@@ -227,16 +227,16 @@
         ( select
             address,
             parcel_id,
-            demo_contractor_text_only,
-            case when socrata_reported_price = 'NaN' then null else socrata_reported_price end,
+            demo_contractor_text_only as contractor_name,
+            case when socrata_reported_price = 'NaN' then null else socrata_reported_price end as price,
             case when demo_knock_down_date is null then null else
-                replace(to_char(demo_knock_down_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), '', 'T')
-            end as demo_knock_down_date,
-            non_hhf_commercial_demo,
+                replace(to_char(demo_knock_down_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+            end as demolition_date,
+            non_hhf_commercial_demo as commercial,
             council_district,
             neighborhood,
-            acct_latitude,
-            acct_longitude,
+            acct_latitude as latitude,
+            acct_longitude as longitude,
                         case when acct_latitude is null then null else
                 concat(
                     'location (',

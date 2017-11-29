@@ -380,10 +380,10 @@
       field: price
       type: money
     Demolition Date:
-      field: demo_knock_down_date
+      field: demolition_date
       type: calendar_date
     Commercial Building:
-      field: non_hhf_commercial_demo
+      field: commercial
       type: text
     Council District:
       field: council_district
@@ -392,10 +392,10 @@
       field: neighborhood
       type: text
     Latitude:
-      field: property_latitude
+      field: latitude
       type: number
     Longitude:
-      field: property_longitude
+      field: longitude
       type: number
     Location:
       field: location
