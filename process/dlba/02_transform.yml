@@ -309,7 +309,7 @@
                 )
             end as location
         from dlba.case c
-        inner join dlba.dba_commercial_demo d on d.related_case = c.id
+        left outer join dlba.dba_commercial_demo d on d.related_case = c.id
         where c.asb_abatement_verification_contractor_name is not null
             and c.demo_contractor_proceed_date is not null
             and c.bseed_final_grade_approved is null
