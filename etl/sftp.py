@@ -3,6 +3,14 @@ from os import environ as env
 from datetime import datetime
 from .utils import df_to_pg
 
+def clean_cols(name):
+  name = name.replace(":", "")
+  name = name.replace(" ", "_").lower().strip()
+  return name
+
+def rename_cols(df):
+  return df.rename(columns=lambda x: clean_cols(x), inplace=True)
+
 class Sftp(object):
   """Connect to an SFTP server and retrieve a file."""
 
@@ -20,6 +28,7 @@ class Sftp(object):
         # copy file from sftp to local dir, read as df
         sftp.get(path, preserve_mtime=True)
         self.df = pandas.read_csv(file_name)
+        rename_cols(self.df)
         os.remove(file_name)
         print('got file, read into df')
       else:
