@@ -18,14 +18,14 @@ class Sftp(object):
     cnopts = pysftp.CnOpts()
     cnopts.hostkeys = None
     with pysftp.Connection(env['SFTP_HOST'], port=2222, username=env['SFTP_USER'], password=env['SFTP_PASS'], cnopts=cnopts) as sftp:
-      print('connected to server')
+      print('connected to {}'.format(env['SFTP_HOST']))
       
       today = datetime.today().strftime('%m%d%Y')
       file_name = 'Contracts_{}.csv'.format(today)
       path = '/outgoing/' + file_name
 
       if sftp.isfile(path):
-        # copy file from sftp to local dir, read as df
+        # copy file from sftp to local dir, read as df, then delete local copy
         sftp.get(path, preserve_mtime=True)
         self.df = pandas.read_csv(file_name)
         rename_cols(self.df)
