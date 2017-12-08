@@ -50,6 +50,7 @@ class Sftp(object):
         if sftp.isfile(path):
           sftp.get(path, preserve_mtime=True)
           self.df = pandas.read_csv(file_name)
+          rename_cols(self.df)
           os.remove(file_name)
           print('got file, read into df')
         else:

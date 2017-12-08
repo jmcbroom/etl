@@ -50,4 +50,23 @@
     - drop view if exists ocp.purchase_agreements_socrata
     - create view ocp.purchase_agreements_socrata as 
         ( select
-      
+          agreement_number,
+          case 
+            when agreement_limit = 'NaN'
+            then null
+            else agreement_limit
+          end as agreement_limit,
+          cod_agency,
+          description,
+          agreement_status_description,
+          supplier,
+          city,
+          case 
+            when state = 'Michigan'
+            then 'MI'
+            else state
+          end as state,
+          report_date as start_date,
+          report_date.1 as end_date
+        from ocp.purchase_agreements )
+    - alter table ocp.purchase_agreements_socrata add column link as concat_ws('http://dataresources.theneighborhoods.org/sites/dataresources.theneighborhoods.org/files/socrata/', agreement_number::text, '.pdf')
