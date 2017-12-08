@@ -15,25 +15,46 @@ class Sftp(object):
   """Connect to an SFTP server and retrieve a file."""
 
   def __init__(self):
-    cnopts = pysftp.CnOpts()
-    cnopts.hostkeys = None
-    with pysftp.Connection(env['SFTP_HOST'], port=2222, username=env['SFTP_USER'], password=env['SFTP_PASS'], cnopts=cnopts) as sftp:
-      print('connected to {}'.format(env['SFTP_HOST']))
-      
-      today = datetime.today().strftime('%m%d%Y')
-      file_name = 'Contracts_{}.csv'.format(today)
-      path = '/outgoing/' + file_name
+    self.host = params['host']
 
-      if sftp.isfile(path):
-        # copy file from sftp to local dir, read as df, then delete local copy
-        sftp.get(path, preserve_mtime=True)
-        self.df = pandas.read_csv(file_name)
-        rename_cols(self.df)
-        os.remove(file_name)
-        print('got file, read into df')
-      else:
-        print('No file named {} found'.format(file_name))
-        pass
+    if self.host == 'novatus':
+      cnopts = pysftp.CnOpts()
+      cnopts.hostkeys = None
+      with pysftp.Connection(env['NOVATUS_HOST'], port=env['NOVATUS_PORT'], username=env['NOVATUS_USER'], password=env['NOVATUS_PASS'], cnopts=cnopts) as sftp:
+        print('connected to {}'.format(env['NOVATUS_HOST']))
+      
+        today = datetime.today().strftime('%m%d%Y')
+        file_name = 'Contracts_{}.csv'.format(today)
+        path = '/outgoing/' + file_name
+
+        if sftp.isfile(path):
+          # copy file from sftp to local dir, read as df, then delete local copy
+          sftp.get(path, preserve_mtime=True)
+          self.df = pandas.read_csv(file_name)
+          rename_cols(self.df)
+          os.remove(file_name)
+          print('got file, read into df')
+        else:
+          print('No file named {} found'.format(file_name))
+          pass
+
+      elif self.host == 'moveit':
+        cnopts = pysftp.CnOpts()
+        cnopts.hostkeys = None
+        with pysftp.Connection(env['MOVEIT_HOST'], port=env['MOVEIT_PORT'], username=env['MOVEIT_USER'], password=env['MOVEIT_PASS'], cnopts=cnopts) as sftp:
+          print('connected to {}'.format(env['MOVEIT_HOST']))
+
+          file_name = 'purchase_agreements_open_data_test.csv'
+          path = '/Home/IET/PO/' + file_name
+          
+          if sftp.isfile(path):
+            sftp.get(path, preserve_mtime=True)
+            self.df = pandas.read_csv(file_name)
+            os.remove(file_name)
+            print('got file, read into df')
+          else:
+            print('No file named {} found.'.format(file_name))
+            pass
     
   def to_postgres(self):
     df_to_pg(self.df, 'ocp', 'contracts')

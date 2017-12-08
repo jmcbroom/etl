@@ -70,14 +70,11 @@ class Process(object):
             pass
 
         elif srctype == 'sftp':
-          if params['host'] == 'novatus':
-            from .sftp import Sftp
-            drop_table_if_exists(connection, params['destination'])
-            s = Sftp()
-            s.to_postgres()
-          else:
-            pass
-
+          from .sftp import Sftp
+          drop_table_if_exists(connection, params['destination'])
+          s = Sftp(params)
+          s.to_postgres()
+          
         else:
           print("I don't know this source type: {}".format(srctype))
 

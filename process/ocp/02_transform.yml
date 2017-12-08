@@ -45,4 +45,9 @@
           contract_contract_agreement_type
         from ocp.contracts 
           order by contract_nigp_code, contract_value asc)
+- type: sql
+  statements:
+    - drop view if exists ocp.purchase_agreements_socrata
+    - create view ocp.purchase_agreements_socrata as 
+        ( select
       
