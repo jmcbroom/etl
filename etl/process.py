@@ -72,7 +72,7 @@ class Process(object):
         elif srctype == 'sftp':
           from .sftp import Sftp
           drop_table_if_exists(connection, params['destination'])
-          s = Sftp(params)
+          s = Sftp(params['host'])
           s.to_postgres()
           
         else:

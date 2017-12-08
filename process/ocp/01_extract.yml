@@ -1,6 +1,6 @@
-- sftp:
-    host: novatus
-    destination: ocp.contracts
+# - sftp:
+#     host: novatus
+#     destination: ocp.contracts
 - sftp:
     host: moveit
     destination: ocp.purchase_agreements
