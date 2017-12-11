@@ -1,10 +1,11 @@
 import schedule
 import time
 import etl
+import arrow
 
 from etl.slack import SlackMessage
 
-msg = SlackMessage({"text": "ETL thread for 2017/11/13"})
+msg = SlackMessage({"text": "ETL thread for {}".format(arrow.now().format('dddd, MMMM Do'))})
 msg.send()
 
 def run(process, notify=False):
@@ -17,9 +18,11 @@ def run(process, notify=False):
     msg.comment("Error: *{}*\n > `{}`".format(process, e))
 
 
-schedule.every(5).minutes.do(run, process='angels_night')
-# schedule.every.day.do(run, process='bseed', notify=True)
-# schedule.every.tuesday.do(run('medical_marijuana'))
+# Turn this back on once our CAD works.
+# schedule.every(5).minutes.do(run, process='angels_night')
+
+schedule.every.day.do(run, process='dlba', notify=True)
+schedule.every.day.do(run, process='bseed', notify=True)
 
 while True:
   schedule.run_pending()
