@@ -58,11 +58,15 @@
             then null
             else agreement_limit
           end as agreement_limit,
-          cod_agency,
-          description,
+          case 
+            when cod_agency = 'NaN'
+            then null
+            else upper(cod_agency)
+          end as cod_agency,
+          upper(description) as description,
           agreement_status_description,
-          supplier,
-          city,
+          upper(replace(rtrim(trim(supplier), '.'), ',', '')) as supplier,
+          upper(city) as city,
           case 
             when state = 'Michigan'
             then 'MI'
