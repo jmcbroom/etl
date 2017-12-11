@@ -1,11 +1,106 @@
-arcgis-online:
-  id:
-  file: parcels.json
-  table: assessor.parcels_accela
-  title: Accela Parcels
-  description: description
-  access: org
-  tags:
-    - iet
-    - bseed
-    - parcels
+- to: Socrata
+  id: 
+  name: Parcel Points Ownership
+  table: assessor.open_data_parcels
+  method: replace
+  row_identifier:
+  columns:
+    ObjectID:
+      field: objectid
+      type: text
+    Parcel Number:
+      field: parcelnum
+      type: text
+    Address:
+      field: address
+      type: text
+    Zip Code:
+      field: zip_code
+      type: text
+    Council District:
+      field: council_district
+      type: text
+    Zoning:
+      field: zoning
+      type: text
+    Owner:
+      field: owner1
+      type: text
+    Owner 2:
+      field: owner2
+      type: text
+    Taxpayer:
+      field: taxpayer
+      type: text
+    Owner Street Address:
+      field: owner_street
+      type: text
+    Owner City:
+      field: owner_city
+      type: text
+    Owner State:
+      field: owner_state
+      type: text
+    Owner Zip Code:
+      field: owner_zip
+      type: text
+    Owner Country:
+      field: owner_country
+      type: text
+    SaleDate:
+      field: last_sale_date
+      type: text
+    Last Sale Price:
+      field: last_sale_price
+      type: text
+    Last Terms of Sale:
+      field: last_terms_of_sale
+      type: text
+    Land Value:
+      field: land_value
+      type: text
+    Taxable Value:
+      field: taxable_value
+      type: text
+    Improved Value:
+      field: improved_value
+      type: text
+    State Equalized Value:
+      field: sev
+      type: text
+    Principal Residence Exemption:
+      field: pre
+      type: text
+    Property Class:
+      field: property_class
+      type: text
+    Total Acreage:
+      field: total_acres
+      type: text
+    Frontage:
+      field: frontage
+      type: text
+    Depth:
+      field: depth
+      type: text
+    Year Built:
+      field: year_built
+      type: text
+    Number of Buildings:
+      field: num_buildings
+      type: text
+    Number of Stories:
+      field: num_stories
+      type: text
+    Legal Description:
+      field: legaldesc
+      type: text
+    Latitude:
+      field: latitude
+      type: text
+    Longitude:
+      field: longitude
+      type: text
+    Location:
+      field: location
+      type: text

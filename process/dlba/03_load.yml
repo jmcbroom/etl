@@ -335,16 +335,16 @@
       field: parcel_id
       type: text
     Contractor Name:
-      field: demo_contractor_text_only
+      field: contractor_name
       type: text
     Price: 
-      field: socrata_reported_price
+      field: price
       type: money
     Projected Demolished By Date:
-      field: demo_planned_knock_down_date
+      field: demolish_by_date
       type: calendar_date
     Commercial Building:
-      field: non_hhf_commercial_demo
+      field: commercial
       type: text
     Council District:
       field: council_district
@@ -353,10 +353,10 @@
       field: neighborhood
       type: text
     Latitude:
-      field: acct_latitude
+      field: latitude
       type: number
     Longitude:
-      field: acct_longitude
+      field: longitude
       type: number
     Location:
       field: location

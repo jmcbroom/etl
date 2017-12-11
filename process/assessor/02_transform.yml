@@ -1,132 +1,137 @@
-- sql:
-  - drop view if exists assessor.parcels_accela;
-  - >- 
-    create view assessor.parcels_accela as (
-    select
-      s.objectid,
-      d.ward,-- WARD
-      s.parcelno as parcelnumber, -- PARCELNUMBER
-      d.district,   -- DISTRICT
-      d.ecf,    -- ECF
-      d.propaddr as propaddress,    -- PROPADDRESS
-      d.propno::integer as "number",    -- NUMBER
-      d.propdir as dir,   -- DIR
-      d.propstr as street, -- STREET
-      a.propzip as zipcode,   -- ZIPCODE
-      a.ownername1 as taxpayername1,    -- TAXPAYERNAME1
-      a.ownername2 as taxpayername2,   -- TAXPAYERNAME2
-      a.ownerstreetaddr as taxpayeraddress,   -- TAYPAYERADDRESS
-      a.ownercity as taxpayercity ,  -- CITY
-      a.ownerstate as taxpayerstate,   -- STATE
-      a.ownerzip as taxpayerzip,    -- ZIPCODE
-      d."propclass" as "class",  -- CLASS
-      d.prevpclass as previous,   -- PREVIOUS
-      'Active' as status,   -- STATUS
-      d.taxstatus as taxablestatus,    -- TAXABLESTATUS
-      d.totalsqft::integer as sqft,    -- SQ. Ft.
-      d.totalacreage as acreage,    -- ACREAGE
-      d.frontage::integer as frontage,   -- FRONTAGE
-      d."depth"::integer as "depth",  -- DEPTH
-      d.usecode as usecode,    -- USECODE
-      d.pre::integer as homestead,    -- HOMESTEADE
-      d.nez,   -- NEZ
-      a."xStreetName_0" as xstreetname1,   -- XSTREETNAME1
-      a."xStreetName_1" as xstreetname2,    -- XSTREETNAME2
-      a.relatedpnum as relatedparcel,    -- RELATEDPARCEL
-      a.cib_floorarea as cifloorarea,    -- CIFLOORAREA
-      a.cib_numcib as cibuildingno,    -- CIBUILDINGNO
-      a.cib_occ as cioccupancy,    -- CIOCCUPANCY
-      a.cib_yearbuilt as ciyearbuilt,  -- CIYEARBUILT
-      a.resb_floorarea as resfloorarea,   -- RESFLOORAREA
-      a.resb_numresb as resbuildingno,   -- RESBUILDINGNO
-      a.resb_occ as resoccupancty,   -- RESOCCUPANCY
-      a.resb_style as resbuildingstyle,   -- RESBUILDINGSTYLE
-      a.resb_yearbuilt as resyearbuilt,   -- RESYEARBUILT
-      a.vacant,    -- VACANT
-      a."lastSalePrice" as lastsaleamount,   -- LASTSALEAMOUNT
-      a."lastSaleDate" as lastsaledate,   -- LASTSALEDATE
-      d.av::integer as assessedvalue,   -- ASSESSEDVALUE
-      d.prevav::integer as prevassessvalue,    -- PREVASSESSVALUE
-      d.sev::integer,   -- SEV
-      d.prevav::integer as prevsev,    -- PREVSEV
-      d.tv::integer as taxablevalue,   -- TAXABLEVALUE
-      d.prevtv::integer as prevtaxablevalue,    -- PREVTAXABLEVALUE
-      d.landvalue::integer as landvalue,    -- LANDVALUE
-      d.landmap,   -- LANDMAP
-      d.aka as akaaddress,   -- AKAADDRESS
-      d.subdivision,    -- SUBDIVISION
-      a.lot as lotnumber,   -- LOTNUMBER
-      d.legaldesc as legaldescription,    -- LEGALDESCRIPTION
-      d.rp,  -- RP
-      s.shape as geom
-    from assessor.parcels_102717 s
-      inner join assessor.parcelmaster a
-      on a.pnum = s.parcelno
-      inner join assessor.parcel_data_18c d
-      on d.parcelno = s.parcelno)
-  - drop view if exists assessor.parcels_accela_small
-  - >- 
-    create view assessor.parcels_accela_small as (
-    select
-      s.objectid,
-      d.ward,-- WARD
-      s.parcelno as parcelnumber, -- PARCELNUMBER
-      d.district,   -- DISTRICT
-      d.ecf,    -- ECF
-      d.propaddr as propaddress,    -- PROPADDRESS
-      d.propno::integer as "number",    -- NUMBER
-      d.propdir as dir,   -- DIR
-      d.propstr as street, -- STREET
-      a.propzip as zipcode,   -- ZIPCODE
-      a.ownername1 as taxpayername1,    -- TAXPAYERNAME1
-      a.ownername2 as taxpayername2,   -- TAXPAYERNAME2
-      a.ownerstreetaddr as taxpayeraddress,   -- TAYPAYERADDRESS
-      a.ownercity as taxpayercity ,  -- CITY
-      a.ownerstate as taxpayerstate,   -- STATE
-      a.ownerzip as taxpayerzip,    -- ZIPCODE
-      d."propclass" as "class",  -- CLASS
-      d.prevpclass as previous,   -- PREVIOUS
-      'Active' as status,   -- STATUS
-      d.taxstatus as taxablestatus,    -- TAXABLESTATUS
-      d.totalsqft::integer as sqft,    -- SQ. Ft.
-      d.totalacreage as acreage,    -- ACREAGE
-      d.frontage::integer as frontage,   -- FRONTAGE
-      d."depth"::integer as "depth",  -- DEPTH
-      d.usecode as usecode,    -- USECODE
-      d.pre::integer as homestead,    -- HOMESTEADE
-      d.nez,   -- NEZ
-      a."xStreetName_0" as xstreetname1,   -- XSTREETNAME1
-      a."xStreetName_1" as xstreetname2,    -- XSTREETNAME2
-      a.relatedpnum as relatedparcel,    -- RELATEDPARCEL
-      a.cib_floorarea as cifloorarea,    -- CIFLOORAREA
-      a.cib_numcib as cibuildingno,    -- CIBUILDINGNO
-      a.cib_occ as cioccupancy,    -- CIOCCUPANCY
-      a.cib_yearbuilt as ciyearbuilt,  -- CIYEARBUILT
-      a.resb_floorarea as resfloorarea,   -- RESFLOORAREA
-      a.resb_numresb as resbuildingno,   -- RESBUILDINGNO
-      a.resb_occ as resoccupancty,   -- RESOCCUPANCY
-      a.resb_style as resbuildingstyle,   -- RESBUILDINGSTYLE
-      a.resb_yearbuilt as resyearbuilt,   -- RESYEARBUILT
-      a.vacant,    -- VACANT
-      a."lastSalePrice" as lastsaleamount,   -- LASTSALEAMOUNT
-      a."lastSaleDate" as lastsaledate,   -- LASTSALEDATE
-      d.av::integer as assessedvalue,   -- ASSESSEDVALUE
-      d.prevav::integer as prevassessvalue,    -- PREVASSESSVALUE
-      d.sev::integer,   -- SEV
-      d.prevav::integer as prevsev,    -- PREVSEV
-      d.tv::integer as taxablevalue,   -- TAXABLEVALUE
-      d.prevtv::integer as prevtaxablevalue,    -- PREVTAXABLEVALUE
-      d.landvalue::integer as landvalue,    -- LANDVALUE
-      d.landmap,   -- LANDMAP
-      d.aka as akaaddress,   -- AKAADDRESS
-      d.subdivision,    -- SUBDIVISION
-      a.lot as lotnumber,   -- LOTNUMBER
-      d.legaldesc as legaldescription,    -- LEGALDESCRIPTION
-      d.rp,  -- RP
-      s.shape as geom
-    from assessor.parcels_102717 s
-      inner join assessor.parcelmaster a
-      on a.pnum = s.parcelno
-      inner join assessor.parcel_data_18c d
-      on d.parcelno = s.parcelno order by random() limit 50)
-    
+- type: sql
+  statements:
+    - drop view if exists assessor.parcels_accela;
+    - >- 
+      create view assessor.parcels_accela as (
+      select
+        s.objectid,
+        d.ward,-- WARD
+        s.parcelno as parcelnumber, -- PARCELNUMBER
+        d.district,   -- DISTRICT
+        d.ecf,    -- ECF
+        d.propaddr as propaddress,    -- PROPADDRESS
+        d.propno::integer as "number",    -- NUMBER
+        d.propdir as dir,   -- DIR
+        d.propstr as street, -- STREET
+        a.propzip as zipcode,   -- ZIPCODE
+        a.ownername1 as taxpayername1,    -- TAXPAYERNAME1
+        a.ownername2 as taxpayername2,   -- TAXPAYERNAME2
+        a.ownerstreetaddr as taxpayeraddress,   -- TAYPAYERADDRESS
+        a.ownercity as taxpayercity ,  -- CITY
+        a.ownerstate as taxpayerstate,   -- STATE
+        a.ownerzip as taxpayerzip,    -- ZIPCODE
+        d."propclass" as "class",  -- CLASS
+        d.prevpclass as previous,   -- PREVIOUS
+        'Active' as status,   -- STATUS
+        d.taxstatus as taxablestatus,    -- TAXABLESTATUS
+        d.totalsqft::integer as sqft,    -- SQ. Ft.
+        d.totalacreage as acreage,    -- ACREAGE
+        d.frontage::integer as frontage,   -- FRONTAGE
+        d."depth"::integer as "depth",  -- DEPTH
+        d.usecode as usecode,    -- USECODE
+        d.pre::integer as homestead,    -- HOMESTEADE
+        d.nez,   -- NEZ
+        a."xStreetName_0" as xstreetname1,   -- XSTREETNAME1
+        a."xStreetName_1" as xstreetname2,    -- XSTREETNAME2
+        a.relatedpnum as relatedparcel,    -- RELATEDPARCEL
+        a.cib_floorarea as cifloorarea,    -- CIFLOORAREA
+        a.cib_numcib as cibuildingno,    -- CIBUILDINGNO
+        a.cib_occ as cioccupancy,    -- CIOCCUPANCY
+        a.cib_yearbuilt as ciyearbuilt,  -- CIYEARBUILT
+        a.resb_floorarea as resfloorarea,   -- RESFLOORAREA
+        a.resb_numresb as resbuildingno,   -- RESBUILDINGNO
+        a.resb_occ as resoccupancty,   -- RESOCCUPANCY
+        a.resb_style as resbuildingstyle,   -- RESBUILDINGSTYLE
+        a.resb_yearbuilt as resyearbuilt,   -- RESYEARBUILT
+        a.vacant,    -- VACANT
+        a."lastSalePrice" as lastsaleamount,   -- LASTSALEAMOUNT
+        a."lastSaleDate" as lastsaledate,   -- LASTSALEDATE
+        d.av::integer as assessedvalue,   -- ASSESSEDVALUE
+        d.prevav::integer as prevassessvalue,    -- PREVASSESSVALUE
+        d.sev::integer,   -- SEV
+        d.prevav::integer as prevsev,    -- PREVSEV
+        d.tv::integer as taxablevalue,   -- TAXABLEVALUE
+        d.prevtv::integer as prevtaxablevalue,    -- PREVTAXABLEVALUE
+        d.landvalue::integer as landvalue,    -- LANDVALUE
+        d.landmap,   -- LANDMAP
+        d.aka as akaaddress,   -- AKAADDRESS
+        d.subdivision,    -- SUBDIVISION
+        a.lot as lotnumber,   -- LOTNUMBER
+        d.legaldesc as legaldescription,    -- LEGALDESCRIPTION
+        d.rp,  -- RP
+        s.shape as geom
+      from assessor.parcels_102717 s
+        inner join assessor.parcelmaster a
+        on a.pnum = s.parcelno
+        inner join assessor.parcel_data_18c d
+        on d.parcelno = s.parcelno
+       )
+    - drop view if exists assessor.open_data_parcels;
+    - >- 
+      create view assessor.open_data_parcels as (
+      select
+        s.objectid,
+        d.ward,-- WARD
+        s.parcelno as parcelnumber, -- PARCELNUMBER
+        d.district,   -- DISTRICT
+        d.ecf,    -- ECF
+        d.propaddr as propaddress,    -- PROPADDRESS
+        d.propno::integer as "number",    -- NUMBER
+        d.propdir as dir,   -- DIR
+        d.propstr as street, -- STREET
+        a.propzip as zipcode,   -- ZIPCODE
+        a.ownername1 as taxpayername1,    -- TAXPAYERNAME1
+        a.ownername2 as taxpayername2,   -- TAXPAYERNAME2
+        a.ownerstreetaddr as taxpayeraddress,   -- TAYPAYERADDRESS
+        a.ownercity as taxpayercity ,  -- CITY
+        a.ownerstate as taxpayerstate,   -- STATE
+        a.ownerzip as taxpayerzip,    -- ZIPCODE
+        d."propclass" as "class",  -- CLASS
+        d.prevpclass as previous,   -- PREVIOUS
+        'Active' as status,   -- STATUS
+        d.taxstatus as taxablestatus,    -- TAXABLESTATUS
+        d.totalsqft::integer as sqft,    -- SQ. Ft.
+        d.totalacreage as acreage,    -- ACREAGE
+        d.frontage::integer as frontage,   -- FRONTAGE
+        d."depth"::integer as "depth",  -- DEPTH
+        d.usecode as usecode,    -- USECODE
+        d.pre::integer as homestead,    -- HOMESTEADE
+        d.nez,   -- NEZ
+        a."xStreetName_0" as xstreetname1,   -- XSTREETNAME1
+        a."xStreetName_1" as xstreetname2,    -- XSTREETNAME2
+        a.relatedpnum as relatedparcel,    -- RELATEDPARCEL
+        a.cib_floorarea as cifloorarea,    -- CIFLOORAREA
+        a.cib_numcib as cibuildingno,    -- CIBUILDINGNO
+        a.cib_occ as cioccupancy,    -- CIOCCUPANCY
+        a.cib_yearbuilt as ciyearbuilt,  -- CIYEARBUILT
+        a.resb_floorarea as resfloorarea,   -- RESFLOORAREA
+        a.resb_numresb as resbuildingno,   -- RESBUILDINGNO
+        a.resb_occ as resoccupancty,   -- RESOCCUPANCY
+        a.resb_style as resbuildingstyle,   -- RESBUILDINGSTYLE
+        a.resb_yearbuilt as resyearbuilt,   -- RESYEARBUILT
+        a.vacant,    -- VACANT
+        a."lastSalePrice" as lastsaleamount,   -- LASTSALEAMOUNT
+        a."lastSaleDate" as lastsaledate,   -- LASTSALEDATE
+        d.av::integer as assessedvalue,   -- ASSESSEDVALUE
+        d.prevav::integer as prevassessvalue,    -- PREVASSESSVALUE
+        d.sev::integer,   -- SEV
+        d.prevav::integer as prevsev,    -- PREVSEV
+        d.tv::integer as taxablevalue,   -- TAXABLEVALUE
+        d.prevtv::integer as prevtaxablevalue,    -- PREVTAXABLEVALUE
+        d.landvalue::integer as landvalue,    -- LANDVALUE
+        d.landmap,   -- LANDMAP
+        d.aka as akaaddress,   -- AKAADDRESS
+        d.subdivision,    -- SUBDIVISION
+        a.lot as lotnumber,   -- LOTNUMBER
+        d.legaldesc as legaldescription,    -- LEGALDESCRIPTION
+        d.rp,  -- RP
+        z.zoning_rev as zoning_code,
+        s.shape as geom
+      from assessor.parcels_102717 s
+        inner join assessor.parcelmaster a
+        on a.pnum = s.parcelno
+        inner join assessor.parcel_data_18c d
+        on d.parcelno = s.parcelno
+        inner join assessor.zoning z
+        on s.parcelno = z.parcelno
+       )

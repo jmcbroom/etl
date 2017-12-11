@@ -195,17 +195,14 @@
                 when demo_planned_knock_down_date is null 
                 then socrata_projected_knocked_by_date 
                 else demo_planned_knock_down_date 
-            end as demo_planned_knock_down_date,
-            socrata_projected_knocked_by_date,
-            case when socrata_reported_price = 'NaN' then null else socrata_reported_price end,
+            end as demolish_by_date,
+            case when socrata_reported_price = 'NaN' then null else socrata_reported_price end as price,
             parcel_id,
-            demo_contractor_text_only,
-            acct_latitude,
-            acct_longitude,
+            demo_contractor_text_only as contractor_name,
+            acct_latitude as latitude,
+            acct_longitude as longitude,
             council_district,
-            non_hhf_commercial_demo,
-            socrata_price_type,
-            demo_ntp_date,
+            non_hhf_commercial_demo as commercial_building, 
             neighborhood,
             case when acct_latitude is null then null else
                 concat(
@@ -221,35 +218,6 @@
                 and socrata_reported_price > 0
                 and demo_contractor_text_only <> ''
                 and status = 'Demo Contracted' )
-    # completed demos
-    - drop view if exists dlba.completed_demos_socrata
-    - create view dlba.completed_demos_socrata as
-        ( select
-            address,
-            parcel_id,
-            demo_contractor_text_only as contractor_name,
-            case when socrata_reported_price = 'NaN' then null else socrata_reported_price end as price,
-            case when demo_knock_down_date is null then null else
-                replace(to_char(demo_knock_down_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
-            end as demolition_date,
-            non_hhf_commercial_demo as commercial,
-            council_district,
-            neighborhood,
-            acct_latitude as latitude,
-            acct_longitude as longitude,
-                        case when acct_latitude is null then null else
-                concat(
-                    'location (',
-                    acct_latitude,
-                    ',',
-                    acct_longitude,
-                    ')'
-                )
-            end as location
-        from dlba.case
-        where demo_knock_down_date::timestamp >= date '2014-01-01'
-            and socrata_reported_price > 0
-            and demo_contractor_text_only <> '' )
     # asbestos mdeq report
     - drop view if exists dlba.asbestos_socrata
     - create view dlba.asbestos_socrata as ( select
@@ -322,12 +290,12 @@
         parcel_id,
         demo_contractor_text_only as contractor_name,
         socrata_reported_price as price,
-        demo_knock_down_date,
-        non_hhf_commercial_demo,
+        demo_knock_down_date as demolition_date,
+        non_hhf_commercial_demo as commercial,
         council_district,
         neighborhood,
-        property_latitude,
-        property_longitude,
+        property_latitude as latitude,
+        property_longitude as longitude,
         case when property_latitude is null then null else
             concat(
                 'location (',
@@ -339,8 +307,8 @@
         end as location
         from dlba.case
         where demo_knock_down_date::timestamp >= date '2014-01-01'
-        and socrata_reported_price > 0
-        and demo_contractor_text_only != '')
+            and socrata_reported_price > 0
+            and demo_contractor_text_only != '')
     # demo pipeline
     - drop view if exists dlba.demo_pipeline_socrata
     - create view dlba.demo_pipeline_socrata as (

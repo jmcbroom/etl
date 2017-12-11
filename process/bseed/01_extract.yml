@@ -8,11 +8,20 @@
     prefix: tm
     source: CASEMAIN
     destination: bseed.tm_casemain
+    where: >-
+        (date '1980-01-01' < CSM_EXPR_DATE and CSM_EXPR_DATE < date '2025-01-01')
+        and
+        (date '1980-01-01' < CSM_FINALED_DATE and CSM_FINALED_DATE < date '2025-01-01')
+        and
+        (date '1980-01-01' < CSM_ISSUED_DATE and CSM_ISSUED_DATE < date '2025-01-01')
+        and
+        (date '1980-01-01' < CSM_RECD_DATE and CSM_RECD_DATE < date '2025-01-01')
 - database:
     type: oracle
     prefix: tm
     source: BG_ANN_ADD_ACT
     destination: bseed.tm_inspections
+    where: (date '1980-01-01' < ACTION_DATE and ACTION_DATE < date '2025-01-01')
 - database:
     type: oracle
     prefix: tm

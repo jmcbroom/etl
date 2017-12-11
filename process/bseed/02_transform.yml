@@ -1,7 +1,7 @@
 # Annual Inspections
 - type: sql
   statements:
-      - drop table if exists bseed.annual_inspections
+      - drop table if exists bseed.annual_inspections cascade
       - create table bseed.annual_inspections as (
             select
             i.action_date, 
@@ -66,7 +66,7 @@
                 concat('location(', ST_Y(pn.parcel_centroid), ',', ST_X(pn.parcel_centroid), ')')
             end as site_location,
             lot_number,
-            subdivision,
+            subdevision as subdivision,
             case_type,
             case_description,
             legal_use,
@@ -108,7 +108,7 @@
             from bseed.bldg_permits
             inner join bseed.pnum_lookup pn on parcel_no = pn.dirty )
  
-# Dismantle Permits
+# # Dismantle Permits
 - type: sql
   statements:
       - drop view if exists bseed.dismantle_permits_socrata cascade
@@ -150,7 +150,7 @@
             where ca.csa_date3 > Date '2014-01-01'
             and ca.action_description in ('Final Grade Inspection', 'Open Hole Inspection ', 'Winter Grade Inspection'))
 
-# Trades Permits
+# # Trades Permits
 - type: sql
   statements: 
    - create table bseed.trade_permits as (

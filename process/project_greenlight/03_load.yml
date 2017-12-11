@@ -1,4 +1,4 @@
-arcgis-online:
+- to: ArcGIS Online
   id: b827c82731294708b500f7c10b3240b1
   file: project_greenlight.json
   table: police.greenlight_arcgis
@@ -8,7 +8,7 @@ arcgis-online:
     - police
     - opendata
     - greenlight
-socrata:
+- to: Socrata
   columns:
     Address:
       field: address
