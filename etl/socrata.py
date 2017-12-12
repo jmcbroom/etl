@@ -43,7 +43,7 @@ class Socrata(object):
         print(len(payload))
         pprint(payload[0])
         if self.id == None:
-            self.id = self.create_dataset
+            self.id = self.create_dataset()
             job = soda_connection.replace( self.id, payload )
         if self.config['method'] == 'replace':
             job = soda_connection.replace( self.id, payload )
