@@ -107,32 +107,34 @@ class Process(object):
         look = LookupValues(s['table'], s['lookup_field'], s['file'], s['match_field'], s['method'], s['set_flag'])
         look.lookup()
 
-  def load(self):
+  def load(self, dataset=None):
     for d in self.l:
-      destination = d.pop('to', None)
-      if destination == 'Socrata':
-        from .socrata import Socrata
-        s = Socrata(d)
-        s.update()
-        # if self.msg:
-        #   self.msg.react('dart')
-        # self.msg.comment('Updated Socrata')
 
-      elif destination == 'ArcGIS Online':
-        from .arcgis import AgoLayer
-        l = AgoLayer(d)
-        l.publish()
-        # if self.msg:
-        #   self.msg.react('globe_with_meridians')
-        # self.msg.comment('Updated ArcGIS Online')
+      # if we specified a name, filter based on that
+      if dataset == None or (dataset and d['name'] == dataset):
 
-      elif destination == 'Mapbox':
-        pass
+        # switch on destination
+        destination = d.pop('to', None)
+        if destination == 'Socrata':
+          from .socrata import Socrata
+          s = Socrata(d)
+          s.update()
 
-      else:
-        print("I don't know this destination type: {}".format(destination))
+        elif destination == 'ArcGIS Online':
+          from .arcgis import AgoLayer
+          l = AgoLayer(d)
+          l.publish()
 
-  def update(self):
+        elif destination == 'Mapbox':
+          pass
+
+        else:
+          print("I don't know this destination type: {}".format(destination))
+
+  def update(self, dataset=None):
     self.extract()
     self.transform()
-    self.load()
+    if dataset:
+      self.load(dataset=dataset)
+    else:
+      self.load()
