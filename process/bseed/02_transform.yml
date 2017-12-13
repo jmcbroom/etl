@@ -23,7 +23,7 @@
   statements:
       - create view bseed.annual_inspections_socrata as (select 
             address,
-            concat(replace(action_date, ' ', 'T'), 'Z') as action_date,
+            replace(action_date, ' ', 'T') as action_date,
             action_description,
             result,
             case_number,
