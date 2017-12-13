@@ -264,9 +264,9 @@
             end as demo_asb_post_abatement_approval_date,
             c.asb_document_url,
             c.asb_post_abatement_document_url,
-            c.property_longitude,
-            c.property_latitude,
-            c.property_zip_code,
+            c.property_longitude as longitude,
+            c.property_latitude as latitude,
+            c.property_zip_code as zip_code,
             case when c.property_latitude is null then null else
                 concat(
                     'location (',
