@@ -1,5 +1,24 @@
 - database:
     type: sql-server
+    source: Sales
+    destination: assessor.sales
+    prefix: assess
+    columns:
+        - id
+        - pnum
+        - salenum
+        - saledate
+        - saleprice
+        - terms
+        - instr
+        - grantor
+        - grantee
+        - propclass
+        - liberpage
+        - verifiedby
+        - addresscombined
+- database:
+    type: sql-server
     source: ParcelMaster
     destination: assessor.parcelmaster
     prefix: assess
@@ -68,34 +87,11 @@
         - relatedpnum
         - r_or_p
         - exempt
-        # - ass_marked_parcel
-        # - packedParcelNumber
-        # - delivery_point_code
-        # - correction_code
-        # - carrier_route
         - lot
         - block
         - sub
         - landMap
         - zoning
-        # - extraZoning_0
-        # - extraZoning_1
-        # - extraZoning_2
-        # - extraZoning_3
-        # - apptDate
-        # - apptTime
-        # - apptWith
-        # - apptRegards
-        # - parentparcel_0
-        # - parentparcel_1
-        # - parentparcel_2
-        # - parentparcel_3
-        # - parentparcel_4
-        # - parentacreage
-        # - courtesysplit
-        # - splitpending
-        # - createdDate
-        # - splitNum
         - lastSaleDate
         - lastSalePrice
         - esttcv
