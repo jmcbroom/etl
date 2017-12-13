@@ -44,10 +44,10 @@ class Socrata(object):
         pprint(payload[0])
         if self.id == None:
             self.id = self.create_dataset()
-            job = soda_connection.replace( self.id, payload )
+            
         if self.config['method'] == 'replace':
             job = soda_connection.replace( self.id, payload )
-            return job
+            return job  
         elif self.config['method'] == 'upsert':
             for i in range(0, len(payload), 20000):
                 try:
