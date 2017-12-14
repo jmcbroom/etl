@@ -45,3 +45,8 @@
             )
         END as location 
         from crimescape.rms_update)
+
+# Copy the data to a csv
+- type: sql
+  statements:
+  - copy ( select * from crimescape.rms_sftp ) to '/tmp/rms.csv' delimiter ',' csv header
