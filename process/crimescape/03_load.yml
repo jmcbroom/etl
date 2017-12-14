@@ -1,0 +1,3 @@
+- to: SFTP
+  host: crimescape
+  file: /tmp/rms.csv
