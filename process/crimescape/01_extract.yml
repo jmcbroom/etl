@@ -1,0 +1,5 @@
+- database:
+    type: sql-server
+    prefix: rms
+    source: vwRMS_Portal
+    destination: crimescape.rms_update

@@ -1,3 +1,4 @@
+# Initial address string clean up
 - type: sql
   statements:
     - alter table pubsafe.cad_update add column if not exists is_anon boolean
@@ -19,6 +20,8 @@
     - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'WARR$', ''))
     - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'APT[\s#A-Za-z0-9]+$', ''))
     - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, '[\s]{2,}', ''))
+
+# Assign street addresses for known places; these will get fuzzed
 - type: lookup
   table: pubsafe.cad_update
   lookup_field: incident_address
@@ -26,6 +29,8 @@
   match_field: geoc_address
   method: match
   set_flag: false
+
+# Keep acceptable place names, eg 'Gullen Mall'; these will not get fuzzed
 - type: lookup
   table: pubsafe.cad_update
   lookup_field: incident_address
@@ -33,6 +38,8 @@
   match_field: anon_return
   method: match
   set_flag: true
+
+# Redact crime details misentered as an address; these will not get fuzzed
 - type: lookup
   table: pubsafe.cad_update
   lookup_field: incident_address
@@ -41,7 +48,7 @@
   method: contains
   set_flag: true
 
-# Add geometry here
+# Add geometry
 - type: sql
   statements:
     - select AddGeometryColumn('pubsafe', 'cad_update', 'geom', 2898, 'POINT', 2)
@@ -69,6 +76,7 @@
   table: pubsafe.cad_update
   against: base.centerline
 
+# Create view
 - type: sql
   statements:
     - update pubsafe.cad_update set incident_address = 'Location Redacted' where is_anon = 'f'
@@ -118,4 +126,3 @@
               ) 
           END as location from pubsafe.cad
       )
-
