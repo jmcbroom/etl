@@ -14,8 +14,9 @@ def rename_cols(df):
 class Sftp(object):
   """Connect to an SFTP server and retrieve a file."""
 
-  def __init__(self, host='moveit'):
+  def __init__(self, host='moveit', file='/tmp/sample.csv'):
     self.host = host
+    self.file = file
 
     if self.host == 'novatus':
       cnopts = pysftp.CnOpts()
@@ -61,7 +62,7 @@ class Sftp(object):
       with pysftp.Connection(env['CRIMESCAPE_HOST'], username=env['CRIMESCAPE_USER'], private_key=env['CRIMESCAPE_KEY']) as sftp:
         print('connected to {}'.format(env['CRIMESCAPE_HOST']))
 
-        sftp.put('/tmp/rms.csv', preserve_mtime=True)
+        sftp.put(self.file, preserve_mtime=True)
 
     else:
       pass

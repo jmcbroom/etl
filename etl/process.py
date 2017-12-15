@@ -127,7 +127,7 @@ class Process(object):
 
         elif destination == 'SFTP':
           from .sftp import Sftp
-          s = Sftp(d['host'])
+          s = Sftp(d['host'], d['file'])
 
         elif destination == 'Mapbox':
           pass

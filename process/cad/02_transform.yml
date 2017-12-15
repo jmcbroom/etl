@@ -55,7 +55,7 @@
     - create index etl_cad_update_geom_idx on pubsafe.cad_update using gist(geom)
     - update pubsafe.cad_update set geom = st_setsrid(st_makepoint(geox, geoy), 2898) where geox > 0 and geoy > 0
 
-# Stamp with District/Neighborhood/Block/ZipCode
+# Stamp with District/Neighborhood/Block
 - type: sql
   statements:
     - alter table pubsafe.cad_update add column block_id varchar(50);
