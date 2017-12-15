@@ -57,9 +57,14 @@ class Sftp(object):
           print('No file named {} found.'.format(file_name))
           pass
 
-      elif self.host == 'crimescape':
-        print('here')
-        pass
+    elif self.host == 'crimescape':
+      with pysftp.Connection(env['CRIMESCAPE_HOST'], username=env['CRIMESCAPE_USER'], private_key=env['CRIMESCAPE_KEY']) as sftp:
+        print('connected to {}'.format(env['CRIMESCAPE_HOST']))
+
+        sftp.put('/tmp/rms.csv', preserve_mtime=True)
+
+    else:
+      pass
     
   def to_postgres(self):
     df_to_pg(self.df, 'ocp', 'purchase_agreements')
