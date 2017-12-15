@@ -63,6 +63,7 @@ class Sftp(object):
         print('connected to {}'.format(env['CRIMESCAPE_HOST']))
 
         sftp.put(self.file, preserve_mtime=True)
+        print('put {} on sftp'.format(self.file))
 
     else:
       pass

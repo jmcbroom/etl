@@ -8,5 +8,3 @@
     prefix: cad
     source: vw_DP_CAD
     destination: crimescape.cad_update
-    where: >-
-        ( CallDateDate >= date '2016-09-20' )

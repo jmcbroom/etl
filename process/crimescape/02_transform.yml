@@ -55,7 +55,7 @@
 - type: sql
   statements:
     - alter table crimescape.cad_update add column if not exists is_anon boolean
-    - update crimescape.cad_update set is_anon = 'f
+    - update crimescape.cad_update set is_anon = 'f'
 
 # CAD: Assign street addresses for known places; these will get fuzzed
 - type: lookup
@@ -115,7 +115,9 @@
                 ST_X(ST_Transform(geom, 4326)), 
                 ')'
               ) 
-          END as location from crimescape.cad
+          END as location 
+          from crimescape.cad_update
+          where "CallDateDate" >= date '2016-09-20'
       )
 
 # CAD: Copy the data to a csv
