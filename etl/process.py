@@ -125,6 +125,10 @@ class Process(object):
           l = AgoLayer(d)
           l.publish()
 
+        elif destination == 'SFTP':
+          from .sftp import Sftp
+          s = Sftp(params['host'])
+
         elif destination == 'Mapbox':
           pass
 

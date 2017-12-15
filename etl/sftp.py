@@ -44,7 +44,7 @@ class Sftp(object):
       with pysftp.Connection(env['MOVEIT_HOST'], port=22, username=env['MOVEIT_USER'], password=env['MOVEIT_PASS'], cnopts=cnopts) as sftp:
         print('connected to {}'.format(env['MOVEIT_HOST']))
 
-        file_name = 'purchase_agreements_open_data_test.csv'
+        file_name = 'purchase_agreements_open_data.csv'
         path = '/Home/IET/PO/' + file_name
           
         if sftp.isfile(path):
@@ -56,6 +56,10 @@ class Sftp(object):
         else:
           print('No file named {} found.'.format(file_name))
           pass
+
+      elif self.host == 'crimescape':
+        print('here')
+        pass
     
   def to_postgres(self):
     df_to_pg(self.df, 'ocp', 'purchase_agreements')
