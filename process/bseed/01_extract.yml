@@ -19,6 +19,11 @@
 - database:
     type: oracle
     prefix: tm
+    source: CASE_ADDRESS
+    destination: bseed.tm_caseaddress
+- database:
+    type: oracle
+    prefix: tm
     source: BG_ANN_ADD_ACT
     destination: bseed.tm_inspections
     where: ((date '1980-01-01' < ACTION_DATE and ACTION_DATE < date '2025-01-01') or ACTION_DATE is null)
