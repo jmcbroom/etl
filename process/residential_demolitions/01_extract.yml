@@ -1,9 +1,0 @@
-- salesforce:
-    object: Case
-    fields:
-      - Id
-      - Address__c
-- salesforce:
-    object: Account
-    fields:
-      - Id
