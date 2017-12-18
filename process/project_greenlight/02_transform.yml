@@ -1,17 +1,17 @@
 - type: sql
   statements:
-    - delete from police.greenlight where status is null;
-    - delete from police.greenlight where status in ('Red', 'Yellow');
+    - delete from pubsafe.greenlight where status is null;
+    - delete from pubsafe.greenlight where status in ('Red', 'Yellow');
+
 - type: geocode
-  table: police.greenlight
+  table: pubsafe.greenlight
   add_col: address
   geom_col: geom
+
 - type: sql
   statements:
-    - drop view if exists police.greenlight_socrata;
-    - >- 
-        create view
-        police.greenlight_socrata as
+    - drop view if exists pubsafe.greenlight_socrata;
+    - create view pubsafe.greenlight_socrata as
         ( select 
             address, 
             business_name, 
@@ -22,14 +22,12 @@
               ST_X(ST_Centroid(geom)),
               ')'
             ) as location
-          from police.greenlight where trim(status) = 'Green' )
-    - drop view if exists police.greenlight_arcgis;
-    - >- 
-        create view
-        police.greenlight_arcgis as
+          from pubsafe.greenlight where trim(status) = 'Green' )
+    - drop view if exists pubsafe.greenlight_arcgis;
+    - create view pubsafe.greenlight_arcgis as
         ( select 
             address, 
             business_name, 
             geom
-          from police.greenlight where trim(status) = 'Green' and geom is not null)
+          from pubsafe.greenlight where trim(status) = 'Green' and geom is not null )
     

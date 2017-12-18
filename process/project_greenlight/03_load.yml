@@ -1,7 +1,7 @@
 - to: ArcGIS Online
   id: b827c82731294708b500f7c10b3240b1
   file: project_greenlight.json
-  table: police.greenlight_arcgis
+  table: pubsafe.greenlight_arcgis
   title: Project Greenlight Locations
   description:
   tags:
@@ -21,5 +21,5 @@
       type: location
   id: vrh6-6pvj
   name: Project Greenlight Locations
-  table: police.greenlight_socrata
+  table: pubsafe.greenlight_socrata
   method: replace
