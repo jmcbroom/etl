@@ -1,0 +1,127 @@
+- to: Socrata
+  id: ti6p-wcg4
+  name: Blight Violations
+  table: dah.
+  method: 
+  row_identifier:
+  columns:
+    Ticket ID:
+      field: ticket_id
+      type: number
+    Ticket Number:
+      field: ticket_number
+      type: text
+    Agency Name:
+      field: agency_name
+      type: text
+    Inspector Name:
+      field: inspector_name
+      type: text
+    Violator Name:
+      field: violator_name
+      type: text
+    Violator ID:
+      field: violator_id
+      type: number
+    Violation Street Number:
+      field: violation_street_number
+      type: text
+    Violation Street Name:
+      field: violation_street_name
+      type: text
+    Violation Zip Code:
+      field: violation_zip_code
+      type: text
+    Mailing Address Street Number:
+      field: mailing_addr_str_number
+      type: text
+    Mailing Address Street Name:
+      field: mailing_addr_str_name
+      type: text
+    Mailing Address City:
+      field: city
+      type: text
+    Mailing Address State:
+      field: state
+      type: text
+    Mailing Address Zip Code:
+      field: zip_code
+      type: text
+    Mailing Address Non-USA Code:
+      field: non_us_str_code
+      type: text
+    Mailing Address Country:
+      field: country
+      type: text
+    Violation Date:
+      field: violation_date
+      type: calendar_date
+    Ticket Issued Time:
+      field: ticket_issued_time
+      type: text
+    Hearing Date:
+      field: hearing_date
+      type: calendar_date
+    Hearing Time:
+      field: hearing_time
+      type: text
+    Violation Code: 
+      field: violation_code
+      type: text
+    Violation Description:
+      field: violation_description
+      type: text
+    Disposition:
+      field: disposition
+      type: text
+    Fine Amount:
+      field: fine_amount
+      type: money
+    Admin Fee:
+      field: admin_fee
+      type: money
+    State Fee:
+      field: state_fee
+      type: money
+    Late Fee:
+      field: late_fee
+      type: money
+    Discount Amount:
+      field: discount_amount
+      type: money
+    Clean Up Cost:
+      field: clean_up_cost
+      type: money
+    Judgment Amount (Total Due):
+      field: judgment_amount
+      type: money
+    Payment Amount (Sum of All Payments):
+      field: payment_amount
+      type: money
+    Balance Due:
+      field: balance_due
+      type: money
+    Payment Date (Most Recent):
+      field: payment_date
+      type: calendar_date
+    Payment Status:
+      field: payment_status
+      type: text
+    Collection Status:
+      field: collection_status
+      type: text
+    Violation Address:
+      field: violation_address
+      type: text
+    Violation Parcel ID:
+      field: parcelno
+      type: text
+    Violation Latitude:
+      field: latitude
+      type: number
+    Violation Longitude: 
+      field: longitude
+      type: number
+    Violation Location:
+      field: location
+      type: location
