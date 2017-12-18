@@ -40,6 +40,7 @@
         from pubsafe.rms r
         where r.dpdcrimeid = u.dpdcrimeid
         and u.dpdcrimeid in (select dpdcrimeid from pubsafe.rms)
+    - create index if not exists rms_update_address_idx on pubsafe.rms_update using btree(address)
 
 # Fuzz text location
 - type: anonymize_text_location
@@ -50,7 +51,7 @@
 - type: sql
   statements:
     - update pubsafe.rms_update set "Offense Description" = 'OPERATING UNDER THE INFLUENCE OF LIQUOR OR DRUGS' where "Offense Description" = 'OUIL'
-    - drop table if exists rms_old cascade
+    - drop table if exists pubsafe.rms_old cascade
     - alter table pubsafe.rms rename to rms_old
     - alter table pubsafe.rms_update rename to rms
     # Now we create 2 views off of "rms"
