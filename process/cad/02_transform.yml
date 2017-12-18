@@ -25,7 +25,7 @@
 - type: lookup
   table: pubsafe.cad_update
   lookup_field: incident_address
-  file: process/cad/misfits_lookup.csv
+  file: /home/gisteam/etl_pkg/process/cad/misfits_lookup.csv
   match_field: geoc_address
   method: match
   set_flag: false
@@ -34,7 +34,7 @@
 - type: lookup
   table: pubsafe.cad_update
   lookup_field: incident_address
-  file: process/cad/misfits_lookup.csv
+  file: /home/gisteam/etl_pkg/process/cad/misfits_lookup.csv
   match_field: anon_return
   method: match
   set_flag: true
@@ -43,7 +43,7 @@
 - type: lookup
   table: pubsafe.cad_update
   lookup_field: incident_address
-  file: process/cad/redacted_lookup.csv
+  file: /home/gisteam/etl_pkg/process/cad/redacted_lookup.csv
   match_field: new
   method: contains
   set_flag: true
