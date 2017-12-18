@@ -10,7 +10,7 @@ def get_table_as_df(query, connString):
   conn = engine.connect()
   df = pandas.read_sql(query, conn)
   print("{} rows fetched".format(len(df)))
-  # df.replace({u'\u0000': ''}, regex=True, inplace=True)
+  df.replace({u'\u0000': ''}, regex=True, inplace=True)
   return df
 
 def make_db_connection_string(dbType, envPrefix):

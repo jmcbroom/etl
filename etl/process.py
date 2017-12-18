@@ -1,7 +1,7 @@
 import os, yaml
 from .utils import connect_to_pg, add_geom_column, exec_psql_query, drop_table_if_exists
 
-DATA_DIR = './process'
+DATA_DIR = '/home/gisteam/etl_pkg/process'
 connection = connect_to_pg()
 
 class Process(object):
@@ -72,7 +72,7 @@ class Process(object):
         elif srctype == 'sftp':
           from .sftp import Sftp
           drop_table_if_exists(connection, params['destination'])
-          s = Sftp(params['host'])
+          s = Sftp(params['host'], params['destination'])
           s.to_postgres()
           
         else:

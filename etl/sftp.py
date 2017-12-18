@@ -1,4 +1,4 @@
-import pysftp, pandas, odo, os
+import pysftp, pandas, odo
 from os import environ as env
 from datetime import datetime
 from .utils import df_to_pg
@@ -14,8 +14,9 @@ def rename_cols(df):
 class Sftp(object):
   """Connect to an SFTP server and retrieve a file."""
 
-  def __init__(self, host='moveit', file='/tmp/sample.csv'):
+  def __init__(self, host='moveit', destination='ocp.contracts', file='/tmp/sample.csv'):
     self.host = host
+    self.destination = destination
     self.file = file
 
     if self.host == 'novatus':
@@ -69,5 +70,6 @@ class Sftp(object):
       pass
     
   def to_postgres(self):
-    df_to_pg(self.df, 'ocp', 'purchase_agreements')
-    print('sent to pg')
+    schema, table = self.destination.split('.')
+    df_to_pg(self.df, schema, table)
+    print('sent to postgres {}.{}'.format(schema, table))
