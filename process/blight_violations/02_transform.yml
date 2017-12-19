@@ -113,7 +113,7 @@
         "DiscAmt",
         # remediation cost
         (select sum("ServiceCost") from dah.blight_ticket_svc_cost bts where z."ZTicketID" = bts."ZTicketID" and bts."ServiceType" = 6)
-      from dah.ztickets z where z."VoidTicket" = 0; --order by random() limit 5000;
+      from dah.ztickets z where z."VoidTicket" = 0;
     # new fine amount
     - update dah.bvn j set fine_amount = z."NewFineAmt" from dah.ztickets z 
         where j.ticket_id = z."ZTicketID" and z."NewFineAmt" > 0;
