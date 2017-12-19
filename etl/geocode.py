@@ -12,10 +12,11 @@ geocoders = {
 }
 
 class GeocodeTable(object):
-  def __init__(self, table, addr_col='address', geom_col='geom', geocoder='composite'):
+  def __init__(self, table, addr_col='address', geom_col='geom', parcel_col=None, geocoder='composite'):
     self.table = table
     self.addr_col = addr_col
     self.geom_col = geom_col
+    self.parcel_col = parcel_col
     self.geocoder = geocoders[geocoder]
   
   def geocode_rows(self):
@@ -29,7 +30,19 @@ class GeocodeTable(object):
       results = geocoding.batch_geocode(rows_to_geocode, out_sr=4326, geocoder=self.geocoder)
       result_dict = dict(zip(rows_to_geocode, results))
       for add, res in result_dict.items():
-        if res['location']['x'] != 'NaN':
+        if res['attributes']['User_fld'] != "" and self.parcel_col:
+          query = "update {} set {} = ST_SetSRID(ST_MakePoint({}, {}), 4326), {} = '{}' where {} = '{}'".format(
+            self.table, 
+            self.geom_col,
+            res['location']['x'],
+            res['location']['y'],
+            self.parcel_col,
+            res['attributes']['User_fld'],
+            self.addr_col,
+            add.replace("'", "''")
+          )
+          conn.execute(query)
+        elif res['location']['x'] != 'NaN':
           query = "update {} set {} = ST_SetSRID(ST_MakePoint({}, {}), 4326) where {} = '{}'".format(
             self.table, 
             self.geom_col,
@@ -39,3 +52,5 @@ class GeocodeTable(object):
             add.replace("'", "''")
           )
           conn.execute(query)
+        else:
+          pass
