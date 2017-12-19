@@ -1,9 +1,9 @@
 - to: Socrata
   id: ti6p-wcg4
   name: Blight Violations
-  table: dah.
-  method: 
-  row_identifier:
+  table: dah.bvn_socrata
+  method: upsert
+  row_identifier: ticket_id
   columns:
     Ticket ID:
       field: ticket_id
