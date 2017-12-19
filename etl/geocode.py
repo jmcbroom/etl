@@ -1,6 +1,7 @@
 from arcgis import gis, geocoding
 from os import environ as env
 from .utils import connect_to_pg
+import sqlalchemy
 
 ago = gis.GIS("https://detroitmi.maps.arcgis.com", env['AGO_USER'], env['AGO_PASS'])
 
@@ -35,6 +36,6 @@ class GeocodeTable(object):
             res['location']['x'],
             res['location']['y'],
             self.addr_col,
-            add
+            add.replace("'", "''")
           )
           conn.execute(query)
