@@ -381,3 +381,50 @@
   table: bseed.trade_permits
   add_col: site_address
   geom_col: geom
+- type: sql
+  statements:
+    - drop view if exists bseed.trades_permits_socrata
+    - create view bseed.trades_permits_socrata as 
+        ( select uniq as unique_id, 
+                permit_no as permit_no,
+                replace(to_char(permit_issued::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') as permit_issued, 
+                replace(to_char(permit_expire::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') as permit_expire
+                replace(to_char(permit_completed::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') as permit_completed, 
+                permit_status as permit_status, 
+                site_address as site_address, 
+                between1 as between1, 
+                prc_lot as prc_lot, 
+                prc_subdiv as prc_subdiv, 
+                case_type as case_type, 
+                case_description as case_description, 
+                type_of_use as type_of_use, 
+                description as type_use_desc, 
+                type_of_work as permit_type, 
+                permit_description as permit_type_desc, 
+                fdicn_description as fdicn_description, 
+                fee_type as fee_type, 
+                CASE parcel_size 
+                  WHEN 'NaN' THEN null 
+                  ELSE parcel_size 
+                END as parcel_size, 
+                parcel_cluster_sector as parcel_cluster_sector, 
+                CASE parcel_floor_area 
+                  WHEN 'NaN' THEN null 
+                  ELSE parcel_floor_area 
+                END as parcel_floor_area, 
+                CASE parcel_ground_area 
+                  WHEN 'NaN' THEN null 
+                  ELSE parcel_ground_area 
+                END as parcel_ground_area, 
+                prc_aka_address as prc_aka_address, 
+                seq_no as seq_no, 
+                pcf_amt_due as pcf_amt_due, 
+                owner_name as owner_name, 
+                owner_address1 as owner_address, 
+                contractor_last_name as contractor_name, 
+                contractor_address1 as contractor_address, 
+                CASE   
+                  WHEN geom is null 
+                  THEN null   
+                ELSE concat('location (', ST_Y(geom), ',', ST_X(geom), ')') END as location 
+             from bseed.trade_permits )
