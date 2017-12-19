@@ -1,4 +1,4 @@
-import pysftp, pandas, odo
+import pysftp, pandas, odo, os
 from os import environ as env
 from datetime import datetime
 from .utils import df_to_pg

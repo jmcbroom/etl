@@ -46,35 +46,35 @@
           contract_contract_agreement_type
         from ocp.contracts 
           order by contract_nigp_code, contract_value asc )
-# - type: sql
-#   statements:
-#     # Purchase Agreements
-#     - drop view if exists ocp.purchase_agreements_socrata
-#     - alter table ocp.purchase_agreements add column link text 
-#     - update ocp.purchase_agreements set link = concat('http://dataresources.theneighborhoods.org/sites/dataresources.theneighborhoods.org/files/socrata/', agreement_number::text, '.pdf')
-#     - create view ocp.purchase_agreements_socrata as 
-#         ( select
-#           agreement_number,
-#           case 
-#             when agreement_limit = 'NaN'
-#             then null
-#             else agreement_limit
-#           end as agreement_limit,
-#           case 
-#             when cod_agency = 'NaN'
-#             then null
-#             else upper(cod_agency)
-#           end as cod_agency,
-#           upper(description) as description,
-#           agreement_status_description,
-#           upper(replace(rtrim(trim(supplier), '.'), ',', '')) as supplier,
-#           upper(city) as city,
-#           case 
-#             when state = 'Michigan'
-#             then 'MI'
-#             else state
-#           end as state,
-#           report_date as start_date,
-#           "report_date.1" as end_date,
-#           link
-#         from ocp.purchase_agreements )
+- type: sql
+  statements:
+    # Purchase Agreements
+    - drop view if exists ocp.purchase_agreements_socrata
+    - alter table ocp.purchase_agreements add column link text 
+    - update ocp.purchase_agreements set link = concat('http://dataresources.theneighborhoods.org/sites/dataresources.theneighborhoods.org/files/socrata/', agreement_number::text, '.pdf')
+    - create view ocp.purchase_agreements_socrata as 
+        ( select
+          agreement_number,
+          case 
+            when agreement_limit = 'NaN'
+            then null
+            else agreement_limit
+          end as agreement_limit,
+          case 
+            when cod_agency = 'NaN'
+            then null
+            else upper(cod_agency)
+          end as cod_agency,
+          upper(description) as description,
+          agreement_status_description,
+          upper(replace(rtrim(trim(supplier), '.'), ',', '')) as supplier,
+          upper(city) as city,
+          case 
+            when state = 'Michigan'
+            then 'MI'
+            else state
+          end as state,
+          report_date as start_date,
+          "report_date.1" as end_date,
+          link
+        from ocp.purchase_agreements )
