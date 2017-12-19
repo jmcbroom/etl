@@ -23,7 +23,7 @@
   statements:
       - create view bseed.annual_inspections_socrata as (select 
             address,
-            replace(action_date, ' ', 'T') as action_date,
+            replace(action_date::character varying, ' ', 'T') as action_date,
             action_description,
             result,
             case_number,
@@ -139,7 +139,7 @@
                   replace(to_char(ca.csa_date2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
             end as csa_date2,
             case when ca.csa_updated is null then null else
-                  replace(to_char(ca.csa_updated::timestap, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+                  replace(to_char(ca.csa_updated::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
             end as csa_updated,
             ca.csa_updated_by,
             ca.csa_assigned_to,
@@ -154,6 +154,7 @@
 # # Trades Permits
 - type: sql
   statements: 
+   - drop table if exists bseed.trade_permits
    - create table bseed.trade_permits as (
       select 
             permit_no,             
@@ -195,7 +196,7 @@
             owner_address1,       
             contractor_last_name,  
             contractor_address1 
-      from bseed_elevator union all
+      from bseed.tm_elevator union all
       select
             permit_no,             
             permit_applied,        
@@ -236,7 +237,7 @@
             owner_address1,       
             contractor_last_name,  
             contractor_address1
-      from bseed_plumbing union all
+      from bseed.tm_plumbing union all
       select
             permit_no,             
             permit_issued,        
@@ -277,7 +278,7 @@
             owner_address1,       
             contractor_last_name,  
             contractor_address1
-      from bseed_electrical union all
+      from bseed.tm_electrical union all
       select
             permit_no,             
             permit_issued,        
@@ -318,7 +319,7 @@
             owner_address1,       
             contractor_last_name,  
             contractor_address1
-      from bseed_boiler union all
+      from bseed.tm_boiler union all
       select
             permit_no,             
             permit_issued,        
@@ -359,22 +360,23 @@
             owner_address1,       
             contractor_last_name,  
             contractor_address1
-      from bseed_mechanical
+      from bseed.tm_mechanical
       );
    - update bseed.trade_permits tp 
       set parcel_no = pl.cleaned
-      from pnum_lookup pl
+      from bseed.pnum_lookup pl
       where tp.parcel_no = pl.dirty
-   - alter table bseed_trade_permits rename column elv_type_of_work to type_of_work;
-   - alter table bseed_trade_permits rename column elv_type_of_use to type_of_use;
-   - alter table bseed_trade_permits rename column elv_type_const_cod to type_const_cod;
-   - alter table bseed_trade_permits rename column elv_zoning_dist to zoning_dist;
-   - alter table bseed_trade_permits rename column elv_use_group to use_group;
-   - alter table bseed_trade_permits rename column elv_basement to basement;
-   - update bseed_trade_permits set 
+   - alter table bseed.trade_permits rename column elv_type_of_work to type_of_work;
+   - alter table bseed.trade_permits rename column elv_type_of_use to type_of_use;
+   - alter table bseed.trade_permits rename column elv_type_const_cod to type_const_cod;
+   - alter table bseed.trade_permits rename column elv_zoning_dist to zoning_dist;
+   - alter table bseed.trade_permits rename column elv_use_group to use_group;
+   - alter table bseed.trade_permits rename column elv_basement to basement;
+   - update bseed.trade_permits set 
       site_address = regexp_replace(site_address, '[\s]{2,}', ' '),
       owner_address1 = regexp_replace(owner_address1, '[\s]{2,}', ' '),
       contractor_address1 = regexp_replace(contractor_address1, '[\s]{2,}', ' ')
+   - create index bseed_trade_permits_idx on bseed.trade_permits using btree(site_address)
 - type: geocode
   table: bseed.trade_permits
   add_col: site_address
