@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='etl',
-      version='0.1',
+      version='1.0',
       description='manage ETL and data warehousing',
       url='http://github.com/CityOfDetroit/etl',
       author='Jessica McInchak, Jimmy McBroom',
