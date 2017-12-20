@@ -1,4 +1,3 @@
-import schedule
 import time
 import etl
 import arrow
@@ -18,30 +17,32 @@ def run(process, dataset=None, notify=False):
   except Exception as e:
     msg.comment("Error: *{}*\n > `{}`".format(process, e))
 
+# # daily run; these do not use schedule
+# run('dlba', dataset=None, notify=True)
+# run('assessor', dataset=None, notify=True)
+# run('medical_marijuana', dataset=None, notify=True)
+# run('cad', dataset=None, notify=True)
+# run('rms', dataset=None, notify=True)
+# run('bseed', dataset=None, notify=True)
+# run('ocp', dataset=None, notify=True)
+# run('blight_violations', dataset=None, notify=True)
 
 ## Scheduling datasets
-
 # Angel's Night fire data
-schedule.every(5).minutes.do(run, process='angels_night')
-# DLBA datasets (7 in total?)
-schedule.every().day.at("9:00").do(run, process='dlba', notify=True)
-# BSEED - just permits for now
-schedule.every().day.at("9:15").do(run, process='bseed', dataset="Building Permits", notify=True)
-# CAD
-schedule.every().day.at.("2:00").do(run, process='cad', notify=True)
+# schedule.every(5).minutes.do(run, process='angels_night')
 
-# infinite loop
-while True:
-  # if it's the next day
-  if arrow.now().format('dddd, MMMM Do') != this_day:
-    # reset this_day to today
-    this_day = arrow.now().format('dddd, MMMM Do')
-    # create and send a new SlackMsg
-    msg = SlackMessage({"text": "ETL thread for {}".format(this_day)})
-    msg.send()
+# # infinite loop
+# while True:
+#   # if it's the next day
+#   if arrow.now().format('dddd, MMMM Do') != this_day:
+#     # reset this_day to today
+#     this_day = arrow.now().format('dddd, MMMM Do')
+#     # create and send a new SlackMsg
+#     msg = SlackMessage({"text": "ETL thread for {}".format(this_day)})
+#     msg.send()
 
-  # run whatever is on deck
-  schedule.run_pending()
+#   # run whatever is on deck
+#   schedule.run_pending()
 
-  # wait a minute before checking again
-  time.sleep(60)
+#   # wait a minute before checking again
+#   time.sleep(1)
