@@ -1,0 +1,31 @@
+- type: sql
+  statements:
+    - drop view if exists fire.angels_night_ago
+    - create view fire.angels_night_ago as (
+          select 
+            inci_id, 
+            case_id, 
+            street, 
+            citydesc, 
+            naturecode, 
+            snature, 
+            natureid, 
+            nature, 
+            timezone('EDT', firstdtm) as firstdtm, 
+            timezone('EDT', lastclr) as lastclr, 
+            timezone('EDT', timeroute) as timeroute, 
+            timezone('EDT', timefini) as timefini, 
+            primeunit, 
+            trim(ltrim(closecode, 'F')) as closecode, 
+            cancelled, 
+            calltime, 
+            district, 
+            statbeat, 
+            firegroup, 
+            timezone('EDT', firstenr) as firstenr,
+            timezone('EDT', firstarrv) as firstarrv,
+            agency, 
+            "TableName", 
+            inmain_notes, 
+            st_transform(st_setsrid(st_makepoint(geox,geoy), 2898), 4326) as geom 
+          from fire.angels_night order by random());

@@ -1,6 +1,16 @@
 # etl
 ETL repository for DoIT work.
 
+## Context
+
+Each ETL has four steps, each with it's own .yml file:
+- 00_metadata: Describes the process
+- 01_extract: Gets the source data
+- 02_transform: Cleans the data
+- 03_load: Puts the data online
+
+Depending on your data request, you might want to add a new view to an existing process (like DLBA or BSEED datasets for example), or create an entirely new process. If creating new, copy the four template .yml files in `example/` to a new folder under `process/`.
+
 ## Setup
 
 Requires Python 3.5+ and preferably the Anaconda install.
@@ -9,43 +19,135 @@ Requires Python 3.5+ and preferably the Anaconda install.
 
 Copy `sample.env` to `.env` and add your secrets.
 
-## Process
+## Usage
 
-Workflows for getting data from various departments, cleaning it, and writing it to a central database. From there, datasets can be published to our Socrata open data portal, ESRI products, or other places.
-
-Generally involves:
-- Python or SQL scripts to access and download the source data, process it, and write it to a database table (usually Postgres). We name scripts in the order they run, eg use prefix `00_` or `01_` and so on
-- Config file to define metadata and map fields from a db view to Socrata, or someplace else
-- Shell scripts to schedule automatic updates via `cron`
-
-## Tools
-
-Tools for connecting to and working with various platforms and softwares. We use [python-fire](https://github.com/google/python-fire) to expose these classes to the command line.
-
-More explanations soon.
-
-### Socrata
-
-Create a new dataset from the command line:
-1. Run your scripts (assuming you've written scripts as described above in Process, and have at least `00_download.py` and `config.yml`):
+```python
+import etl
+# load YMLs for a process
+gl = etl.Process('project_greenlight')
+# extract from sources
+gl.extract()
+# transform (operations & sql)
+gl.transform()
+# load to destinations
+gl.load()
 ```
-cd etl/process/your/path
-python 00_your_script.py
-psql -d < 01_your_other_script.sql
-```
-2. Now, your data should be available in your database as a table. The name of this table should match what you set in `config.yml`
-3. In the same terminal or a different tab, change directories from process to tools: `cd etl/tools`
-4. Open Python in interactive mode: `python`
-5. Create a new Socrata dataset using the following steps:
-```
-import socrata
-ds=socrata.Dataset('your/path')
-ds.create_db_view()
-ds.create_dataset()
-ds.socrata_id
-```
-6. Add the dataset ID echoed in the last command to your `config.yml`. At this point you should have a new dataset with an ID and columns, but 0 rows
-7. Now, still in interactive mode, fill your dataset with actual rows of data: `ds.replace()`
-8. That's it! You should see a success message in Slack's `#z_etl` channel and a data-full dataset on Socrata
 
-Update this dataset in the future using a `cron` job and the `ds.full_replace()` or `ds.upsert()` commands.
+### 00_metadata.yml
+
+```yml
+name: <Title that describes this process, eg 'DLBA datasets'>
+schema: <Postgres schema, eg 'dlba'>
+```
+
+### 01_extract.yml
+
+An array of data sources to be extracted. 
+
+Supported sources:
+- `database` from `database.py`: An Oracle or SQLServer database
+- `salesforce` from `salesforce.py`: A Salesforce query
+- `smartsheet` from `smartsheet.py`: A Smartsheet
+- `api` for now specificially from `scf.py`: An endpoint of open 311 data
+
+Roadmap:
+- `api` support for other domains
+- `airtable`?
+- `googlesheet`?
+
+```yml
+- database:
+    type: <oracle|sql-server>
+    prefix: <Origin database prefix, eg tm for tidemark>
+    source: <Origin table name, eg CASEMAIN>
+    destination: <Postgres table name, eg bseed.casemain>
+    fields:
+      - <Optional list of field names>
+      - <If excluded, select *>
+
+- salesforce:
+    object: <SF object, eg Case>
+    destination: <Postgres table name, eg dlba.account>
+    fields:
+      - <Optional list of field names>
+      - <If excluded, select *>
+
+- smartsheet: 
+    id: <Smartsheet id>
+    table: <Postgres table name, eg mmcc>
+
+- api:
+    domain: <String that tells us which api, eg seeclickfix>
+    destination: <Postgres table name, eg scf.issues>
+```
+
+### 02_transform.yml
+
+An array of steps to clean the data, which can include casting data types, geocoding addresses, scrubbing values, etc. These execute in order, think about them like steps in a recipe.
+
+Supported options:
+- `sql`: execute a list of custom SQL statements
+- `geocode`: provide a table, address column, and geometry column
+- `anonymize_geometry`: provide a table and a base to compare against, eg the centerline
+- `anonymize_text_location`: provide a table, address column and set flag to keep track of which records have been anonymized
+
+Roadmap:
+- `join`?
+
+```yml
+- type: sql
+  statements:
+    - <drop view if exists...>
+    - <create view...>
+
+- type: geocode
+  table: <Postgres table or view, eg bseed.mmcc>
+  add_col: <Existing address field>
+  geom_col: <Geometry field name to be created>
+
+- type: anonymize_geometry
+  table: <Postgres table or view, eg rms_update>
+  against: <Postgres table, eg base.centerline>
+
+- type: anonymize_text_location
+  table: <Postgres table or view, eg rms_update>
+  column: <Existing address field>
+  set_flag: <Bool>
+```
+
+### 03_load.yml
+
+Supported destinations:
+- `Socrata`: A Socrata dataset
+- `ArcGIS Online`: An ArcGIS Online feature layer
+
+Roadmap:
+- `Mapbox`: A Mapbox tileset
+
+```yml
+- to: Socrata
+  id: <Socrata 4x4; if blank, create new dataset> 
+  name: <Dataset title>
+  table: <Postgres view to load the data from, eg bseed.annual_inspections_socrata>
+  method: <replace|upsert>
+  row_identifier: <Field name, optional>
+  columns:
+    <Human-readable name>:
+      field: <Field name in postgres view>
+      type: <Socrata data type>
+
+- to: ArcGIS Online
+  id: <AGO id; if blank, create new layer>
+  file: <Filename>
+  table: <Postgres view to load the data from, eg fire.angels_night_ago>
+```
+## Scheduling jobs
+
+We define jobs in `schedules.py` using [Schedule](https://schedule.readthedocs.io/en/stable/).
+
+Schedule a new process like this:
+```python
+schedule.every.day.do(run, process='bseed', notify=True)
+```
+
+Wnen notify is `true`, we send success or error messages to Slack's #z_etl.

@@ -1,0 +1,26 @@
+- to: Socrata
+  columns:
+    Name:
+      field: name
+      type: text
+    Location:
+      field: location
+      type: location
+    Capacity:
+      field: docks
+      type: number
+  id: mzmy-hifg
+  name: MoGo Bike Share Locations
+  table: transit.mogo_socrata
+  method: replace
+- to: ArcGIS Online
+  id: 
+  file: mogo_bikeshare.json
+  title: MoGo Bike Share Locations
+  description: MoGo bike share locations
+  tags:
+    - bike
+    - mogo
+    - transit
+    - transportation
+  table: transit.mogo_arcgis

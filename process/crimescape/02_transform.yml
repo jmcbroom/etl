@@ -1,0 +1,126 @@
+# RMS: Add geometry and make a point for new incidents
+- type: sql
+  statements:
+    - alter table crimescape.rms_update rename column "Address" to address
+    - alter table crimescape.rms_update rename column "DPDCRIMEID" to dpdcrimeid
+    - alter table crimescape.rms_update add column uniq serial primary key
+    - select AddGeometryColumn( 'crimescape', 'rms_update', 'geom', 2898, 'POINT', 2)
+    - create index if not exists rms_update_dpdcrimeid_idx on crimescape.rms_update using btree(dpdcrimeid)
+    - update crimescape.rms_update set geom = st_setsrid(st_makepoint(geox/100, geoy/100), 2898) where geox > 0 and geoy > 0
+        
+# RMS: Create view
+- type: sql
+  statements:
+  - create view crimescape.rms_sftp as ( 
+      select
+        uniq,
+        dpdcrimeid::text as crime_id,
+        "Report Number" as report_number,
+        address,
+        "Offense Description" as offense_description,
+        "Offense Category" as offense_category,
+        "State Offense Code" as state_offense_code,
+        trim(arr_chrg) as arrest_charge,
+        chrgdesc as charge_description,
+        replace(to_char(concat("Incident Date", ' ', left("Incident Time", 2), ':', right("Incident Time", 2), '\:00')::timestamp, 'YYYY-MM-DD HH24:MI:SS.000'), ' ', 'T') as incident_timestamp,
+        "Incident Time" as incident_time,
+        (extract(dow from concat("Incident Date", ' ', left("Incident Time", 2), ':', right("Incident Time", 2), '\:00')::timestamp) + 1)::integer as day_of_week,
+        left("Incident Time", 2)::integer as hour_of_day,
+        right("Incident Date", 4)::integer as year,
+        "Scout Car Area" as scout_car_area,
+        "Precinct" as precinct,
+        ST_X(ST_Transform(geom, 4326)) as longitude,
+        ST_Y(ST_Transform(geom, 4326)) as latitude,
+        replace(to_char(ibr_date::timestamp, 'YYYY-MM-DD HH24:MI:SS.000'), ' ', 'T') as ibr_date,
+        CASE
+          WHEN geom is null
+            THEN null
+          ELSE
+            concat(
+              'location (',
+              ST_Y(ST_Transform(geom, 4326)),
+              ',',
+              ST_X(ST_Transform(geom, 4326)),
+              ')'
+            )
+        END as location 
+        from crimescape.rms_update)
+
+# RMS: Copy the data to a csv
+- type: sql
+  statements:
+  - copy ( select * from crimescape.rms_sftp ) to '/tmp/rms.csv' delimiter ',' csv header
+
+# CAD: Initial address string clean up
+- type: sql
+  statements:
+    - alter table crimescape.cad_update add column if not exists is_anon boolean
+    - update crimescape.cad_update set is_anon = 'f'
+
+# CAD: Assign street addresses for known places; these will get fuzzed
+- type: lookup
+  table: crimescape.cad_update
+  lookup_field: incident_address
+  file: process/cad/misfits_lookup.csv
+  match_field: geoc_address
+  method: match
+  set_flag: false
+
+# CAD: Add geometry
+- type: sql
+  statements:
+    - select AddGeometryColumn('crimescape', 'cad_update', 'geom', 2898, 'POINT', 2)
+    - create index etl_cad_update_geom_idx on crimescape.cad_update using gist(geom)
+    - update crimescape.cad_update set geom = st_setsrid(st_makepoint(geox, geoy), 2898) where geox > 0 and geoy > 0
+
+# CAD: Create view
+- type: sql
+  statements:
+    - alter table crimescape.cad_update drop column if exists geox
+    - alter table crimescape.cad_update drop column if exists geoy
+    - alter table crimescape.cad_update drop column if exists is_anon
+    - alter table crimescape.cad_update drop column if exists notes
+    - drop view if exists crimescape.cad_sftp
+    - create view crimescape.cad_sftp as (
+        select 
+          inci_id as incident_id,
+          agency,
+          incident_address,
+          zip as zip_code,
+          priority,
+          callcode,
+          calldescription,
+          category,
+          replace(to_char(concat(calldate, ' ', dp_calltime)::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') as call_timestamp,
+          dp_calltime as time_of_call,
+          "precinctSCA" as precinct_sca,
+          respondingunit,
+          officerinitiated,
+          replace(intaketime, ',', '') as intaketime,
+          replace(dispatchtime, ',', '') as dispatchtime,
+          replace(traveltime, ',', '') as traveltime,
+          replace(totalresponsetime, ',', '') as totalresponsetime,
+          replace(timeonscene, ',', '') as time_on_scene,
+          replace(totaltime, ',', '') as totaltime,
+          ST_X(ST_Transform(geom, 4326)) as lon,
+          ST_Y(ST_Transform(geom, 4326)) as lat,
+          CASE 
+            WHEN geom is null 
+              THEN null 
+            ELSE 
+              concat(
+                'location (', 
+                ST_Y(ST_Transform(geom, 4326)), 
+                ',', 
+                ST_X(ST_Transform(geom, 4326)), 
+                ')'
+              ) 
+          END as location 
+          from crimescape.cad_update
+          where "CallDateDate" >= date '2016-09-20'
+      )
+
+# CAD: Copy the data to a csv
+- type: sql
+  statements:
+  - copy ( select * from crimescape.cad_sftp ) to '/tmp/cad.csv' delimiter ',' csv header

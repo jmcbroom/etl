@@ -1,0 +1,10 @@
+- database:
+    type: sql-server
+    prefix: rms
+    source: vwRMS_Portal
+    destination: crimescape.rms_update
+- database:
+    type: sql-server
+    prefix: cad
+    source: vw_DP_CAD
+    destination: crimescape.cad_update
