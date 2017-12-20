@@ -85,7 +85,7 @@ class Process(object):
         # add geometry column and index, specified in YML
         add_geom_column(connection, s['table'], s['geom_col'])
         # batch geocode addresses
-        if s['parcel_col']:
+        if 'parcel_col' in s.keys():
           GeocodeTable(s['table'], s['add_col'], s['geom_col'], s['parcel_col']).geocode_rows()
         else:
           GeocodeTable(s['table'], s['add_col'], s['geom_col']).geocode_rows()
