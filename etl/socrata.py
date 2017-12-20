@@ -56,3 +56,5 @@ class Socrata(object):
                 except:
                     print("Something went wrong on record {}".format(i))
                     soda_connection.upsert(self.id, payload[i:i+20000])
+        soda_connection.close()
+        db_connection.close()
