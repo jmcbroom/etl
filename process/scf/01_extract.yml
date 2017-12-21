@@ -1,3 +1,8 @@
 - api:
     domain: seeclickfix
-    destination: scf.issues
+    destination: scf.issues_update
+    # where:
+    #     field: updated_at
+    #     condition: ">"
+    #     value: max(updated_at)
+    #     table: scf.issues

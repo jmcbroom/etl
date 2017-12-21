@@ -1,3 +1,4 @@
+# Create views
 - type: sql
   statements:
     - drop view if exists scf.submitted_issues_public_socrata
@@ -27,7 +28,7 @@
                 )
               end as location
             from scf.submitted issues
-            where summary is not like '%Abandoned Vehicle% or '%Illegal Dumping in Progress%';
+            where summary is not like '%Abandoned Vehicle% or '%Progress%';
     - drop view if exists scf.submitted_issues_private_socrata
     - create view scf.submitted_issues_private_socrata as
             ( select
@@ -55,4 +56,8 @@
                 )
               end as location
             from scf.submitted issues;
- 
+
+ # Copy view to a csv
+- type: sql
+  statements:
+  - copy ( select * from scf.submitted_issues_private_socrata ) to '/tmp/311.csv' delimiter ',' csv header
