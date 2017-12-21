@@ -7,7 +7,6 @@ soda_connection = sodapy.Socrata('data.detroitmi.gov', soda_token, soda_user, so
 
 import sqlalchemy
 engine = sqlalchemy.create_engine('postgresql+psycopg2://{}/{}'.format(os.environ['PG_CONNSTR'], os.environ['PG_DB']))
-db_connection = engine.connect()
 
 from pprint import pprint
 
@@ -38,6 +37,7 @@ class Socrata(object):
         return self.id
     
     def update(self):
+        db_connection = engine.connect()
         rows = db_connection.execute("select * from {}".format(self.config['table']))
         payload = [ dict(row) for row in rows ]
         print(len(payload))
@@ -56,5 +56,4 @@ class Socrata(object):
                 except:
                     print("Something went wrong on record {}".format(i))
                     soda_connection.upsert(self.id, payload[i:i+20000])
-        soda_connection.close()
         db_connection.close()
