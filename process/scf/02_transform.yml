@@ -27,7 +27,7 @@
                 )
               end as location
             from scf.submitted issues
-            where summary is not like '%Abandoned Vehicle%;
+            where summary is not like '%Abandoned Vehicle% or '%Illegal Dumping in Progress%';
     - drop view if exists scf.submitted_issues_private_socrata
     - create view scf.submitted_issues_private_socrata as
             ( select
