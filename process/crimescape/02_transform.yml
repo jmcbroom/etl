@@ -5,12 +5,20 @@
     - alter table crimescape.rms_update rename column "DPDCRIMEID" to dpdcrimeid
     - alter table crimescape.rms_update add column uniq serial primary key
     - select AddGeometryColumn( 'crimescape', 'rms_update', 'geom', 2898, 'POINT', 2)
+    - create index if not exists etl_rms_update_geom_idx on crimescape.rms_update using gist(geom)
     - create index if not exists rms_update_dpdcrimeid_idx on crimescape.rms_update using btree(dpdcrimeid)
-    - update crimescape.rms_update set geom = st_setsrid(st_makepoint(geox/100, geoy/100), 2898) where geox > 0 and geoy > 0
+    - create index if not exists rms_dpdcrimeid_idx on crimescape.rms using btree(dpdcrimeid)
+    - create index if not exists rms_update_addr_idx on crimescape.rms_update using btree(address)
+    - update crimescape.rms_update set geom = st_setsrid(st_makepoint(geox/100, geoy/100), 2898) 
+        where geox > 0 and geoy > 0 and dpdcrimeid not in (select dpdcrimeid from crimescape.rms)
         
 # RMS: Create view
 - type: sql
   statements:
+  - drop table if exists crimescape.rms_old cascade
+  - alter table crimescape.rms rename to rms_old
+  - alter table crimescape.rms_update rename to rms
+  - drop view if exists crimescape.rms_sftp
   - create view crimescape.rms_sftp as ( 
       select
         uniq,
@@ -44,9 +52,9 @@
               ')'
             )
         END as location 
-        from crimescape.rms_update)
+        from crimescape.rms)
 
-# RMS: Copy the data to a csv
+# RMS: Copy the view to a csv
 - type: sql
   statements:
   - copy ( select * from crimescape.rms_sftp ) to '/tmp/rms.csv' delimiter ',' csv header
@@ -61,7 +69,7 @@
 - type: lookup
   table: crimescape.cad_update
   lookup_field: incident_address
-  file: process/cad/misfits_lookup.csv
+  file: /home/gisteam/etl_pkg/process/cad/misfits_lookup.csv
   match_field: geoc_address
   method: match
   set_flag: false
@@ -80,6 +88,8 @@
     - alter table crimescape.cad_update drop column if exists geoy
     - alter table crimescape.cad_update drop column if exists is_anon
     - alter table crimescape.cad_update drop column if exists notes
+    - insert into crimescape.cad (select * from crimescape.cad_update)
+    - drop table if exists crimescape.cad_update
     - drop view if exists crimescape.cad_sftp
     - create view crimescape.cad_sftp as (
         select 
@@ -116,8 +126,7 @@
                 ')'
               ) 
           END as location 
-          from crimescape.cad_update
-          where "CallDateDate" >= date '2016-09-20'
+          from crimescape.cad
       )
 
 # CAD: Copy the data to a csv
