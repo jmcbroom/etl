@@ -9,8 +9,7 @@
     - create index if not exists rms_update_dpdcrimeid_idx on crimescape.rms_update using btree(dpdcrimeid)
     - create index if not exists rms_dpdcrimeid_idx on crimescape.rms using btree(dpdcrimeid)
     - create index if not exists rms_update_addr_idx on crimescape.rms_update using btree(address)
-    - update crimescape.rms_update set geom = st_setsrid(st_makepoint(geox/100, geoy/100), 2898) 
-        where geox > 0 and geoy > 0 and dpdcrimeid not in (select dpdcrimeid from crimescape.rms)
+    - update crimescape.rms_update set geom = st_setsrid(st_makepoint(geox/100, geoy/100), 2898) where geox > 0 and geoy > 0
         
 # RMS: Create view
 - type: sql
@@ -52,7 +51,9 @@
               ')'
             )
         END as location 
-        from crimescape.rms)
+        from crimescape.rms
+        where "Incident Date"::date >= date '2016-12-06'
+    )
 
 # RMS: Copy the view to a csv
 - type: sql
@@ -127,6 +128,7 @@
               ) 
           END as location 
           from crimescape.cad
+          where "CallDateDate" >= date '2016-09-20'
       )
 
 # CAD: Copy the data to a csv
