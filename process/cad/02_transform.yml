@@ -111,8 +111,8 @@
           neighborhood,
           block_id,
           council_district,
-          ST_X(ST_Transform(geom, 4326)) as lon,
-          ST_Y(ST_Transform(geom, 4326)) as lat,
+          ST_X(ST_Transform(geom, 4326)) as longitude,
+          ST_Y(ST_Transform(geom, 4326)) as latitude,
           CASE 
             WHEN geom is null 
               THEN null 

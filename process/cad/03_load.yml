@@ -67,10 +67,10 @@
       field: council_district
       type: text
     Longitude:
-      field: lon
+      field: longitude
       type: number
     Latitude:
-      field: lat
+      field: latitude
       type: number
     Incident Location:
       field: location
