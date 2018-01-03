@@ -116,9 +116,10 @@
       - create view 
             bseed.dismantle_permits_socrata as
             ( select
-            concat_ws(ca.csa_id, '_', cm.prc_parcel_no) as unique_id,
+            concat(ca.csa_id, '_', pn.cleaned) as unique_id,
+            ca.csa_id,
             cm.prc_parcel_no,
-            pn.cleaned as parcel_number,
+            pn.cleaned as clean_parcel_no,
             ca.csm_caseno,
             ca.case_type,
             ca.action_description,
