@@ -1,8 +1,38 @@
 # Create views
 - type: sql
   statements:
-    - drop view if exists scf.submitted_issues_public_socrata
-    - create view scf.submitted_issues_public_socrata as
+    - insert into scf.issues (select * from scf.issues_update)
+    - drop view if exists scf.issues_socrata
+    - create view scf.issues_socrata as
+            ( select
+              id,
+              status,
+              request_type_title,
+              summary,
+              description, 
+              rating,
+              vote_count,
+              report_method,
+              created_at,
+              acknowledged_at,
+              closed_at,
+              reopened_at,
+              updated_at,
+              html_url,
+              address,
+              case when lat is null then null else
+                concat(
+                  'location (',
+                  lat,
+                  ',',
+                  lng,
+                  ')'
+                )
+              end as location
+            from scf.issues
+            where request_type_title is not like '%Abandoned Vehicle% or '%Illegal Dumping In Progress%';
+    - drop view if exists scf.issues_socrata_private
+    - create view scf.issues_socrata_private as
             ( select
               id,
               status,
@@ -27,37 +57,9 @@
                   ')'
                 )
               end as location
-            from scf.submitted issues
-            where summary is not like '%Abandoned Vehicle% or '%Progress%';
-    - drop view if exists scf.submitted_issues_private_socrata
-    - create view scf.submitted_issues_private_socrata as
-            ( select
-              id,
-              status,
-              summary,
-              description,
-              rating,
-              vote_count,
-              report_method,
-              created_at,
-              acknowledged_at,
-              closed_at,
-              reopened_at,
-              updated_at,
-              html_url,
-              address,
-              case when lat is null then null else
-                concat(
-                  'location (',
-                  lat,
-                  ',',
-                  lng,
-                  ')'
-                )
-              end as location
-            from scf.submitted issues;
+            from scf.issues;
 
  # Copy view to a csv
 - type: sql
   statements:
-  - copy ( select * from scf.submitted_issues_private_socrata ) to '/tmp/311.csv' delimiter ',' csv header
+  - copy ( select * from scf.issues_socrata_private ) to '/tmp/311.csv' delimiter ',' csv header

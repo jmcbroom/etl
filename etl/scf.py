@@ -13,9 +13,9 @@ SCF_API = "https://seeclickfix.com/api/v2/organizations/507/issues?"
 fieldnames = [
     'id',
     'status',
+    'request_type_title'
     'summary',
     'description',
-    'rating',
     'lat',
     'lng',
     'address',
@@ -24,21 +24,11 @@ fieldnames = [
     'closed_at',
     'reopened_at',
     'updated_at',
-    'comments_count',
     'vote_count',
-    'report_method',
-    'html_url',
     'priority_code',
-    'assignee_id',
-    'assignee_role',
-    'assignee_name',
-    'reporter_id',
-    'reporter_name',
-    'reporter_role',
-    'agent_id',
-    'agent_name',
-    'agent_role',
-    'canonical_issue_id'
+    'report_method',
+    'canonical_issue_id',
+    'html_url'
 ]
 
 def flatten(d, parent_key='', sep='_'):
@@ -68,11 +58,15 @@ class Seeclickfix(object):
       "status": "open,acknowledged,closed,archived"
     }
     url = SCF_API + urlencode(params)
+    print(url)
+
     req = requests.get(url, auth=(env['SCF_USER'], env['SCF_PASS']))
     initial_json = json.loads(req.text)
+
     self.pages = initial_json['metadata']['pagination']['pages']
     self.record_count = initial_json['metadata']['pagination']['entries']
     print("Expecting {} records".format(self.record_count))
+
     self.records = initial_json['issues']
     next_page_url = initial_json['metadata']['pagination']['next_page_url']
 
@@ -88,5 +82,5 @@ class Seeclickfix(object):
 
   def to_postgres(self):
     self.df = pandas.DataFrame.from_records(self.records)
-    "delete from scf.submitted_issues where id in ({})".format(",".join([r['id'] for r in self.records]))
-    df_to_pg(self.df, 'scf', 'submitted_issues')
+    "delete from scf.issues_update where id in ({})".format(",".join([r['id'] for r in self.records]))
+    df_to_pg(self.df, 'scf', 'issues_update')

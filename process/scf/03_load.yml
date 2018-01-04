@@ -1,7 +1,7 @@
 - to: Socrata
   name: Improve Detroit Issues
   id: 
-  table: scf.submitted_issues_public_socrata
+  table: scf.issues_socrata
   method: replace
   columns:
     Ticket ID:
@@ -11,7 +11,7 @@
       field: status
       type: text
     Issue Type:
-      field: summary
+      field: request_type_title
       type: text
     Issue Description:
       field: description
@@ -52,7 +52,7 @@
 - to: Socrata
   name: Improve Detroit Issues (Private View)
   id: 
-  table: scf.submitted_issues_private_socrata
+  table: scf.issues_socrata_private
   method: replace
   columns:
     Ticket ID:
@@ -62,7 +62,7 @@
       field: status
       type: text
     Issue Type:
-      field: summary
+      field: request_type_title
       type: text
     Issue Description:
       field: description
