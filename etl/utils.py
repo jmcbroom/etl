@@ -41,7 +41,15 @@ def psql_to_geojson(table, outfile='test.json', insr=4326, outsr=4326):
   ogr = "ogr2ogr -f GeoJSON {} -s_srs epsg:{} -t_srs epsg:{} pg:'{}' {}".format(outfile, insr, outsr, pg_connstr, table)
   print(ogr)
   return os.system(ogr)
-  
+
+def psql_to_zipshp(table, outfile='test'):
+  pgsql2shp = "pgsql2shp -f {} {} {}".format(outfile, env['PG_DB'], table)
+  zip_cmd = "zip {}.zip {}.*".format(outfile, outfile)
+  rm = "rm {}.{{cpg,dbf,prj,shp,shx}}".format(outfile)
+  for cmd in [pgsql2shp, zip_cmd, rm]:
+    print(cmd)
+    os.system(cmd)
+
 def add_geom_column(conn, table, geom_col, proj=4326, geom_type='Geometry'):
   # add geometry column (if not exists)
   query = "alter table {} add column if not exists {} geometry({}, {});".format(table, geom_col, geom_type, proj)
