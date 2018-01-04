@@ -1,7 +1,44 @@
 # Create views
 - type: sql
   statements:
-    - insert into scf.issues (select * from scf.issues_update)
+    - delete from scf.issues where id in (select id from scf.issues_update)
+    - alter table scf.issues_update add column if not exists canonical_issue_id float
+    - update scf.issues_update set canonical_issue_id = 'NaN' where canonical_issue_id is null
+    - insert into scf.issues 
+        (acknowledged_at,
+        address,
+        canonical_issue_id,
+        closed_at,
+        created_at,
+        description,
+        id,
+        lat,
+        lng,
+        priority_code,
+        reopened_at,
+        report_method,
+        request_type_title,
+        status,
+        summary,
+        updated_at)
+        select
+        acknowledged_at,
+        address,
+        canonical_issue_id,
+        closed_at,
+        created_at,
+        description,
+        id,
+        lat,
+        lng,
+        priority_code,
+        reopened_at,
+        report_method,
+        request_type_title,
+        status,
+        summary,
+        updated_at
+        from scf.issues_update
     - drop view if exists scf.issues_socrata
     - create view scf.issues_socrata as
             ( select
@@ -10,15 +47,12 @@
               request_type_title,
               summary,
               description, 
-              rating,
-              vote_count,
               report_method,
               created_at,
               acknowledged_at,
               closed_at,
               reopened_at,
               updated_at,
-              html_url,
               address,
               case when lat is null then null else
                 concat(
@@ -28,9 +62,9 @@
                   lng,
                   ')'
                 )
-              end as location
+              end as location 
             from scf.issues
-            where request_type_title is not like '%Abandoned Vehicle% or '%Illegal Dumping In Progress%';
+            where request_type_title not in ('Abandoned Vehicle', 'Illegal Dumping In Progress'))
     - drop view if exists scf.issues_socrata_private
     - create view scf.issues_socrata_private as
             ( select
@@ -38,15 +72,12 @@
               status,
               summary,
               description,
-              rating,
-              vote_count,
               report_method,
               created_at,
               acknowledged_at,
               closed_at,
               reopened_at,
               updated_at,
-              html_url,
               address,
               case when lat is null then null else
                 concat(
@@ -57,7 +88,8 @@
                   ')'
                 )
               end as location
-            from scf.issues;
+            from scf.issues)
+    - drop table if exists scf.issues_update cascade
 
  # Copy view to a csv
 - type: sql

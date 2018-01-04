@@ -21,3 +21,4 @@ def run(process, dataset=None, notify=False, emoji=None):
 # # daily run; these do not use schedule
 run('crimescape', dataset=None, notify=False, emoji='rotating_light')
 run('angels_night', dataset=None, notify=False, emoji='fire')
+run('scf', dataset=None, notify=False, emoji='cool')

@@ -5,7 +5,7 @@ from os import environ as env
 import json
 import pandas
 import collections
-from utils import df_to_pg
+from .utils import df_to_pg
 from pprint import pprint
 
 SCF_API = "https://seeclickfix.com/api/v2/organizations/507/issues?"
@@ -13,7 +13,7 @@ SCF_API = "https://seeclickfix.com/api/v2/organizations/507/issues?"
 fieldnames = [
     'id',
     'status',
-    'request_type_title'
+    'request_type_title',
     'summary',
     'description',
     'lat',
@@ -24,11 +24,9 @@ fieldnames = [
     'closed_at',
     'reopened_at',
     'updated_at',
-    'vote_count',
-    'priority_code',
     'report_method',
-    'canonical_issue_id',
-    'html_url'
+    'priority_code', 
+    'canonical_issue_id'
 ]
 
 def flatten(d, parent_key='', sep='_'):
@@ -48,13 +46,23 @@ def clean(record):
       record_to_return[k] = record[k]
   return record_to_return
 
+def get_max_update_dt():
+  """Ask the `scf.issues` table for the `max(updated_at)` value"""
+  from .utils import connect_to_pg
+  conn = connect_to_pg()
+  query = "select max(updated_at) from scf.issues"
+  res = conn.execute(query)
+  max_dt = res.fetchone()[0]
+  print(max_dt)
+  return max_dt
+
 class Seeclickfix(object):
   """Get SCF data for the last day or so."""
 
   def __init__(self):
-    after_date = arrow.utcnow().shift(hours=-3)
+    after_date = get_max_update_dt()
     params = {
-      "after": after_date.isoformat(),
+      "updated_at_after": after_date,
       "status": "open,acknowledged,closed,archived"
     }
     url = SCF_API + urlencode(params)
@@ -82,5 +90,5 @@ class Seeclickfix(object):
 
   def to_postgres(self):
     self.df = pandas.DataFrame.from_records(self.records)
-    "delete from scf.issues_update where id in ({})".format(",".join([r['id'] for r in self.records]))
+    # "delete from scf.issues_update where id in ({})".format(str(",".join([r['id'] for r in self.records])))
     df_to_pg(self.df, 'scf', 'issues_update')

@@ -1,105 +1,105 @@
-- to: Socrata
-  name: Improve Detroit Issues
-  id: 
-  table: scf.issues_socrata
-  method: replace
-  columns:
-    Ticket ID:
-      field: id
-      type: text
-    Ticket Status:
-      field: status
-      type: text
-    Issue Type:
-      field: request_type_title
-      type: text
-    Issue Description:
-      field: description
-      type: text
-    Created At:
-      field: created_at
-      type: calendar_date
-    Acknowledged At:
-      field: acknowledged_at
-      type: calendar_date
-    Closed At:
-      field: closed_at
-      type: calendar_date
-    Reopened At:
-      field: reopened_at
-      type: calendar_date
-    Updated At:
-      field: updated_at
-      type: updated_at
-    Rating:
-      field: rating
-      type: number
-    Vote Count:
-      field: vote_count
-      type: number
-    Report Method:
-      field: report_method
-      type: text
-    URL:
-      field: html_url
-      type: text
-    Address:
-      field: address
-      type: text
-    Location:
-      field: location
-      type: location
-- to: Socrata
-  name: Improve Detroit Issues (Private View)
-  id: 
-  table: scf.issues_socrata_private
-  method: replace
-  columns:
-    Ticket ID:
-      field: id
-      type: text
-    Ticket Status:
-      field: status
-      type: text
-    Issue Type:
-      field: request_type_title
-      type: text
-    Issue Description:
-      field: description
-      type: text
-    Created At:
-      field: created_at
-      type: calendar_date
-    Acknowledged At:
-      field: acknowledged_at
-      type: calendar_date
-    Closed At:
-      field: closed_at
-      type: calendar_date
-    Reopened At:
-      field: reopened_at
-      type: calendar_date
-    Updated At:
-      field: updated_at
-      type: updated_at
-    Rating:
-      field: rating
-      type: number
-    Vote Count:
-      field: vote_count
-      type: number
-    Report Method:
-      field: report_method
-      type: text
-    URL:
-      field: html_url
-      type: text
-    Address:
-      field: address
-      type: text
-    Location:
-      field: location
-      type: location
+# - to: Socrata
+#   name: Improve Detroit Issues
+#   id: 
+#   table: scf.issues_socrata
+#   method: replace
+#   columns:
+#     Ticket ID:
+#       field: id
+#       type: text
+#     Ticket Status:
+#       field: status
+#       type: text
+#     Issue Type:
+#       field: request_type_title
+#       type: text
+#     Issue Description:
+#       field: description
+#       type: text
+#     Created At:
+#       field: created_at
+#       type: calendar_date
+#     Acknowledged At:
+#       field: acknowledged_at
+#       type: calendar_date
+#     Closed At:
+#       field: closed_at
+#       type: calendar_date
+#     Reopened At:
+#       field: reopened_at
+#       type: calendar_date
+#     Updated At:
+#       field: updated_at
+#       type: updated_at
+#     Rating:
+#       field: rating
+#       type: number
+#     Vote Count:
+#       field: vote_count
+#       type: number
+#     Report Method:
+#       field: report_method
+#       type: text
+#     URL:
+#       field: html_url
+#       type: text
+#     Address:
+#       field: address
+#       type: text
+#     Location:
+#       field: location
+#       type: location
+# - to: Socrata
+#   name: Improve Detroit Issues (Private View)
+#   id: 
+#   table: scf.issues_socrata_private
+#   method: replace
+#   columns:
+#     Ticket ID:
+#       field: id
+#       type: text
+#     Ticket Status:
+#       field: status
+#       type: text
+#     Issue Type:
+#       field: request_type_title
+#       type: text
+#     Issue Description:
+#       field: description
+#       type: text
+#     Created At:
+#       field: created_at
+#       type: calendar_date
+#     Acknowledged At:
+#       field: acknowledged_at
+#       type: calendar_date
+#     Closed At:
+#       field: closed_at
+#       type: calendar_date
+#     Reopened At:
+#       field: reopened_at
+#       type: calendar_date
+#     Updated At:
+#       field: updated_at
+#       type: updated_at
+#     Rating:
+#       field: rating
+#       type: number
+#     Vote Count:
+#       field: vote_count
+#       type: number
+#     Report Method:
+#       field: report_method
+#       type: text
+#     URL:
+#       field: html_url
+#       type: text
+#     Address:
+#       field: address
+#       type: text
+#     Location:
+#       field: location
+#       type: location
 - to: SFTP
   host: crimescape
   file: /tmp/311.csv
