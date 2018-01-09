@@ -1,0 +1,58 @@
+- to: Socrata
+  id:
+  name: Wayne County Tax Auction Results (2017)
+  table: wcta.wcta_2017_socrata
+  method: replace
+  row_identifier: 
+  columns:
+    Parcel ID:
+      field: parcel_id
+      type: text
+    Property Address:
+      field: prop_address
+      type: text
+    Property City:
+      field: prop_city
+      type: text
+    Property Zip Code:
+      field: prop_zip
+      type: text
+    September Starting Bid:
+      field: sept_starting_bid
+      type: number
+    Winning Bid:
+      field: final_bid_amt
+      type: number
+    Deed Name:
+      field: deed_name
+      type: text
+    Deed Address:
+      field: deed_address
+      type: text
+    Deed City/State:
+      field: deed_city_state
+      type: text
+    Deed Zip:
+      field: deed_zip
+      type: text
+    Deed Date:
+      field: deed_date
+      type: calendar_date
+    Bidder Number:
+      field: biddernbr
+      type: text
+    Bidder Name:
+      field: bidder_name
+      type: text
+    Bidder Address:
+      field: bidder_address
+      type: text
+    Bidder City/State:
+      field: bidder_city_state
+      type: text
+    Bidder Zip:
+      field: bidder_zip
+      type: text
+    Location:
+      field: location
+      type: location
