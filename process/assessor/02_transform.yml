@@ -233,3 +233,25 @@
         inner join assessor.zoning z
         on s.parcelno = z.parcelno
        )
+    - drop view if exists assessor.sales_history_socrata cascade
+    - create view assessor.sales_history_socrata as (
+        select
+         id,
+         addresscombined as address,
+         pnum as parcel_no,
+         replace(saledate::text, ' ', 'T') as sale_date,
+         saleprice as sale_price,
+         terms,
+         instr as instrument,
+         grantor,
+         grantee,
+         concat(
+           'location(',
+           st_y(st_centroid(st_transform(pa.shape, 4326))),
+           ',',
+           st_x(st_centroid(st_transform(pa.shape, 4326))),
+           ')') as location,
+         salenum as sale_number
+         from assessor.sales sa
+         inner join assessor.parcels_102717 pa on sa.pnum = pa.parcelno);
+  
