@@ -1,4 +1,26 @@
 - to: Socrata
+  id:
+  name: Right of Way Permits
+  table: bseed.row_permits
+  method: replace
+  row_identifier:
+  columns:
+    Case Number:
+      field: case_number
+      type: text
+    Description:
+      field: description
+      type: text
+    Contractor:
+      field: contractor
+      type: text
+    Project Name:
+      field: project_name
+      type: text
+    Update Date:
+      field: update_date
+      type: calendar_date
+- to: Socrata
   id: 3eiz-c5du
   name: Annual Inspections
   table: bseed.annual_inspections_socrata

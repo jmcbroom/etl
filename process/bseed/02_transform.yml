@@ -1,3 +1,19 @@
+# ROW Permites
+- type: sql
+  statements:
+    - drop view if exists bseed.row_permits cascade
+    - create view bseed.row_permits as (select 
+            csm_caseno as case_number,
+            csm_description as description,
+            csm_name_last as contractor,
+            csm_projname as project_name,
+            replace(csm_updated::text, ' ', 'T') as update_date
+            from bseed.tm_casemain where case_type = 'ENG' and 
+            (csm_description like '%right-of-way%' 
+                  or csm_description like '%right of way%' 
+                  or csm_description like '% ROW %' 
+                  or csm_description like '% closure %'))
+
 # Annual Inspections
 - type: sql
   statements:
