@@ -1,18 +1,19 @@
-# ROW Permites
+# ROW Permits
 - type: sql
   statements:
     - drop view if exists bseed.row_permits cascade
     - create view bseed.row_permits as (select 
-            csm_caseno as case_number,
-            csm_description as description,
-            csm_name_last as contractor,
-            csm_projname as project_name,
-            replace(csm_updated::text, ' ', 'T') as update_date
-            from bseed.tm_casemain where case_type = 'ENG' and 
-            (csm_description like '%right-of-way%' 
-                  or csm_description like '%right of way%' 
-                  or csm_description like '% ROW %' 
-                  or csm_description like '% closure %'))
+            cm.csm_caseno as case_number,
+            cm.csm_description as description,
+            cm.csm_name_last as contractor,
+            cm.csm_projname as project_name,
+            replace(ce.eng_start_date::text, ' ', 'T') as start_date,
+            replace(ce.eng_end_date::text, ' ', 'T') as end_date,
+            ce.eng_job_loc as location
+            from bseed.tm_casemain cm
+            inner join bseed.tm_caseeng ce on cm.csm_caseno = ce.csm_caseno
+            where cm.case_type = 'ENG' and 
+            ce.eng_type_of_work in ('ROW', 'BARRICADE'))
 
 # Annual Inspections
 - type: sql

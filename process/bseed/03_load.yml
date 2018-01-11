@@ -1,5 +1,5 @@
 - to: Socrata
-  id:
+  id: rj7w-r8ts
   name: Right of Way Permits
   table: bseed.row_permits
   method: replace
@@ -17,9 +17,15 @@
     Project Name:
       field: project_name
       type: text
-    Update Date:
-      field: update_date
+    Start Date:
+      field: start_date
       type: calendar_date
+    End Date:
+      field: end_date
+      type: calendar_date
+    Location:
+      field: location
+      type: text
 - to: Socrata
   id: 3eiz-c5du
   name: Annual Inspections

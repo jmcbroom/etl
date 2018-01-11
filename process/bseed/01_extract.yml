@@ -6,6 +6,15 @@
 - database:
     type: oracle
     prefix: tm
+    source: CASE_ENG
+    destination: bseed.tm_caseeng
+    where: >-
+        ((date '1980-01-01' < ENG_END_DATE and ENG_END_DATE < date '2025-01-01') or ENG_END_DATE is null)
+        and 
+        ((date '1980-01-01' < ENG_START_DATE and ENG_START_DATE < date '2025-01-01') or ENG_START_DATE is null)
+- database:
+    type: oracle
+    prefix: tm
     source: CASEMAIN
     destination: bseed.tm_casemain
     where: >-
