@@ -45,13 +45,29 @@
               id,
               status,
               request_type_title,
-              summary,
-              description, 
+              case 
+                when description = 'NaN'
+                then null
+                else description
+              end as description, 
               report_method,
+              priority_code,
               created_at,
-              acknowledged_at,
-              closed_at,
-              reopened_at,
+              case
+                when acknowledged_at = 'NaN'
+                then null 
+                else acknowledged_at
+              end as acknowledged_at,
+              case
+                when closed_at = 'NaN'
+                then null
+                else closed_at
+              end as closed_at,
+              case
+                when reopened_at = 'NaN'
+                then null 
+                else reopened_at
+              end as reopened_at,
               updated_at,
               address,
               case when lat is null then null else
@@ -62,7 +78,7 @@
                   lng,
                   ')'
                 )
-              end as location 
+              end as location
             from scf.issues
             where request_type_title not in ('Abandoned Vehicle', 'Illegal Dumping In Progress'))
     - drop view if exists scf.issues_socrata_private
@@ -70,13 +86,30 @@
             ( select
               id,
               status,
-              summary,
-              description,
+              request_type_title,
+              case 
+                when description = 'NaN'
+                then null
+                else description
+              end as description, 
               report_method,
+              priority_code,
               created_at,
-              acknowledged_at,
-              closed_at,
-              reopened_at,
+              case
+                when acknowledged_at = 'NaN'
+                then null 
+                else acknowledged_at
+              end as acknowledged_at,
+              case
+                when closed_at = 'NaN'
+                then null
+                else closed_at
+              end as closed_at,
+              case
+                when reopened_at = 'NaN'
+                then null 
+                else reopened_at
+              end as reopened_at,
               updated_at,
               address,
               case when lat is null then null else
