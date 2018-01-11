@@ -1,0 +1,23 @@
+- type: geocode
+  table: ocp.divdat
+  add_col: street
+  geom_col: geom
+
+- type: sql
+  statements:
+    - drop view if exists ocp.divdat_socrata;
+    - create view ocp.divdat_socrata as
+        ( select 
+            name,
+            street,
+            city,
+            state,
+            zip, 
+            concat(
+              'location (',
+              ST_Y(ST_Centroid(geom)), 
+              ',', 
+              ST_X(ST_Centroid(geom)),
+              ')'
+            ) as location
+          from ocp.divdat )

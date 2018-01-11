@@ -1,0 +1,24 @@
+- to: Socrata
+  id: 
+  name: DivDat Kiosk Payment Locations
+  table: ocp.divdat_socrata
+  method: replace
+  columns:
+    Business Name:
+      field: name
+      type: text
+    Street Address:
+      field: street
+      type: text
+    City:
+      field: city
+      type: text
+    State:
+      field: state
+      type: text
+    Zip:
+      field: zip
+      type: text
+    Location:
+      field: location
+      type: location
