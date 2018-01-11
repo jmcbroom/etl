@@ -13,11 +13,15 @@
             city,
             state,
             zip, 
-            concat(
-              'location (',
-              ST_Y(ST_Centroid(geom)), 
-              ',', 
-              ST_X(ST_Centroid(geom)),
-              ')'
-            ) as location
+            case 
+            when geom is null 
+              then 'location (42.3314,-83.0458)'
+              else concat(
+                'location (',
+                ST_Y(ST_Centroid(geom)), 
+                ',', 
+                ST_X(ST_Centroid(geom)),
+                 ')'
+              )
+            end as location
           from ocp.divdat )

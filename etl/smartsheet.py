@@ -4,8 +4,9 @@ smartsheet = smartsheet.Smartsheet()
 import pandas as pd
 from etl.utils import clean_column, df_to_pg
 
-# # thanks tom buckley: https://gist.github.com/tombuckley/3c1eeb56f46904dbb143ac398ea79b40
-#
+# thanks tom buckley: https://gist.github.com/tombuckley/3c1eeb56f46904dbb143ac398ea79b40
+# note that smartsheets needs to be shared with mcbroomj@detroitmi.gov
+
 def get_sheet_as_df(sheet_id):
     ss1 = smartsheet.Sheets.get_sheet(sheet_id, page_size=0)
     row_count = ss1.total_row_count

@@ -1,5 +1,5 @@
 - to: Socrata
-  id: 
+  id: eey7-d4dx
   name: DivDat Kiosk Payment Locations
   table: ocp.divdat_socrata
   method: replace
