@@ -52,23 +52,31 @@
               end as description, 
               report_method,
               priority_code,
-              created_at,
+              case
+                when created_at = 'NaN'
+                then null
+                else replace(to_char(created_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+              end as created_at,
               case
                 when acknowledged_at = 'NaN'
                 then null 
-                else acknowledged_at
+                else replace(to_char(acknowledged_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
               end as acknowledged_at,
               case
                 when closed_at = 'NaN'
                 then null
-                else closed_at
+                else replace(to_char(closed_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
               end as closed_at,
               case
                 when reopened_at = 'NaN'
                 then null 
-                else reopened_at
+                else replace(to_char(reopened_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
               end as reopened_at,
-              updated_at,
+              case
+                when updated_at = 'NaN'
+                then null
+                else replace(to_char(updated_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+              end as updated_at,
               address,
               case when lat is null then null else
                 concat(
@@ -94,23 +102,31 @@
               end as description, 
               report_method,
               priority_code,
-              created_at,
+              case
+                when created_at = 'NaN'
+                then null
+                else replace(to_char(created_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+              end as created_at,
               case
                 when acknowledged_at = 'NaN'
                 then null 
-                else acknowledged_at
+                else replace(to_char(acknowledged_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
               end as acknowledged_at,
               case
                 when closed_at = 'NaN'
                 then null
-                else closed_at
+                else replace(to_char(closed_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
               end as closed_at,
               case
                 when reopened_at = 'NaN'
                 then null 
-                else reopened_at
+                else replace(to_char(reopened_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
               end as reopened_at,
-              updated_at,
+              case
+                when updated_at = 'NaN'
+                then null
+                else replace(to_char(updated_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+              end as updated_at,
               address,
               case when lat is null then null else
                 concat(
@@ -128,3 +144,4 @@
 - type: sql
   statements:
   - copy ( select * from scf.issues_socrata_private ) to '/tmp/311.csv' delimiter ',' csv header
+  

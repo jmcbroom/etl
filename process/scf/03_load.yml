@@ -1,6 +1,6 @@
 - to: Socrata
   name: Improve Detroit Issues
-  id: 
+  id: yiar-rhii
   table: scf.issues_socrata
   method: replace
   columns:
@@ -30,7 +30,7 @@
       type: calendar_date
     Updated At:
       field: updated_at
-      type: updated_at
+      type: calendar_date
     Report Method:
       field: report_method
       type: text
@@ -45,7 +45,7 @@
       type: location
 - to: Socrata
   name: Improve Detroit Issues (Private View)
-  id: 
+  id: q6um-t8hf
   table: scf.issues_socrata_private
   method: replace
   columns:
@@ -75,7 +75,7 @@
       type: calendar_date
     Updated At:
       field: updated_at
-      type: updated_at
+      type: calendar_date
     Report Method:
       field: report_method
       type: text
