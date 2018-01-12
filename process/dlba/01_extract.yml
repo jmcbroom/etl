@@ -11,6 +11,8 @@
       - Neighborhood__c
       - RecordTypeId
       - Related_Property_Case__r.Id
+      - Property_Ownership__c
+      - Parcel_ID__c
 - salesforce:
     object: Case
     destination: dlba.case

@@ -332,3 +332,23 @@
             and c.demo_knock_down_date is null
             and c.demo_pulled_date is null
             and c.recordtypeid in ('012j0000000xtGbAAI', '012j0000000zM27AAE', '012j0000000xtGcAAI'))
+    # all dlba interactions
+    - drop view if exists dlba.all_interactions_socrata
+    - create view dlba.all_interactions_socrata as (
+        select 
+            name,
+            parcel_id,
+            current_status,
+            neighborhood,
+            council_district,
+            latitude,
+            longitude,
+            case 
+                when latitude is null 
+                then null 
+                else concat('location(', acct_latitude, ',', acct_longitude, ')') 
+            end as location,
+        from dlba.account 
+        where 
+            parcel_id is not null
+            and property_ownership != "Non-DLBA Owned" )
