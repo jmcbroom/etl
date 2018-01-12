@@ -29,7 +29,7 @@ def get_values(ss):
     drows = d['rows']
     rownumber = [x['rowNumber'] for x in drows]
     rows = [x['cells'] for x in drows]
-    values = [[x['displayValue'] for x in y] for y in rows]
+    values = [[x['displayValue'] or x['value'] for x in y] for y in rows]
     return pd.DataFrame(values)
 
 class Smartsheet(object):
