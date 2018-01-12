@@ -338,17 +338,30 @@
         select 
             name,
             parcel_id,
-            current_status,
+            case
+                when current_status = 'NaN'
+                then null
+                else current_status
+            end as current_status,
             neighborhood,
             council_district,
-            latitude,
-            longitude,
+            case
+                when latitude = 'NaN'
+                then null
+                else latitude
+            end as latitude,
             case 
-                when latitude is null 
+                when longitude = 'NaN'
+                then null
+                else longitude
+            end as longitude,
+            case 
+                when latitude = 'NaN' 
                 then null 
-                else concat('location(', acct_latitude, ',', acct_longitude, ')') 
-            end as location,
+                else concat('location(', latitude, ',', longitude, ')') 
+            end as location
         from dlba.account 
         where 
             parcel_id is not null
-            and property_ownership != "Non-DLBA Owned" )
+            and property_ownership != 'Non-DLBA Owned'
+            and name not like '%Fake St%' )

@@ -432,12 +432,12 @@
       type: location
 - to: Socrata
   name: DLBA All Interactions (Private View)
-  id: 
+  id: pvpj-rccf
   table: dlba.all_interactions_socrata
   method: replace
   columns:
     Address:
-      field: address
+      field: name
       type: text
     Parcel ID:
       field: parcel_id
@@ -450,7 +450,7 @@
       type: text
     Council District:
       field: council_district
-      type: number
+      type: text
     Latitude:
       field: latitude
       type: number
