@@ -1,13 +1,13 @@
-- to: ArcGIS Online
-  id: b827c82731294708b500f7c10b3240b1
-  file: project_greenlight.json
-  table: pubsafe.greenlight_arcgis
-  title: Project Greenlight Locations
-  description:
-  tags:
-    - police
-    - opendata
-    - greenlight
+# - to: ArcGIS Online
+#   id: b827c82731294708b500f7c10b3240b1
+#   file: project_greenlight.json
+#   table: pubsafe.greenlight_arcgis
+#   title: Project Greenlight Locations
+#   description:
+#   tags:
+#     - police
+#     - opendata
+#     - greenlight
 - to: Socrata
   columns:
     Address:
@@ -16,6 +16,9 @@
     Business Name:
       field: business_name
       type: text
+    Live Date:
+      field: live_date
+      type: calendar_date
     Location:
       field: location
       type: location

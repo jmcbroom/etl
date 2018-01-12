@@ -14,7 +14,8 @@
     - create view pubsafe.greenlight_socrata as
         ( select 
             address, 
-            business_name, 
+            business_name,
+            concat(green_light_live_date, 'T00:00:00.000') as live_date,
             concat(
               'location (',
               ST_Y(ST_Centroid(geom)), 
@@ -27,7 +28,8 @@
     - create view pubsafe.greenlight_arcgis as
         ( select 
             address, 
-            business_name, 
+            business_name,
+            concat(green_light_live_date, 'T00:00:00.000') as live_date,
             geom
           from pubsafe.greenlight where trim(status) = 'Green' and geom is not null )
     
