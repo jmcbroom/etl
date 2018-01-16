@@ -13,6 +13,7 @@
       - Related_Property_Case__r.Id
       - Property_Ownership__c
       - Parcel_ID__c
+      - Inventory_Status_Socrata__c
 - salesforce:
     object: Case
     destination: dlba.case

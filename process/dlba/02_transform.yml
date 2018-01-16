@@ -338,11 +338,7 @@
         select 
             name,
             parcel_id,
-            case
-                when current_status = 'NaN'
-                then null
-                else current_status
-            end as current_status,
+            current_status,
             neighborhood,
             council_district,
             case
@@ -365,3 +361,33 @@
             parcel_id is not null
             and property_ownership != 'Non-DLBA Owned'
             and name not like '%Fake St%' )
+    # all dlba ownership
+    - drop view if exists dlba.all_ownership_socrata
+    - create view dlba.all_ownership_socrata as (
+        select
+            name,
+            parcel_id,
+            inventory_status_socrata,
+            neighborhood,
+            council_district,
+            case
+                when latitude = 'NaN'
+                then null
+                else latitude
+            end as latitude,
+            case 
+                when longitude = 'NaN'
+                then null
+                else longitude
+            end as longitude,
+            case 
+                when latitude = 'NaN' 
+                then null 
+                else concat('location(', latitude, ',', longitude, ')') 
+            end as location
+        from dlba.account
+        where 
+            recordtypeid = '012j0000000xKnSAAU'
+            and parcel_id is not null
+            and property_ownership = 'DLBA Owned'
+            and name not like '%Fake St% )
