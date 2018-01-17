@@ -390,4 +390,4 @@
             recordtypeid = '012j0000000xKnSAAU'
             and parcel_id is not null
             and property_ownership = 'DLBA Owned'
-            and name not like '%Fake St% )
+            and name not like '%Fake St%' )
