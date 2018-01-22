@@ -1,5 +1,7 @@
 # etl
-ETL repository for DoIT work.
+ETL repository for DoIT work. 
+
+ETL means *extract-transform-load* data across systems. For example, Department X manages their data in an Oracle database, we retrieve it, process it by cleaning values or joining multiple tables, and then publish it on our open data portal for residents and other departments to easily consume. 
 
 ## Context
 
@@ -48,6 +50,7 @@ Supported sources:
 - `database` from `database.py`: An Oracle or SQLServer database
 - `salesforce` from `salesforce.py`: A Salesforce query
 - `smartsheet` from `smartsheet.py`: A Smartsheet
+- `sftp` from `sftp.py`: A SFTP server with .csv files
 - `api` for now specificially from `scf.py`: An endpoint of open 311 data
 
 Roadmap:
@@ -75,6 +78,10 @@ Roadmap:
 - smartsheet: 
     id: <Smartsheet id>
     table: <Postgres table name, eg mmcc>
+
+- sftp:
+    host: <Known SFTP host or domain name, eg novatus or moveit>
+    destination: <Postgres table name, eg ocp.contracts>
 
 - api:
     domain: <String that tells us which api, eg seeclickfix>
@@ -117,9 +124,12 @@ Roadmap:
 
 ### 03_load.yml
 
+An array of destinations to publish the data to.
+
 Supported destinations:
 - `Socrata`: A Socrata dataset
 - `ArcGIS Online`: An ArcGIS Online feature layer
+- `SFTP`: Drop a .csv on a SFTP server
 
 Roadmap:
 - `Mapbox`: A Mapbox tileset
@@ -140,7 +150,12 @@ Roadmap:
   id: <AGO id; if blank, create new layer>
   file: <Filename>
   table: <Postgres view to load the data from, eg fire.angels_night_ago>
+
+- to: SFTP
+  host: <Known SFTP host or domain name, eg crimescape>
+  file: <Filename, eg /tmp/abc.csv>
 ```
+
 ## Scheduling jobs
 
 We define jobs in `schedules.py` using [Schedule](https://schedule.readthedocs.io/en/stable/).
