@@ -26,7 +26,9 @@ fieldnames = [
     'updated_at',
     'report_method',
     'priority_code', 
-    'canonical_issue_id'
+    'canonical_issue_id',
+    'html_url',
+    'issue_closed_comment'
 ]
 
 def flatten(d, parent_key='', sep='_'):
@@ -38,6 +40,17 @@ def flatten(d, parent_key='', sep='_'):
         else:
             items.append((new_key, v))
     return dict(items)
+
+def flatten_comment(record):
+    """Create single key/value dict from array of comments"""
+    flat_comment = {}
+    comment = record['comments']
+    for c in comment:
+        if c['comment_type'] == "Issue Closed":
+            flat_comment['issue_closed_comment'] = c['comment']
+        else:
+            flat_comment['issue_closed_comment'] = ""
+    return flat_comment
 
 def clean(record):
   record_to_return = {}
@@ -86,6 +99,7 @@ class Seeclickfix(object):
       next_page_url = resp['metadata']['pagination']['next_page_url']
 
     self.records = [ flatten(r) for r in self.records ]
+    self.records = [ flatten_comment(r) for r in self.reords ]
     self.records = [ clean(r) for r in self.records ]
 
   def to_postgres(self):
