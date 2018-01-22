@@ -1,7 +1,7 @@
 import os, yaml
 from .utils import connect_to_pg, add_geom_column, exec_psql_query, drop_table_if_exists
 
-DATA_DIR = '/home/gisteam/etl_pkg/process'
+DATA_DIR = '/home/gisteam/etl/process'
 connection = connect_to_pg()
 
 class Process(object):

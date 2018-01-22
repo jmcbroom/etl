@@ -70,7 +70,7 @@
 - type: lookup
   table: crimescape.cad_update
   lookup_field: incident_address
-  file: /home/gisteam/etl_pkg/process/cad/misfits_lookup.csv
+  file: /home/gisteam/etl/process/cad/misfits_lookup.csv
   match_field: geoc_address
   method: match
   set_flag: false
