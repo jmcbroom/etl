@@ -4,21 +4,27 @@
     # Add extra cols
     - alter table scf.issues_update add column if not exists canonical_issue_id float
     - update scf.issues_update set canonical_issue_id = 'NaN' where canonical_issue_id is null
-    - alter table scf.issues_udpate add column if not exists days_to_close interval
+    - alter table scf.issues_update add column if not exists days_to_close interval
     - update scf.issues_update set days_to_close = (closed_at::timestamp - created_at::timestamp)
 
     # Add geometry
-    - select AddGeometryColumn('scf', 'issues_update', 'geom', 2898, 'POINT', 2)
+    - select AddGeometryColumn('scf', 'issues_update', 'geom', 4326, 'POINT', 2)
     - create index etl_scf_update_geom_idx on scf.issues_update using gist(geom)
-    - update scf.issues_update set geom = st_setsrid(st_makepoint(lat, lng), 2898) where lat > 0 and lng > 0
+    - update scf.issues_update set geom = st_setsrid(st_makepoint(lat, lng), 4326) where lat is not null and lng is not null
 
     # Stamp with Neighborhood & Council District
-    - alter table scf.issues_update add column neighborhood varchar(100);
-    - update scf.issues_update r set neighborhood = n.name from base.neighborhoods n where st_contains(n.wkb_geometry, r.geom);
-    - alter table scf.issues_update add column council_district integer;
-    - update scf.issues_update r set council_district = d.districts::integer from base.council_districts d where st_contains(d.wkb_geometry, r.geom);
+    - alter table scf.issues_update add column neighborhood varchar(100)
+    - update scf.issues_update r set neighborhood = n.name from base.neighborhoods n where st_contains(n.wkb_geometry, st_transform(r.geom, 2898))
+    - alter table scf.issues_update add column council_district integer
+    - update scf.issues_update r set council_district = d.districts::integer from base.council_districts d where st_contains(d.wkb_geometry, st_transform(r.geom, 2898))
 
     # Insert updates into master table
+    - alter table scf.issues add column if not exists html_url text
+    - alter table scf.issues add column if not exists neighborhood varchar(100)
+    - alter table scf.issues add column if not exists council_district integer
+    - alter table scf.issues add column if not exists days_to_close interval
+    - update scf.issues set days_to_close = (closed_at::timestamp - created_at::timestamp) where closed_at != 'NaN'
+
     - delete from scf.issues where id in (select id from scf.issues_update)
     - insert into scf.issues 
         (acknowledged_at,
@@ -103,7 +109,11 @@
                 else replace(to_char(updated_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
               end as updated_at,
               days_to_close,
-              canonical_issue_id,
+              case 
+                when canonical_issue_id = 'NaN'
+                then null
+                else canonical_issue_id
+              end as canonical_issue_id,
               address,
               neighborhood,
               council_district,
@@ -158,7 +168,11 @@
                 else replace(to_char(updated_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
               end as updated_at,
               days_to_close,
-              canonical_issue_id,
+              case 
+                when canonical_issue_id = 'NaN'
+                then null
+                else canonical_issue_id
+              end as canonical_issue_id,
               address,
               neighborhood,
               council_district,
@@ -172,7 +186,7 @@
                 )
               end as location
             from scf.issues )
-    - drop table if exists scf.issues_update cascade
+    # - drop table if exists scf.issues_update cascade
 
  # Copy view to a csv
 - type: sql
