@@ -22,17 +22,17 @@
             cm.csm_name_last,
             cm.csm_name_mi,
             cm.csm_recd_by,
-            cm.csm_recd_date,
+            replace(cm.csm_recd_date::text, ' ', 'T') as csm_recd_date,
             pl.cleaned as parcelnum,
             case 
                   when pl.parcel_geom is null then null
                   else concat('location (', st_y(st_centroid(parcel_geom)), ',', st_x(st_centroid(parcel_geom)), ')') end as location,
             concat(cadd.csm_st_nmbr, ' ', cadd.csm_st_name) as address,
             ca.action_description,
-            ca.csa_creation_date,
-            ca.csa_date1,
-            ca.csa_date2,
-            ca.csa_date3,
+            replace(ca.csa_creation_date::text, ' ', 'T') as csa_creation_date,
+            replace(ca.csa_date1::text, ' ', 'T') as csa_date1,
+            replace(ca.csa_date2::text, ' ', 'T') as csa_date2,
+            replace(ca.csa_date3::text, ' ', 'T') as csa_date3,
             ca.csa_disp
             from bseed.tm_casemain cm
             inner join last_action_on_case ca on cm.csm_caseno = ca.csm_caseno
