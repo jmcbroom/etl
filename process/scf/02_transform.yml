@@ -70,7 +70,11 @@
               id,
               status,
               request_type_title,
-              description,
+              case
+                when description = 'NaN'
+                then null
+                else description
+              end as description,
               case
                 when id is null
                 then null
@@ -103,7 +107,11 @@
                 then null
                 else replace(to_char(updated_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
               end as updated_at,
-              days_to_close,
+              case
+                when days_to_close is null
+                then null
+                else (extract(epoch FROM days_to_close)/86400)::double precision
+              end as days_to_close,
               case 
                 when canonical_issue_id = 'NaN'
                 then null
@@ -129,7 +137,11 @@
               id,
               status,
               request_type_title,
-              description,
+              case
+                when description = 'NaN'
+                then null
+                else description
+              end as description,
               case
                 when id is null
                 then null
@@ -162,7 +174,11 @@
                 then null
                 else replace(to_char(updated_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
               end as updated_at,
-              days_to_close,
+              case
+                when days_to_close is null
+                then null
+                else (extract(epoch FROM days_to_close)/86400)::double precision
+              end as days_to_close,
               case 
                 when canonical_issue_id = 'NaN'
                 then null
