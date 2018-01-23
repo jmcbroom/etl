@@ -10,21 +10,18 @@
     # Add geometry
     - select AddGeometryColumn('scf', 'issues_update', 'geom', 4326, 'POINT', 2)
     - create index etl_scf_update_geom_idx on scf.issues_update using gist(geom)
-    - update scf.issues_update set geom = st_setsrid(st_makepoint(lat, lng), 4326) where lat is not null and lng is not null
+    - update scf.issues_update set geom = st_setsrid(st_makepoint(lng, lat), 4326) where lat is not null and lng is not null
+
+    # Translate geom to 2898 to join to base
+    - alter table scf.issues_update alter column geom type geometry(Point,2898) using st_transform(geom,2898)
 
     # Stamp with Neighborhood & Council District
     - alter table scf.issues_update add column neighborhood varchar(100)
-    - update scf.issues_update r set neighborhood = n.name from base.neighborhoods n where st_contains(n.wkb_geometry, st_transform(r.geom, 2898))
+    - update scf.issues_update r set neighborhood = n.name from base.neighborhoods n where st_contains(n.wkb_geometry, r.geom)
     - alter table scf.issues_update add column council_district integer
-    - update scf.issues_update r set council_district = d.districts::integer from base.council_districts d where st_contains(d.wkb_geometry, st_transform(r.geom, 2898))
+    - update scf.issues_update r set council_district = d.districts::integer from base.council_districts d where st_contains(d.wkb_geometry, r.geom)
 
     # Insert updates into master table
-    - alter table scf.issues add column if not exists html_url text
-    - alter table scf.issues add column if not exists neighborhood varchar(100)
-    - alter table scf.issues add column if not exists council_district integer
-    - alter table scf.issues add column if not exists days_to_close interval
-    - update scf.issues set days_to_close = (closed_at::timestamp - created_at::timestamp) where closed_at != 'NaN'
-
     - delete from scf.issues where id in (select id from scf.issues_update)
     - insert into scf.issues 
         (acknowledged_at,

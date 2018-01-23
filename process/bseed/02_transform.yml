@@ -29,7 +29,7 @@
                   else concat('location (', st_y(st_centroid(parcel_geom)), ',', st_x(st_centroid(parcel_geom)), ')') end as location,
             concat(cadd.csm_st_nmbr, ' ', cadd.csm_st_name) as address,
             ca.action_description,
-            ca.csa_creation_date,
+            replace(ca.csa_creation_date::text, ' ', 'T') as csa_creation_date,
             replace(ca.csa_date1::text, ' ', 'T') as csa_date1,
             replace(ca.csa_date2::text, ' ', 'T') as csa_date2,
             replace(ca.csa_date3::text, ' ', 'T') as csa_date3,
