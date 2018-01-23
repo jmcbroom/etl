@@ -3,6 +3,7 @@
   id: fjru-bz8m
   table: scf.issues_socrata
   method: replace
+  rowIdentifier: id
   columns:
     Ticket ID:
       field: id
@@ -60,7 +61,7 @@
       type: location
 - to: Socrata
   name: Improve Detroit Issues (Private View)
-  id: irwj-c95e
+  id: 3nvs-wxfi
   table: scf.issues_socrata_private
   method: replace
   columns:
