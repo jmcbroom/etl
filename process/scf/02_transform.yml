@@ -1,13 +1,31 @@
 # Create views
 - type: sql
   statements:
-    - delete from scf.issues where id in (select id from scf.issues_update)
+    # Add extra cols
     - alter table scf.issues_update add column if not exists canonical_issue_id float
     - update scf.issues_update set canonical_issue_id = 'NaN' where canonical_issue_id is null
+    - alter table scf.issues_update add column if not exists days_to_close interval
+    - update scf.issues_update set days_to_close = (closed_at::timestamp - created_at::timestamp) where closed_at != 'NaN'
+
+    # Add geometry
+    - select AddGeometryColumn('scf', 'issues_update', 'geom', 4326, 'POINT', 2)
+    - create index etl_scf_update_geom_idx on scf.issues_update using gist(geom)
+    - update scf.issues_update set geom = st_setsrid(st_makepoint(lng, lat), 4326) where lat is not null and lng is not null
+
+    # Translate geom to 2898 to join to base
+    - alter table scf.issues_update alter column geom type geometry(Point,2898) using st_transform(geom,2898)
+
+    # Stamp with Neighborhood & Council District
+    - alter table scf.issues_update add column neighborhood varchar(100)
+    - update scf.issues_update r set neighborhood = n.name from base.neighborhoods n where st_contains(n.wkb_geometry, r.geom)
+    - alter table scf.issues_update add column council_district integer
+    - update scf.issues_update r set council_district = d.districts::integer from base.council_districts d where st_contains(d.wkb_geometry, r.geom)
+
+    # Insert updates into master table
+    - delete from scf.issues where id in (select id from scf.issues_update)
     - insert into scf.issues 
         (acknowledged_at,
         address,
-        canonical_issue_id,
         closed_at,
         created_at,
         description,
@@ -19,12 +37,14 @@
         report_method,
         request_type_title,
         status,
-        summary,
-        updated_at)
+        updated_at,
+        canonical_issue_id,
+        days_to_close,
+        neighborhood,
+        council_district )
         select
         acknowledged_at,
         address,
-        canonical_issue_id,
         closed_at,
         created_at,
         description,
@@ -36,20 +56,26 @@
         report_method,
         request_type_title,
         status,
-        summary,
-        updated_at
+        updated_at,
+        canonical_issue_id,
+        days_to_close,
+        neighborhood,
+        council_district
         from scf.issues_update
+
+    # Create views
     - drop view if exists scf.issues_socrata
     - create view scf.issues_socrata as
             ( select
               id,
               status,
               request_type_title,
-              case 
-                when description = 'NaN'
+              description,
+              case
+                when id is null
                 then null
-                else description
-              end as description, 
+                else concat('https://seeclickfix.com/issues/', id)
+              end as web_url,
               report_method,
               priority_code,
               case
@@ -77,7 +103,15 @@
                 then null
                 else replace(to_char(updated_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
               end as updated_at,
+              days_to_close,
+              case 
+                when canonical_issue_id = 'NaN'
+                then null
+                else canonical_issue_id
+              end as canonical_issue_id,
               address,
+              neighborhood,
+              council_district,
               case when lat is null then null else
                 concat(
                   'location (',
@@ -95,11 +129,12 @@
               id,
               status,
               request_type_title,
-              case 
-                when description = 'NaN'
+              description,
+              case
+                when id is null
                 then null
-                else description
-              end as description, 
+                else concat('https://seeclickfix.com/issues/', id)
+              end as web_url,
               report_method,
               priority_code,
               case
@@ -127,7 +162,15 @@
                 then null
                 else replace(to_char(updated_at::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
               end as updated_at,
+              days_to_close,
+              case 
+                when canonical_issue_id = 'NaN'
+                then null
+                else canonical_issue_id
+              end as canonical_issue_id,
               address,
+              neighborhood,
+              council_district,
               case when lat is null then null else
                 concat(
                   'location (',
@@ -137,8 +180,8 @@
                   ')'
                 )
               end as location
-            from scf.issues)
-    - drop table if exists scf.issues_update cascade
+            from scf.issues )
+    # - drop table if exists scf.issues_update cascade
 
  # Copy view to a csv
 - type: sql

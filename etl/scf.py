@@ -14,7 +14,6 @@ fieldnames = [
     'id',
     'status',
     'request_type_title',
-    'summary',
     'description',
     'lat',
     'lng',
