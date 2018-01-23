@@ -1,6 +1,6 @@
 - to: Socrata
   name: Improve Detroit Issues
-  id: yiar-rhii
+  id: 
   table: scf.issues_socrata
   method: replace
   columns:
@@ -31,50 +31,8 @@
     Updated At:
       field: updated_at
       type: calendar_date
-    Report Method:
-      field: report_method
-      type: text
-    Priority Code:
-      field: priority_code
-      type: number
-    Address:
-      field: address
-      type: text
-    Location:
-      field: location
-      type: location
-- to: Socrata
-  name: Improve Detroit Issues (Private View)
-  id: q6um-t8hf
-  table: scf.issues_socrata_private
-  method: replace
-  columns:
-    Ticket ID:
-      field: id
-      type: text
-    Ticket Status:
-      field: status
-      type: text
-    Issue Type:
-      field: request_type_title
-      type: text
-    Issue Description:
-      field: description
-      type: text
-    Created At:
-      field: created_at
-      type: calendar_date
-    Acknowledged At:
-      field: acknowledged_at
-      type: calendar_date
-    Closed At:
-      field: closed_at
-      type: calendar_date
-    Reopened At:
-      field: reopened_at
-      type: calendar_date
-    Updated At:
-      field: updated_at
+    Days to Close:
+      field: days_to_close
       type: calendar_date
     Report Method:
       field: report_method
@@ -82,12 +40,66 @@
     Priority Code:
       field: priority_code
       type: number
+    Canonical Issue Id:
+      field: canonical_issue_id
+      type: number
     Address:
       field: address
       type: text
+    Neighborhod:
+      field: neighborhood
+      type: text
+    Council District:
+      field: council_district
+      type: number
     Location:
       field: location
       type: location
-- to: SFTP
-  host: crimescape
-  file: /tmp/311.csv
+# - to: Socrata
+#   name: Improve Detroit Issues (Private View)
+#   id: q6um-t8hf
+#   table: scf.issues_socrata_private
+#   method: replace
+#   columns:
+#     Ticket ID:
+#       field: id
+#       type: text
+#     Ticket Status:
+#       field: status
+#       type: text
+#     Issue Type:
+#       field: request_type_title
+#       type: text
+#     Issue Description:
+#       field: description
+#       type: text
+#     Created At:
+#       field: created_at
+#       type: calendar_date
+#     Acknowledged At:
+#       field: acknowledged_at
+#       type: calendar_date
+#     Closed At:
+#       field: closed_at
+#       type: calendar_date
+#     Reopened At:
+#       field: reopened_at
+#       type: calendar_date
+#     Updated At:
+#       field: updated_at
+#       type: calendar_date
+#     Report Method:
+#       field: report_method
+#       type: text
+#     Priority Code:
+#       field: priority_code
+#       type: number
+#     Address:
+#       field: address
+#       type: text
+#     Location:
+#       field: location
+#       type: location
+# - to: SFTP
+#   host: crimescape
+#   file: /tmp/311.csv

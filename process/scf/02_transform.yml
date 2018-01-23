@@ -5,7 +5,7 @@
     - alter table scf.issues_update add column if not exists canonical_issue_id float
     - update scf.issues_update set canonical_issue_id = 'NaN' where canonical_issue_id is null
     - alter table scf.issues_update add column if not exists days_to_close interval
-    - update scf.issues_update set days_to_close = (closed_at::timestamp - created_at::timestamp)
+    - update scf.issues_update set days_to_close = (closed_at::timestamp - created_at::timestamp) where closed_at != 'NaN'
 
     # Add geometry
     - select AddGeometryColumn('scf', 'issues_update', 'geom', 4326, 'POINT', 2)
@@ -32,7 +32,6 @@
         closed_at,
         created_at,
         description,
-        html_url,
         id,
         lat,
         lng,
@@ -52,7 +51,6 @@
         closed_at,
         created_at,
         description,
-        html_url,
         id,
         lat,
         lng,
@@ -77,10 +75,10 @@
               request_type_title,
               description,
               case
-                when html_url is null
-                then concat('https://seeclickfix.com/issues/', id)
-                else html_url
-              end as html_url,
+                when id is null
+                then null
+                else concat('https://seeclickfix.com/issues/', id)
+              end as web_url,
               report_method,
               priority_code,
               case
@@ -136,10 +134,10 @@
               request_type_title,
               description,
               case
-                when html_url is null
-                then concat('https://seeclickfix.com/issues/', id)
-                else html_url
-              end as html_url,
+                when id is null
+                then null
+                else concat('https://seeclickfix.com/issues/', id)
+              end as web_url,
               report_method,
               priority_code,
               case

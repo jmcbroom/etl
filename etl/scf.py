@@ -25,8 +25,7 @@ fieldnames = [
     'updated_at',
     'report_method',
     'priority_code', 
-    'canonical_issue_id',
-    'html_url'
+    'canonical_issue_id'
 ]
 
 def flatten(d, parent_key='', sep='_'):
