@@ -1,0 +1,27 @@
+- to: Socrata
+  id:
+  name: DEGC Awardees
+  table: degc.awardees_socrata
+  method: replace
+  columns:
+    Parcel Number:
+      field: parcelno
+      type: text
+    Address:
+      field: address
+      type: text
+    Business:
+      field: business
+      type: text
+    Program:
+      field: program
+      type: text
+    Round:
+      field: round
+      type: number
+    Award Type:
+      field: award_type
+      type: text
+    Location:
+      field: location
+      type: location

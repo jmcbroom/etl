@@ -1,0 +1,11 @@
+- type: sql
+  statements:
+    - drop view if exists degc.awardees_socrata;
+    - create view degc.awardees_socrata as (select 
+        parcelno as parcelno,
+        mcm_addres as address,
+        business as business,
+        program as program,
+        round::integer as round,
+        award_type as award_type,
+        concat('location(', st_x(wkb_geometry), ',', st_y(wkb_geometry), ')') as location from degc.awardees);
