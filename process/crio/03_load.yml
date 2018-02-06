@@ -1,0 +1,42 @@
+- to: Socrata
+  id: 
+  name: Business Certification Register
+  table: crio.bizcert_socrata
+  method: replace
+  columns:
+    Business Name:
+      field: business_name
+      type: text
+    Business Street Address:
+      field: business_street_address
+      type: text
+    Business Type:
+      field: business_type
+      type: text
+    Detroit-based or Detroit-headquartered Business:
+      field: dbb
+      type: text
+    Small Business:
+      field: dsb
+      type: text
+    Joint Venture:
+      field: jv
+      type: text
+    Minority-owned business:
+      field: mbe
+      type: text
+    Woman-owned business:
+      field: wbe
+      type: text
+    LGTB-owned business:
+      field: lgtb
+      type: text
+    Start-up or Detroit-relocated Business:
+      field: dsu
+      type: text
+    Certification Expiration Date:
+      field: certification_expire_date
+      type: calendar_date
+    Business Location:
+      field: location
+      type: location
