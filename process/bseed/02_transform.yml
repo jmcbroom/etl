@@ -250,7 +250,7 @@
             inner join bseed.tm_caseaddress cd on ca.csm_caseno = cd.csm_caseno
             inner join bseed.pnum_lookup pn on cm.prc_parcel_no = pn.dirty
             where ca.csa_date3 > Date '2014-01-01'
-            and ca.action_description in ('Final Grade Inspection', 'Open Hole Inspection ', 'Winter Grade Inspection'))
+            and ca.action_description in ('Final Grade Inspection', 'Open Hole Demo Inspection ', 'Open Hole Demo Inspection', 'Winter Grade Inspection'))
 
 # # Trades Permits
 - type: sql
