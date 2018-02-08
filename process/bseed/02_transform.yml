@@ -3,19 +3,6 @@
   statements:
     - drop view if exists bseed.emg_inspections_socrata;
     - create view bseed.emg_inspections_socrata as (
-            with last_action_on_case as (
-                  select distinct on (csm_caseno)
-                        csm_caseno
-                        actn_menu_id,
-                        actn_code,
-                        action_description,
-                        csa_creation_date,
-                        csa_date1,
-                        csa_date2,
-                        csa_date3,
-                        csa_disp
-                  from bseed.tm_caseaction
-                  order by csm_caseno, csa_creation_date desc)
             select
                   cm.csm_caseno,
                   concat(cadd.csm_st_nmbr, ' ', cadd.csm_st_name) as address,
@@ -33,7 +20,7 @@
                   replace(ca.csa_date3::text, ' ', 'T') as csa_date3,
                   ca.csa_disp
             from bseed.tm_casemain cm
-            inner join  last_action_on_case ca on cm.csm_caseno = ca.csm_caseno
+            inner join ( select distinct on (csm_caseno) * from bseed.tm_caseaction order by csm_caseno, csa_creation_date desc) ca on cm.csm_caseno = ca.csm_caseno
             inner join bseed.pnum_lookup pl on pl.dirty = cm.prc_parcel_no
             inner join bseed.tm_caseaddress cadd on cadd.csm_caseno = cm.csm_caseno
             where 

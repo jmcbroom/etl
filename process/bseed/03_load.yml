@@ -1,5 +1,5 @@
 - to: Socrata
-  id: 
+  id: 8fw7-n38z
   name: Emergency Rental Inspections and Lead Reports
   table: bseed.emg_inspections_socrata
   method: replace
