@@ -1,4 +1,47 @@
 - to: Socrata
+  id: 8fw7-n38z
+  name: Emergency Rental Inspections and Lead Reports
+  table: bseed.emg_inspections_socrata
+  method: replace
+  row_identifier:
+  columns:
+    Case Number:
+      field: csm_caseno
+      type: text
+    Address:
+      field: address
+      type: text
+    Parcel Number:
+      field: parcelnum
+      type: text
+    Location:
+      field: location
+      type: location
+    Action Description:
+      field: action_description
+      type: text
+    Action Menu ID:
+      field: actn_menu_id
+      type: text
+    Action Code:
+      field: actn_code
+      type: text
+    CSA Creation Date:
+      field: csa_creation_date
+      type: calendar_date
+    CSA Date 1:
+      field: csa_date1
+      type: calendar_date
+    CSA Date 2:
+      field: csa_date2
+      type: calendar_date
+    CSA Date 3:
+      field: csa_date3
+      type: calendar_date
+    CSA Disposition:
+      field: csa_disp
+      type: text
+- to: Socrata
   id: 64cb-n6dd
   name: Rental Inspections
   table: bseed.rental_inspections_socrata

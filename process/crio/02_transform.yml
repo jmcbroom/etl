@@ -1,0 +1,33 @@
+- type: geocode
+  table: crio.bizcert
+  add_col: business_street_address
+  geom_col: geom
+
+- type: sql
+  statements:
+    - drop view if exists crio.bizcert;
+    - create view crio.bizcert_socrata as
+        ( select 
+            business_name,
+            business_street_address,
+            business_type,
+            dbb,
+            dsb,
+            jv,
+            mbe,
+            wbe,
+            lgtb,
+            dsu,
+            certification_expire_date,
+            case 
+            when geom is null 
+              then 'location (42.3314,-83.0458)'
+              else concat(
+                'location (',
+                ST_Y(ST_Centroid(geom)), 
+                ',', 
+                ST_X(ST_Centroid(geom)),
+                 ')'
+              )
+            end as location
+          from crio.bizcert )

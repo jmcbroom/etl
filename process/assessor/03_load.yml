@@ -1,3 +1,7 @@
+- to: Mapbox
+  name: Assessor Parcels
+  table: assessor.parcels_mapbox
+  tileset: assessor_parcels
 - to: Socrata
   id: xbvp-4is5
   name: Property Sales History

@@ -145,7 +145,7 @@
           COALESCE(discount_amount, 0));
     # compute payment amount: sum all rows with PaymentAmt for a unique ZTicketID
     - update dah.bvn j set
-        payment_amount = (select sum("PaymentAmt") from dah.payments where "ZticketID" = j.ticket_id);
+        payment_amount = (select sum("PaymentAmt") from dah.payments where "ZticketID" = j.ticket_id and "PayAction" = 1 and "Void" != 1);
     - update dah.bvn j set
         payment_amount = judgment_amount
             where j.ticket_id in (select "ZticketID" from dah.payments where "PymtKnd" = 2);
@@ -168,7 +168,7 @@
                 )
               )
             end 
-        from (select * from dah.dispadjourn da order by "EntryDt" desc) da where da."ZTicketID" = j.ticket_id;
+        from (select * from dah.dispadjourn da where "SetAside" != 1 order by "EntryDt" desc) da where da."ZTicketID" = j.ticket_id;
     # if disposition is "not responsible", set payment and judgment to $0 (bc might be refunded)
     - update dah.bvn j set 
         payment_amount = 0, 
@@ -200,6 +200,14 @@
         set violation_address = concat_ws(' ', violation_street_number, violation_street_name);
     # join on parcel address (geocode in future bc dah addresses often lack direction, therefore don't match)
     - create index if not exists dah_bvn_violation_address_idx on dah.bvn using btree(violation_address)
+
+    ## Fixes addressing Bernard's feedback 1/31/2018
+    # if disposition is like "Not responsible", then judgment amount should display $0 (eg 17002283DAH)
+    # - update dah.bvn set judgment_amount = 0 where disposition like 'Not %'
+    # if court date is in the future, then judgment amount and balance due should display $0 (eg 17026937DAH)
+    - update dah.bvn set judgment_amount = 0, balance_due = 0 where hearing_date > NOW();
+    # 
+
 - type: geocode
   table: dah.bvn
   add_col: violation_address
