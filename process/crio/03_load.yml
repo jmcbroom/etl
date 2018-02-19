@@ -1,5 +1,5 @@
 - to: Socrata
-  id: 
+  id: v4da-ysyn
   name: Business Certification Register
   table: crio.bizcert_socrata
   method: replace
@@ -10,33 +10,66 @@
     Business Street Address:
       field: business_street_address
       type: text
+    Suite:
+      field: suite
+      type: text
+    City:
+      field: business_city
+      type: text
+    State:
+      field: state
+      type: text
+    Zip:
+      field: zip_code
+      type: text
     Business Type:
       field: business_type
       type: text
-    Detroit-based or Detroit-headquartered Business:
-      field: dbb
+    Goods and Services Offered:
+      field: goods_and_services_offered
       type: text
-    Small Business:
-      field: dsb
+    NIGP Codes:
+      field: nigp_codes
       type: text
-    Joint Venture:
-      field: jv
-      type: text
-    Minority-owned business:
-      field: mbe
-      type: text
-    Woman-owned business:
-      field: wbe
-      type: text
-    LGTB-owned business:
-      field: lgtb
-      type: text
-    Start-up or Detroit-relocated Business:
-      field: dsu
+    Application Status:
+      field: application_status
       type: text
     Certification Expiration Date:
       field: certification_expire_date
       type: calendar_date
+    DSU or DRL:
+      field: dsu_drl
+      type: text
+    DBB:
+      field: dbb
+      type: text
+    DHB:
+      field: dhb
+      type: text
+    DSB:
+      field: dsb
+      type: text
+    JV:
+      field: jv
+      type: text
+    MBE:
+      field: mbe
+      type: text
+    WBE:
+      field: wbe
+      type: text
+    LGBT:
+      field: lgbt
+      type: text
+    Contact Name:
+      field: contact_name
+      type: text
+    Business Phone Number:
+      field: business_phone_number
+      type: text
+    Business Website:
+      field: website
+      type: text
     Business Location:
       field: location
       type: location
