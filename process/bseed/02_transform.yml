@@ -1,3 +1,118 @@
+# DNG Cases
+- type: sql
+  statements:
+    - drop table if exists bseed.dng_cases cascade;
+    - create table bseed.dng_cases (
+            dng_number text,
+            parcelno text,
+            inspection_date timestamp,
+            inspection_disposition text,
+            tract_investigation_completed_date timestamp,
+            office_hearing_date timestamp,
+            office_hearing_disposition text,
+            cc_hearing_inspection_date timestamp,
+            cc_hearing_inspection_disposition text,
+            cc_hearing_date timestamp,
+            cc_hearing_disposition text,
+            issue_notice_lis_pendens_date timestamp,
+            issue_notice_of_emg_demolition text);
+    - create index bseed_dng_number_idx on bseed.dng_cases using btree(dng_number);
+    - insert into bseed.dng_cases (dng_number, parcelno) select csm_caseno, prc_parcel_no from bseed.tm_casemain where csm_caseno like 'DNG201%';
+    - update bseed.dng_cases dng set inspection_date = (select csa_date3 from bseed.tm_caseaction where csm_caseno = dng.dng_number and trim(action_description) in ('DB Complaint Inspection') order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set inspection_disposition = (select csa_disp from bseed.tm_caseaction where csm_caseno = dng.dng_number and trim(action_description) in ('DB Complaint Inspection') order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set 
+            tract_investigation_completed_date = 
+            (select csa_date3 
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('Tract Investigation Completed') 
+                  order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set 
+            office_hearing_disposition = 
+            (select csa_disp
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('Office Hearing') 
+                  order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set 
+            office_hearing_date = 
+            (select csa_date3 
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('Office Hearing') 
+                  order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set 
+            cc_hearing_inspection_date = 
+            (select csa_date3
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('City Council Hearing Insp') 
+                  order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set 
+            cc_hearing_inspection_disposition =
+            (select csa_disp 
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('City Council Hearing Insp') 
+                  order by csa_date3 desc limit 1);   
+    - update bseed.dng_cases dng set 
+            cc_hearing_date = 
+            (select csa_date3
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('City Council Hearing') 
+                  order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set 
+            cc_hearing_disposition =
+            (select csa_disp 
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('City Council Hearing') 
+                  order by csa_date3 desc limit 1);   
+    - update bseed.dng_cases dng set 
+            issue_notice_lis_pendens_date = 
+            (select csa_date3
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('Issue Notice Lis Pendens') 
+                  order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set 
+            issue_notice_of_emg_demolition = 
+            (select csa_date3
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('Issue Notice of EMG Demolition') 
+                  order by csa_date3 desc limit 1);   
+    - select * from bseed.dng_cases;
+    - drop view if exists bseed.dng_cases_socrata; 
+    - create view bseed.dng_cases_socrata as (
+            select 
+                  dng_number,
+                  pl.cleaned as parcelno,
+                  replace(inspection_date::text, ' ', 'T') as inspection_date,
+                  inspection_disposition,
+                  replace(tract_investigation_completed_date::text, ' ', 'T') as tract_investigation_completed_date,
+                  replace(office_hearing_date::text, ' ', 'T') as office_hearing_date,
+                  office_hearing_disposition,
+                  replace(cc_hearing_inspection_date::text, ' ', 'T') as cc_hearing_inspection_date,
+                  cc_hearing_inspection_disposition,
+                  replace(cc_hearing_date::text, ' ', 'T') as cc_hearing_date,
+                  cc_hearing_disposition,
+                  replace(issue_notice_lis_pendens_date::text, ' ', 'T') as issue_notice_lis_pendens_date,
+                  issue_notice_of_emg_demolition
+            from bseed.dng_cases dng
+            inner join bseed.pnum_lookup pl on dng.parcelno = pl.dirty)
+
+
 # Emergency Rental Inspections and Lead Reports
 - type: sql
   statements:

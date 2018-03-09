@@ -1,4 +1,55 @@
 - to: Socrata
+  id: dgtw-ct96
+  name: DNG Case Actions (Private)
+  table: bseed.dng_cases_socrata
+  method: replace
+  row_identifier: dng_number
+  columns:
+    DNG Number:
+      field: dng_number
+      type: text
+    Parcel Number:
+      field: parcelno
+      type: text
+    Inspection Date:
+      field: inspection_date
+      type: calendar_date
+    Inspection Disposition :
+      field: inspection_disposition
+      type: text
+    Tract Investigation Completed Date:
+      field: tract_investigation_completed_date
+      type: calendar_date
+    Office Hearing Date:
+      field: office_hearing_date
+      type: calendar_date
+    Office Hearing Disposition:
+      field: office_hearing_disposition
+      type: text
+    City Council Hearing Inspection Date:
+      field: cc_hearing_inspection_date
+      type: calendar_date
+    City Council Hearing Inspection Disposition:
+      field: cc_hearing_inspection_disposition
+      type: text
+    City Council Hearing Date:
+      field: cc_hearing_date
+      type: calendar_date
+    City Council Hearing Disposition:
+      field: cc_hearing_disposition
+      type: text
+    Issue Notice Lis Pendens Date:
+      field: issue_notice_lis_pendens_date
+      type: calendar_date
+    Issue Notice of EMG Demolition:
+      field: issue_notice_of_emg_demolition
+      type: calendar_date
+
+- to: Mapbox
+  name: BSEED Building Permits
+  table: bseed.bldg_permits_mapbox
+  tileset: bseed_permits
+- to: Socrata
   id: 8fw7-n38z
   name: Emergency Rental Inspections and Lead Reports
   table: bseed.emg_inspections_socrata
