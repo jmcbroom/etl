@@ -1,84 +1,96 @@
-# - database:
-#     type: oracle
-#     prefix: tm
-#     source: BG_BLD_DET_F
-#     destination: bseed.bldg_permits
+- database:
+    type: oracle
+    prefix: tm
+    source: BG_BLD_DET_F
+    destination: bseed.bldg_permits
 - database:
     type: oracle
     prefix: tm
     source: CASE_PEOPLE
     destination: bseed.tm_casepeople
-# - database:
-#     type: oracle
-#     prefix: tm
-#     source: CASE_ENG
-#     destination: bseed.tm_caseeng
-#     where: >-
-#         ((date '1980-01-01' < ENG_END_DATE and ENG_END_DATE < date '2025-01-01') or ENG_END_DATE is null)
-#         and 
-#         ((date '1980-01-01' < ENG_START_DATE and ENG_START_DATE < date '2025-01-01') or ENG_START_DATE is null)
-# - database:
-#     type: oracle
-#     prefix: tm
-#     source: CASEMAIN
-#     destination: bseed.tm_casemain
-#     where: >-
-#         ((date '1980-01-01' < CSM_EXPR_DATE and CSM_EXPR_DATE < date '2025-01-01') or CSM_EXPR_DATE is null)
-#         and 
-#         ((date '1980-01-01' < CSM_FINALED_DATE and CSM_FINALED_DATE < date '2025-01-01') or CSM_FINALED_DATE is null)
-#         and 
-#         ((date '1980-01-01' < CSM_ISSUED_DATE and CSM_ISSUED_DATE < date '2025-01-01') or CSM_ISSUED_DATE is null)
-#         and 
-#         ((date '1980-01-01' < CSM_RECD_DATE and CSM_RECD_DATE < date '2025-01-01') or CSM_RECD_DATE is null)
-# - database:
-#     type: oracle
-#     prefix: tm
-#     source: CASE_ADDRESS
-#     destination: bseed.tm_caseaddress
-# - database:
-#     type: oracle
-#     prefix: tm
-#     source: BG_ANN_ADD_ACT
-#     destination: bseed.tm_inspections
-#     where: ((date '1980-01-01' < ACTION_DATE and ACTION_DATE < date '2025-01-01') or ACTION_DATE is null)
-# - database:
-#     type: oracle
-#     prefix: tm
-#     source: CASE_ACTION
-#     destination: bseed.tm_caseaction
-#     where: >-
-#         ((date '1980-01-01' < CSA_DATE1 and CSA_DATE1 < date '2025-01-01') or CSA_DATE1 is null)
-#         and
-#         ((date '1980-01-01' < CSA_DATE2 and CSA_DATE2 < date '2025-01-01') or CSA_DATE2 is null)
-#         and
-#         ((date '2014-01-01' < CSA_DATE3 and CSA_DATE3 < date '2025-01-01') or CSA_DATE3 is null)
-#         and
-#         ((date '1980-01-01' < CSA_CREATION_DATE and CSA_CREATION_DATE < date '2025-01-01') or CSA_CREATION_DATE is null)
-# - database:
-#     type: oracle
-#     prefix: tm
-#     source: BG_ELV_DET_F
-#     destination: bseed.tm_elevator
-# - database:
-#     type: oracle
-#     prefix: tm
-#     source: BG_PLM_DET_F
-#     destination: bseed.tm_plumbing
-# - database:
-#     type: oracle
-#     prefix: tm
-#     source: BG_ELE_DET_F
-#     destination: bseed.tm_electrical
-# - database:
-#     type: oracle
-#     prefix: tm
-#     source: BG_BPV_DET_F
-#     destination: bseed.tm_boiler
-# - database:
-#     type: oracle
-#     prefix: tm
-#     source: BG_MEC_DET_F
-#     destination: bseed.tm_mechanical
+- database:
+    type: oracle
+    prefix: tm
+    source: CASE_ENG
+    destination: bseed.tm_caseeng
+    where: >-
+        ((date '1980-01-01' < ENG_END_DATE and ENG_END_DATE < date '2025-01-01') or ENG_END_DATE is null)
+        and 
+        ((date '1980-01-01' < ENG_START_DATE and ENG_START_DATE < date '2025-01-01') or ENG_START_DATE is null)
+- database:
+    type: oracle
+    prefix: tm
+    source: CASEMAIN
+    destination: bseed.tm_casemain
+    where: >-
+        ((date '1980-01-01' < CSM_EXPR_DATE and CSM_EXPR_DATE < date '2025-01-01') or CSM_EXPR_DATE is null)
+        and 
+        ((date '1980-01-01' < CSM_FINALED_DATE and CSM_FINALED_DATE < date '2025-01-01') or CSM_FINALED_DATE is null)
+        and 
+        ((date '1980-01-01' < CSM_ISSUED_DATE and CSM_ISSUED_DATE < date '2025-01-01') or CSM_ISSUED_DATE is null)
+        and 
+        ((date '1980-01-01' < CSM_RECD_DATE and CSM_RECD_DATE < date '2025-01-01') or CSM_RECD_DATE is null)
+- database:
+    type: oracle
+    prefix: tm
+    source: CASE_ADDRESS
+    destination: bseed.tm_caseaddress
+- database:
+    type: oracle
+    prefix: tm
+    source: BG_ANN_ADD_ACT
+    destination: bseed.tm_inspections
+    where: ((date '1980-01-01' < ACTION_DATE and ACTION_DATE < date '2025-01-01') or ACTION_DATE is null)
+- database:
+    type: oracle
+    prefix: tm
+    source: CASE_ACTION
+    destination: bseed.tm_caseaction
+    where: >-
+        ((date '1980-01-01' < CSA_DATE1 and CSA_DATE1 < date '2025-01-01') or CSA_DATE1 is null)
+        and
+        ((date '1980-01-01' < CSA_DATE2 and CSA_DATE2 < date '2025-01-01') or CSA_DATE2 is null)
+        and
+        ((date '2014-01-01' < CSA_DATE3 and CSA_DATE3 < date '2025-01-01') or CSA_DATE3 is null)
+        and
+        ((date '1980-01-01' < CSA_CREATION_DATE and CSA_CREATION_DATE < date '2025-01-01') or CSA_CREATION_DATE is null)
+- database:
+    type: oracle
+    prefix: tm
+    source: BG_ELV_DET_F
+    destination: bseed.tm_elevator
+- database:
+    type: oracle
+    prefix: tm
+    source: BG_PLM_DET_F
+    destination: bseed.tm_plumbing
+- database:
+    type: oracle
+    prefix: tm
+    source: BG_ELE_DET_F
+    destination: bseed.tm_electrical
+- database:
+    type: oracle
+    prefix: tm
+    source: BG_BPV_DET_F
+    destination: bseed.tm_boiler
+- database:
+    type: oracle
+    prefix: tm
+    source: BG_MEC_DET_F
+    destination: bseed.tm_mechanical
+- smartsheet:
+    id: 5167797799020420
+    table: third_party_insp_wadetrim
+- smartsheet: 
+    id: 8784069296187268
+    table: third_party_insp_inspgroup
+- smartsheet:
+    id: 7147041437575044
+    table: third_party_insp_prospections
+- smartsheet:
+    id: 4356938877167492
+    table: third_party_insp_safebuilt
     
 # # # 
 # This was just for the parcel clean up

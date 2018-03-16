@@ -66,7 +66,7 @@
     - alter table crimescape.cad_update add column if not exists is_anon boolean
     - update crimescape.cad_update set is_anon = 'f'
 
-# CAD: Assign street addresses for known places; these will get fuzzed
+# CAD: Assign street addresses for known places, removing text like "MGM Casino"
 - type: lookup
   table: crimescape.cad_update
   lookup_field: incident_address
@@ -135,3 +135,34 @@
 - type: sql
   statements:
   - copy ( select * from crimescape.cad_sftp ) to '/tmp/cad.csv' delimiter ',' csv header
+
+# CAD AVL: Create view
+# - insert into crimescape.avl (select * from crimescape.avl_update)
+# - drop table if exists crimescape.avl_update
+- drop view if exists crimescape.avl_sftp
+- create view crimescape.avl_sftp as (
+    select
+      avllogid,
+      timestamp,
+      unitcode,
+      agency,
+      vehicleid,
+      unitperid,
+      inci_id,
+      status,
+      avstatus,
+      geox,
+      geoy,
+      speed,
+      heading,
+      isradio,
+      emequipact,
+      isaircraft
+    from crimescape.avl
+    where timestamp >= date '2016-12-15'
+)
+
+# CAD AVL: Copy to csv
+- type: sql
+  statements: 
+  - copy ( select * from crimescape.avl_sftp ) to '/tmp/avl.csv' delimiter ',' csv header

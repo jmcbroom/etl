@@ -113,7 +113,7 @@
             inner join bseed.pnum_lookup pl on dng.parcelno = pl.dirty)
 
 
-# Emergency Rental Inspections and Lead Reports
+# Rental Inspections
 - type: sql
   statements:
     - drop view if exists bseed.emg_inspections_socrata;
@@ -146,7 +146,43 @@
                   and ca.actn_code in ('173', '175', '180', '190'))
             )
 
-# Rental Inspections
+# 3rd Party Rental Registrations
+# - type: sql
+#   statements: 
+#     - drop table if exists bseed.third_party_insps_all
+#     - create table bseed.third_party_insps_all as (
+#           select 
+#           # cols TBD
+#           from bseed.third_party_insp_wadetrim
+#           union all
+#           select
+#           # cols TBD
+#           from bseed.third_party_insp_inspgroup
+#           union all
+#           select
+#           # cols TBD
+#           from bseed.third_party_insp_prospections
+#           union all
+#           select
+#           # cols TBD
+#           from third_party_insp_safebuilt
+#       )
+
+# - type: geocode
+#   table: bseed.third_party_insps_all
+#   add_col:
+#   geom_col: geom
+
+# - type: sql
+#   statements:
+#     - drop view if exists bseed.third_party_insps_all_socrata
+#     - create view bseed.third_party_insps_all_socrata as (
+#           select
+#           # cols TBD
+#           from bseed.third_party_insps_all
+#       )
+
+# Rental Registrations & Certfications
 - type: sql
   statements:
     - drop view if exists bseed.rental_inspections_socrata;
