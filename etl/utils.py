@@ -44,9 +44,9 @@ def psql_to_geojson(table, outfile='test.json', insr=4326, outsr=4326):
 
 def psql_to_zipshp(table, outfile='test'):
   pgsql2shp = "pgsql2shp -f {} {} {}".format(outfile, env['PG_DB'], table)
-  zip_cmd = "zip {}.zip {}.*".format(outfile, outfile)
-  rm = "rm {}.{{cpg,dbf,prj,shp,shx}}".format(outfile)
-  for cmd in [pgsql2shp, zip_cmd, rm]:
+  zip_cmd = "zip {} {}.*".format(outfile, outfile.split('.')[0])
+  # rm = "rm {}.{{cpg,dbf,prj,shp,shx}}".format(outfile)
+  for cmd in [pgsql2shp, zip_cmd]:
     print(cmd)
     os.system(cmd)
 

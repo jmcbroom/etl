@@ -1,0 +1,30 @@
+- type: sql
+  statements:
+    - drop view if exists base.schools_socrata;
+    - create view base.schools_socrata as (
+        select
+          bcode,
+          bname,
+          isdcode,
+          isdname,
+          dcode,
+          dname,
+          entity_type,
+          entity_county,
+          chartering_agency_code,
+          chartering_agency_authorizer,
+          charter_management_organization,
+          entity_authorized_grades,
+          entity_actual_grades,
+          address,
+          city,
+          state,
+          zip,
+          elem_k_5_student_count,
+          middle_6_8_student_count,
+          high_9_12_student_count,
+          elementary,
+          middle,
+          high,
+          concat('location(', st_y(wkb_geometry), ',', st_x(wkb_geometry), ')') as location
+        from base.schools)

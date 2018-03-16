@@ -1,0 +1,124 @@
+- to: Socrata
+  id:
+  name: Traffic Crashes
+  table: transit.detroit_crashes_socrata
+  method: replace
+  row_identifier: crash_id
+  columns:
+    Crash ID:
+      field: crash_id
+      type: text
+    Crash Type:
+      field: crash_type
+      type: text
+    Date of Crash:
+      field: datetime
+      type: calendar_date
+    Primary Road:
+      field: primary_road
+      type: text
+    Intersecting Road:
+      field: intersecting_road
+      type: text
+    A-Level Injuries:
+      field: a_level_count
+      type: number
+    B-Level Injuries:
+      field: b_level_count
+      type: number
+    C-Level Injuries:
+      field: c_level_count
+      type: number
+    K-Level/Fatal Injuries:
+      field: fatal_count
+      type: number
+    Most Severe Injury:
+      field: most_severe_injury
+      type: number
+    Alcohol?:
+      field: alcohol
+      type: text
+    Bicycle?:
+      field: bicycle
+      type: text
+    Deer?:
+      field: deer
+      type: text
+    dis_ctrl_i:
+      field: dis_ctrl_i
+      type: text
+    Drugs?:
+      field: drug
+      type: text
+    Elderly Driver?:
+      field: elderly
+      type: text
+    Hit and Run?:
+      field: hit_and_run
+      type: text
+    Property Damage?:
+      field: property_damage
+      type: text
+    Lane Departure?:
+      field: lane_departure
+      type: text
+    Motorcycle?:
+      field: motorcycle
+      type: text
+    Pedestrian?:
+      field: pedestrian
+      type: text
+    Red Light Ran?:
+      field: red_light_running
+      type: text
+    School bus?:
+      field: school_bus
+      type: text
+    Train?:
+      field: train
+      type: text
+    Young Driver?:
+      field: young
+      type: text
+    Hour:
+      field: hour
+      type: number
+    Month:
+      field: month
+      type: number
+    Year:
+      field: year
+      type: number
+    Day of Week:
+      field: weekday
+      type: number
+    Road Class:
+      field: highway_classification
+      type: text
+    Jurisdiction:
+      field: jurisdiction
+      type: text
+    Lighting:
+      field: lighting
+      type: text
+    Occupants:
+      field: occupants
+      type: text
+    Road Condition:
+      field: road_condition
+      type: text
+    Number of Lanes:
+      field: number_of_lanes
+      type: number
+    Speed Limit:
+      field: speed_limit
+      type: number
+    Number of Units:
+      field: number_of_units
+      type: number
+    Weather Conditions:
+      field: weather
+      type: text
+    location:
+      field: location
+      type: location
