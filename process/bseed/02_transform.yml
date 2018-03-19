@@ -147,40 +147,56 @@
             )
 
 # 3rd Party Rental Registrations
-# - type: sql
-#   statements: 
-#     - drop table if exists bseed.third_party_insps_all
-#     - create table bseed.third_party_insps_all as (
-#           select 
-#           # cols TBD
-#           from bseed.third_party_insp_wadetrim
-#           union all
-#           select
-#           # cols TBD
-#           from bseed.third_party_insp_inspgroup
-#           union all
-#           select
-#           # cols TBD
-#           from bseed.third_party_insp_prospections
-#           union all
-#           select
-#           # cols TBD
-#           from third_party_insp_safebuilt
-#       )
+- type: sql
+  statements:
+    - alter table bseed.third_party_insp_safebuilt add column insp_company_name varchar not null default 'SafeBuilt'
+    - alter table bseed.third_party_insp_wadetrim add column insp_company_name varchar not null default 'Wade Trim'
+    - alter table bseed.third_party_insp_inspgroup add column insp_company_name varchar not null default 'The Inspection Group'
+    - alter table bseed.third_party_insp_prospections add column insp_company_name varchar not null default 'Prospections'
+    - drop table if exists bseed.third_party_insps_all
+    - create table bseed.third_party_insps_all as (
+          select 
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed_failed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_or_subsequent_inspection_date", "3rd_or_subsequent_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "insp_company_name"
+          from bseed.third_party_insp_wadetrim
+          union all
+          select
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_certificate_of_compliance_issued", "insp_company_name"
+          from bseed.third_party_insp_inspgroup
+          union all
+          select
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "insp_company_name"
+          from bseed.third_party_insp_prospections
+          union all
+          select
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed_failed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "insp_company_name"
+          from bseed.third_party_insp_safebuilt
+      )
 
 # - type: geocode
 #   table: bseed.third_party_insps_all
 #   add_col:
 #   geom_col: geom
 
-# - type: sql
-#   statements:
-#     - drop view if exists bseed.third_party_insps_all_socrata
-#     - create view bseed.third_party_insps_all_socrata as (
-#           select
-#           # cols TBD
-#           from bseed.third_party_insps_all
-#       )
+- type: sql
+  statements:
+    - drop view if exists bseed.third_party_insps_all_socrata
+    - create view bseed.third_party_insps_all_socrata as (
+          select
+            "date_registered",
+            concat_ws(' ', "address", "direction", "street") as "address",
+            "zip_code",
+            "date_1st_inspection_completed" as "first_inspection_date",
+            "1st_inspection_passed_failed" as "first_inspection_disposition",
+            "2nd_inspection_date" as "second_inspection_date",
+            "2nd_inspection_passed_failed" as "second_inspection_disposition",
+            "3rd_or_subsequent_inspection_date" as "third_or_subsequent_inspection_date",
+            "3rd_or_subsequent_inspection_passed_failed" as "third_or_subsequent_inspection_disposition",
+            "date_correction_order_posted",
+            "date_citation_ticket_posted",
+            "date_c_of_c_issued_to_be_completed_by_clerk",
+            "insp_company_name"
+          from bseed.third_party_insps_all
+      )
 
 # Rental Registrations & Certfications
 - type: sql
