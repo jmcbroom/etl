@@ -13,6 +13,10 @@ def upload(gis, filepath, params):
             'description':params['description'],
             'tags':','.join(params['tags']),
             'type': 'Shapefile'}
+  if params['type'] == 'geojson':
+    item_properties['type'] = 'GeoJson'
+  else:
+    item_properties['type'] = 'Shapefile'
   item = gis.content.add(item_properties, filepath)
   return item
 
@@ -29,9 +33,12 @@ class AgoLayer(object):
     print(params)
 
   def publish(self):
-    # psql_to_geojson(self.params['table'], self.params['file'])
-    psql_to_zipshp(self.params['table'], self.params['file'])
+    if self.params['type'] == 'geojson':
+      psql_to_geojson(self.params['table'], self.params['file'])
+    else:
+      psql_to_zipshp(self.params['table'], self.params['file'])
     if 'id' not in self.params.keys():
+      print(self.params['file'])
       item = upload(gis, self.params['file'], self.params)
       self.item = item.publish()
       # to do: write back new item id to .yml file

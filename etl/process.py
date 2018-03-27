@@ -74,6 +74,18 @@ class Process(object):
           drop_table_if_exists(connection, params['destination'])
           s = Sftp(params['host'], params['destination'])
           s.to_postgres()
+
+        elif srctype == 'mapbox':
+          from .mapbox import MapboxDataset
+          m = MapboxDataset(params)
+          drop_table_if_exists(connection, params['destination'])
+          m.to_postgres()
+
+        elif srctype == 'airtable':
+          from .airtable import AirtableTable
+          a = AirtableTable(params)
+          drop_table_if_exists(connection, params['destination'])
+          a.to_postgres()
           
         else:
           print("I don't know this source type: {}".format(srctype))
@@ -133,8 +145,8 @@ class Process(object):
           s = Sftp(d['host'], None, d['file'])
 
         elif destination == 'Mapbox':
-          from .mapbox import Mapbox
-          m = Mapbox(d)
+          from .mapbox import MapboxUpload
+          m = MapboxUpload(d)
           m.upload()
 
         else:
