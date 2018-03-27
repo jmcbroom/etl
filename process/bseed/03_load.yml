@@ -187,7 +187,7 @@
       field: csa_disp
       type: text
 - to: Socrata
-  id: 
+  id: di9m-phy3
   name: Rental Certifications
   table: bseed.rental_certifications_socrata  
   method: replace
