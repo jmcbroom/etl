@@ -198,7 +198,7 @@
           from bseed.third_party_insps_all
       )
 
-# Rental Registrations & Certfications
+# Initial & Renewal Rental Registrations (Certifications to be broken out into own view)
 - type: sql
   statements:
     - drop view if exists bseed.rental_inspections_socrata;
@@ -241,10 +241,10 @@
             inner join bseed.tm_caseaddress cadd on cadd.csm_caseno = cm.csm_caseno
             where 
                   cm.case_type = 'PMB'
-                  and cm.csm_recd_date > CURRENT_DATE - INTERVAL '1 year'
+                  and ca.csa_date3 > CURRENT_DATE - INTERVAL '1 year'
                   and ca.actn_menu_id = 'B' 
-                  and ca.actn_code in ('80', '90', '220')
-                  and cp.role_type = 'OWN'
+                  and ca.actn_code in ('80', '90')
+                  and cp.csp_primary = 'Y'
             )
         
 # ROW Permits
