@@ -1,4 +1,47 @@
 - to: Socrata
+  id: 
+  name: Third-Party Rental Inspections
+  table: bseed.third_party_insps_all_socrata
+  method: replace
+  row_identifier:
+  columns:
+    Inspection Company Name:
+      field: insp_company_name
+      type: text
+    Address:
+      field: address
+      type: text
+    Zip Code:
+      field: zip_code
+      type: text
+    1st Inspection Date:
+      field: first_inspection_date
+      type: text
+    1st Inspection Disposition:
+      field: first_inspection_disposition
+      type: text
+    2nd Inspection Date:
+      field: second_inspection_date
+      type: text
+    2nd Inspection Disposition:
+      field: second_inspection_disposition
+      type: text
+    3rd or Subsequent Inspection Date:
+      field: third_or_subsequent_inspection_date
+      type: text
+    3rd of Subsequent Inspection Disposition:
+      field: third_or_subsequent_inspection_disposition
+      type: text
+    Date Correction Order Posted:
+      field: date_correction_order_posted
+      type: text
+    Date Citation Order Posted:
+      field: date_citation_order_posted
+      type: text
+    Date Certificate of Compliance Issued:
+      field: date_c_of_c_issued_to_be_completed_by_clerk
+      type: text
+- to: Socrata
   id: dgtw-ct96
   name: DNG Case Actions (Private)
   table: bseed.dng_cases_socrata
@@ -44,14 +87,13 @@
     Issue Notice of EMG Demolition:
       field: issue_notice_of_emg_demolition
       type: calendar_date
-
 - to: Mapbox
   name: BSEED Building Permits
   table: bseed.bldg_permits_mapbox
   tileset: bseed_permits
 - to: Socrata
   id: 8fw7-n38z
-  name: Emergency Rental Inspections and Lead Reports
+  name: Rental Inspections
   table: bseed.emg_inspections_socrata
   method: replace
   row_identifier:
@@ -94,8 +136,60 @@
       type: text
 - to: Socrata
   id: 64cb-n6dd
-  name: Rental Inspections
+  name: Rental Registrations
   table: bseed.rental_inspections_socrata
+  method: replace
+  row_identifier:
+  columns:
+    Case Number:
+      field: csm_caseno
+      type: text
+    First Name:
+      field: csm_name_first
+      type: text
+    Last Name:
+      field: csm_name_last
+      type: text
+    Middle Name:
+      field: csm_name_mi
+      type: text
+    Received By:
+      field: csm_recd_by
+      type: text
+    Received Date:
+      field: csm_recd_date
+      type: calendar_date
+    Parcel Number:
+      field: parcelnum
+      type: text
+    Location:
+      field: location
+      type: location
+    Address:
+      field: address
+      type: text
+    Action Description:
+      field: action_description
+      type: text
+    CSA Creation Date:
+      field: csa_creation_date
+      type: calendar_date
+    CSA Date 1:
+      field: csa_date1
+      type: calendar_date
+    CSA Date 2:
+      field: csa_date2
+      type: calendar_date
+    CSA Date 3:
+      field: csa_date3
+      type: calendar_date
+    CSA Disposition:
+      field: csa_disp
+      type: text
+- to: Socrata
+  id: di9m-phy3
+  name: Rental Certifications
+  table: bseed.rental_certifications_socrata  
   method: replace
   row_identifier:
   columns:

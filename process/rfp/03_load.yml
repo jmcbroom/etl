@@ -1,0 +1,8 @@
+- to: ArcGIS Online
+  type: geojson
+  file: rfp_arcgis.json
+  table: projects.rfp_arcgis
+  title: Requests for Proposal
+  description: RFPs from the City of Detroit
+  tags:
+    - iet

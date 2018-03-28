@@ -4,3 +4,7 @@
 - to: SFTP
   host: crimescape
   file: /tmp/cad.csv
+- to: SFTP
+  host: crimescape
+  file: /tmp/avl.csv
+  

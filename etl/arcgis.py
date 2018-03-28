@@ -1,6 +1,6 @@
 # https://developers.arcgis.com/python/
 from arcgis.gis import GIS
-from .utils import psql_to_geojson
+from .utils import psql_to_geojson, psql_to_zipshp
 
 # requires environment variables: AGO_USER, AGO_PASS
 from os import environ as env
@@ -12,7 +12,11 @@ def upload(gis, filepath, params):
   item_properties ={'title':params['title'],
             'description':params['description'],
             'tags':','.join(params['tags']),
-            'type': 'GeoJson'}
+            'type': 'Shapefile'}
+  if params['type'] == 'geojson':
+    item_properties['type'] = 'GeoJson'
+  else:
+    item_properties['type'] = 'Shapefile'
   item = gis.content.add(item_properties, filepath)
   return item
 
@@ -29,8 +33,12 @@ class AgoLayer(object):
     print(params)
 
   def publish(self):
-    psql_to_geojson(self.params['table'], self.params['file'])
-    if not self.params['id']:
+    if self.params['type'] == 'geojson':
+      psql_to_geojson(self.params['table'], self.params['file'])
+    else:
+      psql_to_zipshp(self.params['table'], self.params['file'])
+    if 'id' not in self.params.keys():
+      print(self.params['file'])
       item = upload(gis, self.params['file'], self.params)
       self.item = item.publish()
       # to do: write back new item id to .yml file

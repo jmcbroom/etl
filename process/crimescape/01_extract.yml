@@ -13,3 +13,15 @@
         condition: ">"
         value: max(inci_id)
         table: crimescape.cad
+- database:
+    type: sql-server
+    prefix: cad
+    source: avllog
+    destination: crimescape.avl
+    # destination: crimescape.avl_update
+    where: (timestamp >= date '2016-12-15')
+    # where:
+    #     field: timestamp
+    #     condition: ">"
+    #     value: max(timestamp)
+    #     table: crimescape.avl

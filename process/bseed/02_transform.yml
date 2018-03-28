@@ -17,6 +17,7 @@
             issue_notice_lis_pendens_date timestamp,
             issue_notice_of_emg_demolition text);
     - create index bseed_dng_number_idx on bseed.dng_cases using btree(dng_number);
+    - create index bseed_case_action_caseno_idx on bseed.tm_caseaction using btree(csm_caseno);
     - insert into bseed.dng_cases (dng_number, parcelno) select csm_caseno, prc_parcel_no from bseed.tm_casemain where csm_caseno like 'DNG201%';
     - update bseed.dng_cases dng set inspection_date = (select csa_date3 from bseed.tm_caseaction where csm_caseno = dng.dng_number and trim(action_description) in ('DB Complaint Inspection') order by csa_date3 desc limit 1);
     - update bseed.dng_cases dng set inspection_disposition = (select csa_disp from bseed.tm_caseaction where csm_caseno = dng.dng_number and trim(action_description) in ('DB Complaint Inspection') order by csa_date3 desc limit 1);
@@ -113,7 +114,7 @@
             inner join bseed.pnum_lookup pl on dng.parcelno = pl.dirty)
 
 
-# Emergency Rental Inspections and Lead Reports
+# Rental Inspections
 - type: sql
   statements:
     - drop view if exists bseed.emg_inspections_socrata;
@@ -146,7 +147,59 @@
                   and ca.actn_code in ('173', '175', '180', '190'))
             )
 
-# Rental Inspections
+# 3rd Party Rental Registrations
+- type: sql
+  statements:
+    - alter table bseed.third_party_insp_safebuilt add column insp_company_name varchar not null default 'SafeBuilt'
+    - alter table bseed.third_party_insp_wadetrim add column insp_company_name varchar not null default 'Wade Trim'
+    - alter table bseed.third_party_insp_inspgroup add column insp_company_name varchar not null default 'The Inspection Group'
+    - alter table bseed.third_party_insp_prospections add column insp_company_name varchar not null default 'Prospections'
+    - drop table if exists bseed.third_party_insps_all
+    - create table bseed.third_party_insps_all as (
+          select 
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed_failed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_or_subsequent_inspection_date", "3rd_or_subsequent_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "insp_company_name"
+          from bseed.third_party_insp_wadetrim
+          union all
+          select
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_certificate_of_compliance_issued", "insp_company_name"
+          from bseed.third_party_insp_inspgroup
+          union all
+          select
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "insp_company_name"
+          from bseed.third_party_insp_prospections
+          union all
+          select
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed_failed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "insp_company_name"
+          from bseed.third_party_insp_safebuilt
+      )
+
+# - type: geocode
+#   table: bseed.third_party_insps_all
+#   add_col:
+#   geom_col: geom
+
+- type: sql
+  statements:
+    - drop view if exists bseed.third_party_insps_all_socrata
+    - create view bseed.third_party_insps_all_socrata as (
+          select
+            "date_registered",
+            concat_ws(' ', "address", "direction", "street") as "address",
+            "zip_code",
+            "date_1st_inspection_completed" as "first_inspection_date",
+            "1st_inspection_passed_failed" as "first_inspection_disposition",
+            "2nd_inspection_date" as "second_inspection_date",
+            "2nd_inspection_passed_failed" as "second_inspection_disposition",
+            "3rd_or_subsequent_inspection_date" as "third_or_subsequent_inspection_date",
+            "3rd_or_subsequent_inspection_passed_failed" as "third_or_subsequent_inspection_disposition",
+            "date_correction_order_posted",
+            "date_citation_ticket_posted",
+            "date_c_of_c_issued_to_be_completed_by_clerk",
+            "insp_company_name"
+          from bseed.third_party_insps_all
+      )
+
+# Initial & Renewal Rental Registrations
 - type: sql
   statements:
     - drop view if exists bseed.rental_inspections_socrata;
@@ -189,10 +242,59 @@
             inner join bseed.tm_caseaddress cadd on cadd.csm_caseno = cm.csm_caseno
             where 
                   cm.case_type = 'PMB'
-                  and cm.csm_recd_date > CURRENT_DATE - INTERVAL '1 year'
+                  and ca.csa_date3 > CURRENT_DATE - INTERVAL '1 year'
                   and ca.actn_menu_id = 'B' 
-                  and ca.actn_code in ('80', '90', '220')
-                  and cp.role_type = 'OWN'
+                  and ca.actn_code in ('80', '90')
+                  and cp.csp_primary = 'Y'
+            )
+
+# Rental Certifications
+- type: sql
+  statements:
+    - drop view if exists bseed.rental_certifications_socrata;
+    - create view bseed.rental_certifications_socrata as (
+            with last_action_on_case as (
+                  select distinct on (csm_caseno)
+                        csm_caseno,
+                        actn_menu_id,
+                        actn_code,
+                        action_description,
+                        csa_creation_date,
+                        csa_date1,
+                        csa_date2,
+                        csa_date3,
+                        csa_disp
+                  from bseed.tm_caseaction
+                  order by csm_caseno, csa_creation_date desc)
+            select 
+                  cm.csm_caseno,
+                  cm.csm_name_first,
+                  cm.csm_name_last,
+                  cm.csm_name_mi,
+                  cm.csm_recd_by,
+                  replace(cm.csm_recd_date::text, ' ', 'T') as csm_recd_date,
+                  pl.cleaned as parcelnum,
+                  case 
+                        when pl.parcel_geom is null then null
+                        else concat('location (', st_y(st_centroid(parcel_geom)), ',', st_x(st_centroid(parcel_geom)), ')') end as location,
+                  concat(cadd.csm_st_nmbr, ' ', cadd.csm_st_name) as address,
+                  ca.action_description,
+                  replace(ca.csa_creation_date::text, ' ', 'T') as csa_creation_date,
+                  replace(ca.csa_date1::text, ' ', 'T') as csa_date1,
+                  replace(ca.csa_date2::text, ' ', 'T') as csa_date2,
+                  replace(ca.csa_date3::text, ' ', 'T') as csa_date3,
+                  ca.csa_disp
+            from bseed.tm_casemain cm
+            inner join last_action_on_case ca on cm.csm_caseno = ca.csm_caseno
+            inner join bseed.tm_casepeople cp on cp.csm_caseno = cm.csm_caseno
+            inner join bseed.pnum_lookup pl on pl.dirty = cm.prc_parcel_no
+            inner join bseed.tm_caseaddress cadd on cadd.csm_caseno = cm.csm_caseno
+            where 
+                  cm.case_type = 'PMB'
+                  and ca.csa_date3 > CURRENT_DATE - INTERVAL '1 year'
+                  and ca.actn_menu_id = 'B' 
+                  and ca.actn_code in ('220')
+                  and cp.csp_primary = 'Y'
             )
         
 # ROW Permits

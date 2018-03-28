@@ -23,6 +23,7 @@
         ticket_issued_time text,
         hearing_date timestamp,
         hearing_time text,
+        judgment_date timestamp,
         violation_code text,
         violation_description text,
         disposition text,
@@ -59,6 +60,7 @@
         ticket_issued_time,
         hearing_date,
         hearing_time,
+        judgment_date,
         violation_code,
         violation_description,
         fine_amount,
@@ -92,6 +94,7 @@
           WHEN z."CourtTime" = 5.0 THEN '6:00 PM'
           ELSE null
         END) as hearing_time,
+        da."EntryDt" as judgment_date,
         od."OrdLaw" as violation_code,
         od."OrdDescription" as violation_description,
         cf."OffFineAmt" as fine_amount,
@@ -107,6 +110,7 @@
           inner join dah.violator_info vi on vi."ZTicketID" = z."ZTicketID"
           inner join dah.ordinance od on od."OrdID" = z."ViolDescID"
           inner join dah.cityfines cf on cf."OffFinID" = z."OrigFineAmt"
+          inner join dah.dispadjourn da on da."ZTicketID" = z."ZTicketID"
           where z."VoidTicket" = 0
     # new fine amount
     - update dah.bvn j set fine_amount = z."NewFineAmt" from dah.ztickets z 
