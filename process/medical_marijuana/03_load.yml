@@ -18,5 +18,6 @@
   method: replace
 - to: ArcGIS Online
   id: c15c471f1a534e88b29d1783e8604937
+  type: geojson
   file: medical_marijuana.json
   table: bseed.mmcc_arcgis

@@ -391,3 +391,12 @@
             and parcel_id is not null
             and property_ownership = 'DLBA Owned'
             and name not like '%Fake St%' )
+    - drop view if exists dlba.all_ownership_mapbox
+    - create view dlba.all_ownership_mapbox as
+            (select
+                name as address,
+                parcel_id,
+                inventory_status_socrata as status,
+                st_transform(ap.wkb_geometry, 4326)
+        from dlba.all_ownership_socrata ao inner join assessor.parcels_010218 ap on ap.parcelno = ao.parcel_id)
+

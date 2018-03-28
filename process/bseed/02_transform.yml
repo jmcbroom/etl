@@ -17,6 +17,7 @@
             issue_notice_lis_pendens_date timestamp,
             issue_notice_of_emg_demolition text);
     - create index bseed_dng_number_idx on bseed.dng_cases using btree(dng_number);
+    - create index bseed_case_action_caseno_idx on bseed.tm_caseaction using btree(csm_caseno);
     - insert into bseed.dng_cases (dng_number, parcelno) select csm_caseno, prc_parcel_no from bseed.tm_casemain where csm_caseno like 'DNG201%';
     - update bseed.dng_cases dng set inspection_date = (select csa_date3 from bseed.tm_caseaction where csm_caseno = dng.dng_number and trim(action_description) in ('DB Complaint Inspection') order by csa_date3 desc limit 1);
     - update bseed.dng_cases dng set inspection_disposition = (select csa_disp from bseed.tm_caseaction where csm_caseno = dng.dng_number and trim(action_description) in ('DB Complaint Inspection') order by csa_date3 desc limit 1);
