@@ -171,19 +171,10 @@
     Action Description:
       field: action_description
       type: text
-    CSA Creation Date:
-      field: csa_creation_date
-      type: calendar_date
-    CSA Date 1:
-      field: csa_date1
-      type: calendar_date
-    CSA Date 2:
-      field: csa_date2
-      type: calendar_date
-    CSA Date 3:
+    Date Issued:
       field: csa_date3
       type: calendar_date
-    CSA Disposition:
+    Disposition:
       field: csa_disp
       type: text
 - to: Socrata
@@ -223,19 +214,10 @@
     Action Description:
       field: action_description
       type: text
-    CSA Creation Date:
-      field: csa_creation_date
-      type: calendar_date
-    CSA Date 1:
-      field: csa_date1
-      type: calendar_date
-    CSA Date 2:
-      field: csa_date2
-      type: calendar_date
-    CSA Date 3:
+    Date Issued:
       field: csa_date3
       type: calendar_date
-    CSA Disposition:
+    Disposition:
       field: csa_disp
       type: text
 - to: Socrata
