@@ -15,8 +15,9 @@ def run(process, dataset=None, notify=False, emoji=None):
       msg.comment("Update successful: *{}*".format(process))
       msg.react(emoji)
   except Exception as e:
-    msg.send()
-    msg.comment("Error: *{}*\n > `{}`".format(process, e))
+    if process != 'angels_night':
+      msg.send()
+      msg.comment("Error: *{}*\n > `{}`".format(process, e))
 
 # # daily run; these do not use schedule
 run('crimescape', dataset=None, notify=False, emoji='rotating_light')
