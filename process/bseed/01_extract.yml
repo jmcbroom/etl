@@ -11,6 +11,11 @@
 - database:
     type: oracle
     prefix: tm
+    source: CASE_PMB
+    destination: bseed.tm_casepmb
+- database:
+    type: oracle
+    prefix: tm
     source: CASE_ENG
     destination: bseed.tm_caseeng
     where: >-
