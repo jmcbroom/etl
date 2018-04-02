@@ -1,5 +1,5 @@
 - to: Socrata
-  id: 
+  id: ajxy-mcqp
   name: Third-Party Rental Inspections
   table: bseed.third_party_insps_all_socrata
   method: replace
@@ -177,6 +177,15 @@
     Disposition:
       field: csa_disp
       type: text
+    Status:
+      field: csm_status
+      type: text
+    Use:
+      field: pmb_type_use
+      type: text
+    Units:
+      field: pmb_dwelling_units
+      type: number
 - to: Socrata
   id: di9m-phy3
   name: Rental Certifications
@@ -220,6 +229,15 @@
     Disposition:
       field: csa_disp
       type: text
+    Status:
+      field: csm_status
+      type: text
+    Use:
+      field: pmb_type_use
+      type: text
+    Units:
+      field: pmb_dwelling_units
+      type: number
 - to: Socrata
   id: rj7w-r8ts
   name: Right of Way Permits

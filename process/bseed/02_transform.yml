@@ -222,9 +222,16 @@
                   replace(ca.csa_date2::text, ' ', 'T') as csa_date2,
                   replace(ca.csa_date3::text, ' ', 'T') as csa_date3,
                   ca.csa_disp
+                  case 
+                        when pm.pmb_dwelling_units = 'NaN'
+                        then null
+                        else pm.pmb_dwelling_units
+                  end as pmb_dwelling_units
+                  pm.pmb_type_use
             from bseed.tm_casemain cm
             inner join bseed.tm_caseaction ca on cm.csm_caseno = ca.csm_caseno
             inner join bseed.tm_casepeople cp on cp.csm_caseno = cm.csm_caseno
+            inner join bseed.tm_casepmb pm on pm.csm_caseno = cm.csm_caseno
             inner join bseed.pnum_lookup pl on pl.dirty = cm.prc_parcel_no
             inner join bseed.tm_caseaddress cadd on cadd.csm_caseno = cm.csm_caseno
             where 
@@ -259,9 +266,16 @@
                   replace(ca.csa_date2::text, ' ', 'T') as csa_date2,
                   replace(ca.csa_date3::text, ' ', 'T') as csa_date3,
                   ca.csa_disp
+                  case 
+                        when pm.pmb_dwelling_units = 'NaN'
+                        then null
+                        else pm.pmb_dwelling_units
+                  end as pmb_dwelling_units
+                  pm.pmb_type_use
             from bseed.tm_casemain cm
             inner join bseed.tm_caseaction ca on cm.csm_caseno = ca.csm_caseno
             inner join bseed.tm_casepeople cp on cp.csm_caseno = cm.csm_caseno
+            inner join bseed.tm_casepmb pm on pm.csm_caseno = cm.csm_caseno
             inner join bseed.pnum_lookup pl on pl.dirty = cm.prc_parcel_no
             inner join bseed.tm_caseaddress cadd on cadd.csm_caseno = cm.csm_caseno
             where 
