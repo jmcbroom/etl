@@ -171,21 +171,21 @@
     Action Description:
       field: action_description
       type: text
-    CSA Creation Date:
-      field: csa_creation_date
-      type: calendar_date
-    CSA Date 1:
-      field: csa_date1
-      type: calendar_date
-    CSA Date 2:
-      field: csa_date2
-      type: calendar_date
-    CSA Date 3:
+    Date Issued:
       field: csa_date3
       type: calendar_date
-    CSA Disposition:
+    Disposition:
       field: csa_disp
       type: text
+    Status:
+      field: csm_status
+      type: text
+    Use:
+      field: pmb_type_use
+      type: text
+    Units:
+      field: pmb_dwelling_units
+      type: number
 - to: Socrata
   id: di9m-phy3
   name: Rental Certifications
@@ -223,21 +223,21 @@
     Action Description:
       field: action_description
       type: text
-    CSA Creation Date:
-      field: csa_creation_date
-      type: calendar_date
-    CSA Date 1:
-      field: csa_date1
-      type: calendar_date
-    CSA Date 2:
-      field: csa_date2
-      type: calendar_date
-    CSA Date 3:
+    Date Issued:
       field: csa_date3
       type: calendar_date
-    CSA Disposition:
+    Disposition:
       field: csa_disp
       type: text
+    Status:
+      field: csm_status
+      type: text
+    Use:
+      field: pmb_type_use
+      type: text
+    Units:
+      field: pmb_dwelling_units
+      type: number
 - to: Socrata
   id: rj7w-r8ts
   name: Right of Way Permits
