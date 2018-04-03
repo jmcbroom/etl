@@ -1,7 +1,7 @@
 - type: sql
   statements:
     # auctions sold
-    - drop view if exists dlba.auction_sold_socrata
+    - drop view if exists dlba.auction_sold_socrata cascade
     - create view dlba.auction_sold_socrata as
             ( select
             case when a.actual_closing_date is null then null else
@@ -42,7 +42,7 @@
             and pb.buyer_status = 'Selected'
             and c.address not like '%Fake St%' );
     # commercial demos
-    - drop view if exists dlba.commercial_demos_socrata
+    - drop view if exists dlba.commercial_demos_socrata cascade
     - create view dlba.commercial_demos_socrata as
         ( select
             dba_com_property_name as address,
@@ -90,7 +90,7 @@
             and commercial_demo_status in ('Demo Contracted', 'Demolished', 'Demo Pipeline') 
             and demo_pulled_date is null )
     # for sale
-    - drop view if exists dlba.for_sale_socrata
+    - drop view if exists dlba.for_sale_socrata cascade
     - create view dlba.for_sale_socrata as
         ( select 
             c.address,
@@ -116,12 +116,11 @@
             inner join dlba.case c on a.case = c.id
             where (a.recordtypeid = '012j0000000xtGoAAI'
                 or a.dlba_activity_type in ('Demo Pull Sale', 'Demo Pull for Demo Sale', 'Renovation Sale', 'Own It Now', 'Own It Now - Bundled Property', 'Auction - Bundled Property'))
-                and a.listing_date::timestamp < now() + interval '1 day'
                 and a.sale_status = 'For Sale On Site'
                 and c.status = 'For Sale'
                 and c.address not like '%Fake St%' )
     # own it now sold
-    - drop view if exists dlba.own_it_now_socrata
+    - drop view if exists dlba.own_it_now_socrata cascade
     - create view dlba.own_it_now_socrata as
         ( select 
             case when a.actual_closing_date is null then null else
@@ -155,7 +154,7 @@
             and pb.buyer_status = 'Selected'
             and c.address not like '%Fake St%' )
     # side lots sold
-    - drop view if exists dlba.side_lots_socrata
+    - drop view if exists dlba.side_lots_socrata cascade
     - create view dlba.side_lots_socrata as 
         ( select
             a.actual_closing_date,
@@ -187,7 +186,7 @@
                 and pb.buyer_status = 'Selected'
                 and c.address not like '%Fake St%' )
     # upcoming demos
-    - drop view if exists dlba.upcoming_demos_socrata
+    - drop view if exists dlba.upcoming_demos_socrata cascade
     - create view dlba.upcoming_demos_socrata as 
         ( select 
             address,
@@ -219,7 +218,7 @@
                 and demo_contractor_text_only <> ''
                 and status = 'Demo Contracted' )
     # asbestos mdeq report
-    - drop view if exists dlba.asbestos_socrata
+    - drop view if exists dlba.asbestos_socrata cascade
     - create view dlba.asbestos_socrata as ( select
             c.address,
             c.parcel_id,
@@ -283,7 +282,7 @@
             and c.bseed_final_grade_approved is null
             and c.demo_final_grade_approved_date is null )
     # completed demos
-    - drop view if exists dlba.completed_demos_socrata
+    - drop view if exists dlba.completed_demos_socrata cascade
     - create view dlba.completed_demos_socrata as (
         select 
         address,
@@ -310,7 +309,7 @@
             and socrata_reported_price > 0
             and demo_contractor_text_only != '')
     # demo pipeline
-    - drop view if exists dlba.demo_pipeline_socrata
+    - drop view if exists dlba.demo_pipeline_socrata cascade
     - create view dlba.demo_pipeline_socrata as (
         select 
             c.address,
@@ -333,7 +332,7 @@
             and c.demo_pulled_date is null
             and c.recordtypeid in ('012j0000000xtGbAAI', '012j0000000zM27AAE', '012j0000000xtGcAAI'))
     # all dlba interactions
-    - drop view if exists dlba.all_interactions_socrata
+    - drop view if exists dlba.all_interactions_socrata cascade
     - create view dlba.all_interactions_socrata as (
         select 
             name,
@@ -362,7 +361,7 @@
             and property_ownership != 'Non-DLBA Owned'
             and name not like '%Fake St%' )
     # all dlba ownership
-    - drop view if exists dlba.all_ownership_socrata
+    - drop view if exists dlba.all_ownership_socrata cascade
     - create view dlba.all_ownership_socrata as (
         select
             name,

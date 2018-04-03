@@ -17,11 +17,9 @@
     type: sql-server
     prefix: cad
     source: avllog
-    destination: crimescape.avl
-    # destination: crimescape.avl_update
-    where: (timestamp >= date '2016-12-15')
-    # where:
-    #     field: timestamp
-    #     condition: ">"
-    #     value: max(timestamp)
-    #     table: crimescape.avl
+    destination: crimescape.avl_update
+    where:
+        field: avllogid
+        condition: ">"
+        value: max(avllogid)
+        table: crimescape.avl
