@@ -24,7 +24,7 @@
     Location:
       field: location
       type: location
-  id: 
+  id: 8nby-8bd9
   name: Fire Stations
   table: fire.dfd_locations_socrata
   method: replace
