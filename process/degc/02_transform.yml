@@ -1,11 +1,41 @@
 - type: sql
   statements:
-    - drop view if exists degc.awardees_socrata;
-    - create view degc.awardees_socrata as (select 
-        parcelno as parcelno,
-        mcm_addres as address,
-        business as business,
-        program as program,
-        round::integer as round,
-        award_type as award_type,
-        concat('location(', st_x(wkb_geometry), ',', st_y(wkb_geometry), ')') as location from degc.awardees);
+    - delete from degc.mc_cash where pipeline_stage != 'Opened' or pipeline_stage is null
+    - alter table degc.mc_cash add column parcelno text
+- type: geocode
+  table: degc.mc_cash
+  add_col: business_address
+  geom_col: geom
+  parcel_col: parcelno
+
+- type: sql
+  statements:
+    - delete from degc.mc_restore where pipeline_stage = 'Withdrawn' or round is null
+    - alter table degc.mc_restore add column parcelno text
+- type: geocode
+  table: degc.mc_restore
+  add_col: business_address
+  geom_col: geom
+  parcel_col: parcelno
+
+- type: sql
+  statements: 
+  - drop view if exists degc.mc_cash_socrata cascade
+  - create view degc.mc_cash_socrata as (select 
+      round, 
+      business, 
+      business_address, 
+      description, 
+      url, 
+      parcelno,  
+      case when geom is null then null else concat('location(', st_y(geom), ',', st_x(geom), ')') end as location from degc.mc_cash)
+  - drop view if exists degc.mc_restore_socrata cascade
+  - create view degc.mc_restore_socrata as (select 
+      round,
+      track,
+      business, 
+      business_address, 
+      description, 
+      website, 
+      parcelno,  
+      case when geom is null then null else concat('location(', st_y(geom), ',', st_x(geom), ')') end as location from degc.mc_restore)
