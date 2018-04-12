@@ -234,15 +234,15 @@
             from bseed.tm_casemain cm
             inner join bseed.tm_caseaction ca on cm.csm_caseno = ca.csm_caseno
             inner join bseed.tm_casepeople cp on cp.csm_caseno = cm.csm_caseno
-            inner join bseed.tm_casepmb pm on pm.csm_caseno = cm.csm_caseno
+            left outer join bseed.tm_casepmb pm on pm.csm_caseno = cm.csm_caseno
             inner join bseed.pnum_lookup pl on pl.dirty = cm.prc_parcel_no
             inner join bseed.tm_caseaddress cadd on cadd.csm_caseno = cm.csm_caseno
             where 
-                  cm.case_type in ('PMB', 'RNT', 'VPO')
+                  (cm.case_type in ('PMB', 'RNT') or ca.case_type = 'VPO')
                   and ca.csa_date3 > CURRENT_DATE - INTERVAL '1 year'
-                  and ca.actn_menu_id = 'B' 
-                  and ca.actn_code in ('80', '90', '200', '202')
-                  and ca.csa_calendar_tag = 'ISSD'
+                  and ca.actn_menu_id in ('B', 'D') 
+                  and ca.actn_code in ('80', '90', '200', '202', '60')
+                  and ca.csa_calendar_tag in ('ISSD', 'VREG')
                   and cp.csp_primary = 'Y'
             )
 
