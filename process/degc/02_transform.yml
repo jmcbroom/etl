@@ -2,6 +2,7 @@
   statements:
     - delete from degc.mc_cash where pipeline_stage != 'Opened' or pipeline_stage is null
     - alter table degc.mc_cash add column parcelno text
+    - update degc.mc_cash set business_address = split_part(business_address, ',', 1)
 - type: geocode
   table: degc.mc_cash
   add_col: business_address
@@ -12,6 +13,7 @@
   statements:
     - delete from degc.mc_restore where pipeline_stage = 'Withdrawn' or round is null
     - alter table degc.mc_restore add column parcelno text
+    - update degc.mc_restore set business_address = split_part(business_address, ',', 1)
 - type: geocode
   table: degc.mc_restore
   add_col: business_address
