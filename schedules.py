@@ -16,9 +16,9 @@ def run(process, dataset=None, notify=False, emoji=None):
     p.transform()
     if socket.gethostname() == "cod-etl-tools-fs2":
       p.load()
-    if notify:
-      msg.comment("Update successful: *{}*".format(process))
-      msg.react(emoji)
+      if notify:
+        msg.comment("Update successful: *{}*".format(process))
+        msg.react(emoji)
   except Exception as e:
     pass
     msg.comment("Error: *{}*\n > `{}`".format(process, e))
