@@ -192,6 +192,9 @@
     Case Type:
       field: case_type
       type: text
+    CSA Creation Date:
+      field: csa_creation_date
+      type: calendar_date
 - to: Socrata
   id: di9m-phy3
   name: Rental Certifications
@@ -244,6 +247,9 @@
     Units:
       field: pmb_dwelling_units
       type: number
+    CSA Creation Date:
+      field: csa_creation_date
+      type: calendar_date
 - to: Socrata
   id: rj7w-r8ts
   name: Right of Way Permits
