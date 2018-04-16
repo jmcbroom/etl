@@ -383,6 +383,9 @@
     Price:
       field: price
       type: money
+    Funding Source:
+      field: funding_source
+      type: text
     Demolition Date:
       field: demolition_date
       type: calendar_date
