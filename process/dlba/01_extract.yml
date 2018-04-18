@@ -47,6 +47,7 @@
       - DEMO_Pulled_Date__c
       - Demo_Contractor_Proceed_Date__c
       - Demo_Contractor_TEXT_ONLY__c
+      - Demo_Primarily_Funded_By__c
       - Id
       - Neighborhood__c
       - Non_HHF_Commercial_Demo__c

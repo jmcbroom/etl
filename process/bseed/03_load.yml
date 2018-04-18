@@ -41,6 +41,12 @@
     Date Certificate of Compliance Issued:
       field: date_c_of_c_issued_to_be_completed_by_clerk
       type: text
+    Date Lead Docs Attached:
+      field: date_lead_docs_attached
+      type: text
+    Location:
+      field: location
+      type: location
 - to: Socrata
   id: dgtw-ct96
   name: DNG Case Actions (Private)

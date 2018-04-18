@@ -289,6 +289,7 @@
         parcel_id,
         demo_contractor_text_only as contractor_name,
         socrata_reported_price as price,
+        demo_primarily_funded_by as funding_source,
         demo_knock_down_date as demolition_date,
         non_hhf_commercial_demo as commercial,
         council_district,
