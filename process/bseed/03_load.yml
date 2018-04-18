@@ -44,6 +44,9 @@
     Date Lead Docs Attached:
       field: date_lead_docs_attached
       type: text
+    Location:
+      field: location
+      type: location
 - to: Socrata
   id: dgtw-ct96
   name: DNG Case Actions (Private)
