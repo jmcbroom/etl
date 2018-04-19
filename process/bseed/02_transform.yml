@@ -119,6 +119,7 @@
     - drop view if exists bseed.emg_inspections_socrata;
     - create view bseed.emg_inspections_socrata as (
             select
+                  distinct on (cm.csm_caseno)
                   cm.csm_caseno,
                   concat(cadd.csm_st_nmbr, ' ', cadd.csm_st_name) as address,
                   pl.cleaned as parcelnum,
@@ -219,6 +220,7 @@
     - drop view if exists bseed.rental_inspections_socrata;
     - create view bseed.rental_inspections_socrata as (
             select 
+                  distinct on (cm.csm_caseno)
                   cm.csm_caseno,
                   cm.csm_name_first,
                   cm.csm_name_last,
@@ -265,6 +267,7 @@
     - drop view if exists bseed.rental_certifications_socrata;
     - create view bseed.rental_certifications_socrata as (
             select 
+                  distinct on (cm.csm_caseno)
                   cm.csm_caseno,
                   cm.csm_name_first,
                   cm.csm_name_last,
