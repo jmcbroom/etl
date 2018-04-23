@@ -143,6 +143,9 @@
     Case Type:
       field: case_type
       type: text
+    Zip Code:
+      field: prc_zip_code
+      type: text
 - to: Socrata
   id: 64cb-n6dd
   name: Rental Registrations
@@ -201,6 +204,9 @@
     CSA Creation Date:
       field: csa_creation_date
       type: calendar_date
+    Zip Code:
+      field: prc_zip_code
+      type: text
 - to: Socrata
   id: di9m-phy3
   name: Rental Certifications
@@ -256,6 +262,9 @@
     CSA Creation Date:
       field: csa_creation_date
       type: calendar_date
+    Zip Code:
+      field: prc_zip_code
+      type: text
 - to: Socrata
   id: rj7w-r8ts
   name: Right of Way Permits
