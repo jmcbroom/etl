@@ -96,7 +96,12 @@
 - smartsheet:
     id: 4356938877167492
     table: third_party_insp_safebuilt
-    
+- database: 
+    type: oracle
+    prefix: tm
+    source: PARCEL
+    destination: bseed.tm_parcel
+
 # # # 
 # This was just for the parcel clean up
 # - database:
