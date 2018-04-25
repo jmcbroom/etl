@@ -1,7 +1,7 @@
 # Rental Inspections
 - type: sql
   statements:
-    - drop table if exists bseed.emg_inspections;
+    - drop table if exists bseed.emg_inspections cascade;
     - create table bseed.emg_inspections as (
             select
                   distinct on (cm.csm_caseno)
@@ -58,11 +58,11 @@
                   csa_date3,
                   csa_disp,
                   case_type,
-                  prc_zip_code
+                  prc_zip_code,
                   case
                         when location is not null then location
                         when geocode_geom is null then null
-                        else concat('location (', st_y(st_centroid(geocode_geom)), ',', st_x(st_centroid(geocode_geom)), ')') end as location,
+                        else concat('location (', st_y(st_centroid(geocode_geom)), ',', st_x(st_centroid(geocode_geom)), ')') end as location
             from bseed.emg_inspections )
 
 # 3rd Party Rental Inspections
@@ -134,7 +134,7 @@
 # Initial & Renewal Rental Registrations
 - type: sql
   statements:
-    - drop table if exists bseed.rental_inspections_table;
+    - drop table if exists bseed.rental_inspections_table cascade;
     - create table bseed.rental_inspections_table as (
             select 
                   distinct on (cm.csm_caseno)
@@ -219,7 +219,7 @@
 # Rental Certifications
 - type: sql
   statements:
-    - drop table if exists bseed.rental_certifications;
+    - drop table if exists bseed.rental_certifications cascade;
     - create table bseed.rental_certifications as (
             select 
                   distinct on (cm.csm_caseno)
@@ -272,7 +272,7 @@
 - type: sql
   statements:
     - drop view if exists bseed.rental_certifications_socrata;
-    - create view bseed.rental_certifcations_socrata as (
+    - create view bseed.rental_certifications_socrata as (
             select 
                   csm_caseno,
                   csm_name_first,
