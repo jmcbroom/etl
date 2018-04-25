@@ -12,16 +12,17 @@ geocoders = {
 }
 
 class GeocodeTable(object):
-  def __init__(self, table, addr_col='address', geom_col='geom', parcel_col=None, geocoder='composite'):
+  def __init__(self, table, addr_col='address', geom_col='geom', parcel_col=None, where_clause="1=1", geocoder='composite'):
     self.table = table
     self.addr_col = addr_col
     self.geom_col = geom_col
     self.parcel_col = parcel_col
+    self.where_clause = where_clause
     self.geocoder = geocoders[geocoder]
   
   def geocode_rows(self):
     conn = connect_to_pg()
-    res = conn.execute("select distinct {} from {}".format(self.addr_col, self.table))
+    res = conn.execute("select distinct {} from {} where {}".format(self.addr_col, self.table, self.where_clause))
     self.rows = [ r[0] for r in res.fetchall() ]
 
     # iterate through batches of 1000
