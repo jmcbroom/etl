@@ -63,71 +63,71 @@
             inner join base.zip_codes z on st_contains(st_transform(z.wkb_geometry, 4326), parcel_geom)
             )
 
-# # 3rd Party Rental Inspections
-# - type: sql
-#   statements:
-#     - alter table bseed.third_party_insp_safebuilt add column insp_company_name varchar not null default 'SafeBuilt'
-#     - alter table bseed.third_party_insp_wadetrim add column insp_company_name varchar not null default 'Wade Trim'
-#     - alter table bseed.third_party_insp_inspgroup add column insp_company_name varchar not null default 'The Inspection Group'
-#     - alter table bseed.third_party_insp_prospections add column insp_company_name varchar not null default 'Prospections'
-#     - drop table if exists bseed.third_party_insps_all cascade
-#     - create table bseed.third_party_insps_all as (
-#           select 
-#             "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed_failed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_or_subsequent_inspection_date", "3rd_or_subsequent_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "date_lead_docs_attached", "insp_company_name"
-#           from bseed.third_party_insp_wadetrim
-#           union all
-#           select
-#             "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_certificate_of_compliance_issued", "date_lead_reports_attached", "insp_company_name"
-#           from bseed.third_party_insp_inspgroup
-#           union all
-#           select
-#             "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "date_lead_docs_attached", "insp_company_name"
-#           from bseed.third_party_insp_prospections
-#           union all
-#           select
-#             "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed_failed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "date_lead_docs_attached", "insp_company_name"
-#           from bseed.third_party_insp_safebuilt
-#       )
-#     - alter table bseed.third_party_insps_all add column full_address varchar
-#     - update bseed.third_party_insps_all set full_address = trim(concat_ws(' ', "address", "direction", "street"))
+# 3rd Party Rental Inspections
+- type: sql
+  statements:
+    - alter table bseed.third_party_insp_safebuilt add column insp_company_name varchar not null default 'SafeBuilt'
+    - alter table bseed.third_party_insp_wadetrim add column insp_company_name varchar not null default 'Wade Trim'
+    - alter table bseed.third_party_insp_inspgroup add column insp_company_name varchar not null default 'The Inspection Group'
+    - alter table bseed.third_party_insp_prospections add column insp_company_name varchar not null default 'Prospections'
+    - drop table if exists bseed.third_party_insps_all cascade
+    - create table bseed.third_party_insps_all as (
+          select 
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed_failed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_or_subsequent_inspection_date", "3rd_or_subsequent_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "date_lead_docs_attached", "insp_company_name"
+          from bseed.third_party_insp_wadetrim
+          union all
+          select
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_certificate_of_compliance_issued", "date_lead_reports_attached", "insp_company_name"
+          from bseed.third_party_insp_inspgroup
+          union all
+          select
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "date_lead_docs_attached", "insp_company_name"
+          from bseed.third_party_insp_prospections
+          union all
+          select
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed_failed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "date_lead_docs_attached", "insp_company_name"
+          from bseed.third_party_insp_safebuilt
+      )
+    - alter table bseed.third_party_insps_all add column full_address varchar
+    - update bseed.third_party_insps_all set full_address = trim(concat_ws(' ', "address", "direction", "street"))
 
-# - type: geocode
-#   table: bseed.third_party_insps_all
-#   add_col: full_address
-#   geom_col: geom
+- type: geocode
+  table: bseed.third_party_insps_all
+  add_col: full_address
+  geom_col: geom
 
-# - type: sql
-#   statements:
-#     - drop view if exists bseed.third_party_insps_all_socrata
-#     - create view bseed.third_party_insps_all_socrata as (
-#           select
-#             "date_registered",
-#             trim(concat_ws(' ', "address", "direction", "street")) as "address",
-#             "zip_code",
-#             "date_1st_inspection_completed" as "first_inspection_date",
-#             "1st_inspection_passed_failed" as "first_inspection_disposition",
-#             "2nd_inspection_date" as "second_inspection_date",
-#             "2nd_inspection_passed_failed" as "second_inspection_disposition",
-#             "3rd_or_subsequent_inspection_date" as "third_or_subsequent_inspection_date",
-#             "3rd_or_subsequent_inspection_passed_failed" as "third_or_subsequent_inspection_disposition",
-#             "date_correction_order_posted",
-#             "date_citation_ticket_posted",
-#             "date_c_of_c_issued_to_be_completed_by_clerk",
-#             "date_lead_docs_attached",
-#             "insp_company_name",
-#             case 
-#               when "geom" is null then null else
-#               concat(
-#                 'location (',
-#                 ST_Y(ST_Centroid("geom")), 
-#                 ',', 
-#                 ST_X(ST_Centroid("geom")),
-#                 ')'
-#               ) 
-#             end as "location"
-#           from bseed.third_party_insps_all
-#           where "address" is not null
-#       )
+- type: sql
+  statements:
+    - drop view if exists bseed.third_party_insps_all_socrata
+    - create view bseed.third_party_insps_all_socrata as (
+          select
+            "date_registered",
+            trim(concat_ws(' ', "address", "direction", "street")) as "address",
+            "zip_code",
+            "date_1st_inspection_completed" as "first_inspection_date",
+            "1st_inspection_passed_failed" as "first_inspection_disposition",
+            "2nd_inspection_date" as "second_inspection_date",
+            "2nd_inspection_passed_failed" as "second_inspection_disposition",
+            "3rd_or_subsequent_inspection_date" as "third_or_subsequent_inspection_date",
+            "3rd_or_subsequent_inspection_passed_failed" as "third_or_subsequent_inspection_disposition",
+            "date_correction_order_posted",
+            "date_citation_ticket_posted",
+            "date_c_of_c_issued_to_be_completed_by_clerk",
+            "date_lead_docs_attached",
+            "insp_company_name",
+            case 
+              when "geom" is null then null else
+              concat(
+                'location (',
+                ST_Y(ST_Centroid("geom")), 
+                ',', 
+                ST_X(ST_Centroid("geom")),
+                ')'
+              ) 
+            end as "location"
+          from bseed.third_party_insps_all
+          where "address" is not null
+      )
 
 # Initial & Renewal Rental Registrations
 - type: sql
@@ -291,572 +291,572 @@
                   z.zipcode as prc_zip_code
             from bseed.rental_certifications inner join base.zip_codes z on st_contains(st_transform(z.wkb_geometry, 4326), parcel_geom) )
 
-# # DNG Cases
-# - type: sql
-#   statements:
-#     - drop table if exists bseed.dng_cases cascade;
-#     - create table bseed.dng_cases (
-#             dng_number text,
-#             parcelno text,
-#             inspection_date timestamp,
-#             inspection_disposition text,
-#             tract_investigation_completed_date timestamp,
-#             office_hearing_date timestamp,
-#             office_hearing_disposition text,
-#             cc_hearing_inspection_date timestamp,
-#             cc_hearing_inspection_disposition text,
-#             cc_hearing_date timestamp,
-#             cc_hearing_disposition text,
-#             issue_notice_lis_pendens_date timestamp,
-#             issue_notice_of_emg_demolition text);
-#     - create index if not exists bseed_dng_number_idx on bseed.dng_cases using btree(dng_number);
-#     - create index if not exists bseed_case_action_caseno_idx on bseed.tm_caseaction using btree(csm_caseno);
-#     - insert into bseed.dng_cases (dng_number, parcelno) select csm_caseno, prc_parcel_no from bseed.tm_casemain where csm_caseno like 'DNG201%';
-#     - update bseed.dng_cases dng set inspection_date = (select csa_date3 from bseed.tm_caseaction where csm_caseno = dng.dng_number and trim(action_description) in ('DB Complaint Inspection') order by csa_date3 desc limit 1);
-#     - update bseed.dng_cases dng set inspection_disposition = (select csa_disp from bseed.tm_caseaction where csm_caseno = dng.dng_number and trim(action_description) in ('DB Complaint Inspection') order by csa_date3 desc limit 1);
-#     - update bseed.dng_cases dng set 
-#             tract_investigation_completed_date = 
-#             (select csa_date3 
-#                   from bseed.tm_caseaction 
-#                   where csm_caseno = dng.dng_number 
-#                   and trim(action_description) 
-#                   in ('Tract Investigation Completed') 
-#                   order by csa_date3 desc limit 1);
-#     - update bseed.dng_cases dng set 
-#             office_hearing_disposition = 
-#             (select csa_disp
-#                   from bseed.tm_caseaction 
-#                   where csm_caseno = dng.dng_number 
-#                   and trim(action_description) 
-#                   in ('Office Hearing') 
-#                   order by csa_date3 desc limit 1);
-#     - update bseed.dng_cases dng set 
-#             office_hearing_date = 
-#             (select csa_date3 
-#                   from bseed.tm_caseaction 
-#                   where csm_caseno = dng.dng_number 
-#                   and trim(action_description) 
-#                   in ('Office Hearing') 
-#                   order by csa_date3 desc limit 1);
-#     - update bseed.dng_cases dng set 
-#             cc_hearing_inspection_date = 
-#             (select csa_date3
-#                   from bseed.tm_caseaction 
-#                   where csm_caseno = dng.dng_number 
-#                   and trim(action_description) 
-#                   in ('City Council Hearing Insp') 
-#                   order by csa_date3 desc limit 1);
-#     - update bseed.dng_cases dng set 
-#             cc_hearing_inspection_disposition =
-#             (select csa_disp 
-#                   from bseed.tm_caseaction 
-#                   where csm_caseno = dng.dng_number 
-#                   and trim(action_description) 
-#                   in ('City Council Hearing Insp') 
-#                   order by csa_date3 desc limit 1);   
-#     - update bseed.dng_cases dng set 
-#             cc_hearing_date = 
-#             (select csa_date3
-#                   from bseed.tm_caseaction 
-#                   where csm_caseno = dng.dng_number 
-#                   and trim(action_description) 
-#                   in ('City Council Hearing') 
-#                   order by csa_date3 desc limit 1);
-#     - update bseed.dng_cases dng set 
-#             cc_hearing_disposition =
-#             (select csa_disp 
-#                   from bseed.tm_caseaction 
-#                   where csm_caseno = dng.dng_number 
-#                   and trim(action_description) 
-#                   in ('City Council Hearing') 
-#                   order by csa_date3 desc limit 1);   
-#     - update bseed.dng_cases dng set 
-#             issue_notice_lis_pendens_date = 
-#             (select csa_date3
-#                   from bseed.tm_caseaction 
-#                   where csm_caseno = dng.dng_number 
-#                   and trim(action_description) 
-#                   in ('Issue Notice Lis Pendens') 
-#                   order by csa_date3 desc limit 1);
-#     - update bseed.dng_cases dng set 
-#             issue_notice_of_emg_demolition = 
-#             (select csa_date3
-#                   from bseed.tm_caseaction 
-#                   where csm_caseno = dng.dng_number 
-#                   and trim(action_description) 
-#                   in ('Issue Notice of EMG Demolition') 
-#                   order by csa_date3 desc limit 1);   
-#     - select * from bseed.dng_cases;
-#     - drop view if exists bseed.dng_cases_socrata; 
-#     - create view bseed.dng_cases_socrata as (
-#             select 
-#                   dng_number,
-#                   pl.cleaned as parcelno,
-#                   replace(inspection_date::text, ' ', 'T') as inspection_date,
-#                   inspection_disposition,
-#                   replace(tract_investigation_completed_date::text, ' ', 'T') as tract_investigation_completed_date,
-#                   replace(office_hearing_date::text, ' ', 'T') as office_hearing_date,
-#                   office_hearing_disposition,
-#                   replace(cc_hearing_inspection_date::text, ' ', 'T') as cc_hearing_inspection_date,
-#                   cc_hearing_inspection_disposition,
-#                   replace(cc_hearing_date::text, ' ', 'T') as cc_hearing_date,
-#                   cc_hearing_disposition,
-#                   replace(issue_notice_lis_pendens_date::text, ' ', 'T') as issue_notice_lis_pendens_date,
-#                   issue_notice_of_emg_demolition
-#             from bseed.dng_cases dng
-#             inner join bseed.pnum_lookup pl on dng.parcelno = pl.dirty)
+# DNG Cases
+- type: sql
+  statements:
+    - drop table if exists bseed.dng_cases cascade;
+    - create table bseed.dng_cases (
+            dng_number text,
+            parcelno text,
+            inspection_date timestamp,
+            inspection_disposition text,
+            tract_investigation_completed_date timestamp,
+            office_hearing_date timestamp,
+            office_hearing_disposition text,
+            cc_hearing_inspection_date timestamp,
+            cc_hearing_inspection_disposition text,
+            cc_hearing_date timestamp,
+            cc_hearing_disposition text,
+            issue_notice_lis_pendens_date timestamp,
+            issue_notice_of_emg_demolition text);
+    - create index if not exists bseed_dng_number_idx on bseed.dng_cases using btree(dng_number);
+    - create index if not exists bseed_case_action_caseno_idx on bseed.tm_caseaction using btree(csm_caseno);
+    - insert into bseed.dng_cases (dng_number, parcelno) select csm_caseno, prc_parcel_no from bseed.tm_casemain where csm_caseno like 'DNG201%';
+    - update bseed.dng_cases dng set inspection_date = (select csa_date3 from bseed.tm_caseaction where csm_caseno = dng.dng_number and trim(action_description) in ('DB Complaint Inspection') order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set inspection_disposition = (select csa_disp from bseed.tm_caseaction where csm_caseno = dng.dng_number and trim(action_description) in ('DB Complaint Inspection') order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set 
+            tract_investigation_completed_date = 
+            (select csa_date3 
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('Tract Investigation Completed') 
+                  order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set 
+            office_hearing_disposition = 
+            (select csa_disp
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('Office Hearing') 
+                  order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set 
+            office_hearing_date = 
+            (select csa_date3 
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('Office Hearing') 
+                  order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set 
+            cc_hearing_inspection_date = 
+            (select csa_date3
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('City Council Hearing Insp') 
+                  order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set 
+            cc_hearing_inspection_disposition =
+            (select csa_disp 
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('City Council Hearing Insp') 
+                  order by csa_date3 desc limit 1);   
+    - update bseed.dng_cases dng set 
+            cc_hearing_date = 
+            (select csa_date3
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('City Council Hearing') 
+                  order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set 
+            cc_hearing_disposition =
+            (select csa_disp 
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('City Council Hearing') 
+                  order by csa_date3 desc limit 1);   
+    - update bseed.dng_cases dng set 
+            issue_notice_lis_pendens_date = 
+            (select csa_date3
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('Issue Notice Lis Pendens') 
+                  order by csa_date3 desc limit 1);
+    - update bseed.dng_cases dng set 
+            issue_notice_of_emg_demolition = 
+            (select csa_date3
+                  from bseed.tm_caseaction 
+                  where csm_caseno = dng.dng_number 
+                  and trim(action_description) 
+                  in ('Issue Notice of EMG Demolition') 
+                  order by csa_date3 desc limit 1);   
+    - select * from bseed.dng_cases;
+    - drop view if exists bseed.dng_cases_socrata; 
+    - create view bseed.dng_cases_socrata as (
+            select 
+                  dng_number,
+                  pl.cleaned as parcelno,
+                  replace(inspection_date::text, ' ', 'T') as inspection_date,
+                  inspection_disposition,
+                  replace(tract_investigation_completed_date::text, ' ', 'T') as tract_investigation_completed_date,
+                  replace(office_hearing_date::text, ' ', 'T') as office_hearing_date,
+                  office_hearing_disposition,
+                  replace(cc_hearing_inspection_date::text, ' ', 'T') as cc_hearing_inspection_date,
+                  cc_hearing_inspection_disposition,
+                  replace(cc_hearing_date::text, ' ', 'T') as cc_hearing_date,
+                  cc_hearing_disposition,
+                  replace(issue_notice_lis_pendens_date::text, ' ', 'T') as issue_notice_lis_pendens_date,
+                  issue_notice_of_emg_demolition
+            from bseed.dng_cases dng
+            inner join bseed.pnum_lookup pl on dng.parcelno = pl.dirty)
         
-# # ROW Permits
-# - type: sql
-#   statements:
-#     - drop view if exists bseed.row_permits cascade
-#     - create view bseed.row_permits as (select 
-#             cm.csm_caseno as case_number,
-#             cm.csm_description as description,
-#             cm.csm_name_last as contractor,
-#             cm.csm_projname as project_name,
-#             replace(ce.eng_start_date::text, ' ', 'T') as start_date,
-#             replace(ce.eng_end_date::text, ' ', 'T') as end_date,
-#             ce.eng_job_loc as location
-#             from bseed.tm_casemain cm
-#             inner join bseed.tm_caseeng ce on cm.csm_caseno = ce.csm_caseno
-#             where cm.case_type = 'ENG' and 
-#             ce.eng_type_of_work in ('ROW', 'BARRICADE'))
+# ROW Permits
+- type: sql
+  statements:
+    - drop view if exists bseed.row_permits cascade
+    - create view bseed.row_permits as (select 
+            cm.csm_caseno as case_number,
+            cm.csm_description as description,
+            cm.csm_name_last as contractor,
+            cm.csm_projname as project_name,
+            replace(ce.eng_start_date::text, ' ', 'T') as start_date,
+            replace(ce.eng_end_date::text, ' ', 'T') as end_date,
+            ce.eng_job_loc as location
+            from bseed.tm_casemain cm
+            inner join bseed.tm_caseeng ce on cm.csm_caseno = ce.csm_caseno
+            where cm.case_type = 'ENG' and 
+            ce.eng_type_of_work in ('ROW', 'BARRICADE'))
 
-# # Annual Inspections
-# - type: sql
-#   statements:
-#       - drop table if exists bseed.annual_inspections cascade
-#       - create table bseed.annual_inspections as (
-#             select
-#             i.action_date, 
-#             i.action_description,
-#             i.csa_disp as result,
-#             i.csm_caseno as case_number,
-#             pn.cleaned as parcel_assess,
-#             concat_ws(' ', cm.csm_name_first, cm.csm_name_last) as owner,
-#             cm.csm_projname as project_name,
-#             concat_ws(' ', i.csm_st_nmbr, i.csm_st_pfx, i.csm_st_name) as address
-#             from bseed.tm_inspections i
-#             inner join bseed.tm_casemain cm on i.csm_caseno = cm.csm_caseno
-#             inner join bseed.pnum_lookup pn on cm.prc_parcel_no = pn.dirty)
-#       - create index if not exists bseed_annual_inspections_address_idx on bseed.annual_inspections using btree(address)    
+# Annual Inspections
+- type: sql
+  statements:
+      - drop table if exists bseed.annual_inspections cascade
+      - create table bseed.annual_inspections as (
+            select
+            i.action_date, 
+            i.action_description,
+            i.csa_disp as result,
+            i.csm_caseno as case_number,
+            pn.cleaned as parcel_assess,
+            concat_ws(' ', cm.csm_name_first, cm.csm_name_last) as owner,
+            cm.csm_projname as project_name,
+            concat_ws(' ', i.csm_st_nmbr, i.csm_st_pfx, i.csm_st_name) as address
+            from bseed.tm_inspections i
+            inner join bseed.tm_casemain cm on i.csm_caseno = cm.csm_caseno
+            inner join bseed.pnum_lookup pn on cm.prc_parcel_no = pn.dirty)
+      - create index if not exists bseed_annual_inspections_address_idx on bseed.annual_inspections using btree(address)    
 
-# - type: geocode
-#   table: bseed.annual_inspections
-#   add_col: address
-#   geom_col: geom
+- type: geocode
+  table: bseed.annual_inspections
+  add_col: address
+  geom_col: geom
 
-# - type: sql
-#   statements:
-#       - create view bseed.annual_inspections_socrata as (select 
-#             address,
-#             replace(action_date::character varying, ' ', 'T') as action_date,
-#             action_description,
-#             result,
-#             case_number,
-#             parcel_assess,
-#             owner,
-#             project_name,
-#             case when geom is null then null else
-#                   concat(
-#                   'location (',
-#                   ST_Y(ST_Centroid(geom)), 
-#                   ',', 
-#                   ST_X(ST_Centroid(geom)),
-#                   ')'
-#                   ) 
-#                   end as location
-#             from bseed.annual_inspections)
+- type: sql
+  statements:
+      - create view bseed.annual_inspections_socrata as (select 
+            address,
+            replace(action_date::character varying, ' ', 'T') as action_date,
+            action_description,
+            result,
+            case_number,
+            parcel_assess,
+            owner,
+            project_name,
+            case when geom is null then null else
+                  concat(
+                  'location (',
+                  ST_Y(ST_Centroid(geom)), 
+                  ',', 
+                  ST_X(ST_Centroid(geom)),
+                  ')'
+                  ) 
+                  end as location
+            from bseed.annual_inspections)
 
-# # Building Permits
-# - type: sql
-#   statements:
-#       - drop view if exists bseed.bldg_permits_socrata cascade;
-#       - create view
-#             bseed.bldg_permits_socrata as
-#             ( select 
-#             permit_no,
-#             case when permit_issued is null then null else
-#                   concat(replace(permit_issued::text, ' ', 'T'), 'Z')
-#             end as permit_issued,
-#             case when permit_expire is null then null else
-#                   concat(replace(permit_expire::text, ' ', 'T'), 'Z')
-#             end as permit_expire,
-#             case when permit_completed is null then null else
-#                   concat(replace(permit_completed::text, ' ', 'T'), 'Z')
-#             end as permit_completed,
-#             permit_status,
-#             site_address,
-#             between1,
-#             pn.cleaned as parcel_no,
-#             case when pn.parcel_centroid is null then null else
-#                 concat('location(', ST_Y(pn.parcel_centroid), ',', ST_X(pn.parcel_centroid), ')')
-#             end as site_location,
-#             lot_number,
-#             subdevision as subdivision,
-#             case_type,
-#             case_description,
-#             legal_use,
-#             case estimated_cost when 'NaN' then null else estimated_cost end,
-#             case parcel_size when 'NaN' then null else parcel_size end,
-#             parcel_cluster_sector,
-#             case stories when 'NaN' then null else stories end,
-#             case parcel_floor_area when 'NaN' then null else parcel_floor_area end,
-#             case parcel_ground_area when 'NaN' then null else parcel_ground_area end,
-#             prc_aka_address,
-#             bld_permit_type,
-#             bld_permit_desc,
-#             fdicn_description,
-#             bld_type_use,
-#             residential,
-#             bld_type_const_cod,
-#             bld_zoning_dist,
-#             bld_use_group,
-#             bld_basement,
-#             fee_type,
-#             csm_caseno,
-#             csf_created_by,
-#             seq_no,
-#             case pcf_amt_due when 'NaN' then null else pcf_amt_due end,
-#             owner_last_name,
-#             owner_first_name,
-#             owner_address1,
-#             owner_address2,
-#             owner_city,
-#             owner_state,
-#             owner_zip,
-#             contractor_last_name,
-#             contractor_first_name,
-#             contractor_address1,
-#             contractor_address2,
-#             contractor_city,
-#             contractor_stat,
-#             contractor_zip
-#             from bseed.bldg_permits
-#             inner join bseed.pnum_lookup pn on parcel_no = pn.dirty )
+# Building Permits
+- type: sql
+  statements:
+      - drop view if exists bseed.bldg_permits_socrata cascade;
+      - create view
+            bseed.bldg_permits_socrata as
+            ( select 
+            permit_no,
+            case when permit_issued is null then null else
+                  concat(replace(permit_issued::text, ' ', 'T'), 'Z')
+            end as permit_issued,
+            case when permit_expire is null then null else
+                  concat(replace(permit_expire::text, ' ', 'T'), 'Z')
+            end as permit_expire,
+            case when permit_completed is null then null else
+                  concat(replace(permit_completed::text, ' ', 'T'), 'Z')
+            end as permit_completed,
+            permit_status,
+            site_address,
+            between1,
+            pn.cleaned as parcel_no,
+            case when pn.parcel_centroid is null then null else
+                concat('location(', ST_Y(pn.parcel_centroid), ',', ST_X(pn.parcel_centroid), ')')
+            end as site_location,
+            lot_number,
+            subdevision as subdivision,
+            case_type,
+            case_description,
+            legal_use,
+            case estimated_cost when 'NaN' then null else estimated_cost end,
+            case parcel_size when 'NaN' then null else parcel_size end,
+            parcel_cluster_sector,
+            case stories when 'NaN' then null else stories end,
+            case parcel_floor_area when 'NaN' then null else parcel_floor_area end,
+            case parcel_ground_area when 'NaN' then null else parcel_ground_area end,
+            prc_aka_address,
+            bld_permit_type,
+            bld_permit_desc,
+            fdicn_description,
+            bld_type_use,
+            residential,
+            bld_type_const_cod,
+            bld_zoning_dist,
+            bld_use_group,
+            bld_basement,
+            fee_type,
+            csm_caseno,
+            csf_created_by,
+            seq_no,
+            case pcf_amt_due when 'NaN' then null else pcf_amt_due end,
+            owner_last_name,
+            owner_first_name,
+            owner_address1,
+            owner_address2,
+            owner_city,
+            owner_state,
+            owner_zip,
+            contractor_last_name,
+            contractor_first_name,
+            contractor_address1,
+            contractor_address2,
+            contractor_city,
+            contractor_stat,
+            contractor_zip
+            from bseed.bldg_permits
+            inner join bseed.pnum_lookup pn on parcel_no = pn.dirty )
  
-# # # Dismantle Permits
-# - type: sql
-#   statements:
-#       - drop view if exists bseed.dismantle_permits_socrata cascade
-#       - create view 
-#             bseed.dismantle_permits_socrata as
-#             ( select
-#             concat(ca.csa_id, '_', pn.cleaned) as unique_id,
-#             ca.csa_id,
-#             cm.prc_parcel_no,
-#             pn.cleaned as clean_parcel_no,
-#             ca.csm_caseno,
-#             ca.case_type,
-#             ca.action_description,
-#             concat_ws(' ', cd.csm_st_nmbr, cd.csm_st_pfx, cd.csm_st_name) as street_address,
-#             case when ca.csa_date3 is null then null else
-#                   replace(to_char(ca.csa_date3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
-#             end as csa_date3,
-#             ca.csa_disp,
-#             ca.csa_notes,
-#             ca.actn_menu_id,
-#             ca.actn_code,
-#             case when ca.csa_creation_date is null then null else
-#                   replace(to_char(ca.csa_creation_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
-#             end as csa_creation_date,
-#             case when ca.csa_date1 is null then null else
-#                   replace(to_char(ca.csa_date1::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
-#             end as csa_date1,
-#             case when ca.csa_date2 is null then null else
-#                   replace(to_char(ca.csa_date2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
-#             end as csa_date2,
-#             case when ca.csa_updated is null then null else
-#                   replace(to_char(ca.csa_updated::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
-#             end as csa_updated,
-#             ca.csa_updated_by,
-#             ca.csa_assigned_to,
-#             ca.csa_done_by
-#             from bseed.tm_caseaction ca
-#             inner join bseed.tm_casemain cm on ca.csm_caseno = cm.csm_caseno
-#             inner join bseed.tm_caseaddress cd on ca.csm_caseno = cd.csm_caseno
-#             inner join bseed.pnum_lookup pn on cm.prc_parcel_no = pn.dirty
-#             where ca.csa_date3 > Date '2014-01-01'
-#             and ca.action_description in ('Final Grade Inspection', 'Open Hole Demo Inspection ', 'Open Hole Demo Inspection', 'Winter Grade Inspection'))
+# # Dismantle Permits
+- type: sql
+  statements:
+      - drop view if exists bseed.dismantle_permits_socrata cascade
+      - create view 
+            bseed.dismantle_permits_socrata as
+            ( select
+            concat(ca.csa_id, '_', pn.cleaned) as unique_id,
+            ca.csa_id,
+            cm.prc_parcel_no,
+            pn.cleaned as clean_parcel_no,
+            ca.csm_caseno,
+            ca.case_type,
+            ca.action_description,
+            concat_ws(' ', cd.csm_st_nmbr, cd.csm_st_pfx, cd.csm_st_name) as street_address,
+            case when ca.csa_date3 is null then null else
+                  replace(to_char(ca.csa_date3::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+            end as csa_date3,
+            ca.csa_disp,
+            ca.csa_notes,
+            ca.actn_menu_id,
+            ca.actn_code,
+            case when ca.csa_creation_date is null then null else
+                  replace(to_char(ca.csa_creation_date::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+            end as csa_creation_date,
+            case when ca.csa_date1 is null then null else
+                  replace(to_char(ca.csa_date1::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+            end as csa_date1,
+            case when ca.csa_date2 is null then null else
+                  replace(to_char(ca.csa_date2::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+            end as csa_date2,
+            case when ca.csa_updated is null then null else
+                  replace(to_char(ca.csa_updated::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T')
+            end as csa_updated,
+            ca.csa_updated_by,
+            ca.csa_assigned_to,
+            ca.csa_done_by
+            from bseed.tm_caseaction ca
+            inner join bseed.tm_casemain cm on ca.csm_caseno = cm.csm_caseno
+            inner join bseed.tm_caseaddress cd on ca.csm_caseno = cd.csm_caseno
+            inner join bseed.pnum_lookup pn on cm.prc_parcel_no = pn.dirty
+            where ca.csa_date3 > Date '2014-01-01'
+            and ca.action_description in ('Final Grade Inspection', 'Open Hole Demo Inspection ', 'Open Hole Demo Inspection', 'Winter Grade Inspection'))
 
-# # Trades Permits
-# - type: sql
-#   statements: 
-#    - drop table if exists bseed.trade_permits cascade
-#    - create table bseed.trade_permits as (
-#       select 
-#             permit_no,             
-#             permit_issued,        
-#             permit_expire,         
-#             permit_completed,      
-#             permit_status,         
-#             site_address,          
-#             between1,              
-#             parcel_no,             
-#             prc_lot,               
-#             prc_subdiv,            
-#             case_type,             
-#             case_description,      
-#             legal_use,             
-#             estimated_cost,        
-#             parcel_size,           
-#             parcel_cluster_sector, 
-#             stories,               
-#             parcel_floor_area,     
-#             parcel_ground_area,    
-#             prc_aka_address,       
-#             elv_type_of_work,              
-#             permit_description,    
-#             fdicn_description,     
-#             elv_type_of_use,               
-#             residential,           
-#             description,           
-#             elv_type_const_cod,    
-#             elv_zoning_dist,       
-#             elv_use_group,        
-#             elv_basement,          
-#             fee_type,              
-#             csm_caseno,            
-#             csf_created_by,        
-#             seq_no,                
-#             pcf_amt_due,           
-#             owner_name,            
-#             owner_address1,       
-#             contractor_last_name,  
-#             contractor_address1 
-#       from bseed.tm_elevator union all
-#       select
-#             permit_no,             
-#             permit_applied,        
-#             permit_expire,         
-#             permit_completed,      
-#             permit_status,         
-#             site_address,          
-#             between1,              
-#             parcel_no,             
-#             prc_lot,               
-#             prc_subdiv,            
-#             case_type,             
-#             case_description,      
-#             legal_use,             
-#             estimated_cost,        
-#             parcel_size,           
-#             parcel_cluster_sector, 
-#             stories,               
-#             parcel_floor_area,     
-#             parcel_ground_area,    
-#             prc_aka_address,       
-#             plm_work,              
-#             permit_description,    
-#             fdicn_description,     
-#             plm_use,               
-#             residential,           
-#             description,           
-#             plm_type_const_cod,    
-#             plm_zoning_dist,       
-#             plm_use_group,        
-#             plm_basement,          
-#             fee_type,              
-#             csm_caseno,            
-#             csf_created_by,        
-#             seq_no,                
-#             pcf_amt_due,           
-#             owner_name,            
-#             owner_address1,       
-#             contractor_last_name,  
-#             contractor_address1
-#       from bseed.tm_plumbing union all
-#       select
-#             permit_no,             
-#             permit_issued,        
-#             permit_expire,         
-#             permit_completed,      
-#             permit_status,         
-#             site_address,          
-#             between1,              
-#             parcel_no,             
-#             prc_lot,               
-#             prc_subdiv,            
-#             case_type,             
-#             case_description,      
-#             legal_use,             
-#             estimated_cost,        
-#             parcel_size,           
-#             parcel_cluster_sector, 
-#             stories,               
-#             parcel_floor_area,     
-#             parcel_ground_area,    
-#             prc_aka_address,       
-#             ele_type_work,              
-#             permit_description,    
-#             fdicn_description,     
-#             ele_type_use,               
-#             residential,           
-#             description,           
-#             ele_type_const_cod,    
-#             ele_zoning_dist,       
-#             ele_use_group,        
-#             ele_basement,          
-#             fee_type,              
-#             csm_caseno,            
-#             csf_created_by,        
-#             seq_no,                
-#             pcf_amt_due,           
-#             owner_name,            
-#             owner_address1,       
-#             contractor_last_name,  
-#             contractor_address1
-#       from bseed.tm_electrical union all
-#       select
-#             permit_no,             
-#             permit_issued,        
-#             permit_expire,         
-#             permit_completed,      
-#             permit_status,         
-#             site_address,          
-#             between1,              
-#             parcel_no,             
-#             prc_lot,               
-#             prc_subdiv,            
-#             case_type,             
-#             case_description,      
-#             legal_use,             
-#             estimated_cost,        
-#             parcel_size,           
-#             parcel_cluster_sector, 
-#             stories,               
-#             parcel_floor_area,     
-#             parcel_ground_area,    
-#             prc_aka_address,       
-#             bpv_type_work,              
-#             permit_description,    
-#             fdicn_description,     
-#             bpv_type_use,               
-#             residential,           
-#             description,           
-#             bpv_type_const_cod,    
-#             bpv_zoning_dist,       
-#             bpv_use_group,        
-#             bpv_basement,          
-#             fee_type,              
-#             csm_caseno,            
-#             csf_created_by,        
-#             seq_no,                
-#             pcf_amt_due,           
-#             concat_ws(' ', owner_first_name, owner_last_name),            
-#             owner_address1,       
-#             contractor_last_name,  
-#             contractor_address1
-#       from bseed.tm_boiler union all
-#       select
-#             permit_no,             
-#             permit_issued,        
-#             permit_expire,         
-#             permit_completed,      
-#             permit_status,         
-#             site_address,          
-#             between1,              
-#             parcel_no,             
-#             prc_lot,               
-#             prc_subdiv,            
-#             case_type,             
-#             case_description,      
-#             legal_use,             
-#             estimated_cost,        
-#             parcel_size,           
-#             parcel_cluster_sector, 
-#             stories,               
-#             parcel_floor_area,     
-#             parcel_ground_area,    
-#             prc_aka_address,       
-#             mec_work,              
-#             permit_description,    
-#             fdicn_description,     
-#             mec_use,               
-#             residential,           
-#             description,           
-#             mec_type_const_cod,    
-#             mec_zoning_dist,       
-#             mec_use_group,        
-#             mec_basement,          
-#             fee_type,              
-#             csm_caseno,            
-#             csf_created_by,        
-#             seq_no,                
-#             pcf_amt_due,           
-#             owner_name,            
-#             owner_address1,       
-#             contractor_last_name,  
-#             contractor_address1
-#       from bseed.tm_mechanical
-#       );
-#    - update bseed.trade_permits tp 
-#       set parcel_no = pl.cleaned
-#       from bseed.pnum_lookup pl
-#       where tp.parcel_no = pl.dirty
-#    - alter table bseed.trade_permits rename column elv_type_of_work to type_of_work;
-#    - alter table bseed.trade_permits rename column elv_type_of_use to type_of_use;
-#    - alter table bseed.trade_permits rename column elv_type_const_cod to type_const_cod;
-#    - alter table bseed.trade_permits rename column elv_zoning_dist to zoning_dist;
-#    - alter table bseed.trade_permits rename column elv_use_group to use_group;
-#    - alter table bseed.trade_permits rename column elv_basement to basement;
-#    - alter table bseed.trade_permits add column uniq serial primary key;
-#    - update bseed.trade_permits set 
-#       site_address = regexp_replace(site_address, '[\s]{2,}', ' '),
-#       owner_address1 = regexp_replace(owner_address1, '[\s]{2,}', ' '),
-#       contractor_address1 = regexp_replace(contractor_address1, '[\s]{2,}', ' ')
-#    - create index if not exists bseed_trade_permits_idx on bseed.trade_permits using btree(site_address)
+# Trades Permits
+- type: sql
+  statements: 
+   - drop table if exists bseed.trade_permits cascade
+   - create table bseed.trade_permits as (
+      select 
+            permit_no,             
+            permit_issued,        
+            permit_expire,         
+            permit_completed,      
+            permit_status,         
+            site_address,          
+            between1,              
+            parcel_no,             
+            prc_lot,               
+            prc_subdiv,            
+            case_type,             
+            case_description,      
+            legal_use,             
+            estimated_cost,        
+            parcel_size,           
+            parcel_cluster_sector, 
+            stories,               
+            parcel_floor_area,     
+            parcel_ground_area,    
+            prc_aka_address,       
+            elv_type_of_work,              
+            permit_description,    
+            fdicn_description,     
+            elv_type_of_use,               
+            residential,           
+            description,           
+            elv_type_const_cod,    
+            elv_zoning_dist,       
+            elv_use_group,        
+            elv_basement,          
+            fee_type,              
+            csm_caseno,            
+            csf_created_by,        
+            seq_no,                
+            pcf_amt_due,           
+            owner_name,            
+            owner_address1,       
+            contractor_last_name,  
+            contractor_address1 
+      from bseed.tm_elevator union all
+      select
+            permit_no,             
+            permit_applied,        
+            permit_expire,         
+            permit_completed,      
+            permit_status,         
+            site_address,          
+            between1,              
+            parcel_no,             
+            prc_lot,               
+            prc_subdiv,            
+            case_type,             
+            case_description,      
+            legal_use,             
+            estimated_cost,        
+            parcel_size,           
+            parcel_cluster_sector, 
+            stories,               
+            parcel_floor_area,     
+            parcel_ground_area,    
+            prc_aka_address,       
+            plm_work,              
+            permit_description,    
+            fdicn_description,     
+            plm_use,               
+            residential,           
+            description,           
+            plm_type_const_cod,    
+            plm_zoning_dist,       
+            plm_use_group,        
+            plm_basement,          
+            fee_type,              
+            csm_caseno,            
+            csf_created_by,        
+            seq_no,                
+            pcf_amt_due,           
+            owner_name,            
+            owner_address1,       
+            contractor_last_name,  
+            contractor_address1
+      from bseed.tm_plumbing union all
+      select
+            permit_no,             
+            permit_issued,        
+            permit_expire,         
+            permit_completed,      
+            permit_status,         
+            site_address,          
+            between1,              
+            parcel_no,             
+            prc_lot,               
+            prc_subdiv,            
+            case_type,             
+            case_description,      
+            legal_use,             
+            estimated_cost,        
+            parcel_size,           
+            parcel_cluster_sector, 
+            stories,               
+            parcel_floor_area,     
+            parcel_ground_area,    
+            prc_aka_address,       
+            ele_type_work,              
+            permit_description,    
+            fdicn_description,     
+            ele_type_use,               
+            residential,           
+            description,           
+            ele_type_const_cod,    
+            ele_zoning_dist,       
+            ele_use_group,        
+            ele_basement,          
+            fee_type,              
+            csm_caseno,            
+            csf_created_by,        
+            seq_no,                
+            pcf_amt_due,           
+            owner_name,            
+            owner_address1,       
+            contractor_last_name,  
+            contractor_address1
+      from bseed.tm_electrical union all
+      select
+            permit_no,             
+            permit_issued,        
+            permit_expire,         
+            permit_completed,      
+            permit_status,         
+            site_address,          
+            between1,              
+            parcel_no,             
+            prc_lot,               
+            prc_subdiv,            
+            case_type,             
+            case_description,      
+            legal_use,             
+            estimated_cost,        
+            parcel_size,           
+            parcel_cluster_sector, 
+            stories,               
+            parcel_floor_area,     
+            parcel_ground_area,    
+            prc_aka_address,       
+            bpv_type_work,              
+            permit_description,    
+            fdicn_description,     
+            bpv_type_use,               
+            residential,           
+            description,           
+            bpv_type_const_cod,    
+            bpv_zoning_dist,       
+            bpv_use_group,        
+            bpv_basement,          
+            fee_type,              
+            csm_caseno,            
+            csf_created_by,        
+            seq_no,                
+            pcf_amt_due,           
+            concat_ws(' ', owner_first_name, owner_last_name),            
+            owner_address1,       
+            contractor_last_name,  
+            contractor_address1
+      from bseed.tm_boiler union all
+      select
+            permit_no,             
+            permit_issued,        
+            permit_expire,         
+            permit_completed,      
+            permit_status,         
+            site_address,          
+            between1,              
+            parcel_no,             
+            prc_lot,               
+            prc_subdiv,            
+            case_type,             
+            case_description,      
+            legal_use,             
+            estimated_cost,        
+            parcel_size,           
+            parcel_cluster_sector, 
+            stories,               
+            parcel_floor_area,     
+            parcel_ground_area,    
+            prc_aka_address,       
+            mec_work,              
+            permit_description,    
+            fdicn_description,     
+            mec_use,               
+            residential,           
+            description,           
+            mec_type_const_cod,    
+            mec_zoning_dist,       
+            mec_use_group,        
+            mec_basement,          
+            fee_type,              
+            csm_caseno,            
+            csf_created_by,        
+            seq_no,                
+            pcf_amt_due,           
+            owner_name,            
+            owner_address1,       
+            contractor_last_name,  
+            contractor_address1
+      from bseed.tm_mechanical
+      );
+   - update bseed.trade_permits tp 
+      set parcel_no = pl.cleaned
+      from bseed.pnum_lookup pl
+      where tp.parcel_no = pl.dirty
+   - alter table bseed.trade_permits rename column elv_type_of_work to type_of_work;
+   - alter table bseed.trade_permits rename column elv_type_of_use to type_of_use;
+   - alter table bseed.trade_permits rename column elv_type_const_cod to type_const_cod;
+   - alter table bseed.trade_permits rename column elv_zoning_dist to zoning_dist;
+   - alter table bseed.trade_permits rename column elv_use_group to use_group;
+   - alter table bseed.trade_permits rename column elv_basement to basement;
+   - alter table bseed.trade_permits add column uniq serial primary key;
+   - update bseed.trade_permits set 
+      site_address = regexp_replace(site_address, '[\s]{2,}', ' '),
+      owner_address1 = regexp_replace(owner_address1, '[\s]{2,}', ' '),
+      contractor_address1 = regexp_replace(contractor_address1, '[\s]{2,}', ' ')
+   - create index if not exists bseed_trade_permits_idx on bseed.trade_permits using btree(site_address)
 
-# - type: geocode
-#   table: bseed.trade_permits
-#   add_col: site_address
-#   geom_col: geom
+- type: geocode
+  table: bseed.trade_permits
+  add_col: site_address
+  geom_col: geom
 
-# - type: sql
-#   statements:
-#     - drop view if exists bseed.trades_permits_socrata cascade
-#     - create view bseed.trades_permits_socrata as 
-#         ( select uniq as unique_id, 
-#                 permit_no as permit_no,
-#                 replace(to_char(permit_issued::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') as permit_issued, 
-#                 replace(to_char(permit_expire::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') as permit_expire,
-#                 replace(to_char(permit_completed::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') as permit_completed, 
-#                 permit_status as permit_status, 
-#                 site_address as site_address, 
-#                 between1 as between1, 
-#                 prc_lot as prc_lot, 
-#                 prc_subdiv as prc_subdiv, 
-#                 case_type as case_type, 
-#                 case_description as case_description, 
-#                 type_of_use as type_of_use, 
-#                 description as type_use_desc, 
-#                 type_of_work as permit_type, 
-#                 permit_description as permit_type_desc, 
-#                 fdicn_description as fdicn_description, 
-#                 fee_type as fee_type, 
-#                 CASE parcel_size 
-#                   WHEN 'NaN' THEN null 
-#                   ELSE parcel_size 
-#                 END as parcel_size, 
-#                 parcel_cluster_sector as parcel_cluster_sector, 
-#                 CASE parcel_floor_area 
-#                   WHEN 'NaN' THEN null 
-#                   ELSE parcel_floor_area 
-#                 END as parcel_floor_area, 
-#                 CASE parcel_ground_area 
-#                   WHEN 'NaN' THEN null 
-#                   ELSE parcel_ground_area 
-#                 END as parcel_ground_area, 
-#                 prc_aka_address as prc_aka_address, 
-#                 seq_no as seq_no, 
-#                 pcf_amt_due as pcf_amt_due, 
-#                 owner_name as owner_name, 
-#                 owner_address1 as owner_address, 
-#                 contractor_last_name as contractor_name, 
-#                 contractor_address1 as contractor_address, 
-#                 CASE   
-#                   WHEN geom is null 
-#                   THEN null   
-#                 ELSE concat('location (', ST_Y(geom), ',', ST_X(geom), ')') END as location 
-#              from bseed.trade_permits )
+- type: sql
+  statements:
+    - drop view if exists bseed.trades_permits_socrata cascade
+    - create view bseed.trades_permits_socrata as 
+        ( select uniq as unique_id, 
+                permit_no as permit_no,
+                replace(to_char(permit_issued::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') as permit_issued, 
+                replace(to_char(permit_expire::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') as permit_expire,
+                replace(to_char(permit_completed::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') as permit_completed, 
+                permit_status as permit_status, 
+                site_address as site_address, 
+                between1 as between1, 
+                prc_lot as prc_lot, 
+                prc_subdiv as prc_subdiv, 
+                case_type as case_type, 
+                case_description as case_description, 
+                type_of_use as type_of_use, 
+                description as type_use_desc, 
+                type_of_work as permit_type, 
+                permit_description as permit_type_desc, 
+                fdicn_description as fdicn_description, 
+                fee_type as fee_type, 
+                CASE parcel_size 
+                  WHEN 'NaN' THEN null 
+                  ELSE parcel_size 
+                END as parcel_size, 
+                parcel_cluster_sector as parcel_cluster_sector, 
+                CASE parcel_floor_area 
+                  WHEN 'NaN' THEN null 
+                  ELSE parcel_floor_area 
+                END as parcel_floor_area, 
+                CASE parcel_ground_area 
+                  WHEN 'NaN' THEN null 
+                  ELSE parcel_ground_area 
+                END as parcel_ground_area, 
+                prc_aka_address as prc_aka_address, 
+                seq_no as seq_no, 
+                pcf_amt_due as pcf_amt_due, 
+                owner_name as owner_name, 
+                owner_address1 as owner_address, 
+                contractor_last_name as contractor_name, 
+                contractor_address1 as contractor_address, 
+                CASE   
+                  WHEN geom is null 
+                  THEN null   
+                ELSE concat('location (', ST_Y(geom), ',', ST_X(geom), ')') END as location 
+             from bseed.trade_permits )
