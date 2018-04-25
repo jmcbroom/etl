@@ -8,10 +8,7 @@
                   cm.csm_caseno,
                   concat(cadd.csm_st_nmbr, ' ', cadd.csm_st_name) as address,
                   pl.cleaned as parcelnum,
-                  case 
-                        when pl.parcel_geom is null then null
-                        else concat('location (', st_y(st_centroid(parcel_geom)), ',', st_x(st_centroid(parcel_geom)), ')') 
-                  end as location,
+                  st_centroid(pl.parcel_geom) as parcel_geom,
                   ca.action_description,
                   ca.actn_menu_id,
                   ca.actn_code,
@@ -20,8 +17,7 @@
                   replace(ca.csa_date2::text, ' ', 'T') as csa_date2,
                   replace(ca.csa_date3::text, ' ', 'T') as csa_date3,
                   ca.csa_disp,
-                  cm.case_type,
-                  p.prc_zip_code
+                  cm.case_type
             from bseed.tm_casemain cm
             inner join ( select distinct on (csm_caseno) * from bseed.tm_caseaction order by csm_caseno, csa_creation_date desc) ca on cm.csm_caseno = ca.csm_caseno
             left outer join bseed.pnum_lookup pl on pl.dirty = cm.prc_parcel_no
@@ -39,10 +35,11 @@
   table: bseed.emg_inspections
   add_col: address
   geom_col: geocode_geom
-  where_clause: location is null
+  where_clause: parcel_geom is null
 
 - type: sql
   statements:
+    - update bseed.emg_inspections set parcel_geom = geocode_geom where parcel_geom is null and geocode_geom is not null
     - drop view if exists bseed.emg_inspections_socrata;
     - create view bseed.emg_inspections_socrata as (
             select 
@@ -58,12 +55,13 @@
                   csa_date3,
                   csa_disp,
                   case_type,
-                  prc_zip_code,
+                  z.zipcode as prc_zip_code,
                   case
-                        when location is not null then location
-                        when geocode_geom is null then null
-                        else concat('location (', st_y(st_centroid(geocode_geom)), ',', st_x(st_centroid(geocode_geom)), ')') end as location
-            from bseed.emg_inspections )
+                        when parcel_geom is null then null
+                        else concat('location (', st_y(parcel_geom), ',', st_x(parcel_geom), ')') end as location
+            from bseed.emg_inspections
+            inner join base.zip_codes z on st_contains(st_transform(z.wkb_geometry, 4326), parcel_geom)
+            )
 
 # 3rd Party Rental Inspections
 - type: sql
@@ -145,9 +143,7 @@
                   cm.csm_recd_by,
                   replace(cm.csm_recd_date::text, ' ', 'T') as csm_recd_date,
                   pl.cleaned as parcelnum,
-                  case 
-                        when pl.parcel_geom is null then null
-                        else concat('location (', st_y(st_centroid(parcel_geom)), ',', st_x(st_centroid(parcel_geom)), ')') end as location,
+                  st_centroid(pl.parcel_geom) as parcel_geom,
                   concat(cadd.csm_st_nmbr, ' ', cadd.csm_st_name) as address,
                   ca.action_description,
                   replace(ca.csa_creation_date::text, ' ', 'T') as csa_creation_date,
@@ -162,8 +158,7 @@
                   end as pmb_dwelling_units,
                   pm.pmb_type_use,
                   cm.csm_status,
-                  cm.case_type,
-                  p.prc_zip_code
+                  cm.case_type
             from bseed.tm_casemain cm
             inner join bseed.tm_caseaction ca on cm.csm_caseno = ca.csm_caseno
             inner join bseed.tm_casepeople cp on cp.csm_caseno = cm.csm_caseno
@@ -184,10 +179,11 @@
   table: bseed.rental_inspections_table
   add_col: address
   geom_col: geocode_geom
-  where_clause: location is null
+  where_clause: parcel_geom is null
 
 - type: sql
   statements:
+    - update bseed.rental_inspections_table set parcel_geom = geocode_geom where parcel_geom is null and geocode_geom is not null
     - drop view if exists bseed.rental_inspections_socrata;
     - create view bseed.rental_inspections_socrata as (
             select 
@@ -199,9 +195,8 @@
                   csm_recd_date,
                   parcelnum,
                   case
-                        when location is not null then location
-                        when geocode_geom is null then null
-                        else concat('location (', st_y(st_centroid(geocode_geom)), ',', st_x(st_centroid(geocode_geom)), ')') end as location,
+                        when parcel_geom is null then null
+                        else concat('location (', st_y(parcel_geom), ',', st_x(parcel_geom), ')') end as location,
                   address,
                   action_description,
                   csa_creation_date,
@@ -213,8 +208,9 @@
                   pmb_type_use,
                   csm_status,
                   case_type,
-                  prc_zip_code
-            from bseed.rental_inspections_table )
+                  z.zipcode as prc_zip_code
+            from bseed.rental_inspections_table
+            inner join base.zip_codes z on st_contains(st_transform(z.wkb_geometry, 4326), parcel_geom))
 
 # Rental Certifications
 - type: sql
@@ -230,9 +226,7 @@
                   cm.csm_recd_by,
                   replace(cm.csm_recd_date::text, ' ', 'T') as csm_recd_date,
                   pl.cleaned as parcelnum,
-                  case 
-                        when pl.parcel_geom is null then null
-                        else concat('location (', st_y(st_centroid(parcel_geom)), ',', st_x(st_centroid(parcel_geom)), ')') end as location,
+                  st_centroid(pl.parcel_geom) as parcel_geom,
                   concat(cadd.csm_st_nmbr, ' ', cadd.csm_st_name) as address,
                   ca.action_description,
                   replace(ca.csa_creation_date::text, ' ', 'T') as csa_creation_date,
@@ -246,8 +240,7 @@
                         else pm.pmb_dwelling_units
                   end as pmb_dwelling_units,
                   pm.pmb_type_use,
-                  cm.csm_status,
-                  p.prc_zip_code
+                  cm.csm_status
             from bseed.tm_casemain cm
             inner join bseed.tm_caseaction ca on cm.csm_caseno = ca.csm_caseno
             inner join bseed.tm_casepeople cp on cp.csm_caseno = cm.csm_caseno
@@ -267,10 +260,11 @@
   table: bseed.rental_certifications
   add_col: address
   geom_col: geocode_geom
-  where_clause: location is null
+  where_clause: parcel_geom is null
 
 - type: sql
   statements:
+    - update bseed.rental_certifications set parcel_geom = geocode_geom where parcel_geom is null and geocode_geom is not null
     - drop view if exists bseed.rental_certifications_socrata;
     - create view bseed.rental_certifications_socrata as (
             select 
@@ -282,9 +276,8 @@
                   csm_recd_date,
                   parcelnum,
                   case
-                        when location is not null then location
-                        when geocode_geom is null then null
-                        else concat('location (', st_y(st_centroid(geocode_geom)), ',', st_x(st_centroid(geocode_geom)), ')') end as location,
+                        when parcel_geom is null then null
+                        else concat('location (', st_y(parcel_geom), ',', st_x(parcel_geom), ')') end as location,
                   address,
                   action_description,
                   csa_creation_date,
@@ -295,8 +288,8 @@
                   pmb_dwelling_units,
                   pmb_type_use,
                   csm_status,
-                  prc_zip_code
-            from bseed.rental_certifications )
+                  z.zipcode as prc_zip_code
+            from bseed.rental_certifications inner join base.zip_codes z on st_contains(st_transform(z.wkb_geometry, 4326), parcel_geom) )
 
 # DNG Cases
 - type: sql
