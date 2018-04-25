@@ -99,6 +99,10 @@ class Process(object):
         # batch geocode addresses
         if 'parcel_col' in s.keys():
           GeocodeTable(s['table'], s['add_col'], s['geom_col'], s['parcel_col']).geocode_rows()
+        elif 'where_clause' in s.keys() and 'parcel_col' in s.keys():
+          GeocodeTable(s['table'], s['add_col'], s['geom_col'], s['parcel_col'], s['where_clause']).geocode_rows()
+        elif 'where_clause' in s.keys() and 'parcel_col' not in s.keys():
+          GeocodeTable(s['table'], s['add_col'], s['geom_col'], None, s['where_clause']).geocode_rows()
         else:
           GeocodeTable(s['table'], s['add_col'], s['geom_col']).geocode_rows()
 
