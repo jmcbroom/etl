@@ -1,6 +1,11 @@
 - database:
     type: oracle
     prefix: tm
+    source: BG_BUS_DET_FN1
+    destination: bseed.business_licenses
+- database:
+    type: oracle
+    prefix: tm
     source: BG_BLD_DET_F
     destination: bseed.bldg_permits
 - database:

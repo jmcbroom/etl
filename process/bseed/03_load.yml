@@ -1,4 +1,35 @@
 - to: Socrata
+  id: pugj-2dh4
+  name: Business Licenses
+  table: bseed.business_licenses_socrata
+  method: replace
+  row_identifier:
+  columns:
+    Case Number:
+      field: case_a
+      type: text
+    Address:
+      field: address
+      type: text
+    Business Name:
+      field: bus_name
+      type: text
+    Owner Name:
+      field: owner_name
+      type: text
+    License Issued Date:
+      field: permit_issued
+      type: calendar_date
+    License Type:
+      field: bus_own
+      type: text
+    Business Description:
+      field: business_description
+      type: text
+    Location:
+      field: location
+      type: location
+- to: Socrata
   id: ajxy-mcqp
   name: Third-Party Rental Inspections
   table: bseed.third_party_insps_all_socrata
