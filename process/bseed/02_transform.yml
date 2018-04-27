@@ -307,8 +307,7 @@
             bus_name,
             business_description,
             bus_own
-          from bseed.business_licenses
-    )
+          from bseed.business_licenses )
 
 - type: geocode
   table: bseed.business_licenses_geo
@@ -318,7 +317,7 @@
 - type: sql
   statements: 
     - drop view if exists bseed.business_licenses_socrata
-    - create table bseed.business_licenses_socrata as (
+    - create view bseed.business_licenses_socrata as (
           select
             case_a,
             permit_issued,
@@ -337,8 +336,7 @@
                 ')'
               ) 
             end as location
-          from bseed.business_licenses_geo
-    )
+          from bseed.business_licenses_geo )
 
 # DNG Cases
 - type: sql
