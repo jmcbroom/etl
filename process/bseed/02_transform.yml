@@ -294,6 +294,52 @@
           where "address" is not null
       )
 
+# Business Licenses
+- type: sql
+  statements: 
+    - drop table if exists bseed.business_licenses_geo cascade
+    - create table bseed.business_licenses_geo as (
+          select
+            case_a,
+            replace(permit_issued::text, ' ', 'T') as permit_issued,
+            trim(concat_ws(' ', owner_first_name, owner_last_name)) as owner_name,
+            trim(concat_ws(' ', csm_st_nmbr, csm_st_pfx, csm_st_name)) as address,
+            bus_name,
+            business_description,
+            bus_own
+          from bseed.business_licenses
+    )
+
+- type: geocode
+  table: bseed.business_licenses_geo
+  add_col: address
+  geom_col: geom
+
+- type: sql
+  statements: 
+    - drop view if exists bseed.business_licenses_socrata
+    - create table bseed.business_licenses_socrata as (
+          select
+            case_a,
+            permit_issued,
+            owner_name,
+            address,
+            bus_name,
+            business_description,
+            bus_own,
+            case 
+              when geom is null then null 
+              else concat (
+                'location (',
+                ST_Y(ST_Centroid(geom)), 
+                ',', 
+                ST_X(ST_Centroid(geom)),
+                ')'
+              ) 
+            end as location
+          from bseed.business_licenses_geo
+    )
+
 # DNG Cases
 - type: sql
   statements:
@@ -413,7 +459,8 @@
 - type: sql
   statements:
     - drop view if exists bseed.row_permits cascade
-    - create view bseed.row_permits as (select 
+    - create view bseed.row_permits as (
+          select 
             cm.csm_caseno as case_number,
             cm.csm_description as description,
             cm.csm_name_last as contractor,
@@ -421,7 +468,7 @@
             replace(ce.eng_start_date::text, ' ', 'T') as start_date,
             replace(ce.eng_end_date::text, ' ', 'T') as end_date,
             ce.eng_job_loc as location
-            from bseed.tm_casemain cm
+          from bseed.tm_casemain cm
             inner join bseed.tm_caseeng ce on cm.csm_caseno = ce.csm_caseno
             where cm.case_type = 'ENG' and 
             ce.eng_type_of_work in ('ROW', 'BARRICADE'))
