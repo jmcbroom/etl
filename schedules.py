@@ -33,6 +33,7 @@ run('bseed', dataset=None, notify=True, emoji='nut_and_bolt')
 run('ocp', dataset=None, notify=True, emoji='money_with_wings')
 run('blight_violations', dataset=None, notify=True, emoji='warning')
 run('crio', dataset=None, notify=True, emoji="briefcase")
+run('dba', dataset=None, notify=True, emoji="dollar")
 
 ## Scheduling datasets
 # Angel's Night fire data

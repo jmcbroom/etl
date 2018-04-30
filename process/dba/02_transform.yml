@@ -1,0 +1,25 @@
+- type: sql
+  statements:
+    - alter table dba.marketed_properties add column pid text
+- type: geocode
+  table: dba.marketed_properties
+  add_col: address
+  geom_col: geom
+  parcel_col: pid
+- type: sql
+  statements:
+    - drop view if exists dba.marketed_properties_socrata
+    - create view dba.marketed_properties_socrata as (
+        select 
+          ownership, 
+          address, 
+          zip_code, 
+          property_type, 
+          pid,
+          case 
+            when geom is not null then
+            concat('location(', st_y(geom), ',', st_x(geom), ')')
+            else null
+          end as location
+          from dba.marketed_properties
+        )
