@@ -1,0 +1,25 @@
+- to: Socrata
+  id: d5cp-qnb9
+  name: DBA Marketed Properties
+  table: dba.marketed_properties_socrata
+  method: replace
+  row_identifier:
+  columns:
+    Ownership:
+      field: ownership 
+      type: text
+    Address:
+      field: address
+      type: text
+    Zip Code:
+      field: zip_code
+      type: text
+    Property Type:
+      field: property_type
+      type: text
+    Parcel ID:
+      field: pid
+      type: text
+    Location:
+      field: location
+      type: location
