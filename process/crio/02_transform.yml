@@ -45,5 +45,5 @@
               )
             end as location
           from crio.bizcert
-            where certification_expire_date1_yr_from_end_date_or != 'NaN'
-            and certification_expire_date1_yr_from_end_date_or::date >= now()::date )
+            where status_of_application = 'Approved' )
+            
