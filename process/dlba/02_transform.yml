@@ -397,6 +397,6 @@
                 name as address,
                 parcel_id,
                 inventory_status_socrata as status,
-                st_transform(ap.wkb_geometry, 4326)
-        from dlba.all_ownership_socrata ao inner join assessor.parcels_010218 ap on ap.parcelno = ao.parcel_id)
+                st_transform(ap.shape, 4326)
+        from dlba.all_ownership_socrata ao inner join assessor.parcels_050318 ap on ap.parcelno = ao.parcel_id)
 
