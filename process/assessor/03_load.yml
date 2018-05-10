@@ -2,6 +2,9 @@
   name: Assessor Parcels
   table: assessor.parcels_mapbox
   tileset: assessor_parcels
+  flags:
+    - "-Z13"
+    - "-z19"
 - to: Socrata
   id: xbvp-4is5
   name: Property Sales History
