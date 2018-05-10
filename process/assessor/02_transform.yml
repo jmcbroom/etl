@@ -1,5 +1,9 @@
 - type: sql
   statements:
+    - drop view if exists assessor.parcels_mapbox
+    - create view assessor.parcels_mapbox as (
+      select st_transform(shape, 4326) as wkb_geometry, parcelno from assessor.parcels_050318
+      );
     - drop view if exists assessor.parcel_points
     - create view assessor.parcel_points as 
         (select 
