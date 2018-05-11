@@ -2,8 +2,6 @@
   name: DLBA All Ownership Parcels
   table: dlba.all_ownership_mapbox
   tileset: dlba_parcels
-  flags:
-    -
 - to: Socrata
   name: Asbestos Abatement (MDEQ Report)
   id: vnrt-n46x
