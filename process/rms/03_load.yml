@@ -154,3 +154,7 @@
     Incident Location:
       field: location
       type: location
+- to: ArcGIS Online
+  id: 
+  file: rms_incidents.json
+  table: pubsafe.rms_ago
