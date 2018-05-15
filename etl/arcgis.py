@@ -32,12 +32,15 @@ class AgoLayer(object):
     self.params = params
     print(params)
 
+  def to_postgres(self, schema, table):
+    pass
+
   def publish(self):
     if self.params['type'] == 'geojson':
       psql_to_geojson(self.params['table'], self.params['file'])
     else:
       psql_to_zipshp(self.params['table'], self.params['file'])
-    if 'id' not in self.params.keys():
+    if 'id' not in self.params.keys() or self.params['id'] is None:
       print(self.params['file'])
       item = upload(gis, self.params['file'], self.params)
       self.item = item.publish()
