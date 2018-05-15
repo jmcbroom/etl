@@ -155,6 +155,13 @@
       field: location
       type: location
 - to: ArcGIS Online
-  id: 
+  id: 4cad198d56464ff2adb84a944d4f02b3
   file: rms_incidents.json
   table: pubsafe.rms_ago
+  type: geojson
+  title: RMS Incidents Last 90 Days
+  description:
+  tags:
+    - police
+    - opendata
+    - rms
