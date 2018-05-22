@@ -580,9 +580,15 @@
             contractor_address2,
             contractor_city,
             contractor_stat,
-            contractor_zip
+            contractor_zip,
+            case 
+                  when pm.pmb_dwelling_units = 'NaN'
+                  then null
+                  else pm.pmb_dwelling_units
+            end as dwelling_units
             from bseed.bldg_permits
-            inner join bseed.pnum_lookup pn on parcel_no = pn.dirty )
+            inner join bseed.pnum_lookup pn on parcel_no = pn.dirty
+            left outer join bseed.tm_casepmb pm on pm.csm_caseno = csm_caseno )
  
 # # Dismantle Permits
 - type: sql
