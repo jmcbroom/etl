@@ -43,7 +43,9 @@
         parcelno text)
     # create indices on helper tables. speeds up ze joins
     - create index if not exists dah_bvn_zticket_idx on dah.bvn using btree(ticket_id);
+    - create index if not exists dah_ztickets_zticketid_idx on dah.ztickets using btree("ZTicketID")
     - create index if not exists dah_violator_info_idx on dah.violator_info using btree("ZTicketID");
+    - create index if not exists dah_dispadjourn_idx on dah.dispadjourn using btree("ZTicketID");
     - create index if not exists dah_violator_address_idx on dah.violator_address using btree("ViolatorID");
     - create index if not exists dah_payment_id_idx on dah.payments using btree("ZticketID");
     # start joins
@@ -104,13 +106,13 @@
         z."DiscAmt" as discount_amount,
         (select sum("ServiceCost") from dah.blight_ticket_svc_cost bts where z."ZTicketID" = bts."ZTicketID" and bts."ServiceType" = 6) as clean_up_cost
           from dah.ztickets z
-          inner join dah.agency ag on ag."AgencyID" = z."AgencyID"
-          inner join dah.security se on se."SecurityID" = z."ZTicketUserID"
-          inner join dah.streets st on st."StreetID" = z."ViolStreetName"
-          inner join dah.violator_info vi on vi."ZTicketID" = z."ZTicketID"
-          inner join dah.ordinance od on od."OrdID" = z."ViolDescID"
-          inner join dah.cityfines cf on cf."OffFinID" = z."OrigFineAmt"
-          inner join dah.dispadjourn da on da."ZTicketID" = z."ZTicketID"
+          left outer join dah.agency ag on ag."AgencyID" = z."AgencyID"
+          left outer join dah.security se on se."SecurityID" = z."ZTicketUserID"
+          left outer join dah.streets st on st."StreetID" = z."ViolStreetName"
+          left outer join dah.violator_info vi on vi."ZTicketID" = z."ZTicketID"
+          left outer join dah.ordinance od on od."OrdID" = z."ViolDescID"
+          left outer join dah.cityfines cf on cf."OffFinID" = z."OrigFineAmt"
+          left outer join dah.dispadjourn da on da."ZTicketID" = z."ZTicketID"
           where z."VoidTicket" = 0
     # new fine amount
     - update dah.bvn j set fine_amount = z."NewFineAmt" from dah.ztickets z 

@@ -104,7 +104,7 @@
       field: sqft
       type: number
     Acreage:
-      field: acreage
+      field: total_acres
       type: number
     Frontage:
       field: frontage
