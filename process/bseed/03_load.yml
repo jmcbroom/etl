@@ -365,6 +365,9 @@
   method: replace
   row_identifier: permit_no
   columns:
+    Units:
+      field: dwelling_units
+      type: number
     Amount Due:
       field: pcf_amt_due
       type: money
