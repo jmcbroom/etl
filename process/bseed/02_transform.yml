@@ -563,7 +563,7 @@
             bld_use_group,
             bld_basement,
             fee_type,
-            csm_caseno,
+            bp.csm_caseno,
             csf_created_by,
             seq_no,
             case pcf_amt_due when 'NaN' then null else pcf_amt_due end,
@@ -586,9 +586,9 @@
                   then null
                   else pm.pmb_dwelling_units
             end as dwelling_units
-            from bseed.bldg_permits
-            inner join bseed.pnum_lookup pn on parcel_no = pn.dirty
-            left outer join bseed.tm_casepmb pm on pm.csm_caseno = csm_caseno )
+            from bseed.bldg_permits bp
+            inner join bseed.pnum_lookup pn on bp.parcel_no = pn.dirty
+            left outer join bseed.tm_casepmb pm on pm.csm_caseno = bp.csm_caseno )
  
 # # Dismantle Permits
 - type: sql
