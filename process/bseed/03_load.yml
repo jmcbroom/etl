@@ -306,21 +306,45 @@
     Case Number:
       field: case_number
       type: text
-    Description:
-      field: description
-      type: text
-    Contractor:
-      field: contractor
+    Permit Type:
+      field: permit_type
       type: text
     Project Name:
       field: project_name
       type: text
+    Description:
+      field: description
+      type: text
+    Work Done By:
+      field: work_done_by
+      type: text
+    Contractor:
+      field: contractor
+      type: text
+    Contractor Address:
+      field: contractor_address
+      type: text
+    Contractor City:
+      field: contractor_city
+      type: text
+    Contractor State:
+      field: contractor_state
+      type: text
+    Contractor Zip:
+      field: contractor_zip
+      type: text
+    Issued Date:
+      field: issued_date
+      type: calendar_date
     Start Date:
       field: start_date
       type: calendar_date
     End Date:
       field: end_date
       type: calendar_date
+    Permit Address:
+      field: permit_address
+      type: text
     Location:
       field: location
       type: text
