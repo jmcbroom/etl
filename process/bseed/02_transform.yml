@@ -572,7 +572,7 @@
             bld_use_group,
             bld_basement,
             fee_type,
-            bp.csm_caseno,
+            bp.csm_caseno as csm_caseno,
             csf_created_by,
             seq_no,
             case pcf_amt_due when 'NaN' then null else pcf_amt_due end,
