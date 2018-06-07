@@ -28,6 +28,11 @@
 - database:
     type: oracle
     prefix: tm
+    source: CASE_BLD
+    destination: bseed.tm_casebld
+- database:
+    type: oracle
+    prefix: tm
     source: CASE_ENG
     destination: bseed.tm_caseeng
     where: >-
