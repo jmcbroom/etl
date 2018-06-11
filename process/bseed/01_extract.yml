@@ -21,6 +21,18 @@
 - database:
     type: oracle
     prefix: tm
+    source: CASE_PRV
+    destination: bseed.tm_caseprv
+    where: >-
+        ((date '1980-01-01' < PRV_ISSD_DATE and PRV_ISSD_DATE < date '2025-01-01') or PRV_ISSD_DATE is null)
+- database:
+    type: oracle
+    prefix: tm
+    source: CASE_BLD
+    destination: bseed.tm_casebld
+- database:
+    type: oracle
+    prefix: tm
     source: CASE_ENG
     destination: bseed.tm_caseeng
     where: >-

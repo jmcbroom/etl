@@ -66,9 +66,6 @@
     Date Correction Order Posted:
       field: date_correction_order_posted
       type: text
-    Date Citation Order Posted:
-      field: date_citation_order_posted
-      type: text
     Date Certificate of Compliance Issued:
       field: date_c_of_c_issued_to_be_completed_by_clerk
       type: text
