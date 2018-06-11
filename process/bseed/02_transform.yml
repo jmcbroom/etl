@@ -238,19 +238,19 @@
     - drop table if exists bseed.third_party_insps_all cascade
     - create table bseed.third_party_insps_all as (
           select 
-            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed_failed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_or_subsequent_inspection_date", "3rd_or_subsequent_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "date_lead_docs_attached", "insp_company_name"
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed_failed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_or_subsequent_inspection_date", "3rd_or_subsequent_inspection_passed_failed", "date_correction_order_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "date_lead_docs_attached", "insp_company_name"
           from bseed.third_party_insp_wadetrim
           union all
           select
-            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_certificate_of_compliance_issued", "date_lead_reports_attached", "insp_company_name"
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_certificate_of_compliance_issued", "date_lead_reports_attached", "insp_company_name"
           from bseed.third_party_insp_inspgroup
           union all
           select
-            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "date_lead_docs_attached", "insp_company_name"
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "date_lead_docs_attached", "insp_company_name"
           from bseed.third_party_insp_prospections
           union all
           select
-            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed_failed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_citation_ticket_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "date_lead_docs_attached", "insp_company_name"
+            "date_registered", "address", "street", "direction", "zip_code", "date_1st_inspection_completed", "1st_inspection_passed_failed", "2nd_inspection_date", "2nd_inspection_passed_failed", "3rd_inspection_date", "3rd_inspection_passed_failed", "date_correction_order_posted", "date_c_of_c_issued_to_be_completed_by_clerk", "date_lead_docs_attached", "insp_company_name"
           from bseed.third_party_insp_safebuilt
       )
     - alter table bseed.third_party_insps_all add column full_address varchar
@@ -276,7 +276,6 @@
             "3rd_or_subsequent_inspection_date" as "third_or_subsequent_inspection_date",
             "3rd_or_subsequent_inspection_passed_failed" as "third_or_subsequent_inspection_disposition",
             "date_correction_order_posted",
-            "date_citation_ticket_posted",
             "date_c_of_c_issued_to_be_completed_by_clerk",
             "date_lead_docs_attached",
             "insp_company_name",
