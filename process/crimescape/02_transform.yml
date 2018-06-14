@@ -50,9 +50,13 @@
               ST_X(ST_Transform(geom, 4326)),
               ')'
             )
-        END as location 
-        from crimescape.rms
-        where "Incident Date"::date >= date '2016-12-06'
+        END as location,
+        n.rel2offnd,
+        c.premise1
+        from crimescape.rms r
+        left outer join crimescape.lwnames n on n.lwmainid = r.case_id
+        left outer join crimespace.lwchrg c on c.lwmainid = r.case_id
+          where "Incident Date"::date >= date '2016-12-06'
     )
 
 # RMS: Copy the view to a csv

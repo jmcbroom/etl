@@ -23,3 +23,21 @@
         condition: ">"
         value: max(avllogid)
         table: crimescape.avl
+- database: 
+    type: sql-server
+    prefix: rms
+    source: vw_lwnames_Restrict
+    destination: crimescape.lwnames
+    where: >-
+        (name_code === 'VI')
+- database: 
+    type: sql-server
+    prefix: rms
+    source: vw_lwchrg_Restrict
+    destination: crimescape.lwchrg
+- database:
+    type: sql-server
+    prefix: rms
+    source: systab2
+    destination: crimescape.systab2
+    
