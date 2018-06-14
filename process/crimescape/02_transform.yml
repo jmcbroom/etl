@@ -3,11 +3,13 @@
   statements:
     - alter table crimescape.rms_update rename column "Address" to address
     - alter table crimescape.rms_update rename column "DPDCRIMEID" to dpdcrimeid
+    - alter table crimescape.rms_update rename column "Case ID" to case_id
     - alter table crimescape.rms_update add column uniq serial primary key
     - select AddGeometryColumn( 'crimescape', 'rms_update', 'geom', 2898, 'POINT', 2)
     - create index if not exists etl_rms_update_geom_idx on crimescape.rms_update using gist(geom)
     - create index if not exists rms_update_dpdcrimeid_idx on crimescape.rms_update using btree(dpdcrimeid)
     - create index if not exists rms_dpdcrimeid_idx on crimescape.rms using btree(dpdcrimeid)
+    - create index if not exists rms_caseid_idx on crimescape.rms using btree(case_id)
     - create index if not exists rms_update_addr_idx on crimescape.rms_update using btree(address)
     - update crimescape.rms_update set geom = st_setsrid(st_makepoint(geox/100, geoy/100), 2898) where geox > 0 and geoy > 0
         
@@ -27,8 +29,8 @@
         "Offense Description" as offense_description,
         "Offense Category" as offense_category,
         "State Offense Code" as state_offense_code,
-        trim(arr_chrg) as arrest_charge,
-        chrgdesc as charge_description,
+        trim(r.arr_chrg) as arrest_charge,
+        r.chrgdesc as charge_description,
         replace(to_char(concat("Incident Date", ' ', left("Incident Time", 2), ':', right("Incident Time", 2), '\:00')::timestamp, 'YYYY-MM-DD HH24:MI:SS.000'), ' ', 'T') as incident_timestamp,
         "Incident Time" as incident_time,
         (extract(dow from concat("Incident Date", ' ', left("Incident Time", 2), ':', right("Incident Time", 2), '\:00')::timestamp) + 1)::integer as day_of_week,
@@ -55,7 +57,7 @@
         c.premise1
         from crimescape.rms r
         left outer join crimescape.lwnames n on n.lwmainid = r.case_id
-        left outer join crimespace.lwchrg c on c.lwmainid = r.case_id
+        left outer join crimescape.lwchrg c on c.lwmainid = r.case_id
           where "Incident Date"::date >= date '2016-12-06'
     )
 
