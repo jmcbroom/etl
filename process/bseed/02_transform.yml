@@ -231,10 +231,10 @@
 # 3rd Party Rental Inspections
 - type: sql
   statements:
-    - alter table bseed.third_party_insp_safebuilt add column insp_company_name varchar not null default 'SafeBuilt'
-    - alter table bseed.third_party_insp_wadetrim add column insp_company_name varchar not null default 'Wade Trim'
-    - alter table bseed.third_party_insp_inspgroup add column insp_company_name varchar not null default 'The Inspection Group'
-    - alter table bseed.third_party_insp_prospections add column insp_company_name varchar not null default 'Prospections'
+    - alter table bseed.third_party_insp_safebuilt add column if not exists insp_company_name varchar not null default 'SafeBuilt'
+    - alter table bseed.third_party_insp_wadetrim add column if not exists insp_company_name varchar not null default 'Wade Trim'
+    - alter table bseed.third_party_insp_inspgroup add column if not exists insp_company_name varchar not null default 'The Inspection Group'
+    - alter table bseed.third_party_insp_prospections add column if not exists insp_company_name varchar not null default 'Prospections'
     - drop table if exists bseed.third_party_insps_all cascade
     - create table bseed.third_party_insps_all as (
           select 
