@@ -29,7 +29,7 @@
     source: vw_lwnames_Restrict
     destination: crimescape.lwnames
     where: >-
-        (name_code === 'VI')
+        (name_code = 'VI')
 - database: 
     type: sql-server
     prefix: rms
