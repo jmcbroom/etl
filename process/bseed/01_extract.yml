@@ -16,6 +16,18 @@
 - database:
     type: oracle
     prefix: tm
+    source: PAID_CASE_FEE
+    destination: bseed.paid_case_fee
+    where: >-
+        ((date '1980-01-01' < PCF_UPDATED and PCF_UPDATED < date '2025-01-01') or PCF_UPDATED is null)
+- database:
+    type: oracle
+    prefix: tm
+    source: VALIDATION_VALUES
+    destination: bseed.validation_values
+- database:
+    type: oracle
+    prefix: tm
     source: CASE_PMB
     destination: bseed.tm_casepmb
 - database:
