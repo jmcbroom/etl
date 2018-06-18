@@ -53,15 +53,13 @@
               ')'
             )
         END as location,
-        (select s.descriptn from crimescape.systab2 s where c.premise1 = s.code_sbi and s.code_key = 'LOTP') as premise,
-        n.rel2offnd,
-        regexp_replace(regexp_replace(n.rel2offnd,',[1-9]',',','g'),'^[1]','') as rel2offnd_clean,
+        (select s.descriptn from crimescape.systab2 s where c.premise1 = s.code_sbi and s.code_key = 'LOTP') as location_type,
         case 
-          when n.rel2offnd like any (array['%01%','%02%','%13%','%33%','%34%','%24%','%26%','%32%']) then 'IPV'
-          when n.rel2offnd like any (array['%05%','%10%','%25%','%07%','%04%','%11%','%03%','%09%','%06%','%08%','%12%','%20%']) then 'DV'
-          when n.rel2offnd like any (array['%23%','%21%','%22%','%28%','%29%','%30%','%18%','%98%','%99%','%31%']) then 'OTH'
+          when regexp_replace(regexp_replace(n.rel2offnd,',[1-9]',',','g'),'^[1]','') like any (array['%01%','%02%','%13%','%33%','%34%','%24%','%26%','%32%']) then 'IPV'
+          when regexp_replace(regexp_replace(n.rel2offnd,',[1-9]',',','g'),'^[1]','') like any (array['%05%','%10%','%25%','%07%','%04%','%11%','%03%','%09%','%06%','%08%','%12%','%20%']) then 'DV'
+          when regexp_replace(regexp_replace(n.rel2offnd,',[1-9]',',','g'),'^[1]','') like any (array['%23%','%21%','%22%','%28%','%29%','%30%','%18%','%98%','%99%','%31%']) then 'OTH'
           else n.rel2offnd
-        end as rel2offnd_grouped,
+        end as ranked_relationship_to_offender,
         from crimescape.rms r
         left outer join crimescape.lwnames n on n.lwmainid = r.case_id
         left outer join crimescape.lwchrg c on c.lwmainid = r.case_id
