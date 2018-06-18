@@ -12,7 +12,7 @@
     - create index if not exists rms_caseid_idx on crimescape.rms using btree(case_id)
     - create index if not exists rms_update_addr_idx on crimescape.rms_update using btree(address)
     - update crimescape.rms_update set geom = st_setsrid(st_makepoint(geox/100, geoy/100), 2898) where geox > 0 and geoy > 0
-        
+
 # RMS: Create view
 - type: sql
   statements:
@@ -54,13 +54,12 @@
             )
         END as location,
         n.rel2offnd,
-        c.premise1
+        (select s.descriptn from crimescape.systab2 s where c.premise1 = s.code_sbi and s.code_key = 'LOTP') as premise
         from crimescape.rms r
         left outer join crimescape.lwnames n on n.lwmainid = r.case_id
         left outer join crimescape.lwchrg c on c.lwmainid = r.case_id
-          where "Incident Date"::date >= date '2016-12-06'
-    )
-
+          where "Incident Date"::date >= date '2016-12-06' )
+          
 # RMS: Copy the view to a csv
 - type: sql
   statements:
