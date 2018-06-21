@@ -280,6 +280,9 @@
     Zip Code:
       field: prc_zip_code
       type: text
+    Council District:
+      field: council_district
+      type: number
 - to: Socrata
   id: di9m-phy3
   name: Rental Certifications

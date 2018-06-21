@@ -11,8 +11,7 @@
       case when c.case_type = 'PRV' then max(cp.prv_permit_type) when c.case_type = 'BLD' then max(cb.bld_permit_type) end as permit_type,
       case when c.case_type = 'PRV' then max(cp.prv_type_use) when c.case_type = 'BLD' then max(cb.bld_legal_use) end as legal_use,
       case when 
-            case when 
-            c.case_type = 'PRV' then max(cp.prv_est_cost) 
+            case when c.case_type = 'PRV' then max(cp.prv_est_cost) 
             when c.case_type = 'BLD' then max(cb.bld_est_cost) end = 'NaN' 
             then null 
             else
@@ -94,6 +93,8 @@
 - type: sql
   statements:
     - update bseed.rental_inspections_table set parcel_geom = geocode_geom where parcel_geom is null and geocode_geom is not null
+    - alter table bseed.rental_inspections_table add column council_district integer;
+    - update bseed.rental_inspections_table r set council_district = d.districts::integer from base.council_districts d where st_contains(d.wkb_geometry, r.parcel_geom);
     - drop view if exists bseed.rental_inspections_socrata;
     - create view bseed.rental_inspections_socrata as (
             select 
@@ -118,7 +119,8 @@
                   pmb_type_use,
                   csm_status,
                   case_type,
-                  z.zipcode as prc_zip_code
+                  z.zipcode as prc_zip_code,
+                  council_district
             from bseed.rental_inspections_table
             left outer join base.zip_codes z on st_contains(st_transform(z.wkb_geometry, 4326), parcel_geom)
       )
