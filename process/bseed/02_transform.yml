@@ -21,7 +21,7 @@
             then max(cb.bld_est_cost) 
       end end as est_cost,
       case when c.case_type = 'PRV' then max(c.csm_description) when c.case_type = 'BLD' then max(cb.bld_permit_desc) end as bld_permit_desc,
-      case when c.case_type = 'PRV' then max(cp.prv_type_use) when c.case_type = 'BLD' then (select vlv_desc from bseed.validation_values where valid_value = max(cb.bld_type_use) and valid_key = 'bld_use_code') end as bld_type_use,
+      case when c.case_type = 'PRV' then max(cp.prv_type_use) when c.case_type = 'BLD' then (select vlv_desc from bseed.validation_values where valid_value = max(cb.bld_type_use) and valid_key = 'bld_use_code' limit 1) end as bld_type_use,
       case when c.case_type = 'PRV' then max(cp.prv_const_type) when c.case_type = 'BLD' then max(cb.bld_type_const_cod) end as bld_type_const,
       case when max(pcf.pcf_amt_due) is null then null else max(pcf.pcf_amt_due) end as amt_due,
       case when pl.cleaned is null then null when pl.parcel_geom is null then null else concat('location(', st_y(st_centroid(pl.parcel_geom)), ',', st_x(st_centroid(pl.parcel_geom)), ')') end as location
@@ -641,7 +641,7 @@
             inner join bseed.pnum_lookup pn on bp.parcel_no = pn.dirty
             left outer join bseed.tm_casepmb pm on pm.csm_caseno = bp.csm_caseno )
  
-# # Dismantle Permits
+# Dismantle Permits
 - type: sql
   statements:
       - drop view if exists bseed.dismantle_permits_socrata cascade
@@ -965,3 +965,21 @@
                   THEN null   
                 ELSE concat('location (', ST_Y(geom), ',', ST_X(geom), ')') END as location 
              from bseed.trade_permits )
+
+# Bldg permits plus COOs & PRVs tileset
+- type: sql
+  statements:
+    - drop view if exists bseed.all_permits_mapbox;
+    - create view bseed.all_permits_mapbox as (
+          select 
+            parcel_no
+          from bseed.bldg_permits_socrata
+            where parcel_no is not null
+            group by parcel_no
+          union 
+          select
+            parcel_no
+          from bseed.coo_planrev_socrata
+            where parcel_no is not null
+            group by parcel_no
+    )

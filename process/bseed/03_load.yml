@@ -1,5 +1,9 @@
+- to: Mapbox
+  name: BSEED All Permits
+  table: bseed.all_permits_mapbox
+  tileset: parcels_with_lots_of_permits
 - to: Socrata
-  id:
+  id: 3qbb-7tqs
   name: Certificates of Occupancy and Plan Review
   table: bseed.coo_planrev_socrata
   method: replace
