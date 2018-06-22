@@ -970,16 +970,25 @@
 - type: sql
   statements:
     - drop view if exists bseed.all_permits_mapbox;
-    - create view bseed.all_permits_mapbox as (
+    - create view bseed.all_permits_mapbox as
+        (
+          with all_permits as 
+        (
           select 
-            parcel_no
-          from bseed.bldg_permits_socrata
-            where parcel_no is not null
-            group by parcel_no
-          union 
-          select
-            parcel_no
-          from bseed.coo_planrev_socrata
-            where parcel_no is not null
-            group by parcel_no
-    )
+            parcel_no, 
+            sum(estimated_cost::bigint) as total_cost 
+            from bseed.bldg_permits_socrata where parcel_no is not null and estimated_cost > 50000 group by parcel_no
+          union all
+          select 
+            parcel_no, 
+            sum(est_cost::bigint) as total_cost 
+          from bseed.coo_planrev_socrata where parcel_no is not null and est_cost > 50000 group by parcel_no
+        )
+          select 
+            parcel_no, 
+            sum(total_cost::bigint) as cost, 
+            st_transform(ap.shape, 4326) 
+          from all_permits pa 
+            inner join assessor.parcels_050318 ap on pa.parcel_no = ap.parcelno 
+            group by parcel_no, ap.shape
+        );
