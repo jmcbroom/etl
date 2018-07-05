@@ -93,8 +93,6 @@
 - type: sql
   statements:
     - update bseed.rental_inspections_table set parcel_geom = geocode_geom where parcel_geom is null and geocode_geom is not null
-    - alter table bseed.rental_inspections_table add column council_district integer;
-    - update bseed.rental_inspections_table r set council_district = d.districts::integer from base.council_districts d where st_contains(d.wkb_geometry, r.parcel_geom);
     - drop view if exists bseed.rental_inspections_socrata;
     - create view bseed.rental_inspections_socrata as (
             select 
@@ -120,9 +118,10 @@
                   csm_status,
                   case_type,
                   z.zipcode as prc_zip_code,
-                  council_district
+                  cd.districts::integer as council_district
             from bseed.rental_inspections_table
             left outer join base.zip_codes z on st_contains(st_transform(z.wkb_geometry, 4326), parcel_geom)
+            left outer join base.council_districts cd on st_contains(st_transform(cd.wkb_geometry, 4326), parcel_geom)
       )
 
 # Rental Certifications
