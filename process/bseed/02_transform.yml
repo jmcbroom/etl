@@ -11,8 +11,7 @@
       case when c.case_type = 'PRV' then max(cp.prv_permit_type) when c.case_type = 'BLD' then max(cb.bld_permit_type) end as permit_type,
       case when c.case_type = 'PRV' then max(cp.prv_type_use) when c.case_type = 'BLD' then max(cb.bld_legal_use) end as legal_use,
       case when 
-            case when 
-            c.case_type = 'PRV' then max(cp.prv_est_cost) 
+            case when c.case_type = 'PRV' then max(cp.prv_est_cost) 
             when c.case_type = 'BLD' then max(cb.bld_est_cost) end = 'NaN' 
             then null 
             else
@@ -22,7 +21,7 @@
             then max(cb.bld_est_cost) 
       end end as est_cost,
       case when c.case_type = 'PRV' then max(c.csm_description) when c.case_type = 'BLD' then max(cb.bld_permit_desc) end as bld_permit_desc,
-      case when c.case_type = 'PRV' then max(cp.prv_type_use) when c.case_type = 'BLD' then (select vlv_desc from bseed.validation_values where valid_value = max(cb.bld_type_use) and valid_key = 'bld_use_code') end as bld_type_use,
+      case when c.case_type = 'PRV' then max(cp.prv_type_use) when c.case_type = 'BLD' then (select vlv_desc from bseed.validation_values where valid_value = max(cb.bld_type_use) and valid_key = 'bld_use_code' limit 1) end as bld_type_use,
       case when c.case_type = 'PRV' then max(cp.prv_const_type) when c.case_type = 'BLD' then max(cb.bld_type_const_cod) end as bld_type_const,
       case when max(pcf.pcf_amt_due) is null then null else max(pcf.pcf_amt_due) end as amt_due,
       case when pl.cleaned is null then null when pl.parcel_geom is null then null else concat('location(', st_y(st_centroid(pl.parcel_geom)), ',', st_x(st_centroid(pl.parcel_geom)), ')') end as location
@@ -94,6 +93,8 @@
 - type: sql
   statements:
     - update bseed.rental_inspections_table set parcel_geom = geocode_geom where parcel_geom is null and geocode_geom is not null
+    - alter table bseed.rental_inspections_table add column council_district integer;
+    - update bseed.rental_inspections_table r set council_district = d.districts::integer from base.council_districts d where st_contains(d.wkb_geometry, r.parcel_geom);
     - drop view if exists bseed.rental_inspections_socrata;
     - create view bseed.rental_inspections_socrata as (
             select 
@@ -118,7 +119,8 @@
                   pmb_type_use,
                   csm_status,
                   case_type,
-                  z.zipcode as prc_zip_code
+                  z.zipcode as prc_zip_code,
+                  council_district
             from bseed.rental_inspections_table
             left outer join base.zip_codes z on st_contains(st_transform(z.wkb_geometry, 4326), parcel_geom)
       )
@@ -639,7 +641,7 @@
             inner join bseed.pnum_lookup pn on bp.parcel_no = pn.dirty
             left outer join bseed.tm_casepmb pm on pm.csm_caseno = bp.csm_caseno )
  
-# # Dismantle Permits
+# Dismantle Permits
 - type: sql
   statements:
       - drop view if exists bseed.dismantle_permits_socrata cascade
@@ -963,3 +965,30 @@
                   THEN null   
                 ELSE concat('location (', ST_Y(geom), ',', ST_X(geom), ')') END as location 
              from bseed.trade_permits )
+
+# Bldg permits plus COOs & PRVs tileset
+- type: sql
+  statements:
+    - drop view if exists bseed.all_permits_mapbox;
+    - create view bseed.all_permits_mapbox as
+        (
+          with all_permits as 
+        (
+          select 
+            parcel_no, 
+            sum(estimated_cost::bigint) as total_cost 
+            from bseed.bldg_permits_socrata where parcel_no is not null and estimated_cost > 50000 group by parcel_no
+          union all
+          select 
+            parcel_no, 
+            sum(est_cost::bigint) as total_cost 
+          from bseed.coo_planrev_socrata where parcel_no is not null and est_cost > 50000 group by parcel_no
+        )
+          select 
+            parcel_no, 
+            sum(total_cost::bigint) as cost, 
+            st_transform(ap.shape, 4326) 
+          from all_permits pa 
+            inner join assessor.parcels_050318 ap on pa.parcel_no = ap.parcelno 
+            group by parcel_no, ap.shape
+        );
