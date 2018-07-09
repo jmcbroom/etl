@@ -41,6 +41,7 @@
         ST_X(ST_Transform(geom, 4326)) as longitude,
         ST_Y(ST_Transform(geom, 4326)) as latitude,
         replace(to_char(ibr_date::timestamp, 'YYYY-MM-DD HH24:MI:SS.000'), ' ', 'T') as ibr_date,
+        c.lwchrgid,
         CASE
           WHEN geom is null
             THEN null
