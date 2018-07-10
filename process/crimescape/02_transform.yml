@@ -96,7 +96,7 @@
 # RMS: Copy the view to a csv
 - type: sql
   statements:
-  - copy ( select * from crimescape.rms_sftp ) to '/tmp/rms.csv' delimiter ',' csv header
+  - copy ( select * from crimescape.rms_sftp_grouped ) to '/tmp/rms.csv' delimiter ',' csv header
 
 # CAD: Initial address string clean up
 - type: sql
