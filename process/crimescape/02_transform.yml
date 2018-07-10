@@ -31,9 +31,9 @@
         "State Offense Code" as state_offense_code,
         trim(r.arr_chrg) as arrest_charge,
         r.chrgdesc as charge_description,
-        replace(to_char(concat("Incident Date", ' ', left("Incident Time", 2), ':', right("Incident Time", 2), ':00')::timestamp, 'YYYY-MM-DD HH24:MI:SS.000'), ' ', 'T') as incident_timestamp,
+        replace(to_char(concat("Incident Date", ' ', left("Incident Time", 2), ':', right("Incident Time", 2), '\:00')::timestamp, 'YYYY-MM-DD HH24:MI:SS.000'), ' ', 'T') as incident_timestamp,
         "Incident Time" as incident_time,
-        (extract(dow from concat("Incident Date", ' ', left("Incident Time", 2), ':', right("Incident Time", 2), ':00')::timestamp) + 1)::integer as day_of_week,
+        (extract(dow from concat("Incident Date", ' ', left("Incident Time", 2), ':', right("Incident Time", 2), '\:00')::timestamp) + 1)::integer as day_of_week,
         left("Incident Time", 2)::integer as hour_of_day,
         right("Incident Date", 4)::integer as year,
         "Scout Car Area" as scout_car_area,
@@ -41,7 +41,7 @@
         ST_X(ST_Transform(geom, 4326)) as longitude,
         ST_Y(ST_Transform(geom, 4326)) as latitude,
         replace(to_char(ibr_date::timestamp, 'YYYY-MM-DD HH24:MI:SS.000'), ' ', 'T') as ibr_date,
-        c.lwchrgid,
+        c.lwchrgid as primary_key,
         CASE
           WHEN geom is null
             THEN null
@@ -65,6 +65,31 @@
         left outer join crimescape.lwnames n on n.lwmainid = r.case_id
         left outer join crimescape.lwchrg c on c.lwmainid = r.case_id
           where "Incident Date"::date >= date '2016-12-06' )
+  - drop view if exists crimescape.rms_sftp_grouped
+  - create view crimescape.rms_sftp_grouped as (
+      select * from crimescape.rms_sftp
+      group by
+        uniq,
+        crime_id,
+        report_number,
+        address,
+        offense_description,
+        offense_category,
+        arrest_charge,
+        charge_description,
+        incident_timestamp,
+        incident_time,
+        day_of_week,
+        hour_of_day,
+        year,
+        scout_car_area,
+        precinct,
+        latitude,
+        longitude,
+        ibr_date,
+        primary_key,
+        location_type,
+        ranked_relationship_to_offender )
 
 # RMS: Copy the view to a csv
 - type: sql
