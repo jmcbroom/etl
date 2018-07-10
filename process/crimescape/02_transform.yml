@@ -18,7 +18,7 @@
   statements:
   - drop table if exists crimescape.rms_old cascade
   - alter table crimescape.rms rename to rms_old
-  - alter table crimescape.rms_old rename to rms
+  - alter table crimescape.rms_update rename to rms
   - drop view if exists crimescape.rms_sftp
   - create view crimescape.rms_sftp as ( 
       select
