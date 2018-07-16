@@ -163,9 +163,12 @@
             where 
                   cm.case_type in ('PMB','VPO')
                   and ca.csa_date3 > CURRENT_DATE - INTERVAL '1 year'
-                  and ca.actn_menu_id in ('B','D') 
-                  and ca.actn_code in ('220','70')
                   and cp.csp_primary = 'Y'
+                  and (
+                    (ca.actn_menu_id = 'B' and ca.actn_code in ('220', '221', '222', '120', '225'))
+                    or (ca.actn_menu_id = 'C' and ca.actn_code in ('600', '55'))
+                    or (ca.actn_menu_id = 'D' and ca.actn_code in ('70'))
+                  )
             )
 
 - type: geocode
