@@ -1,7 +1,7 @@
 # Certificate of Occupancy & Plan Review
 - type: sql
   statements:
-    - drop view if exists bseed.coo_planrev_socrata;
+    - drop view if exists bseed.coo_planrev_socrata cascade;
     - create view bseed.coo_planrev_socrata as (select
       c.csm_caseno as case_no,
       concat(replace(ca.csa_date3::text, ' ', 'T'), 'Z') as date,
