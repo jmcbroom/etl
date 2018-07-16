@@ -166,7 +166,7 @@
                   and cp.csp_primary = 'Y'
                   and ca.actn_menu_id in ('B','C','D')
                   and ca.actn_code in ('220', '221', '222', '120', '225','600','55','70')
-                  and (ca.action_description not like '%Ticket Posting%')
+                  and ca.action_description like any (array['%C of C%', '%Cert%', '%COC%'])
             )
 
 - type: geocode
