@@ -1,7 +1,7 @@
 # Certificate of Occupancy & Plan Review
 - type: sql
   statements:
-    - drop view if exists bseed.coo_planrev_socrata;
+    - drop view if exists bseed.coo_planrev_socrata cascade;
     - create view bseed.coo_planrev_socrata as (select
       c.csm_caseno as case_no,
       concat(replace(ca.csa_date3::text, ' ', 'T'), 'Z') as date,
@@ -163,9 +163,10 @@
             where 
                   cm.case_type in ('PMB','VPO')
                   and ca.csa_date3 > CURRENT_DATE - INTERVAL '1 year'
-                  and ca.actn_menu_id in ('B','D') 
-                  and ca.actn_code in ('220','70')
                   and cp.csp_primary = 'Y'
+                  and ca.actn_menu_id in ('B','C','D')
+                  and ca.actn_code in ('220', '221', '222', '120', '225','600','55','70')
+                  and ca.action_description like any (array['%C of C%', '%Cert%', '%COC%'])
             )
 
 - type: geocode
