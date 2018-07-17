@@ -1,3 +1,6 @@
 schema: assessor
-name: Assessor Sales
-notify: yes
+name: Assessor
+datasets:
+  - sales_history
+  - parcel_points
+  - parcel_map

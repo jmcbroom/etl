@@ -1,0 +1,49 @@
+- create_view:
+    view_name: parcel_points_socrata
+    as: select 
+          sh.objectid as objectid,
+          sh.parcelno as parcelnum,
+          left(sh.parcelno, 2) as ward,
+          pm.propstreetcombined as address,
+          cd.districts as council_district,
+          pm.propzip as zip_code,
+          pm.ownername1 as owner1,
+          pm.ownername2 as owner2,
+          pm.tax_send_to_name as taxpayer,
+          pm.ownerstreetaddr as owner_street,
+          pm.ownercity as owner_city,
+          pm.ownerstate as owner_state,
+          pm.ownerzip as owner_zip,
+          pm.ownercountry as owner_country,
+          pa.propclass as property_class,
+          pa.exemptcode as taxable_status,
+          pa."squareFootage" as sqft,
+          pa."land_netAcres" as total_acres,
+          pa.land_front_0 as frontage,
+          pa.land_depth_0 as depth,
+          pa."MayPRE" as homestead_pre,
+          nez."NEZ_PARCEL" as nez,
+          greatest(pm.resb_yearbuilt, pm.cib_yearbuilt) as year_built,
+          greatest(pm.resb_floorarea, pm.cib_floorarea) as floor_area,
+          greatest(pm.resb_numresb, pm.cib_numcib) as num_buildings,
+          pm.resb_style as building_style,
+          pm."lastSalePrice" as last_sale_price,
+          replace(pm."lastSaleDate"::varchar, ' ', 'T') as last_sale_date,
+          pm."lastTermsOfSale" as last_terms_of_sale,
+          pa.mborsev as sev,
+          pa.ass as taxable_value,
+          pm.landvalue as land_value,
+          pm.bldgimprval as improved_value,
+          pm."landMap" as landmap,
+          pm.relatedpnum as related_parcel,
+          pm.zoning as zoning,
+          st_y(st_centroid(st_transform(sh.shape, 4326))) as latitude,
+          st_x(st_centroid(st_transform(sh.shape, 4326))) as longitude,
+          concat('location(', st_y(st_centroid(st_transform(sh.shape, 4326))), ',', st_x(st_centroid(st_transform(sh.shape, 4326))), ')') as location,
+          lg.legal as legaldesc
+        from assessor.parcels_050318 sh 
+          left outer join assessor.parcels pa on sh.parcelno = pa.pnum
+          left outer join assessor.parcelmaster pm on sh.parcelno = pm.pnum
+          left outer join assessor.nezlist nez on sh.parcelno = nez."LAND_PARCEL"
+          left outer join assessor.legals lg on sh.parcelno = lg.pnum
+          left outer join base.council_districts cd on st_contains(cd.wkb_geometry, st_centroid(sh.shape))
