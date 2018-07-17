@@ -1,13 +1,14 @@
 import os, yaml
-from .utils import connect_to_pg, add_geom_column, exec_psql_query, drop_table_if_exists
+from .utils import connect_to_pg, add_geom_column, exec_psql_query, drop_table_if_exists, create_psql_view
 
 DATA_DIR = "{}/process".format(os.environ['ETL_ROOT'])
 connection = connect_to_pg()
 
 class Dataset(object):
-  def __init__(self, name, basedir):
+  def __init__(self, name, basedir, schema):
     self.name = name
     self.basedir = basedir
+    self.schema = schema
     self.refresh()
 
   def refresh(self):
@@ -38,6 +39,9 @@ class Dataset(object):
         for statement in s['statements']:
           exec_psql_query(connection, statement, verbose=True)
 
+      if s['type'] == 'create_view':
+        create_psql_view(connection, "{}.{}".format(self.schema, s['view_name']), s['as'])
+
       if s['type'] == 'anonymize_text_location':
         from etl.anonymize import AnonTextLocation
         atl = AnonTextLocation(s['table'], s['column'], s['set_flag'])
@@ -54,35 +58,33 @@ class Dataset(object):
         look = LookupValues(s['table'], s['lookup_field'], s['file'], s['match_field'], s['method'], s['set_flag'])
         look.lookup()
   
-  def load(self, dataset=None):
+  def load(self):
     for d in self.l:
 
-      # if we specified a name, filter based on that
-      if dataset == None or (dataset and d['name'] == dataset):
+      # switch on destination
+      destination = d.pop('to', None)
 
-        # switch on destination
-        destination = d.pop('to', None)
-        if destination == 'Socrata':
-          from .socrata import Socrata
-          s = Socrata(d)
-          s.update()
+      if destination == 'Socrata':
+        from .socrata import Socrata
+        s = Socrata(d)
+        s.update()
 
-        elif destination == 'ArcGIS Online':
-          from .arcgis import AgoLayer
-          l = AgoLayer(d)
-          l.publish()
+      elif destination == 'ArcGIS Online':
+        from .arcgis import AgoLayer
+        l = AgoLayer(d)
+        l.publish()
 
-        elif destination == 'SFTP':
-          from .sftp import Sftp
-          s = Sftp(d['host'], None, d['file'])
+      elif destination == 'SFTP':
+        from .sftp import Sftp
+        s = Sftp(d['host'], None, d['file'])
 
-        elif destination == 'Mapbox':
-          from .mapbox import MapboxUpload
-          m = MapboxUpload(d)
-          m.upload()
+      elif destination == 'Mapbox':
+        from .mapbox import MapboxUpload
+        m = MapboxUpload(d)
+        m.upload()
 
-        else:
-          print("I don't know this destination type: {}".format(destination))
+      else:
+        print("I don't know this destination type: {}".format(destination))
 
 class Process(object):
   def __init__(self, directory="project_greenlight"):
@@ -168,9 +170,15 @@ class Process(object):
           print("I don't know this source type: {}".format(srctype))
 
   def update(self, dataset=None):
-    self.extract()
+    # Extract our data that the Datasets require
+    # self.extract()
+
+    # Loop through our datasets
     for d in self.datasets:
-      ds = Dataset(d, self.basedir)
+
+      # Requires dataset name and basedir
+      ds = Dataset(d, self.basedir, self.schema)
+
+      # These two steps now belong to Dataset
       ds.transform()
-      ds.load()
-    self.transform()
+      # ds.load()
