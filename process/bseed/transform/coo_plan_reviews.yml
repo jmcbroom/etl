@@ -1,0 +1,56 @@
+- type: create_view
+  view_name: coo_planrev_socrata
+  as: select
+        c.csm_caseno as case_no,
+        (select makeSocrataDate(ca.csa_date3)) as date,
+        concat_ws(' ', cd.csm_st_nmbr, cd.csm_st_pfx, cd.csm_st_name) as address,
+        pl.cleaned as parcel_no,
+        ca.action_description,
+        case 
+          when c.case_type = 'PRV' then max(cp.prv_permit_type) 
+          when c.case_type = 'BLD' then max(cb.bld_permit_type) 
+        end as permit_type,
+        case 
+          when c.case_type = 'PRV' then max(cp.prv_type_use) 
+          when c.case_type = 'BLD' then max(cb.bld_legal_use) 
+        end as legal_use,
+        case 
+          when 
+            case 
+              when c.case_type = 'PRV' then max(cp.prv_est_cost) 
+              when c.case_type = 'BLD' then max(cb.bld_est_cost)
+            end = 'NaN' 
+          then null 
+          else
+            case when c.case_type = 'PRV' then max(cp.prv_est_cost) 
+            when c.case_type = 'BLD' then max(cb.bld_est_cost) 
+        end end as est_cost,
+        case 
+          when c.case_type = 'PRV' then max(c.csm_description) 
+          when c.case_type = 'BLD' then max(cb.bld_permit_desc)
+        end as bld_permit_desc,
+        case 
+          when c.case_type = 'PRV' then max(cp.prv_type_use) 
+          when c.case_type = 'BLD' then (select vlv_desc from bseed.validation_values where valid_value = max(cb.bld_type_use) and valid_key = 'bld_use_code' limit 1) 
+        end as bld_type_use,
+        case 
+          when c.case_type = 'PRV' then max(cp.prv_const_type) 
+          when c.case_type = 'BLD' then max(cb.bld_type_const_cod) 
+        end as bld_type_const,
+        case 
+          when max(pcf.pcf_amt_due) is null then null 
+          else max(pcf.pcf_amt_due) 
+        end as amt_due,
+        (select makeSocrataLocation(pl.parcel_geom)) as location
+      from bseed.tm_casemain c
+        inner join bseed.tm_caseaction ca on c.csm_caseno = ca.csm_caseno
+        inner join bseed.tm_caseaddress cd on c.csm_caseno = cd.csm_caseno
+        left outer join bseed.pnum_lookup pl on c.prc_parcel_no = pl.dirty
+        left outer join bseed.tm_casebld cb on c.csm_caseno = cb.csm_caseno
+        left outer join bseed.tm_caseprv cp on c.csm_caseno = cp.csm_caseno
+        inner join bseed.paid_case_fee pcf on c.csm_caseno = pcf.csm_caseno
+      where c.case_type in ('PRV', 'BLD')
+        and ca.csa_date3 > '2014-01-01'
+        and ca.actn_code in ('020', '030', '385')
+      group by c.csm_caseno, ca.csa_date3, cd.csm_st_nmbr, pl.cleaned, cd.csm_st_pfx, cd.csm_st_name, ca.action_description, c.case_type, pl.parcel_geom
+      order by ca.csa_date3 desc
