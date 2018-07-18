@@ -1,0 +1,58 @@
+- to: Socrata
+  id: di9m-phy3
+  name: Rental Certifications
+  table: bseed.rental_certifications_socrata  
+  method: replace
+  row_identifier:
+  columns:
+    Case Number:
+      field: csm_caseno
+      type: text
+    First Name:
+      field: csm_name_first
+      type: text
+    Last Name:
+      field: csm_name_last
+      type: text
+    Middle Name:
+      field: csm_name_mi
+      type: text
+    Received By:
+      field: csm_recd_by
+      type: text
+    Received Date:
+      field: csm_recd_date
+      type: calendar_date
+    Parcel Number:
+      field: parcelnum
+      type: text
+    Location:
+      field: location
+      type: location
+    Address:
+      field: address
+      type: text
+    Action Description:
+      field: action_description
+      type: text
+    Date Issued:
+      field: csa_date3
+      type: calendar_date
+    Disposition:
+      field: csa_disp
+      type: text
+    Status:
+      field: csm_status
+      type: text
+    Use:
+      field: pmb_type_use
+      type: text
+    Units:
+      field: pmb_dwelling_units
+      type: number
+    CSA Creation Date:
+      field: csa_creation_date
+      type: calendar_date
+    Zip Code:
+      field: prc_zip_code
+      type: text

@@ -1,0 +1,46 @@
+- to: Socrata
+  id: 3qbb-7tqs
+  name: Certificates of Occupancy and Plan Review
+  table: bseed.coo_planrev_socrata
+  method: replace
+  columns:
+    Case Number:
+      field: case_no
+      type: text
+    Date:
+      field: date
+      type: calendar_date
+    Address:
+      field: address
+      type: text
+    Parcel Number:
+      field: parcel_no
+      type: text
+    Permit Type:
+      field: permit_type
+      type: text
+    Action Description:
+      field: action_description
+      type: text
+    Legal Use:
+      field: legal_use
+      type: text
+    Estimated Cost:
+      field: est_cost
+      type: number
+    Permit Description:
+      field: bld_permit_desc
+      type: text
+    Use Type:
+      field: bld_type_use
+      type: text
+    Construction Type:
+      field: bld_type_const
+      type: text
+    Amount Due:
+      field: amt_due
+      type: number
+    Location:
+      field: location
+      type: location
+      
