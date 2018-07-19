@@ -1,0 +1,174 @@
+
+- to: Mapbox
+  name: BSEED All Permits
+  table: bseed.all_permits_mapbox
+  tileset: parcels_with_lots_of_permits
+
+# - to: Mapbox
+#   name: BSEED Building Permits
+#   table: bseed.bldg_permits_mapbox
+#   tileset: bseed_permits
+
+- to: Socrata
+  id: xw2a-a7tf
+  name: Building Permits
+  table: bseed.bldg_permits_socrata
+  method: replace
+  row_identifier: permit_no
+  columns:
+    Units:
+      field: dwelling_units
+      type: number
+    Amount Due:
+      field: pcf_amt_due
+      type: money
+    Between:
+      field: between1
+      type: text
+    Building Basement:
+      field: bld_basement
+      type: text
+    Building Permit Description:
+      field: bld_permit_desc
+      type: text
+    Building Permit Type:
+      field: bld_permit_type
+      type: text
+    Building Type Construction Code:
+      field: bld_type_const_cod
+      type: text
+    Building Type Use:
+      field: bld_type_use
+      type: text
+    Building Use Group:
+      field: bld_use_group
+      type: text
+    Building Zoning District:
+      field: bld_zoning_dist
+      type: text
+    Case Description:
+      field: case_description
+      type: text
+    Case Number:
+      field: csm_caseno
+      type: text
+    Case Type:
+      field: case_type
+      type: text
+    Common Name Address:
+      field: prc_aka_address
+      type: text
+    Contractor Address:
+      field: contractor_address1
+      type: text
+    Contractor Address 2:
+      field: contractor_address2
+      type: text
+    Contractor City:
+      field: contractor_city
+      type: text
+    Contractor First Name:
+      field: contractor_first_name
+      type: text
+    Contractor Last Name:
+      field: contractor_last_name
+      type: text
+    Contractor Location:
+      field: contractor_location
+      type: location
+    Contractor State:
+      field: contractor_stat
+      type: text
+    Contractor Zip Code:
+      field: contractor_zip
+      type: text
+    Created By:
+      field: csf_created_by
+      type: text
+    Estimated Cost:
+      field: estimated_cost
+      type: money
+    FDICN Description:
+      field: fdicn_description
+      type: text
+    Fee Type:
+      field: fee_type
+      type: text
+    Legal Use:
+      field: legal_use
+      type: text
+    Lot Number:
+      field: lot_number
+      type: text
+    Owner Address:
+      field: owner_address1
+      type: text
+    Owner Address 2:
+      field: owner_address2
+      type: text
+    Owner City:
+      field: owner_city
+      type: text
+    Owner First Name:
+      field: owner_first_name
+      type: text
+    Owner Last Name:
+      field: owner_last_name
+      type: text
+    Owner Location:
+      field: owner_location
+      type: location
+    Owner State:
+      field: owner_state
+      type: text
+    Owner Zip Code:
+      field: owner_zip
+      type: text
+    Parcel Cluster Sector:
+      field: parcel_cluster_sector
+      type: number
+    Parcel Floor Area:
+      field: parcel_floor_area
+      type: number
+    Parcel Ground Area:
+      field: parcel_ground_area
+      type: number
+    Parcel Number:
+      field: parcel_no
+      type: text
+    Parcel Size:
+      field: parcel_size
+      type: number
+    Permit Completed:
+      field: permit_completed
+      type: calendar_date
+    Permit Expiration:
+      field: permit_expire
+      type: calendar_date
+    Permit Issued:
+      field: permit_issued
+      type: calendar_date
+    Permit Number:
+      field: permit_no
+      type: text
+    Permit Status:
+      field: permit_status
+      type: text
+    Residential:
+      field: residential
+      type: text
+    Sequence Number:
+      field: seq_no
+      type: number
+    Site Address:
+      field: site_address
+      type: text
+    Site Location:
+      field: site_location
+      type: location
+    Stories:
+      field: stories
+      type: number
+    Subdivision:
+      field: subdivision
+      type: text

@@ -1,0 +1,23 @@
+- type: create_view
+  view_name: row_permits
+  as: select
+        cm.csm_caseno as case_number,
+        ce.eng_type_of_work as permit_type,
+        cm.csm_projname as project_name,
+        cm.csm_description as description,
+        ce.eng_work_done_by as work_done_by,
+        cm.csm_name_last as contractor,
+        cp.csp_address1 as contractor_address,
+        cp.csp_city as contractor_city,
+        cp.csp_state as contractor_state,
+        cp.csp_zip as contractor_zip,
+        (select makeSocrataDate(cm.csm_issued_date)) as issued_date,
+        (select makeSocrataDate(ce.eng_start_date)) as start_date,
+        (select makeSocrataDate(ce.eng_end_date)) as end_date
+        concat_ws(' ', ca.csm_st_nmbr, ca.csm_st_pfx, ca.csm_st_name) as permit_address,
+        ce.eng_job_loc as location
+      from bseed.tm_casemain cm
+        inner join bseed.tm_caseeng ce on cm.csm_caseno = ce.csm_caseno
+        left outer join bseed.tm_casepeople cp on cm.csm_caseno = cp.csm_caseno
+        left outer join bseed.tm_caseaddress ca on cm.csm_caseno = ca.csm_caseno
+      where cm.case_type = 'ENG'

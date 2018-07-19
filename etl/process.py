@@ -1,5 +1,5 @@
 import os, yaml
-from .utils import connect_to_pg, add_geom_column, exec_psql_query, drop_table_if_exists, create_psql_view
+from .utils import connect_to_pg, add_geom_column, exec_psql_query, drop_table_if_exists, create_psql_view, create_psql_table
 
 DATA_DIR = "{}/process".format(os.environ['ETL_ROOT'])
 connection = connect_to_pg()
@@ -41,6 +41,9 @@ class Dataset(object):
 
       if s['type'] == 'create_view':
         create_psql_view(connection, "{}.{}".format(self.schema, s['view_name']), s['as'])
+
+      if s['type'] == 'create_table':
+        create_psql_table(connection, "{}.{}".format(self.schema, s['table_name']), s['as'])
 
       if s['type'] == 'anonymize_text_location':
         from etl.anonymize import AnonTextLocation

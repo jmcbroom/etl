@@ -1,0 +1,79 @@
+- type: create_view
+  view_name: bldg_permits_socrata
+  as: select 
+        permit_no,
+        (select makeSocrataDate(permit_issued)) as permit_issued,
+        (select makeSocrataDate(permit_expire)) as permit_expire,
+        (select makeSocrataDate(permit_completed)) as permit_completed,
+        permit_status,
+        site_address,
+        between1,
+        pn.cleaned as parcel_no,
+        (select makeSocrataLocation(pn.parcel_centroid)) as site_location,
+        lot_number,
+        subdevision as subdivision,
+        case_type,
+        case_description,
+        legal_use,
+        (select handleNan(estimated_cost)) as estimated_cost,
+        (select handleNan(parcel_size) as parcel_size,
+        parcel_cluster_sector,
+        (select handleNan(stories)) as stories,
+        (select handleNan(parcel_floor_area)) as parcel_floor_area,
+        (select handleNan(parcel_ground_area)) as parcel_ground_area,
+        prc_aka_address,
+        bld_permit_type,
+        bld_permit_desc,
+        fdicn_description,
+        bld_type_use,
+        residential,
+        bld_type_const_cod,
+        bld_zoning_dist,
+        bld_use_group,
+        bld_basement,
+        fee_type,
+        bp.csm_caseno as csm_caseno,
+        csf_created_by,
+        seq_no,
+        (select handleNan(pcf_amt_due)) as pcf_amt_due,
+        owner_last_name,
+        owner_first_name,
+        owner_address1,
+        owner_address2,
+        owner_city,
+        owner_state,
+        owner_zip,
+        contractor_last_name,
+        contractor_first_name,
+        contractor_address1,
+        contractor_address2,
+        contractor_city,
+        contractor_stat,
+        contractor_zip,
+        (select handleNan(pm.pmb_dwelling_units)) as dwelling_units
+      from bseed.bldg_permits bp
+        inner join bseed.pnum_lookup pn on bp.parcel_no = pn.dirty
+        left outer join bseed.tm_casepmb pm on pm.csm_caseno = bp.csm_caseno
+
+# Bldg permits plus COOs & PRVs tileset
+- type: create_view
+  view_name: all_permits_mapbox
+  as: with all_permits as 
+      (
+        select 
+          parcel_no, 
+          sum(estimated_cost::bigint) as total_cost 
+          from bseed.bldg_permits_socrata where parcel_no is not null and estimated_cost > 50000 group by parcel_no
+        union all
+        select 
+          parcel_no, 
+          sum(est_cost::bigint) as total_cost 
+        from bseed.coo_planrev_socrata where parcel_no is not null and est_cost > 50000 group by parcel_no
+      )
+        select 
+          parcel_no, 
+          sum(total_cost::bigint) as cost, 
+          st_transform(ap.shape, 4326) 
+        from all_permits pa 
+          inner join assessor.parcels_050318 ap on pa.parcel_no = ap.parcelno 
+          group by parcel_no, ap.shape
