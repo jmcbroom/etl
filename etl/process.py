@@ -171,7 +171,7 @@ class Process(object):
 
   def update(self, dataset=None):
     # Extract our data that the Datasets require
-    # self.extract()
+    self.extract()
 
     # Loop through our datasets
     for d in self.datasets:
