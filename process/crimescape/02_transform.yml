@@ -61,7 +61,7 @@
           when regexp_replace(regexp_replace(n.rel2offnd,',[1-9]',',','g'),'^[1]','') like any (array['%23%','%21%','%22%','%28%','%29%','%30%','%18%','%98%','%99%','%31%']) then 'OTH'
           else n.rel2offnd
         end as ranked_relationship_to_offender,
-        c."Addtime" as charge_addtime
+        c.addtime as charge_addtime
         from crimescape.rms r
           left outer join crimescape.lwnames n on n.lwmainid = r.case_id
           left outer join crimescape.lwchrg c on (c.lwmainid = r.case_id and c.arr_chrg = r.arr_chrg)
