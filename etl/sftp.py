@@ -5,6 +5,7 @@ from .utils import df_to_pg
 
 def clean_cols(name):
   name = name.replace(":", "")
+  name = name.replace("#", "")
   name = name.replace(" ", "_").lower().strip()
   return name
 
@@ -52,6 +53,25 @@ class Sftp(object):
         if sftp.isfile(path):
           sftp.get(path, preserve_mtime=True)
           self.df = pandas.read_csv(file_name)
+          rename_cols(self.df)
+          os.remove(file_name)
+          print('got file, read into df')
+        else:
+          print('No file named {} found.'.format(file_name))
+          pass
+  
+    elif self.host == 'pnc':
+      cnopts = pysftp.CnOpts()
+      cnopts.hostkeys = None
+      with pysftp.Connection(env['MOVEIT_HOST'], port=22, username=env['MOVEIT_USER'], password=env['MOVEIT_PASS'], cnopts=cnopts) as sftp:
+        print('connected to {}'.format(env['MOVEIT_HOST']))
+
+        file_name = 'TrialBalance07192018_TEST.xlsx'
+        path = '/Home/IET/PNC/' + file_name
+          
+        if sftp.isfile(path):
+          sftp.get(path, preserve_mtime=True)
+          self.df = pandas.read_excel(file_name)
           rename_cols(self.df)
           os.remove(file_name)
           print('got file, read into df')
