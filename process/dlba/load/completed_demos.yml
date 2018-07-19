@@ -1,29 +1,42 @@
-- type: create_view
-  view_name: completed_demos_socrata
-  as: select
-        address,
-        parcel_id,
-        demo_contractor_text_only as contractor_name,
-        socrata_reported_price as price,
-        demo_primarily_funded_by as funding_source,
-        (select makeSocrataDate(demo_knock_down_date::timestamp)) as demolition_date,
-        non_hhf_commercial_demo as commercial,
-        council_district,
-        neighborhood,
-        property_latitude as latitude,
-        property_longitude as longitude,
-        case 
-          when property_latitude is null then null 
-          else
-            concat(
-                'location (',
-                property_latitude,
-                ',',
-                property_longitude,
-            ')'
-            )
-        end as location
-      from dlba.case
-      where demo_knock_down_date::timestamp >= date '2014-01-01'
-        and socrata_reported_price > 0
-        and demo_contractor_text_only != ''
+- to: Socrata
+  name: Detroit Demolitions
+  id: rv44-e9di
+  table: dlba.completed_demos_socrata
+  method: replace
+  columns:
+    Address:
+      field: address
+      type: text
+    Parcel ID:
+      field: parcel_id
+      type: text
+    Contractor Name:
+      field: contractor_name
+      type: text
+    Price:
+      field: price
+      type: money
+    Funding Source:
+      field: funding_source
+      type: text
+    Demolition Date:
+      field: demolition_date
+      type: calendar_date
+    Commercial Building:
+      field: commercial
+      type: text
+    Council District:
+      field: council_district
+      type: number
+    Neighborhood:
+      field: neighborhood
+      type: text
+    Latitude:
+      field: latitude
+      type: number
+    Longitude:
+      field: longitude
+      type: number
+    Location:
+      field: location
+      type: location

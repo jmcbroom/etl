@@ -1,0 +1,45 @@
+- to: Socrata
+  name: Side Lot Sales
+  id: mfsk-uw55
+  table: dlba.side_lots_socrata
+  method: replace
+  columns:
+    Address:
+      field: address
+      type: text
+    Parcel ID:
+      field: parcel_id
+      type: text
+    Final Sale Price:
+      field: final_sale_price
+      type: money
+    Closing Date:
+      field: actual_closing_date
+      type: calendar_date
+    Sale Status:
+      field: sale_status
+      type: text
+    Buyer Status:
+      field: buyer_status
+      type: text
+    Purchaser Type:
+      field: purchaser_type
+      type: text
+    Program:
+      field: program
+      type: text
+    Council District:
+      field: council_district
+      type: number
+    Neighborhood:
+      field: neighborhood
+      type: text
+    Latitude:
+      field: acct_latitude
+      type: number
+    Longitude:
+      field: acct_longitude
+      type: number
+    Location:
+      field: location
+      type: location

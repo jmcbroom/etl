@@ -1,24 +1,30 @@
-- type: create_view
-  view_name: demo_pipeline_socrata
-  as: select
-        c.address,
-        c.parcel_id,
-        c.council_district,
-        c.non_hhf_commercial_demo as commercial_building,
-        c.acct_latitude as latitude,
-        c.acct_longitude as longitude,
-        case 
-          when acct_latitude is null then null 
-          else concat('location(', acct_latitude, ',', acct_longitude, ')') 
-          end as location,
-        c.neighborhood
-      from dlba.case c
-        inner join dlba.account a 
-        on a.related_property_case_id = c.id
-      where 
-        c.asb_document_url is not null
-        and c.demo_contractor_proceed_date is null
-        and c.demo_asb_survey_status = 'Completed'
-        and c.demo_knock_down_date is null
-        and c.demo_pulled_date is null
-        and c.recordtypeid in ('012j0000000xtGbAAI', '012j0000000zM27AAE', '012j0000000xtGcAAI')
+- to: Socrata
+  name: Demolition Pipeline
+  id: dyp9-69zf
+  table: dlba.demo_pipeline_socrata
+  method: replace
+  columns:
+    Address:
+      field: address
+      type: text
+    Parcel ID:
+      field: parcel_id
+      type: text
+    Council District:
+      field: council_district
+      type: number
+    Commercial Building:
+      field: commercial_demolition
+      type: text
+    Neighborhood:
+      field: neighborhood
+      type: text
+    Latitude:
+      field: property_latitude
+      type: number
+    Longitude:
+      field: property_longitude
+      type: number
+    Location:
+      field: location
+      type: location
