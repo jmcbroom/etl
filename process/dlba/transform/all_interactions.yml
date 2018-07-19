@@ -1,0 +1,18 @@
+- type: create_view
+  view_name: all_interactions_socrata
+  as: select
+        name,
+        parcel_id,
+        current_status,
+        neighborhood,
+        council_district,
+        (select handleNan(latitude)) as latitude,
+        (select handleNan(longitude)) as longitude,
+        case 
+          when latitude = 'NaN' then null 
+          else concat('location(', latitude, ',', longitude, ')') 
+        end as location
+      from dlba.account 
+      where parcel_id is not null
+        and property_ownership != 'Non-DLBA Owned'
+        and name not like '%Fake St%'

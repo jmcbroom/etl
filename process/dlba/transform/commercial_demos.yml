@@ -1,0 +1,51 @@
+- type: create_view
+  view_name: commercial_demos_socrata
+  as: select
+        dba_com_property_name as address,
+        dba_com_property_parcel_id as parcel_id,
+        commercial_demo_status as status,
+        case when demo_cost_abatement = 'NaN' then 0 else demo_cost_abatement end as abatement_cost,
+        case when demo_cost_knock = 'NaN' then 0 else demo_cost_knock end as demo_cost,
+        (select makeSocrataDate(demo_ntp_dt::timestamp)) as demo_proceed_date,
+        (select makeSocrataDate(demo_proj_demo_dt::timestamp)) as projected_demo_date,
+        env_group_number,
+        (select makeSocrataDate(knock_start_dt::timestamp)) as demo_date,
+        demolition_contractor,
+        dba_com_property_latitude as latitude,
+        dba_com_property_longitude as longitude,
+        dba_com_property_neighborhood as neighborhood,
+        dba_com_property_council_district as council_district,
+        case 
+          when bseed_com_final_grade_approved is null 
+          then (select makeSocrataDate(final_grade_approved_dt::timestamp)) 
+          else (select makeSocrataDate(bseed_com_final_grade_approved::timestamp))
+        end as final_grade_date,
+        case 
+          when bseed_com_open_hole_approved is null 
+          then (select makeSocrataDate(open_hole_approved_dt::timestamp)) 
+          else (select makeSocrataDate(bseed_com_open_hole_approved::timestamp))
+        end as open_hole_date,
+        case 
+          when bseed_com_winter_grade_approved is null 
+          then (select makeSocrataDate(winter_grade_approved_dt::timestamp)) 
+          else (select makeSocrataDate(bseed_com_winter_grade_approved::timestamp))
+        end as winter_grade_date,
+        case 
+          when (demo_cost_abatement+demo_cost_knock) = 'NaN' then null 
+          else (demo_cost_abatement+demo_cost_knock)
+        end as total_demo_cost,
+        case 
+          when dba_com_property_latitude is null then null 
+          else
+            concat(
+                'location (',
+                dba_com_property_latitude,
+                ',',
+                dba_com_property_longitude,
+                ')'
+            )
+        end as location
+      from dlba.dba_commercial_demo
+      where (knock_start_dt::timestamp >= date '2014-01-01' or knock_start_dt is null)
+        and commercial_demo_status in ('Demo Contracted', 'Demolished', 'Demo Pipeline') 
+        and demo_pulled_date is null
