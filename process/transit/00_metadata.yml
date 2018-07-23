@@ -1,0 +1,7 @@
+name: Transit
+schema: transit
+notify: True
+datasets: 
+  - mogo
+  - crashes
+  

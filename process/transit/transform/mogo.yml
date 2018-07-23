@@ -1,0 +1,16 @@
+- type: create_view
+  view_name: mogo_socrata
+  as: select
+        name,
+        docks,
+        (select makeSocrataLocation(wkb_geometry)) as location
+      from transit.mogo
+
+- type: create_view
+  view_name: mogo_arcgis
+  as: select
+        name,
+        docks,
+        wkb_geometry
+      from transit.mogo 
+      where wkb_geometry is not null

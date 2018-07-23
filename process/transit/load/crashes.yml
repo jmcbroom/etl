@@ -1,5 +1,5 @@
 - to: Socrata
-  id:
+  id: 9fph-m2jv
   name: Traffic Crashes
   table: transit.detroit_crashes_socrata
   method: replace
