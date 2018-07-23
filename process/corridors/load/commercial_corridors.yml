@@ -1,6 +1,6 @@
 - to: Socrata
-  id:
-  name: Commercial Corridors All
+  id: uwua-576f
+  name: Commercial Corridors All (Private)
   table: corridors.all_socrata
   method: replace
   row_identifier:
@@ -245,5 +245,3 @@
     location:
       field: location
       type: location  
-
-

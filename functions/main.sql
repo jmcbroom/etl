@@ -24,12 +24,12 @@ $$ language sql;
 /*
 Formats a postgis geometry so it can be loaded as a socrata location or point type
 Param: geometry - https://postgis.net/docs/geometry.html
-Returns: text - rounded latitude, longitude coordinate
+Returns: text - rounded latitude, longitude coordinate in 4326 projection
 */
 create or replace function makeSocrataLocation (geom geometry) RETURNS text AS $$
     select case 
         when geom is null 
         then null
-        else concat('location (', round(st_y(geom), 5), ',', round(st_x(geom), 5), ')') 
+        else concat('location (', round(st_y(st_transform(geom, 4326)), 5), ',', round(st_x(st_transform(geom, 4326)), 5), ')') 
     end
 $$ LANGUAGE sql;

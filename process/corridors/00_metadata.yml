@@ -1,3 +1,6 @@
-name: commercial
+name: Commercial Corridors project
 schema: corridors
-notify:
+notify: False
+datasets:
+  - commercial_corridors
+  
