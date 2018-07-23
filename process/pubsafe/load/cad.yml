@@ -1,0 +1,81 @@
+- to: Socrata
+  id: wgv9-drfc
+  name: 911 Calls for Service
+  table: pubsafe.cad_socrata
+  method: upsert
+  columns:
+    Incident ID:
+      field: incident_id
+      type: text
+    Agency:
+      field: agency
+      type: text
+    Incident Address:
+      field: incident_address
+      type: text
+    Zip Code:
+      field: zip_code
+      type: text
+    Priority:
+      field: priority
+      type: number
+    Call Code:
+      field: callcode
+      type: text
+    Call Description:
+      field: calldescription
+      type: text
+    Category:
+      field: category
+      type: text
+    Call Time:
+      field: call_timestamp
+      type: calendar_date
+    Time of Call:
+      field: time_of_call
+      type: text
+    Precinct/Scout Car Area:
+      field: precinct_sca
+      type: text
+    Responding Unit:
+      field: respondingunit
+      type: text
+    Officer Initiated:
+      field: officerinitiated
+      type: text
+    Intake Time:
+      field: intaketime
+      type: number
+    Dispatch Time:
+      field: dispatchtime
+      type: number
+    Travel Time:
+      field: traveltime
+      type: number
+    Total Response Time:
+      field: totalresponsetime
+      type: number
+    Time On Scene:
+      field: time_on_scene
+      type: number
+    Total Time:
+      field: totaltime
+      type: number
+    Neighborhood:
+      field: neighborhood
+      type: text
+    Census Block GEOID:
+      field: block_id
+      type: text
+    Council District:
+      field: council_district
+      type: text
+    Longitude:
+      field: longitude
+      type: number
+    Latitude:
+      field: latitude
+      type: number
+    Incident Location:
+      field: location
+      type: location

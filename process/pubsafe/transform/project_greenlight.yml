@@ -1,0 +1,30 @@
+- type: sql
+  statements:
+    - delete from pubsafe.greenlight where status is null;
+    - delete from pubsafe.greenlight where status in ('Red', 'Yellow');
+
+- type: geocode
+  table: pubsafe.greenlight
+  add_col: address
+  geom_col: geom
+
+- type: create_view
+  view_name: greenlight_socrata
+  as: select
+        address, 
+        business_name,
+        concat(green_light_live_date, 'T00:00:00.000') as live_date,
+        (select makeSocrataLocation(geom)) as location
+      from pubsafe.greenlight 
+      where trim(status) = 'Green'
+
+- type: create_view
+  view_name: greenlight_arcgis
+  as: select 
+        address, 
+        business_name,
+        concat(green_light_live_date, 'T00:00:00.000') as live_date,
+        geom
+      from pubsafe.greenlight 
+      where trim(status) = 'Green' 
+        and geom is not null

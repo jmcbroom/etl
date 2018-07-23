@@ -1,6 +1,0 @@
-- database:
-    type: sql-server
-    prefix: rms
-    source: vwRMS_Portal
-    destination: pubsafe.rms_update
-    
