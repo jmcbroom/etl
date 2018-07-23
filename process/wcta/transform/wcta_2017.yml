@@ -2,10 +2,10 @@
   table: wcta.wcta2017
   add_col: prop_address
   geom_col: geom
-- type: sql
-  statements:
-    - create view wcta.wcta_2017_socrata as (
-        select 
+
+- type: create_view
+  view_name: wcta_2017_socrata
+  as: select
         parcel_id,
         prop_address,
         prop_city,
@@ -22,5 +22,6 @@
         bidder_address,
         bidder_city_state,
         bidder_zip,
-        concat('location(', st_y(geom), ',', st_x(geom), ')') as location
-        from wcta.wcta2017 where trim(prop_city) = 'DETROIT MI')
+        (select makeSocrataLocation(geom)) as location
+      from wcta.wcta2017 
+      where trim(prop_city) = 'DETROIT MI'

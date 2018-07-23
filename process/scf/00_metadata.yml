@@ -1,2 +1,4 @@
 name: Improve Detroit
 schema: scf
+datasets:
+  - all_issues

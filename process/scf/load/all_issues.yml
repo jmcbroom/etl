@@ -59,6 +59,7 @@
     Location:
       field: location
       type: location
+
 - to: Socrata
   name: Improve Detroit Issues (Private View)
   id: 3nvs-wxfi
@@ -119,6 +120,7 @@
     Location:
       field: location
       type: location
+
 - to: SFTP
   host: crimescape
   file: /tmp/311.csv

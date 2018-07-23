@@ -1,6 +1,6 @@
 - to: Socrata
-  id:
-  name: Schools
+  id: wn8n-5a4d
+  name: All Schools 2017/2018
   table: base.schools_socrata
   method: replace
   row_identifier: bcode
@@ -77,4 +77,3 @@
     location:
       field: location
       type: location
-

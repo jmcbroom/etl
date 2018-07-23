@@ -1,5 +1,5 @@
 - to: Socrata
-  id:
+  id: gnh3-c8fn
   name: Wayne County Tax Auction Results (2017)
   table: wcta.wcta_2017_socrata
   method: replace
