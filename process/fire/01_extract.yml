@@ -1,0 +1,8 @@
+- database:
+    type: sql-server
+    prefix: cad
+    source: vwAngelNight_2017_UN
+    destination: fire.angels_night
+- smartsheet: 
+    id: 8469443043977092
+    table: dfd_locations
