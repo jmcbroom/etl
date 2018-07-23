@@ -8,6 +8,7 @@ datasets:
   - coo_plan_reviews
   - dismantle_permits
   - dng_cases
+  - medical_marijuana
   - rental_certifications
   - rental_inspections
   - rental_registrations

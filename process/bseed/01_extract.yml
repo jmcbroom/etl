@@ -130,6 +130,9 @@
     prefix: tm
     source: PARCEL
     destination: bseed.tm_parcel
+- smartsheet: 
+    id: 3079873704028036
+    table: mmcc
 
 # # # 
 # This was just for the parcel clean up
