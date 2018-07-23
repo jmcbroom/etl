@@ -1,0 +1,24 @@
+- type: sql
+  statements:
+    - alter table ocp.purchase_agreements add column link text 
+    - update ocp.purchase_agreements set link = concat('http://dataresources.theneighborhoods.org/sites/dataresources.theneighborhoods.org/files/socrata/', agreement_number::text, '.pdf')
+
+- type: create_view
+  view_name: purchase_agreements_socrata
+  as: select 
+        agreement_number,
+        (select handleNan(agreement_limit)) as agreement_limit,
+        (select handleNan(cod_agency)) as cod_agency,
+        upper(description) as description,
+        agreement_status_description,
+        upper(replace(rtrim(trim(supplier), '.'), ',', '')) as supplier,
+        upper(city) as city,
+        case 
+          when state = 'Michigan'
+          then 'MI'
+          else state
+        end as state,
+        report_date as start_date,
+        "report_date.1" as end_date,
+        link
+      from ocp.purchase_agreements

@@ -1,0 +1,15 @@
+- type: geocode
+  table: ocp.divdat
+  add_col: street
+  geom_col: geom
+
+- type: create_view
+  view_name: divdat_socrata
+  as: select 
+        name,
+        street,
+        city,
+        state,
+        zip, 
+        (select makeSocrataLocation(geom)) as location
+      from ocp.divdat

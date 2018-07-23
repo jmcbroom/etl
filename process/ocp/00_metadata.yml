@@ -1,2 +1,7 @@
-name: Contracting & Procurement datasets
+name: Office of Contracting & Procurement
 schema: ocp
+notify: True
+datasets:
+  - contracts
+  - purchase_agreements
+  - divdat
