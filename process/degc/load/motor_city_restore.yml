@@ -1,0 +1,30 @@
+- to: Socrata
+  id: qjux-tfwj
+  name: Motor City Restore Awardees
+  table: degc.mc_restore_socrata
+  method: replace
+  columns:
+    Address:
+      field: business_address
+      type: text
+    Business:
+      field: business
+      type: text
+    Round:
+      field: round
+      type: text
+    Track:
+      field: track
+      type: text
+    Description:
+      field: description
+      type: text
+    URL:
+      field: website
+      type: text
+    Parcel Number:
+      field: parcelno
+      type: text
+    Location:
+      field: location
+      type: location
