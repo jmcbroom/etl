@@ -5,4 +5,6 @@
 - mapbox:
     dataset: cjf9yq5e20m872qmhyrip5tkc
     destination: projects.rfp_shapes
-
+- smartsheet: 
+    id: 5525344699606916
+    table: capital_projects

@@ -1,3 +1,5 @@
-name: dba
+name: Detroit Building Authority
 schema: dba
-notify: false
+notify: False
+datasets: 
+  - marketed_properties
