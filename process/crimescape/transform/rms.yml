@@ -1,10 +1,10 @@
+# Add geometry and make a point for new incidents
 - type: sql
   statements:
     - alter table crimescape.rms_update rename column "Address" to address
     - alter table crimescape.rms_update rename column "DPDCRIMEID" to dpdcrimeid
     - alter table crimescape.rms_update rename column "Case ID" to case_id
     - alter table crimescape.rms_update add column uniq serial primary key
-    # Add geometry and make a point for new incidents
     - select AddGeometryColumn( 'crimescape', 'rms_update', 'geom', 2898, 'POINT', 2)
     - create index if not exists etl_rms_update_geom_idx on crimescape.rms_update using gist(geom)
     - create index if not exists rms_update_dpdcrimeid_idx on crimescape.rms_update using btree(dpdcrimeid)
