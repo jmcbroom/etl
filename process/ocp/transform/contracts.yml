@@ -12,7 +12,7 @@
         case 
           when trim(company_state) = 'MICHIGAN'
           then 'MI'
-          else upper(company_state)
+          else (select handleNan(upper(company_state)))
         end as company_state,
         upper(contract_contract_purpose) as contract_contract_purpose,
         case
