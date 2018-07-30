@@ -14,8 +14,7 @@ tags:
 license: 
   name: Public Domain
   url: 
-start_date: 
-end_date: Present
+time_period: Open contracts to date
 update_frequency: Daily
 row_label: Contract
 columns:
@@ -79,3 +78,6 @@ columns:
     notes:
     type: text
     required: no
+links:
+  - http://www.detroitmi.gov/Purchasing
+  

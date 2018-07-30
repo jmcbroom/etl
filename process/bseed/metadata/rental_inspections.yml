@@ -1,0 +1,89 @@
+title: Rental Inspections
+category: Housing & Buildings
+agency: BSEED
+description: >
+  All inspections on rental properties conducted by BSEED. Only includes the most recent inspection for a unique case number or rental property.
+notes: >
+  null
+tags:
+  - rental
+  - inspection
+  - bseed
+license: 
+  name: Public Domain
+  url: 
+time_period: 1/1/2014 - present
+update_frequency: Daily
+row_label: Rental inspection
+columns:
+  Case Number:
+    description: Case number assigned by BSEED
+    notes:
+    type: text
+    required: yes
+  Address:
+    description: Street address of rental property
+    notes:
+    type: text
+    required: yes
+  Parcel Number:
+    description: Parcel number associated with rental property address
+    notes:
+    type: text
+    required: no
+  Action Description:
+    description: Description of rental inspection
+    notes: 
+    type: text
+    required: yes
+  Action Menu ID:
+    description: System menu category for action description from BSEED
+    notes:
+    type: text
+    required: yes
+  Action Code:
+    description: System code category for action description from BSEED
+    notes:
+    type: text
+    required: yes
+  CSA Creation Date:
+    description: Date case was created by BSEED
+    notes:
+    type: date
+    required: no
+  CSA Date 1:
+    description:
+    notes: 
+    type: date
+    required: no
+  CSA Date 2:
+    description:
+    notes: 
+    type: date
+    required: no
+  CSA Date 3:
+    description: Date most recent inpsection occurred
+    notes: 
+    type: date
+    required: yes
+  CSA Disposition:
+    description: Outcome of inspection performed
+    notes:
+    type: text
+    required: yes
+  Case Type:
+    description: Type of case as classified in BSEED's system
+    note: VPO type is a vacant property
+  Zip Code:
+    description: Zip code associated with rental property address
+    notes: 
+    type: text
+    required: no
+  Location:
+    description: Latitude, longitude coordinate associated with rental property address
+    notes: Provided in EPSG Projection 4326 - WGS 84
+    type: text
+    required: yes
+links:
+  - http://www.detroitmi.gov/rental
+  - http://www.detroitmi.gov/RentalMap/index.html
