@@ -82,6 +82,7 @@
                   and ca.actn_code in ('80', '90', '200', '202', '60')
                   and ca.csa_calendar_tag in ('ISSD', 'VREG')
                   and cp.csp_primary = 'Y'
+                  and cm.csm_status != 'FRZ'
             )
 
 - type: geocode
@@ -167,6 +168,7 @@
                   and ca.actn_menu_id in ('B','C','D')
                   and ca.actn_code in ('220', '221', '222', '120', '225','600','55','70')
                   and ca.action_description like any (array['%C of C%', '%Cert%', '%COC%'])
+                  and cm.csm_status != 'FRZ'
             )
 
 - type: geocode
