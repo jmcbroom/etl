@@ -83,6 +83,7 @@
                   and ca.csa_calendar_tag in ('ISSD', 'VREG')
                   and cp.csp_primary = 'Y'
                   and cm.csm_status != 'FRZ'
+                  and ca.action_description != 'Issue Project Invoice'
             )
 
 - type: geocode
