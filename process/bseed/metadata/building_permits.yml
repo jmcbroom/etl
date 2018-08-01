@@ -210,40 +210,40 @@ columns:
     type: text
     required: no
   Contractor Last Name:
-    description:
+    description:  Last name or business name of contractor performing permit work
     notes:
-    type:
-    required:
+    type: text
+    required: yes
   Contractor First Name:
-    description:
+    description: First name of contractor performing permit work
     notes:
-    type:
-    required:
+    type: text
+    required: no
   Contractor Address 1:
-    description:
-    notes:
-    type:
-    required:
+    description: Street address of contractor
+    notes: 
+    type: text
+    required: no
   Contractor Address 2:
-    description:
+    description: Second street address of contractor
     notes:
-    type:
-    required:
+    type: text
+    required: no
   Contractor City:
-    description:
-    notes:
-    type:
-    required:
+    description: City of contractor
+    notes: 
+    type: text
+    required: no
   Contractor State:
-    description:
-    notes:
-    type:
-    required:
+    description: State of contractor
+    notes: 
+    type: text
+    required: no
   Contractor Zip: 
-    description:
-    notes:
-    type:
-    required:
+    description: Zip code of contractor
+    notes: 
+    type: text
+    required: no
   Permit Location:
     description: Latitude, longitude coordinate associated with permit site address
     notes: Provided in EPSG Projection 4326 - WGS 84
@@ -260,4 +260,4 @@ columns:
     type: number
     required: no
 links:
-  - null
+  - https://cityofdetroit.github.io/permits/
