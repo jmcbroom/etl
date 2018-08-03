@@ -34,6 +34,9 @@
     Use Type:
       field: bld_type_use
       type: text
+    Use Type Calculated:
+      field: bld_type_use_calculated
+      type: text
     Construction Type:
       field: bld_type_const
       type: text

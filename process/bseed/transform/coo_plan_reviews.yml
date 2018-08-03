@@ -34,6 +34,14 @@
           when c.case_type = 'BLD' then (select vlv_desc from bseed.validation_values where valid_value = max(cb.bld_type_use) and valid_key = 'bld_use_code' limit 1) 
         end as bld_type_use,
         case 
+          when c.case_type = 'BLD' then max(cb.bld_type_use) 
+        end as bld_type_use_code,
+        case 
+          when (c.case_type = 'BLD' and max(cb.bld_type_use) in ('18','25','26','28','54','69','92','101','106','107','109','114','118')) 
+          then 'Residential' 
+          else null
+        end as bld_type_use_calculated,
+        case 
           when c.case_type = 'PRV' then max(cp.prv_const_type) 
           when c.case_type = 'BLD' then max(cb.bld_type_const_cod) 
         end as bld_type_const,
