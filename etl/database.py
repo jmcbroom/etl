@@ -44,7 +44,8 @@ class DbDestination(object):
   def __init__(self, params):
     self.params = params
 
+
   def insert(self):
-    source_df = pg_to_df('pnc', 'escrow')
+    source_df = pg_to_df(self.params['schema'], self.params['table'])
     destination_engine = sqlalchemy.create_engine(make_db_connection_string(self.params['dbType'], self.params['prefix']))
     source_df.to_sql(self.params['destination'], destination_engine, if_exists=self.params['if_exists'], index=False)

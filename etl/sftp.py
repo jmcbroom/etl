@@ -63,15 +63,17 @@ class Sftp(object):
     elif self.host == 'pnc':
       cnopts = pysftp.CnOpts()
       cnopts.hostkeys = None
-      with pysftp.Connection(env['MOVEIT_HOST'], port=22, username=env['MOVEIT_USER'], password=env['MOVEIT_PASS'], cnopts=cnopts) as sftp:
-        print('connected to {}'.format(env['MOVEIT_HOST']))
+      with pysftp.Connection(env['MOVEITPROD_HOST'], port=22, username=env['MOVEITPROD_USER'], password=env['MOVEITPROD_PASS'], cnopts=cnopts) as sftp:
+        print('connected to {}'.format(env['MOVEITPROD_HOST']))
 
-        file_name = 'TrialBalance07192018_TEST.xlsx'
+        import arrow
+        date = arrow.utcnow().shift(days=-1)
+        file_name = "TrialBalance{}.csv".format(date.format('MMDDYYYY'))
         path = '/Home/IET/PNC/' + file_name
           
         if sftp.isfile(path):
           sftp.get(path, preserve_mtime=True)
-          self.df = pandas.read_excel(file_name)
+          self.df = pandas.read_csv(file_name)
           rename_cols(self.df)
           os.remove(file_name)
           print('got file, read into df')
