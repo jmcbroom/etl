@@ -1,0 +1,93 @@
+title: Certificates of Occupancy and Plan Review
+category: Housing & Buildings
+agency: BSEED
+description: >
+  Certificates of Occupancy and Plan Review permits issued by BSEED.
+notes: >
+  null
+tags:
+  - permits
+  - occupancy
+  - plan review
+  - bseed
+license: 
+  name: Public Domain
+  url: 
+time_period: 1/1/2014 - present
+update_frequency: Daily
+row_label: Permit
+columns:
+  Case Number:
+    description: Case number assigned by BSEED
+    notes:
+    type: text
+    required: yes
+  Date:
+    description: Date permits was issued by BSEED
+    notes:
+    type: date
+    required: yes
+  Address:
+    description: Street address of property
+    notes:
+    type: text
+    required: yes
+  Parcel Number:
+    description: Parcel number associated with street address
+    notes:
+    type: text
+    required: no
+  Permit Type:
+    description: Abbreviated type of permit issued
+    notes:
+    type: text
+    required: yes
+  Action Description:
+    description: Full text description of action taken by BSEED
+    notes:
+    type: text
+    required: yes
+  Legal Use:
+    description: Legal use of property as defined by BSEED
+    notes:
+    type: text
+    required: no
+  Estimated Cost:
+    description: Estimated cost in dollars of permit
+    notes: 
+    type: number
+    required: yes
+  Permit Description:
+    description: Full text description of work to be performed under permit
+    notes:
+    type: text
+    required: yes
+  Use Type:
+    description: Use of building associated with site address
+    notes:
+    type: text
+    required: no
+  Use Type Calculated:
+    description: Check when certifications of occupancy are issued to residential buildings per the rental ordinance
+    notes: Expected value is 'Residential' or null
+    type: text
+    required: no
+  Construction Type:
+    description: Type of construction to be peformed under permit
+    notes: 
+    type: text
+    required: no
+  Amount Due: 
+    description: Paymount amount in dollars due
+    notes:
+    type: number
+    required: no
+  Location:
+    description: Latitude, longitude coordinate associated with rental property address
+    notes: Provided in EPSG Projection 4326 - WGS 84
+    type: text
+    required: yes 
+links:
+  - https://cityofdetroit.github.io/permits/
+  - http://www.detroitmi.gov/rental
+  - http://www.detroitmi.gov/RentalMap/index.html
