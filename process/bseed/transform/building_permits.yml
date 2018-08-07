@@ -16,7 +16,7 @@
         case_description,
         legal_use,
         (select handleNan(estimated_cost)) as estimated_cost,
-        (select handleNan(parcel_size) as parcel_size,
+        (select handleNan(parcel_size)) as parcel_size,
         parcel_cluster_sector,
         (select handleNan(stories)) as stories,
         (select handleNan(parcel_floor_area)) as parcel_floor_area,

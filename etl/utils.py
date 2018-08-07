@@ -37,7 +37,7 @@ def create_psql_view(conn, name, select_statement):
   conn.execute("create view {} as ({})".format(name, select_statement))
 
 def create_psql_table(conn, name, select_statement):
-  conn.execute("drop table if exists {} cascade".format(table))
+  conn.execute("drop table if exists {} cascade".format(name))
   conn.execute("create table {} as ({})".format(name, select_statement))
 
 def drop_table_if_exists(conn, table):

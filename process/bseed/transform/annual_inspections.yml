@@ -1,5 +1,5 @@
-- type: create_view
-  view_name: annual_inspections
+- type: create_table
+  table_name: annual_inspections
   as: select
         i.action_date, 
         i.action_description,
