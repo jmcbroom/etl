@@ -26,7 +26,7 @@
   view_name: annual_inspections_socrata
   as: select
         address,
-        (select makeSocrataData(action_date)) as action_date,
+        (select makeSocrataDate(action_date)) as action_date,
         action_description,
         result,
         case_number,
