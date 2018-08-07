@@ -1,18 +1,21 @@
-- type: create_table
-  table_name: dng_cases
-  as: dng_number text,
-    parcelno text,
-    inspection_date timestamp,
-    inspection_disposition text,
-    tract_investigation_completed_date timestamp,
-    office_hearing_date timestamp,
-    office_hearing_disposition text,
-    cc_hearing_inspection_date timestamp,
-    cc_hearing_inspection_disposition text,
-    cc_hearing_date timestamp,
-    cc_hearing_disposition text,
-    issue_notice_lis_pendens_date timestamp,
-    issue_notice_of_emg_demolition text
+- type: sql
+  statements:
+    - drop table if exists dng_cases cascade
+    - create table dng_cases (
+        dng_number text,
+        parcelno text,
+        inspection_date timestamp,
+        inspection_disposition text,
+        tract_investigation_completed_date timestamp,
+        office_hearing_date timestamp,
+        office_hearing_disposition text,
+        cc_hearing_inspection_date timestamp,
+        cc_hearing_inspection_disposition text,
+        cc_hearing_date timestamp,
+        cc_hearing_disposition text,
+        issue_notice_lis_pendens_date timestamp,
+        issue_notice_of_emg_demolition text
+      )
 
 - type: sql
   statements:
