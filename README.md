@@ -1,17 +1,20 @@
 # etl
+
 ETL repository for DoIT work. 
 
-ETL means *extract-transform-load* data across systems. For example, Department X manages their data in an Oracle database, we retrieve it, process it by cleaning values or joining multiple tables, and then publish it on our open data portal for residents and other departments to easily consume. 
+ETL means *extract-transform-load* data across systems. For example, Department X manages their data in an Oracle database, we retrieve it and store a copy in our central PostgreSQL database, process it by cleaning values or joining multiple tables, and then publish data views to our open data portal for residents and other departments to easily consume. 
 
 ## Context
 
-Each ETL has four steps, each with it's own .yml file:
-- 00_metadata: Describes the process
-- 01_extract: Gets the source data
-- 02_transform: Cleans the data
-- 03_load: Puts the data online
+Each ETL is made up of:
+- Process: a group of many datasets that rely on the same origin data; `process/` subfolders in this repo match our PostgreSQL database schemas
+- Datasets: Individual tables and views within a process
 
-Depending on your data request, you might want to add a new view to an existing process (like DLBA or BSEED datasets for example), or create an entirely new process. If creating new, copy the four template .yml files in `example/` to a new folder under `process/`.
+Each process has four parts or steps:
+- `00_metadata`: Describes the overall process; `metadata/` contains dataset-level descriptions
+- `01_extract`: Gets the source data
+- `transform/`: Cleans each dataset
+- `load/`: Puts each dataset online
 
 ## Setup
 
@@ -52,11 +55,10 @@ Supported sources:
 - `smartsheet` from `smartsheet.py`: A Smartsheet
 - `sftp` from `sftp.py`: A SFTP server with .csv files
 - `api` for now specificially from `scf.py`: An endpoint of open 311 data
+- `airtable` from `airtable.py`: An Airtable table within a base
 
 Roadmap:
-- `api` support for other domains
-- `airtable`?
-- `googlesheet`?
+- `googlesheet`
 
 ```yml
 - database:
@@ -86,6 +88,11 @@ Roadmap:
 - api:
     domain: <String that tells us which api, eg seeclickfix>
     destination: <Postgres table name, eg scf.issues>
+
+- airtable:
+  base: <Airtable base id>
+  table: <Airtable table name, eg RFPs>
+  destination: <Postgres table name, eg projects.rfp_attributes>
 ```
 
 ### 02_transform.yml
@@ -93,10 +100,13 @@ Roadmap:
 An array of steps to clean the data, which can include casting data types, geocoding addresses, scrubbing values, etc. These execute in order, think about them like steps in a recipe.
 
 Supported options:
-- `sql`: execute a list of custom SQL statements
+- `sql`: execute a list of custom PostgreSQL statements
+- `create_view`: drops and creates a postgres view
+- `create_table`: drops and creates a postgres table
 - `geocode`: provide a table, address column, and geometry column
 - `anonymize_geometry`: provide a table and a base to compare against, eg the centerline
 - `anonymize_text_location`: provide a table, address column and set flag to keep track of which records have been anonymized
+- `lookup`: provide an external table, lookup and replace values (specific to pubsafe/cad right now)
 
 Roadmap:
 - `join`?
@@ -130,8 +140,6 @@ Supported destinations:
 - `Socrata`: A Socrata dataset
 - `ArcGIS Online`: An ArcGIS Online feature layer
 - `SFTP`: Drop a .csv on a SFTP server
-
-Roadmap:
 - `Mapbox`: A Mapbox tileset
 
 ```yml
@@ -154,6 +162,11 @@ Roadmap:
 - to: SFTP
   host: <Known SFTP host or domain name, eg crimescape>
   file: <Filename, eg /tmp/abc.csv>
+
+- to: Mapbox
+  name: <Name of dataset, eg BSEED All Permits>
+  table: <Postgres table or view to load the data from, eg bseed.all_permits_mapbox>
+  tileset: <Name of tileset on Mapbox, eg parcels_with_lots_of_permits>
 ```
 
 ## Scheduling jobs
