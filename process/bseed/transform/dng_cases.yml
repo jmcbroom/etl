@@ -1,7 +1,7 @@
 - type: sql
   statements:
-    - drop table if exists dng_cases cascade
-    - create table dng_cases (
+    - drop table if exists bseed.dng_cases cascade
+    - create table bseed.dng_cases (
         dng_number text,
         parcelno text,
         inspection_date timestamp,
