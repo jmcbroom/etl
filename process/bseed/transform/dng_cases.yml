@@ -93,7 +93,7 @@
         cc_hearing_inspection_disposition,
         (select makeSocrataDate(cc_hearing_date)) as cc_hearing_date,
         cc_hearing_disposition,
-        (select makeSocrataDate(issue_note_lis_pendens_date)) as issue_notice_lis_pendens_date,       
+        (select makeSocrataDate(dng.issue_notice_lis_pendens_date)) as issue_notice_lis_pendens_date,       
         issue_notice_of_emg_demolition
       from bseed.dng_cases dng
         inner join bseed.pnum_lookup pl on dng.parcelno = pl.dirty
