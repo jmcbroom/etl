@@ -22,7 +22,7 @@ def df_to_pg(df, schema, table):
   import odo
   odo.odo(df, 'postgresql://{}/{}::{}'.format(env['PG_CONNSTR'], env['PG_DB'], table), schema=schema)
 
-def pg_to_df(schema, table):
+def pg_to_df(schema=None, table=None):
   import pandas
   import sqlalchemy
   eng = sqlalchemy.create_engine("postgresql://{}/{}".format(env['PG_CONNSTR'], env['PG_DB']))
