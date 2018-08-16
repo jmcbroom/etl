@@ -2,5 +2,7 @@
   prefix: ESCROW
   dbType: sql-server
   source: pnc.escrow
+  schema: pnc
+  table: escrow
   destination: property_data_escrowbalance
   if_exists: append
