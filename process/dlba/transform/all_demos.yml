@@ -1,0 +1,14 @@
+# for graphql
+- type: create_view
+  view_name: all_demos_gql
+  as: select
+        address, parcel_id, demolition_date, 'Completed' as status
+      from dlba.completed_demos_socrata
+      union all
+      select
+        address, parcel_id, null as date, 'Pipeline' as status
+      from dlba.demo_pipeline_socrata
+      union all
+      select
+        address, parcel_id, demolish_by_date, 'Upcoming' as status
+      from dlba.upcoming_demos_socrata
