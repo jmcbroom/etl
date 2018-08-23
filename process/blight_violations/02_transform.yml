@@ -221,6 +221,9 @@
   parcel_col: parcelno
 - type: sql
   statements:
+    # create view for AGO
+    - drop view if exists dah.bvn_ago
+    - create view dah.bvn_ago as (select * from dah.bvn where violation_date > '2018-04-01')
     # create view for open data
     - drop view if exists dah.bvn_socrata
     - create view dah.bvn_socrata as 

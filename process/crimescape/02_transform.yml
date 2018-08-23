@@ -11,7 +11,7 @@
     - create index if not exists rms_dpdcrimeid_idx on crimescape.rms_update using btree(dpdcrimeid)
     - create index if not exists rms_caseid_idx on crimescape.rms_update using btree(case_id)
     - create index if not exists rms_update_addr_idx on crimescape.rms_update using btree(address)
-    - update crimescape.rms_update set geom = st_setsrid(st_makepoint(geox/100, geoy/100), 2898) where geox > 0 and geoy > 0
+    - update crimescape.rms_update set geom = case when geox > 0 and geoy > 0 then st_setsrid(st_makepoint(geox/100, geoy/100), 2898) else null end
 
 # RMS: Create view
 - type: sql
@@ -61,7 +61,7 @@
           when regexp_replace(regexp_replace(n.rel2offnd,',[1-9]',',','g'),'^[1]','') like any (array['%23%','%21%','%22%','%28%','%29%','%30%','%18%','%98%','%99%','%31%']) then 'OTH'
           else n.rel2offnd
         end as ranked_relationship_to_offender,
-        c.addtime as charge_addtime
+        c."addtime" as charge_addtime
         from crimescape.rms r
           left outer join crimescape.lwnames n on n.lwmainid = r.case_id
           left outer join crimescape.lwchrg c on (c.lwmainid = r.case_id and c.arr_chrg = r.arr_chrg)
@@ -120,8 +120,7 @@
   statements:
     - select AddGeometryColumn('crimescape', 'cad_update', 'geom', 2898, 'POINT', 2)
     - create index etl_cad_update_geom_idx on crimescape.cad_update using gist(geom)
-    - update crimescape.cad_update set geom = st_setsrid(st_makepoint(geox, geoy), 2898) where geox > 0 and geoy > 0
-
+    - update crimescape.cad_update set geom = case when geox > 0 and geoy > 0 then st_setsrid(st_makepoint(geox, geoy), 2898) else null end
 # CAD: Create view
 - type: sql
   statements:

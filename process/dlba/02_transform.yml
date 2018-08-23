@@ -119,6 +119,26 @@
                 and a.sale_status = 'For Sale On Site'
                 and c.status = 'For Sale'
                 and c.address not like '%Fake St%' )
+    # demolitions AGO
+    - drop view if exists dlba.completed_demos_ago;
+    - create view dlba.completed_demos_ago as (
+        select 
+        address,
+        parcel_id,
+        demo_contractor_text_only as contractor_name,
+        socrata_reported_price as price,
+        demo_primarily_funded_by as funding_source,
+        demo_knock_down_date::timestamp with time zone as demolition_date,
+        non_hhf_commercial_demo as commercial,
+        council_district,
+        neighborhood,
+        property_latitude as latitude,
+        property_longitude as longitude,
+        ST_SetSRID(ST_MakePoint(property_longitude::double precision, property_latitude::double precision), 4326) as geom
+        from dlba.case
+        where demo_knock_down_date::timestamp >= date '2014-01-01'
+            and socrata_reported_price > 0
+            and demo_contractor_text_only != '')
     # own it now sold
     - drop view if exists dlba.own_it_now_socrata cascade
     - create view dlba.own_it_now_socrata as

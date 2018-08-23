@@ -3,7 +3,7 @@ import cx_Oracle
 import pandas
 import odo
 from os import environ as env
-from etl.utils import df_to_pg
+from etl.utils import df_to_pg, pg_to_df
 
 def get_table_as_df(query, connString):
   engine = sqlalchemy.create_engine(connString)
@@ -39,3 +39,13 @@ class DbTable(object):
     self.conn = make_db_connection_string(self.dbType, self.prefix)
     self.df = get_table_as_df(self.query_all, self.conn)
     df_to_pg(self.df, self.schema, self.table)
+
+class DbDestination(object):
+  def __init__(self, params):
+    self.params = params
+
+
+  def insert(self):
+    source_df = pg_to_df(self.params['schema'], self.params['table'])
+    destination_engine = sqlalchemy.create_engine(make_db_connection_string(self.params['dbType'], self.params['prefix']))
+    source_df.to_sql(self.params['destination'], destination_engine, if_exists=self.params['if_exists'], index=False)

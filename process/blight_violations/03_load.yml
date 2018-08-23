@@ -1,3 +1,16 @@
+- to: ArcGIS Online
+  type: geojson
+  file: blight_violations.json
+  table: dah.bvn_ago
+  name: Blight Violation Notices
+  id: e9de847b6f384788813b0b2685b426cb
+  title: Blight Violation Notices
+  description: Blight violation notices since April 1, 2018.
+  tags:
+    - dah
+    - blight
+    - violation
+    - tickets
 - to: Socrata
   id: ti6p-wcg4
   name: Blight Violations

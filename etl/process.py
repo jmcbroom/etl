@@ -86,6 +86,8 @@ class Process(object):
           a = AirtableTable(params)
           drop_table_if_exists(connection, params['destination'])
           a.to_postgres()
+
+
           
         else:
           print("I don't know this source type: {}".format(srctype))
@@ -152,6 +154,11 @@ class Process(object):
           from .mapbox import MapboxUpload
           m = MapboxUpload(d)
           m.upload()
+
+        elif destination == 'internal':
+          from .database import DbDestination
+          dest = DbDestination(d)
+          dest.insert()
 
         else:
           print("I don't know this destination type: {}".format(destination))

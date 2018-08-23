@@ -1,0 +1,3 @@
+- sftp:
+    host: pnc
+    destination: pnc.escrow
