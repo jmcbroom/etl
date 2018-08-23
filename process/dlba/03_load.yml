@@ -365,6 +365,17 @@
     Location:
       field: location
       type: location
+- to: ArcGIS Online
+  type: geojson
+  file: all_demolitions.json
+  table: dlba.completed_demos_ago
+  name: All Demolitions
+  id: b4de6333c5a149cab53ad28b0e1a808d
+  title: All Demolitions
+  description: detroit demolitions
+  tags:
+    - dlba
+    - demolitions
 - to: Socrata
   name: Detroit Demolitions
   id: rv44-e9di
