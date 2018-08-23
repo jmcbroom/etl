@@ -1,6 +1,6 @@
 - type: sql
   statements:
-    - drop table pubsafe.greenlight_unanon cascade;
+    - drop table if exists pubsafe.greenlight_unanon cascade;
     - create table pubsafe.greenlight_unanon as select * from pubsafe.greenlight
     - delete from pubsafe.greenlight where status is null;
     - delete from pubsafe.greenlight where status in ('Red', 'Yellow');
