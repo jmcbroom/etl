@@ -1,4 +1,4 @@
-# RMS: Add geometry and make a point for new incidents
+# # RMS: Add geometry and make a point for new incidents
 - type: sql
   statements:
     - alter table crimescape.rms_update rename column "Address" to address
@@ -8,8 +8,8 @@
     - select AddGeometryColumn('crimescape', 'rms_update', 'geom', 2898, 'POINT', 2)
     - create index if not exists etl_rms_update_geom_idx on crimescape.rms_update using gist(geom)
     - create index if not exists rms_update_dpdcrimeid_idx on crimescape.rms_update using btree(dpdcrimeid)
-    - create index if not exists rms_dpdcrimeid_idx on crimescape.rms using btree(dpdcrimeid)
-    - create index if not exists rms_caseid_idx on crimescape.rms using btree(case_id)
+    - create index if not exists rms_dpdcrimeid_idx on crimescape.rms_update using btree(dpdcrimeid)
+    - create index if not exists rms_caseid_idx on crimescape.rms_update using btree(case_id)
     - create index if not exists rms_update_addr_idx on crimescape.rms_update using btree(address)
     - update crimescape.rms_update set geom = case when geox > 0 and geoy > 0 then st_setsrid(st_makepoint(geox/100, geoy/100), 2898) else null end
 
