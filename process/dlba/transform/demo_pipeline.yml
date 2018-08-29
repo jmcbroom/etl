@@ -19,4 +19,4 @@
         and c.demo_asb_survey_status = 'Completed'
         and c.demo_knock_down_date is null
         and c.demo_pulled_date is null
-        and c.recordtypeid in ('012j0000000xtGbAAI', '012j0000000zM27AAE', '012j0000000xtGcAAI'))
+        and c.recordtypeid in ('012j0000000xtGbAAI', '012j0000000zM27AAE', '012j0000000xtGcAAI')
