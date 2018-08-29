@@ -22,6 +22,7 @@ class Dataset(object):
   def transform(self):
     for s in self.t:
       if s['type'] == 'geocode':
+        print("Geocoding table {}".format(self.t))
         from etl.geocode import GeocodeTable
         # add geometry column and index, specified in YML
         add_geom_column(connection, s['table'], s['geom_col'])
@@ -36,6 +37,7 @@ class Dataset(object):
           GeocodeTable(s['table'], s['add_col'], s['geom_col']).geocode_rows()
 
       if s['type'] == 'sql':
+        print("executing sql")
         for statement in s['statements']:
           exec_psql_query(connection, statement, verbose=True)
 
@@ -176,12 +178,19 @@ class Process(object):
     # Extract our data that the Datasets require
     # self.extract()
 
+    print(dataset)
+
     # Loop through our datasets
     for d in self.datasets:
 
-      # Requires dataset name and basedir
-      ds = Dataset(d, self.basedir, self.schema)
+      if dataset and d != dataset:
+        pass
+      else:
+        print(d)
 
-      # These two steps now belong to Dataset
-      ds.transform()
-      # ds.load()
+        # Requires dataset name and basedir
+        ds = Dataset(d, self.basedir, self.schema)
+
+        # These two steps now belong to Dataset
+        ds.transform()
+        # ds.load()

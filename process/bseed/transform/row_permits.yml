@@ -13,7 +13,7 @@
         cp.csp_zip as contractor_zip,
         (select makeSocrataDate(cm.csm_issued_date)) as issued_date,
         (select makeSocrataDate(ce.eng_start_date)) as start_date,
-        (select makeSocrataDate(ce.eng_end_date)) as end_date
+        (select makeSocrataDate(ce.eng_end_date)) as end_date,
         concat_ws(' ', ca.csm_st_nmbr, ca.csm_st_pfx, ca.csm_st_name) as permit_address,
         ce.eng_job_loc as location
       from bseed.tm_casemain cm

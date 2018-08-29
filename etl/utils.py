@@ -33,12 +33,20 @@ def exec_psql_query(conn, query, verbose=False):
   conn.execute(sqlalchemy.text(query))
 
 def create_psql_view(conn, name, select_statement):
-  conn.execute("drop view if exists {} cascade".format(name))
-  conn.execute("create view {} as ({})".format(name, select_statement))
+  print("Creating view {}".format(name))
+  drop_view = "drop view if exists {} cascade".format(name)
+  exec_psql_query(conn, drop_view)
+  create_view = "create view {} as ({})".format(name, select_statement)
+  exec_psql_query(conn, create_view)
 
 def create_psql_table(conn, name, select_statement):
-  conn.execute("drop table if exists {} cascade".format(name))
-  conn.execute("create table {} as ({})".format(name, select_statement))
+  print("Creating table {}".format(name))
+  exec_psql_query(conn, "drop table if exists {} cascade".format(name))
+  if select_statement.startswith("select"):
+    exec_psql_query(conn, "create table {} as ({})".format(name, select_statement))
+  else:
+    exec_psql_query(conn, "create table {} ({})".format(name, select_statement))
+
 
 def drop_table_if_exists(conn, table):
   query = "drop table if exists {} cascade".format(table)

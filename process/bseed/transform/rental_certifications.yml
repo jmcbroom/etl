@@ -7,17 +7,17 @@
         cm.csm_name_last,
         cm.csm_name_mi,
         cm.csm_recd_by,
-        (select makeSocrataDate(cm.csm_recd_date)) as csm_recd_date,
+        makeSocrataDate(cm.csm_recd_date) as csm_recd_date,
         pl.cleaned as parcelnum,
         st_centroid(pl.parcel_geom) as parcel_geom,
         concat(cadd.csm_st_nmbr, ' ', cadd.csm_st_name) as address,
         ca.action_description,
-        (select makeSocrataDate(ca.csa_creation_date)) as csa_creation_date,
-        (select makeSocrataDate(ca.csa_date1)) as ca.csa_date1,
-        (select makeSocrataDate(ca.csa_date2)) as ca.csa_date2,
-        (select makeSocrataDate(ca.csa_date3)) as ca.csa_date3,
+        makeSocrataDate(ca.csa_creation_date) as csa_creation_date,
+        makeSocrataDate(ca.csa_date1) as csa_date1,
+        makeSocrataDate(ca.csa_date2) as csa_date2,
+        makeSocrataDate(ca.csa_date3) as csa_date3,
         ca.csa_disp,
-        (select handleNan(pm.pmb_dwelling_units)) as pmb_dwelling_units,
+        handleNan(pm.pmb_dwelling_units) as pmb_dwelling_units,
         pm.pmb_type_use,
         cm.csm_status
       from bseed.tm_casemain cm
@@ -47,7 +47,7 @@
     - update bseed.rental_certifications set parcel_geom = geocode_geom where parcel_geom is null and geocode_geom is not null
 
 - type: create_view
-  view_name: bseed.rental_certifications_socrata
+  view_name: rental_certifications_socrata
   as: select
         csm_caseno,
         csm_name_first,

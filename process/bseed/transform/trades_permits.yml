@@ -233,7 +233,7 @@
         uniq as unique_id, 
         permit_no as permit_no,
         (select makeSocrataDate(permit_issued)) as permit_issued,
-        (selecct makeSocrataDate(permit_expire)) as permit_expire,
+        (select makeSocrataDate(permit_expire)) as permit_expire,
         (select makeSocrataDate(permit_completed)) as permit_completed,
         permit_status as permit_status, 
         site_address as site_address, 
