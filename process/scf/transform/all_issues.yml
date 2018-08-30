@@ -121,7 +121,7 @@
           )
         end as location
       from scf.issues
-      where request_type_title not in ('Abandoned Vehicle', 'Illegal Dumping In Progress')
+      where request_type_title not in ('Abandoned Vehicle', 'Illegal Dumping In Progress', 'Squatters Issue')
 
 - type: create_view
   view_name: issues_socrata_private
