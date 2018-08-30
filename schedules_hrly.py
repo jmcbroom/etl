@@ -10,7 +10,10 @@ msg = SlackMessage({"text": "ETL hourly updates for {}".format(this_day)})
 def run(process, dataset=None, notify=False, emoji=None):
   try:
     p = etl.Process(process)
-    p.update(dataset)
+    if dataset:
+      p.update(dataset)
+    else:
+      p.update()
     if notify:
       msg.comment("Update successful: *{}*".format(process))
       msg.react(emoji)
@@ -21,5 +24,5 @@ def run(process, dataset=None, notify=False, emoji=None):
 
 # # daily run; these do not use schedule
 run('crimescape', dataset=None, notify=False, emoji='rotating_light')
-run('angels_night', dataset=None, notify=False, emoji='fire')
-run('scf', dataset=None, notify=False, emoji='cool')
+run('fire', dataset='angels_night', notify=False, emoji='fire')
+run('scf', dataset='all_issues', notify=False, emoji='cool')
