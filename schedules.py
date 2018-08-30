@@ -14,6 +14,7 @@ def run(process, dataset=None, notify=False, emoji=None):
     p = etl.Process(process)
     p.extract()
     p.transform()
+    # only load on production box
     if socket.gethostname() == "cod-etl-tools-fs2":
       p.load()
       if notify:

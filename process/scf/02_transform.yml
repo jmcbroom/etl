@@ -130,7 +130,7 @@
                 )
               end as location
             from scf.issues
-            where request_type_title not in ('Abandoned Vehicle', 'Illegal Dumping In Progress'))
+            where request_type_title not in ('Abandoned Vehicle', 'Illegal Dumping In Progress', 'Squatters Issue'))
     - drop view if exists scf.issues_socrata_private
     - create view scf.issues_socrata_private as
             ( select
