@@ -1,14 +1,14 @@
 - type: sql
   statements:
-    - alter table ocp.purchase_agreements add column link text 
+    - alter table ocp.purchase_agreements add column if not exists link text 
     - update ocp.purchase_agreements set link = concat('http://dataresources.theneighborhoods.org/sites/dataresources.theneighborhoods.org/files/socrata/', agreement_number::text, '.pdf')
 
 - type: create_view
   view_name: purchase_agreements_socrata
   as: select 
         agreement_number,
-        (select handleNan(agreement_limit)) as agreement_limit,
-        (select handleNan(cod_agency)) as cod_agency,
+        handleNan(agreement_limit::numeric) as agreement_limit,
+        handleNan(cod_agency::numeric) as cod_agency,
         upper(description) as description,
         agreement_status_description,
         upper(replace(rtrim(trim(supplier), '.'), ',', '')) as supplier,

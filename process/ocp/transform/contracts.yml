@@ -8,11 +8,11 @@
         end as contract_nigp_code,
         contract_contract_id,
         upper(replace(rtrim(trim(company_company_name), '.'), ',', '')) as company_company_name,
-        (select handleNan(company_city)) as company_city,
+        handleNan(company_city::numeric) as company_city,
         case 
           when trim(company_state) = 'MICHIGAN'
           then 'MI'
-          else (select handleNan(upper(company_state)))
+          else upper(company_state)
         end as company_state,
         upper(contract_contract_purpose) as contract_contract_purpose,
         case
