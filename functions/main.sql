@@ -30,6 +30,6 @@ create or replace function makeSocrataLocation (geom geometry) RETURNS text AS $
     select case 
         when geom is null 
         then null
-        else concat('location (', round(st_y(st_transform(geom, 4326)), 5), ',', round(st_x(st_transform(geom, 4326)), 5), ')') 
+        else concat('location (', round(st_y(st_transform(geom, 4326))::numeric, 5), ',', round(st_x(st_transform(geom, 4326))::numeric, 5), ')') 
     end
 $$ LANGUAGE sql;
