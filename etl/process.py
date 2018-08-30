@@ -1,4 +1,5 @@
 import os, yaml
+import socket
 from .utils import connect_to_pg, add_geom_column, exec_psql_query, drop_table_if_exists, create_psql_view, create_psql_table
 
 DATA_DIR = "{}/process".format(os.environ['ETL_ROOT'])
@@ -195,4 +196,6 @@ class Process(object):
 
         # These two steps now belong to Dataset
         ds.transform()
-        ds.load()
+
+        if socket.gethostname() == "cod-etl-tools-fs2":
+          ds.load()
