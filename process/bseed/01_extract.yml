@@ -11,6 +11,13 @@
 - database:
     type: oracle
     prefix: tm
+    source: CASE_BUS_SCH
+    destination: bseed.tm_casebussch
+    where: >-
+        ((date '1980-01-01' < SCH_PAY_DT and SCH_PAY_DT < date '2025-01-01') or SCH_PAY_DT is null)
+- database:
+    type: oracle
+    prefix: tm
     source: CASE_PEOPLE
     destination: bseed.tm_casepeople
 - database:

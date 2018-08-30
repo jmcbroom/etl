@@ -75,6 +75,9 @@
     License Type:
       field: bus_own
       type: text
+    License Description:
+      field: license_description
+      type: text
     Business Description:
       field: business_description
       type: text
