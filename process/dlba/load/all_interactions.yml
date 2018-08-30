@@ -1,0 +1,30 @@
+- to: Socrata
+  name: DLBA All Interactions (Private)
+  id: pvpj-rccf
+  table: dlba.all_interactions_socrata
+  method: replace
+  columns:
+    Address:
+      field: name
+      type: text
+    Parcel ID:
+      field: parcel_id
+      type: text
+    Current Status:
+      field: current_status
+      type: text
+    Neighborhood:
+      field: neighborhood
+      type: text
+    Council District:
+      field: council_district
+      type: text
+    Latitude:
+      field: latitude
+      type: number
+    Longitude:
+      field: longitude
+      type: number
+    Location:
+      field: location
+      type: location

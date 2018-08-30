@@ -1,0 +1,39 @@
+- to: Socrata
+  name: Upcoming Demolitions
+  id: tsqq-qtet
+  table: dlba.upcoming_demos_socrata
+  method: replace
+  columns:
+    Address:
+      field: address
+      type: text
+    Parcel ID:
+      field: parcel_id
+      type: text
+    Contractor Name:
+      field: contractor_name
+      type: text
+    Price: 
+      field: price
+      type: money
+    Projected Demolished By Date:
+      field: demolish_by_date
+      type: calendar_date
+    Commercial Building:
+      field: commercial
+      type: text
+    Council District:
+      field: council_district
+      type: number
+    Neighborhood:
+      field: neighborhood
+      type: text
+    Latitude:
+      field: latitude
+      type: number
+    Longitude:
+      field: longitude
+      type: number
+    Location:
+      field: location
+      type: location

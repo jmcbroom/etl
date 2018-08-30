@@ -1,0 +1,18 @@
+- type: geocode
+  table: fire.dfd_locations
+  add_col: address
+  geom_col: geom
+
+- type: create_view
+  view_name: dfd_locations_socrata
+  as: select 
+        address, 
+        engine,
+        ladder,
+        squad, 
+        chief,
+        medic,
+        special,
+        (select makeSocrataLocatin(geom)) as location
+      from fire.dfd_locations
+      

@@ -1,7 +1,0 @@
-- type: sql
-  statements:
-    - 
-- type: geocode
-  table:
-  add_col:
-  geom_col:

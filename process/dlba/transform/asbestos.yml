@@ -1,0 +1,48 @@
+- type: create_view
+  view_name: asbestos_socrata
+  as: select
+        c.address,
+        c.parcel_id,
+        c.bseed_final_grade_approved,
+        c.demo_final_grade_approved_date,
+        c.demo_batch_contractor_name_del1_name,
+        c.abatement_sub_contractor,
+        c.demo_asb_abatement_contractor_name,
+        c.demo_asb_survey_contractor_name,
+        c.asb_inspectors_name,
+        c.asb_abatement_verification_contractor_name,
+        c.asb_verifier_name,
+        (select makeSocrataDate(c.demo_contractor_proceed_date::timestamp)) as demo_contractor_proceed_date,
+        (select makeSocrataDate(c.asb_abatement_start_date::timestamp)) as asb_abatement_start_date,
+        (select makeSocrataDate(c.demo_asb_abatement_date::timestamp)) as demo_asb_abatement_date,
+        (select makeSocrataDate(c.asb_post_abatement_insp_date::timestamp)) as asb_post_abatement_insp_date,
+        c.asb_post_abatement_notes,
+        (select handleNan(c.asb_post_abatement_times_failed)) as asb_post_abatement_times_failed,
+        c.asb_post_abatement_verification_status,
+        (select makeSocrataDate(c.demo_planned_knock_down_date::timestamp)) as demo_planned_knock_down_date,
+        (select makeSocrataDate(c.demo_knock_down_date::timestamp)) as demo_knock_down_date,
+        (select makeSocrataDate(c.socrata_projected_knocked_by_date::timestamp)) as socrata_projected_knocked_by_date,
+        (select makeSocrataDate(c.demo_asb_post_abatement_failed_date::timestamp)) as demo_asb_post_abatement_failed_date,
+        (select makeSocrataDate(d.asb_post_abatement_passed_date::timestamp)) as demo_asb_post_abatement_approval_date,
+        c.asb_document_url,
+        c.asb_post_abatement_document_url,
+        c.property_longitude as longitude,
+        c.property_latitude as latitude,
+        c.property_zip_code as zip_code,
+        case 
+          when c.property_latitude is null then null 
+          else
+            concat(
+                'location (',
+                c.property_latitude,
+                ',',
+                c.property_longitude,
+            ')'
+            )
+        end as location
+      from dlba.case c
+        left outer join dlba.dba_commercial_demo d on d.related_case = c.id
+      where c.asb_abatement_verification_contractor_name is not null
+        and c.demo_contractor_proceed_date is not null
+        and c.bseed_final_grade_approved is null
+        and c.demo_final_grade_approved_date is null

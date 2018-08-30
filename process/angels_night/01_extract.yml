@@ -1,5 +1,0 @@
-- database:
-    type: sql-server
-    prefix: cad
-    source: vwAngelNight_2017_UN
-    destination: fire.angels_night

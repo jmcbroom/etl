@@ -1,2 +1,7 @@
 name: rms & cad
 schema: crimescape
+datasets:
+  - rms
+  - cad
+  - avllog
+  

@@ -1,0 +1,35 @@
+- to: Mapbox
+  name: DLBA All Ownership Parcels
+  table: dlba.all_ownership_mapbox
+  tileset: dlba_parcels
+
+- to: Socrata
+  name: DLBA Inventory
+  id: vsin-ur7i
+  table: dlba.all_ownership_socrata
+  method: replace
+  columns:
+    Address:
+      field: name
+      type: text
+    Parcel ID:
+      field: parcel_id
+      type: text
+    Inventory Status:
+      field: inventory_status_socrata
+      type: text
+    Neighborhood:
+      field: neighborhood
+      type: text
+    Council District:
+      field: council_district
+      type: text
+    Latitude:
+      field: latitude
+      type: number
+    Longitude:
+      field: longitude
+      type: number
+    Location:
+      field: location
+      type: location

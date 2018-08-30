@@ -1,0 +1,34 @@
+- type: create_view
+  view_name: auction_sold_socrata
+  as: select
+        (select makeSocrataDate(a.actual_closing_date::timestamp)) as actual_closing_date,
+        a.sale_status,
+        c.address,
+        c.parcel_id,
+        'Auction'::text as program,
+        c.neighborhood,
+        c.council_district,
+        c.acct_latitude,
+        c.acct_longitude,
+        pb.buyer_status,
+        (select handleNan(pb.final_sale_price)) as final_sale_price,
+        pb.purchaser_type,
+        case 
+            when c.acct_latitude is null 
+            then null 
+            else
+            concat(
+                'location (',
+                c.acct_latitude,
+                ',',
+                c.acct_longitude,
+                ')'
+            )
+        end as location
+      from dlba.dlba_activity a
+        inner join dlba.case c on a.case = c.id
+        inner join dlba.prospective_buyer pb on pb.dlba_activity = a.id
+      where a.recordtypeid = '012j0000000xtGoAAI' 
+        and a.sale_status = 'Closed'
+        and pb.buyer_status = 'Selected'
+        and c.address not like '%Fake St%'

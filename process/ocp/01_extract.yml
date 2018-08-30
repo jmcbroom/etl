@@ -4,3 +4,6 @@
 - sftp:
     host: moveit
     destination: ocp.purchase_agreements
+- smartsheet: 
+    id: 8330456560101252
+    table: divdat

@@ -1,0 +1,45 @@
+- to: Socrata
+  name: DLBA Auctions Closed
+  id: tgwk-njih
+  table: dlba.auction_sold_socrata
+  method: replace
+  columns:
+    Address:
+      field: Address
+      type: text
+    Parcel ID:
+      field: Parcel_ID
+      type: text
+    Final Sale Price:
+      field: 
+      type: money
+    Closing Date:
+      field:
+      type: calendar_date
+    Sale Status:
+      field:
+      type: text
+    Buyer Status:
+      field:
+      type: text
+    Purchaser Type:
+      field:
+      type: text
+    Program:
+      field:
+      type: text
+    Council District:
+      field: 
+      type: number
+    Neighborhood:
+      field:
+      type: text
+    Latitude:
+      field:
+      type: number
+    Longitude:
+      field:
+      type: number
+    Location:
+      field:
+      type: location

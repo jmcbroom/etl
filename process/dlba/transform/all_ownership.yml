@@ -1,0 +1,29 @@
+- type: create_view
+  view_name: all_ownership_socrata
+  as: select
+        name,
+        parcel_id,
+        inventory_status_socrata,
+        neighborhood,
+        council_district,
+        (select handleNan(latitude)) as latitude,
+        (select handleNan(longitude)) as longitude,
+        case 
+          when latitude = 'NaN' then null 
+          else concat('location(', latitude, ',', longitude, ')') 
+        end as location
+    from dlba.account
+    where recordtypeid = '012j0000000xKnSAAU'
+      and parcel_id is not null
+      and property_ownership = 'DLBA Owned'
+      and name not like '%Fake St%'
+
+- type: create_view
+  view_name: all_ownership_mapbox
+  as: select
+        name as address,
+        parcel_id,
+        inventory_status_socrata as status,
+        st_transform(ap.shape, 4326)
+      from dlba.all_ownership_socrata ao 
+        inner join assessor.parcels_050318 ap on ap.parcelno = ao.parcel_id

@@ -1,0 +1,39 @@
+- to: Socrata
+  id: sg4v-2cny
+  name: Purchase Agreements
+  table: ocp.purchase_agreements_socrata
+  method: replace
+  columns:
+    Agreement Number:
+      field: agreement_number
+      type: number
+    Agreement Limit:
+      field: agreement_limit
+      type: money
+    Department or Agency:
+      field: cod_agency
+      type: text
+    Description:
+      field: description
+      type: text
+    Status: 
+      field: agreement_status_description
+      type: text
+    Supplier Name:
+      field: supplier
+      type: text
+    Supplier City:
+      field: city
+      type: text
+    Supplier State:
+      field: state
+      type: text
+    Start Date: 
+      field: start_date
+      type: calendar_date
+    End Date: 
+      field: end_date
+      type: calendar_date
+    Document Link:
+      field: link
+      type: text

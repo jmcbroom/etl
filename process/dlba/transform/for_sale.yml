@@ -1,0 +1,29 @@
+- type: create_view
+  view_name: for_sale_socrata
+  as: select 
+        c.address,
+        c.parcel_id,
+        c.program,
+        (select makeSocrataDate(a.listing_date::timestamp)) as listing_date,
+        c.neighborhood,
+        c.council_district,
+        c.acct_latitude,
+        c.acct_longitude,
+        case 
+          when c.acct_latitude is null then null 
+          else
+            concat(
+                'location (',
+                c.acct_latitude,
+                ',',
+                c.acct_longitude,
+                ')'
+            )
+        end as location
+      from dlba.dlba_activity a
+        inner join dlba.case c on a.case = c.id
+      where (a.recordtypeid = '012j0000000xtGoAAI'
+        or a.dlba_activity_type in ('Demo Pull Sale', 'Demo Pull for Demo Sale', 'Renovation Sale', 'Own It Now', 'Own It Now - Bundled Property', 'Auction - Bundled Property'))
+        and a.sale_status = 'For Sale On Site'
+        and c.status = 'For Sale'
+        and c.address not like '%Fake St%'

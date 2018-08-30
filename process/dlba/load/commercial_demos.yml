@@ -1,0 +1,63 @@
+- to: Socrata
+  name: Commercial Demolitions
+  id: hyeb-fsy5
+  table: dlba.commercial_demos_socrata
+  method: replace
+  columns:
+    Address:
+      field: address
+      type: text
+    Parcel ID:
+      field: parcel_id
+      type: text
+    Status:
+      field: commercial_demo_status
+      type: text
+    Contractor Name:
+      field: demolition_contractor
+      type: text
+    Environmental Survey Group Number:
+      field: env_group_number
+      type: text
+    Notice to Proceed with Demo Date:
+      field: demo_ntp_dt
+      type: calendar_date
+    Projected Knock Down Date:
+      field: demo_proj_demo_dt
+      type: calendar_date
+    Demolished Date:
+      field: knock_start_dt
+      type: calendar_date
+    Open Hole Inspection Approval Date:
+      field: open_hole_date
+      type: calendar_date
+    Winter Grade Inspection Approval Date:
+      field: winter_grade_date
+      type: calendar_date
+    Final Grade Inspection Approval Date:
+      field: final_grade_date
+      type: calendar_date
+    Abatement Cost:
+      field: demo_cost_abatement
+      type: money
+    Knock Down Cost:
+      field: demo_cost_knock
+      type: money
+    Total Demo Cost:
+      field: total_demo_cost
+      type: money
+    Council District:
+      field: dba_com_property_council_district
+      type: number
+    Neighborhood:
+      field: dba_com_property_neighborhood
+      type: text
+    Latitude:
+      field: dba_com_property_latitude
+      type: number
+    Longitude:
+      field: dba_com_property_longitude
+      type: number
+    Location:
+      field: location
+      type: location

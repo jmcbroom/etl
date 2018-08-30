@@ -1,0 +1,107 @@
+title: Rental Certifications
+category: Housing & Buildings
+agency: BSEED
+description: >
+  Rental properties that have been issued a Certificate of Compliance per City Ordinance 18-03 by BSEED within the last year.
+notes: >
+  null
+tags:
+  - rental
+  - certification
+  - ordinance
+  - bseed
+license: 
+  name: Public Domain
+  url: 
+time_period: Within 365 days of Date Issued (csa_date3)
+update_frequency: Daily
+row_label: Certified rental property
+columns:
+  Case Number:
+    description: Case number assigned by BSEED
+    notes:
+    type: text
+    required: yes
+  Parcel Number:
+    description: Parcel number associated with rental property address
+    notes:
+    type: text
+    required: no
+  Address:
+    description: Street address of rental property
+    notes:
+    type: text
+    required: yes
+  Use:
+    description: Abbreviated type of housing unit
+    notes: Common values are SINGLE (single family), MULTI (multi family), APART (apartment), CONDO and TOWN (townhouse)
+    type: text
+    required: no
+  Units:
+    description: Number of units reported at rental property
+    notes:
+    type: number
+    required: no
+  First Name:
+    description: First name of property owner
+    notes:
+    type: text
+    required: no
+  Last Name:
+    description: Last name or business name of property owner
+    notes:
+    type: text
+    required: yes
+  Middle Initial: 
+    description: Middle initial of property owner
+    notes:
+    type: text
+    required: no
+  Received By:
+    description: Initials of BSEED staff person who received application for certification
+    notes:
+    type: text
+    required: yes
+  Received Date:
+    description: Date case was received by BSEED
+    notes:
+    type: date
+    required: yes
+  Action Description:
+    description: Description of C of C (Cerficate of Compliance) that was issued
+    notes: 
+    type: text
+    required: no
+  Creation Date:
+    description: Date certificate was created by BSEED
+    notes: Not expected to match Date Issued if more than one inspection occured before certificate was issued
+    type: text
+    required: no
+  Date Issued:
+    description: Date certificate of compliance was issued by BSEED
+    notes: This is an important date; a rental property will be certified as compliant for 365 days from this date
+    type: text
+    required: yes
+  Disposition:
+    description: Outcome of inspection performed to certify property
+    notes:
+    type: text
+    required: yes
+  Status:
+    description: Status of case per BSEED's system
+    notes:
+    type: text
+    required: yes
+  Zip Code:
+    description: Zip code associated with rental property address
+    notes: 
+    type: text
+    required: no 
+  Location:
+    description: Latitude, longitude coordinate associated with rental property address
+    notes: Provided in EPSG Projection 4326 - WGS 84
+    type: text
+    required: yes 
+links:
+  - http://www.detroitmi.gov/rental
+  - http://www.detroitmi.gov/RentalMap/index.html

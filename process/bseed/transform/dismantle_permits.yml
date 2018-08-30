@@ -1,0 +1,29 @@
+- type: create_view
+  view_name: dismantle_permits_socrata
+  as: select 
+        concat(ca.csa_id, '_', pn.cleaned) as unique_id,
+        ca.csa_id,
+        cm.prc_parcel_no,
+        pn.cleaned as clean_parcel_no,
+        ca.csm_caseno,
+        ca.case_type,
+        ca.action_description,
+        concat_ws(' ', cd.csm_st_nmbr, cd.csm_st_pfx, cd.csm_st_name) as street_address,
+        (select makeSocrataDate(ca.csa_date3::timestamp)) as csa_date3,
+        ca.csa_disp,
+        ca.csa_notes,
+        ca.actn_menu_id,
+        ca.actn_code,
+        (select makeSocrataDate(ca.csa_creation_date::timestamp)) as csa_creation_date,
+        (select makeSocrataDate(ca.csa_date1::timestamp)) as csa_date1,
+        (select makeSocrataDate(ca.csa_date2::timestamp)) as csa_date2,
+        (select makeSocrataDate(ca.csa_updated::timestamp)) as csa_updated,
+        ca.csa_updated_by,
+        ca.csa_assigned_to,
+        ca.csa_done_by
+      from bseed.tm_caseaction ca
+        inner join bseed.tm_casemain cm on ca.csm_caseno = cm.csm_caseno
+        inner join bseed.tm_caseaddress cd on ca.csm_caseno = cd.csm_caseno
+        inner join bseed.pnum_lookup pn on cm.prc_parcel_no = pn.dirty
+      where ca.csa_date3 > Date '2014-01-01'
+        and ca.action_description in ('Final Grade Inspection', 'Open Hole Demo Inspection ', 'Open Hole Demo Inspection', 'Winter Grade Inspection')

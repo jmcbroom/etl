@@ -1,2 +1,4 @@
-name: Business Certifications
+name: Civil Rights, Inclusion & Opportunity dept
 schema: crio
+datasets: 
+  - business_certifications

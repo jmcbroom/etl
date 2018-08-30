@@ -1,0 +1,40 @@
+- to: Socrata
+  id: xbvp-4is5
+  name: Property Sales History
+  table: assessor.sales_history_socrata
+  method: upsert
+  row_identifier: id
+  columns:
+    Id:
+      field: id
+      type: text
+    Address:
+      field: address
+      type: text
+    Parcel Number:
+      field: parcel_no
+      type: text
+    Sale Date:
+      field: sale_date
+      type: calendar_date
+    Sale Price:
+      field: sale_price
+      type: number
+    Terms of Sale:
+      field: terms
+      type: text
+    Instrument:
+      field: instrument
+      type: text
+    Grantor:
+      field: grantor
+      type: text
+    Grantee:
+      field: grantee
+      type: text
+    Location:
+      field: location
+      type: location
+    Sale Number:
+      field: sale_number
+      type: number
