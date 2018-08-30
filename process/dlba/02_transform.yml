@@ -1,0 +1,422 @@
+- type: sql
+  statements:
+    # auctions sold
+    - drop view if exists dlba.auction_sold_socrata cascade
+    - create view dlba.auction_sold_socrata as
+            ( select
+            case when a.actual_closing_date is null then null else
+                concat_ws('T', a.actual_closing_date, '00:00:00.000Z')
+            end as actual_closing_date,
+            a.sale_status,
+            c.address,
+            c.parcel_id,
+            'Auction'::text as program,
+            c.neighborhood,
+            c.council_district,
+            c.acct_latitude,
+            c.acct_longitude,
+            pb.buyer_status,
+            case 
+                when pb.final_sale_price = 'NaN' 
+                then null 
+                else pb.final_sale_price 
+            end as final_sale_price,
+            pb.purchaser_type,
+            case 
+                when c.acct_latitude is null 
+                then null 
+                else
+                concat(
+                    'location (',
+                    c.acct_latitude,
+                    ',',
+                    c.acct_longitude,
+                    ')'
+                )
+            end as location
+            from dlba.dlba_activity a
+            inner join dlba.case c on a.case = c.id
+            inner join dlba.prospective_buyer pb on pb.dlba_activity = a.id
+            where a.recordtypeid = '012j0000000xtGoAAI' 
+            and a.sale_status = 'Closed'
+            and pb.buyer_status = 'Selected'
+            and c.address not like '%Fake St%' );
+    # commercial demos
+    - drop view if exists dlba.commercial_demos_socrata cascade
+    - create view dlba.commercial_demos_socrata as
+        ( select
+            dba_com_property_name as address,
+            dba_com_property_parcel_id as parcel_id,
+            commercial_demo_status as status,
+            case when demo_cost_abatement = 'NaN' then 0 else demo_cost_abatement end as abatement_cost,
+            case when demo_cost_knock = 'NaN' then 0 else demo_cost_knock end as demo_cost,
+            case when demo_ntp_dt is null then null else
+                replace(to_char(demo_ntp_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as demo_proceed_date,
+            case when demo_proj_demo_dt is null then null else
+                replace(to_char(demo_proj_demo_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as projected_demo_date,
+            env_group_number,
+            case when knock_start_dt is null then null else
+                replace(to_char(knock_start_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as demo_date,
+            demolition_contractor,
+            dba_com_property_latitude as latitude,
+            dba_com_property_longitude as longitude,
+            dba_com_property_neighborhood as neighborhood,
+            dba_com_property_council_district as council_district,
+            case when bseed_com_final_grade_approved is null then replace(to_char(final_grade_approved_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T') else
+                replace(to_char(bseed_com_final_grade_approved::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as final_grade_date,
+            case when bseed_com_open_hole_approved is null then replace(to_char(open_hole_approved_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T') else
+                replace(to_char(bseed_com_open_hole_approved::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as open_hole_date,
+            case when bseed_com_winter_grade_approved is null then replace(to_char(winter_grade_approved_dt::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T') else
+                replace(to_char(bseed_com_winter_grade_approved::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as winter_grade_date,
+            case when (demo_cost_abatement+demo_cost_knock) = 'NaN' then null else (demo_cost_abatement+demo_cost_knock) end as total_demo_cost,
+            case when dba_com_property_latitude is null then null else
+                concat(
+                    'location (',
+                    dba_com_property_latitude,
+                    ',',
+                    dba_com_property_longitude,
+                    ')'
+                )
+            end as location
+        from dlba.dba_commercial_demo
+        where (knock_start_dt::timestamp >= date '2014-01-01'
+            or knock_start_dt is null)
+            and commercial_demo_status in ('Demo Contracted', 'Demolished', 'Demo Pipeline') 
+            and demo_pulled_date is null )
+    # for sale
+    - drop view if exists dlba.for_sale_socrata cascade
+    - create view dlba.for_sale_socrata as
+        ( select 
+            c.address,
+            c.parcel_id,
+            c.program,
+            case when a.listing_date is null then null else
+                concat_ws('T', a.listing_date, '00:00:00.000Z')
+            end as listing_date,
+            c.neighborhood,
+            c.council_district,
+            c.acct_latitude,
+            c.acct_longitude,
+            case when c.acct_latitude is null then null else
+                concat(
+                    'location (',
+                    c.acct_latitude,
+                    ',',
+                    c.acct_longitude,
+                    ')'
+                )
+            end as location
+            from dlba.dlba_activity a
+            inner join dlba.case c on a.case = c.id
+            where (a.recordtypeid = '012j0000000xtGoAAI'
+                or a.dlba_activity_type in ('Demo Pull Sale', 'Demo Pull for Demo Sale', 'Renovation Sale', 'Own It Now', 'Own It Now - Bundled Property', 'Auction - Bundled Property'))
+                and a.sale_status = 'For Sale On Site'
+                and c.status = 'For Sale'
+                and c.address not like '%Fake St%' )
+    # demolitions AGO
+    - drop view if exists dlba.completed_demos_ago;
+    - create view dlba.completed_demos_ago as (
+        select 
+        address,
+        parcel_id,
+        demo_contractor_text_only as contractor_name,
+        socrata_reported_price as price,
+        demo_primarily_funded_by as funding_source,
+        demo_knock_down_date::timestamp with time zone as demolition_date,
+        non_hhf_commercial_demo as commercial,
+        council_district,
+        neighborhood,
+        property_latitude as latitude,
+        property_longitude as longitude,
+        ST_SetSRID(ST_MakePoint(property_longitude::double precision, property_latitude::double precision), 4326) as geom
+        from dlba.case
+        where demo_knock_down_date::timestamp >= date '2014-01-01'
+            and socrata_reported_price > 0
+            and demo_contractor_text_only != '')
+    # own it now sold
+    - drop view if exists dlba.own_it_now_socrata cascade
+    - create view dlba.own_it_now_socrata as
+        ( select 
+            case when a.actual_closing_date is null then null else
+                concat_ws('T', a.actual_closing_date, '00:00:00.000Z')
+            end as actual_closing_date,
+            a.sale_status,
+            c.address,
+            c.parcel_id,
+            c.program,
+            c.neighborhood,
+            c.council_district,
+            c.acct_latitude,
+            c.acct_longitude,
+            pb.buyer_status,
+            case when pb.final_sale_price = 'NaN' then null else pb.final_sale_price end,
+            pb.purchaser_type,
+            case when c.acct_latitude is null then null else
+                concat(
+                    'location (',
+                    c.acct_latitude,
+                    ',',
+                    c.acct_longitude,
+                    ')'
+                )
+            end as location
+        from dlba.dlba_activity a
+        inner join dlba.case c on a.case = c.id
+        inner join dlba.prospective_buyer pb on pb.dlba_activity = a.id
+        where a.dlba_activity_type in ('Demo Pull Sale', 'Demo Pull for Demo Sale', 'Own It Now', 'Own It Now - Bundled Property')
+            and a.actual_closing_date is not null
+            and pb.buyer_status = 'Selected'
+            and c.address not like '%Fake St%' )
+    # side lots sold
+    - drop view if exists dlba.side_lots_socrata cascade
+    - create view dlba.side_lots_socrata as 
+        ( select
+            a.actual_closing_date,
+            a.sale_status,
+            c.address,
+            c.parcel_id,
+            c.program,
+            c.neighborhood,
+            c.council_district,
+            c.acct_latitude,
+            c.acct_longitude,
+            pb.buyer_status,
+            pb.final_sale_price,
+            pb.purchaser_type,
+            case when c.acct_latitude is null then null else
+                concat(
+                    'location (',
+                    c.acct_latitude,
+                    ',',
+                    c.acct_longitude,
+                    ')'
+                )
+            end as location
+            from dlba.dlba_activity a
+            inner join dlba.case c on a.case = c.id
+            inner join dlba.prospective_buyer pb on pb.dlba_activity = a.id
+            where a.recordtypeid = '012j0000000xtGvAAI'
+                and a.actual_closing_date is not null
+                and pb.buyer_status = 'Selected'
+                and c.address not like '%Fake St%' )
+    # upcoming demos
+    - drop view if exists dlba.upcoming_demos_socrata cascade
+    - create view dlba.upcoming_demos_socrata as 
+        ( select 
+            address,
+            case 
+                when demo_planned_knock_down_date is null 
+                then socrata_projected_knocked_by_date 
+                else demo_planned_knock_down_date 
+            end as demolish_by_date,
+            case when socrata_reported_price = 'NaN' then null else socrata_reported_price end as price,
+            parcel_id,
+            demo_contractor_text_only as contractor_name,
+            acct_latitude as latitude,
+            acct_longitude as longitude,
+            council_district,
+            non_hhf_commercial_demo as commercial_building, 
+            neighborhood,
+            case when acct_latitude is null then null else
+                concat(
+                    'location (',
+                    acct_latitude,
+                    ',',
+                    acct_longitude,
+                    ')'
+                )
+            end as location
+            from dlba.case
+            where socrata_projected_knocked_by_date is not null
+                and socrata_reported_price > 0
+                and demo_contractor_text_only <> ''
+                and status = 'Demo Contracted' )
+    # asbestos mdeq report
+    - drop view if exists dlba.asbestos_socrata cascade
+    - create view dlba.asbestos_socrata as ( select
+            c.address,
+            c.parcel_id,
+            c.bseed_final_grade_approved,
+            c.demo_final_grade_approved_date,
+            c.demo_batch_contractor_name_del1_name,
+            c.abatement_sub_contractor,
+            c.demo_asb_abatement_contractor_name,
+            c.demo_asb_survey_contractor_name,
+            c.asb_inspectors_name,
+            c.asb_abatement_verification_contractor_name,
+            c.asb_verifier_name,
+            case when c.demo_contractor_proceed_date is null then null else
+                replace(to_char(c.demo_contractor_proceed_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as demo_contractor_proceed_date,
+            case when c.asb_abatement_start_date is null then null else
+                replace(to_char(c.asb_abatement_start_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as asb_abatement_start_date,
+            case when c.demo_asb_abatement_date is null then null else
+                replace(to_char(c.demo_asb_abatement_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as demo_asb_abatement_date,
+            case when c.asb_post_abatement_insp_date is null then null else
+                replace(to_char(c.asb_post_abatement_insp_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as asb_post_abatement_insp_date,
+            c.asb_post_abatement_notes,
+            case when c.asb_post_abatement_times_failed = 'NaN' then null else c.asb_post_abatement_times_failed end,
+            c.asb_post_abatement_verification_status,
+            case when c.demo_planned_knock_down_date is null then null else
+                replace(to_char(c.demo_planned_knock_down_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as demo_planned_knock_down_date,
+            case when c.demo_knock_down_date is null then null else
+                replace(to_char(c.demo_knock_down_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as demo_knock_down_date,
+            case when c.socrata_projected_knocked_by_date is null then null else
+                replace(to_char(c.socrata_projected_knocked_by_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as socrata_projected_knocked_by_date,
+            case when c.demo_asb_post_abatement_failed_date is null then null else
+                replace(to_char(c.demo_asb_post_abatement_failed_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as demo_asb_post_abatement_failed_date,
+            case when d.asb_post_abatement_passed_date is null then null else
+                replace(to_char(d.asb_post_abatement_passed_date::timestamp, 'YYYY-MM-DD HH24:MM:SS'), ' ', 'T')
+            end as demo_asb_post_abatement_approval_date,
+            c.asb_document_url,
+            c.asb_post_abatement_document_url,
+            c.property_longitude as longitude,
+            c.property_latitude as latitude,
+            c.property_zip_code as zip_code,
+            case when c.property_latitude is null then null else
+                concat(
+                    'location (',
+                    c.property_latitude,
+                    ',',
+                    c.property_longitude,
+                ')'
+                )
+            end as location
+        from dlba.case c
+        left outer join dlba.dba_commercial_demo d on d.related_case = c.id
+        where c.asb_abatement_verification_contractor_name is not null
+            and c.demo_contractor_proceed_date is not null
+            and c.bseed_final_grade_approved is null
+            and c.demo_final_grade_approved_date is null )
+    # completed demos
+    - drop view if exists dlba.completed_demos_socrata cascade
+    - create view dlba.completed_demos_socrata as (
+        select 
+        address,
+        parcel_id,
+        demo_contractor_text_only as contractor_name,
+        socrata_reported_price as price,
+        demo_primarily_funded_by as funding_source,
+        demo_knock_down_date as demolition_date,
+        non_hhf_commercial_demo as commercial,
+        council_district,
+        neighborhood,
+        property_latitude as latitude,
+        property_longitude as longitude,
+        case when property_latitude is null then null else
+            concat(
+                'location (',
+                property_latitude,
+                ',',
+                property_longitude,
+            ')'
+            )
+        end as location
+        from dlba.case
+        where demo_knock_down_date::timestamp >= date '2014-01-01'
+            and socrata_reported_price > 0
+            and demo_contractor_text_only != '')
+    # demo pipeline
+    - drop view if exists dlba.demo_pipeline_socrata cascade
+    - create view dlba.demo_pipeline_socrata as (
+        select 
+            c.address,
+            c.parcel_id,
+            c.council_district,
+            c.non_hhf_commercial_demo as commercial_building,
+            c.acct_latitude as latitude,
+            c.acct_longitude as longitude,
+            case when acct_latitude is null then null else
+            concat('location(', acct_latitude, ',', acct_longitude, ')') end as location,
+            c.neighborhood
+        from dlba.case c
+            inner join dlba.account a 
+            on a.related_property_case_id = c.id
+        where 
+            c.asb_document_url is not null
+            and c.demo_contractor_proceed_date is null
+            and c.demo_asb_survey_status = 'Completed'
+            and c.demo_knock_down_date is null
+            and c.demo_pulled_date is null
+            and c.recordtypeid in ('012j0000000xtGbAAI', '012j0000000zM27AAE', '012j0000000xtGcAAI'))
+    # all dlba interactions
+    - drop view if exists dlba.all_interactions_socrata cascade
+    - create view dlba.all_interactions_socrata as (
+        select 
+            name,
+            parcel_id,
+            current_status,
+            neighborhood,
+            council_district,
+            case
+                when latitude = 'NaN'
+                then null
+                else latitude
+            end as latitude,
+            case 
+                when longitude = 'NaN'
+                then null
+                else longitude
+            end as longitude,
+            case 
+                when latitude = 'NaN' 
+                then null 
+                else concat('location(', latitude, ',', longitude, ')') 
+            end as location
+        from dlba.account 
+        where 
+            parcel_id is not null
+            and property_ownership != 'Non-DLBA Owned'
+            and name not like '%Fake St%' )
+    # all dlba ownership
+    - drop view if exists dlba.all_ownership_socrata cascade
+    - create view dlba.all_ownership_socrata as (
+        select
+            name,
+            parcel_id,
+            inventory_status_socrata,
+            neighborhood,
+            council_district,
+            case
+                when latitude = 'NaN'
+                then null
+                else latitude
+            end as latitude,
+            case 
+                when longitude = 'NaN'
+                then null
+                else longitude
+            end as longitude,
+            case 
+                when latitude = 'NaN' 
+                then null 
+                else concat('location(', latitude, ',', longitude, ')') 
+            end as location
+        from dlba.account
+        where 
+            recordtypeid = '012j0000000xKnSAAU'
+            and parcel_id is not null
+            and property_ownership = 'DLBA Owned'
+            and name not like '%Fake St%' )
+    - drop view if exists dlba.all_ownership_mapbox
+    - create view dlba.all_ownership_mapbox as
+            (select
+                name as address,
+                parcel_id,
+                inventory_status_socrata as status,
+                st_transform(ap.shape, 4326)
+        from dlba.all_ownership_socrata ao inner join assessor.parcels_050318 ap on ap.parcelno = ao.parcel_id)
+

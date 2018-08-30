@@ -221,6 +221,10 @@
   parcel_col: parcelno
 
 - type: create_view
+  view_name: bvn_ago
+  as: select * from dah.bvn where violation_date > '2018-04-01'
+
+- type: create_view
   view_name: bvn_socrata
   as: select
         ticket_id,

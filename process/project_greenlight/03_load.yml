@@ -1,0 +1,44 @@
+# - to: ArcGIS Online
+#   id: b827c82731294708b500f7c10b3240b1
+#   file: project_greenlight.json
+#   table: pubsafe.greenlight_arcgis
+#   title: Project Greenlight Locations
+#   description:
+#   tags:
+#     - police
+#     - opendata
+#     - greenlight
+- to: internal
+  prefix: CRIMEINCIDENTS
+  dbType: sql-server
+  schema: pubsafe
+  table: applications
+  destination: project_greenlight_applications
+  if_exists: replace
+  name: Project Greenlight Applications
+- to: internal
+  prefix: CRIMEINCIDENTS
+  dbType: sql-server
+  schema: pubsafe
+  table: greenlight_unanon
+  destination: project_greenlight_master
+  if_exists: replace
+  name: Project Greenlight Master
+# - to: Socrata
+#   columns:
+#     Address:
+#       field: address
+#       type: text
+#     Business Name:
+#       field: business_name
+#       type: text
+#     Live Date:
+#       field: live_date
+#       type: calendar_date
+#     Location:
+#       field: location
+#       type: location
+#   id: vrh6-6pvj
+#   name: Project Greenlight Locations
+#   table: pubsafe.greenlight_socrata
+#   method: replace

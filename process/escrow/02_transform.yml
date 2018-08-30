@@ -1,0 +1,12 @@
+- type: sql
+  statements:
+    - delete from pnc.escrow where master_account is null
+    - delete from pnc.escrow where master_account = 'NaN'
+    - alter table pnc.escrow alter column master_account type bigint using master_account::bigint
+    - alter table pnc.escrow rename column master_account to master_account_num
+    - alter table pnc.escrow alter column sub_account_ type bigint using sub_account_::bigint
+    - alter table pnc.escrow rename column sub_account_ to sub_account_num
+    - alter table pnc.escrow rename column group_ to group_num
+    - alter table pnc.escrow rename column item_ to item_num
+    - alter table pnc.escrow rename column fed_wh_tax_this_period to fed_withholding_tax_this_period
+    - alter table pnc.escrow rename column ytd_fed_wh_tax to ytd_fed_withholding_tax

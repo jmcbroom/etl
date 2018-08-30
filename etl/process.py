@@ -170,13 +170,15 @@ class Process(object):
           a = AirtableTable(params)
           drop_table_if_exists(connection, params['destination'])
           a.to_postgres()
+
+
           
         else:
           print("I don't know this source type: {}".format(srctype))
 
   def update(self, dataset=None):
     # Extract our data that the Datasets require
-    # self.extract()
+    self.extract()
 
     print(dataset)
 
@@ -186,11 +188,11 @@ class Process(object):
       if dataset and d != dataset:
         pass
       else:
-        print(d)
+        print("Starting process dataset: {}".format(d))
 
         # Requires dataset name and basedir
         ds = Dataset(d, self.basedir, self.schema)
 
         # These two steps now belong to Dataset
         ds.transform()
-        # ds.load()
+        ds.load()

@@ -15,10 +15,21 @@
       type: number
 
 - to: ArcGIS Online
+  type: geojson
+  file: bird_locations.json
+  table: transit.birds
+  name: Bird Scooter Locations
+  id: 28ec6f6784454434b79cad2ddc866786
+  title: Bird Scooter Locations
+  description: Locations of Bird scooters. This layer should update every 5 minutes.
+  tags:
+    - mobility
+- to: ArcGIS Online
   id: 
   table: transit.mogo_arcgis
   file: mogo_bikeshare.json
   title: MoGo Bike Share Locations
+  name: MoGo Bike Share Locations
   description: MoGo bike share locations
   tags:
     - bike

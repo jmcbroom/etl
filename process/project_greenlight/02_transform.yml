@@ -1,0 +1,42 @@
+- type: sql
+  statements:
+    - drop table if exists pubsafe.greenlight_unanon cascade;
+    - create table pubsafe.greenlight_unanon as select * from pubsafe.greenlight
+    - delete from pubsafe.greenlight where status is null;
+    - delete from pubsafe.greenlight where status in ('Red', 'Yellow');
+
+- type: geocode
+  table: pubsafe.greenlight
+  add_col: address
+  geom_col: geom
+
+- type: sql
+  statements:
+    - drop view if exists pubsafe.greenlight_socrata;
+    - create view pubsafe.greenlight_socrata as
+        ( select 
+            address, 
+            business_name,
+            concat(green_light_live_date, 'T00:00:00.000') as live_date,
+            concat(
+              'location (',
+              ST_Y(ST_Centroid(geom)), 
+              ',', 
+              ST_X(ST_Centroid(geom)),
+              ')'
+            ) as location
+          from pubsafe.greenlight where trim(status) = 'Green' )
+    - drop view if exists pubsafe.greenlight_arcgis;
+    - create view pubsafe.greenlight_arcgis as
+        ( select 
+            address, 
+            business_name,
+            concat(green_light_live_date, 'T00:00:00.000') as live_date,
+            geom
+          from pubsafe.greenlight where trim(status) = 'Green' and geom is not null )
+    
+
+- type: sql
+  statements: 
+    - update pubsafe.applications set let_us_know_why_you_are_interested_in_joining = replace(let_us_know_why_you_are_interested_in_joining, '''', '')
+    - update pubsafe.applications set is_there_anything_additional_we_should_know = replace(is_there_anything_additional_we_should_know, '''', '')
