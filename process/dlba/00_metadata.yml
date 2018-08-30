@@ -1,3 +1,15 @@
 name: Detroit Land Bank datasets
 schema: dlba
 notify: 'yes'
+datasets:
+  - all_interactions
+  - all_ownership
+  - asbestos
+  - auction_sold
+  - commercial_demos
+  - completed_demos
+  - demo_pipeline
+  - for_sale
+  - own_it_now_sold
+  - side_lots_sold
+  - upcoming_demos

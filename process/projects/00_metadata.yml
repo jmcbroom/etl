@@ -1,0 +1,6 @@
+name: Special projects
+schema: projects
+notify: true
+datasets: 
+  - rfp
+  - capital_projects

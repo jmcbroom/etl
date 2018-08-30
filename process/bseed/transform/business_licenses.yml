@@ -1,0 +1,29 @@
+- type: create_table
+  table_name: business_licenses_geo
+  as: select
+        case_a,
+        (select makeSocrataDate(permit_issued)) as permit_issued,
+        trim(concat_ws(' ', owner_first_name, owner_last_name)) as owner_name,
+        trim(concat_ws(' ', csm_st_nmbr, csm_st_pfx, csm_st_name)) as address,
+        bus_name,
+        business_description,
+        bus_own
+      from bseed.business_licenses
+
+- type: geocode
+  table: bseed.business_licenses_geo
+  add_col: address
+  geom_col: geom
+
+- type: create_view
+  view_name: business_licenses_socrata
+  as: select
+        case_a,
+        permit_issued,
+        owner_name,
+        address,
+        bus_name,
+        business_description,
+        bus_own,
+        (select makeSocrataLocation(geom)) as location
+      from bseed.business_licenses_geo

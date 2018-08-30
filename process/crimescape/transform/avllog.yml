@@ -1,0 +1,32 @@
+- type: sql
+  statements:
+    - insert into crimescape.avl (select * from crimescape.avl_update)
+    - drop table if exists crimescape.avl_update
+
+- type: create_view
+  view_name: avl_sftp
+  as: select
+        avllogid,
+        timestamp,
+        unitcode,
+        agency,
+        vehicleid,
+        unitperid,
+        inci_id,
+        status,
+        avstatus,
+        geox,
+        geoy,
+        speed,
+        heading,
+        isradio,
+        emequipact,
+        isaircraft
+      from crimescape.avl
+      where agency = 'DPD '
+        and timestamp >= date '2016-12-15' 
+
+# Copy to csv
+- type: sql
+  statements:
+    - copy ( select * from crimescape.avl_sftp ) to '/tmp/avl.csv' delimiter ',' csv header

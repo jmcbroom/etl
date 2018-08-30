@@ -1,0 +1,65 @@
+# Initial address string clean up
+- type: sql
+  statements:
+    - alter table crimescape.cad_update add column if not exists is_anon boolean
+    - update crimescape.cad_update set is_anon = 'f'
+
+# Assign street addresses for known places, removing text like "MGM Casino"
+- type: lookup
+  table: crimescape.cad_update
+  lookup_field: incident_address
+  file: /home/gisteam/etl/process/pubsafe/transform/misfits_lookup.csv
+  match_field: geoc_address
+  method: match
+  set_flag: false
+
+# Add geometry
+- type: sql
+  statements:
+    - select AddGeometryColumn('crimescape', 'cad_update', 'geom', 2898, 'POINT', 2)
+    - create index etl_cad_update_geom_idx on crimescape.cad_update using gist(geom)
+    - update crimescape.cad_update set geom = st_setsrid(st_makepoint(geox, geoy), 2898) where geox > 0 and geoy > 0
+
+# Prep view
+- type: sql
+  statements:
+    - alter table crimescape.cad_update drop column if exists geox
+    - alter table crimescape.cad_update drop column if exists geoy
+    - alter table crimescape.cad_update drop column if exists is_anon
+    - alter table crimescape.cad_update drop column if exists notes
+    - insert into crimescape.cad (select * from crimescape.cad_update)
+    - drop table if exists crimescape.cad_update
+
+# Make view
+- type: create_view
+  view_name: cad_sftp
+  as: select
+        inci_id as incident_id,
+        agency,
+        incident_address,
+        zip as zip_code,
+        priority,
+        callcode,
+        calldescription,
+        category,
+        replace(to_char(concat(calldate, ' ', dp_calltime)::timestamp, 'YYYY-MM-DD HH24:MI:SS'), ' ', 'T') as call_timestamp,
+        dp_calltime as time_of_call,
+        "precinctSCA" as precinct_sca,
+        respondingunit,
+        officerinitiated,
+        replace(intaketime, ',', '') as intaketime,
+        replace(dispatchtime, ',', '') as dispatchtime,
+        replace(traveltime, ',', '') as traveltime,
+        replace(totalresponsetime, ',', '') as totalresponsetime,
+        replace(timeonscene, ',', '') as time_on_scene,
+        replace(totaltime, ',', '') as totaltime,
+        ST_X(ST_Transform(geom, 4326)) as lon,
+        ST_Y(ST_Transform(geom, 4326)) as lat,
+        (select makeSocrataLocation(geom)) as location
+      from crimescape.cad
+      where "CallDateDate" >= date '2016-09-20'
+
+# Copy the data to a csv
+- type: sql
+  statements:
+    - copy ( select * from crimescape.cad_sftp ) to '/tmp/cad.csv' delimiter ',' csv header

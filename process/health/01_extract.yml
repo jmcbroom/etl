@@ -1,0 +1,35 @@
+- database:
+    type: 
+    prefix: 
+    source: EstInfo
+    destination: health.estinfo
+- database:
+    type:
+    prefix:
+    source: ESTLIC
+    destination: health.estlic
+- database:
+    type: 
+    prefix:
+    source: IHeader
+    destination: health.iheader
+- database:
+    type:
+    prefix:
+    source: IDetail
+    destination: health.idetail
+- database:
+    type:
+    prefix:
+    source: Instype
+    destination: health.instype
+- database:
+    type: 
+    prefix:
+    source: ZIPCODE
+    destination: health.zipcode
+- database:
+    type:
+    prefix:
+    source: RiskCategory
+    destination: health.riskcategory

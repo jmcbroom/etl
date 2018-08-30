@@ -1,0 +1,21 @@
+- database:
+    type: sql-server
+    prefix: cad
+    source: vw_DP_CAD
+    destination: pubsafe.cad_update
+    where:
+        field: inci_id
+        condition: ">"
+        value: max(inci_id)
+        table: pubsafe.cad
+- database:
+    type: sql-server
+    prefix: rms
+    source: vwRMS_Portal
+    destination: pubsafe.rms_update
+- smartsheet: 
+    id: 2432809366251396
+    table: greenlight
+- smartsheet: 
+    id: 4058809057470340
+    table: applications

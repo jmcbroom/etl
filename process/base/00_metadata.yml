@@ -1,0 +1,6 @@
+name: Base
+schema: base
+notify: False
+datasets:
+  - schools
+  

@@ -1,0 +1,263 @@
+title: Building Permits
+category: Housing & Buildings
+agency: BSEED
+description: >
+  Building permits for residential and commerical construction projects issued by the Buildings, Safety Engineering & Environmental Department (BSEED).
+notes: >
+  null
+tags:
+  - commercial
+  - residential
+  - construction
+  - building
+  - permit
+  - bseed
+license: 
+  name: Public Domain
+  url: 
+time_period: 5/20/2010 - present
+update_frequency: Daily
+row_label: Building permit
+columns:
+  Permit Number:
+    description: Case number assigned by BSEED
+    notes:
+    type: text
+    required: yes
+  Permit Issued:
+    description: Date permit issued by BSEED
+    notes:
+    type: date
+    required: yes
+  Permit Completed:
+    description: Date permitted work will complete (estimate)
+    notes:
+    type: date
+    required: no
+  Expiration Date:
+    description: Date permit expires
+    notes: 
+    type: date
+    required: yes
+  Site Address:
+    description: Street address of construction site
+    notes: 
+    type: text
+    required: yes
+  Permit Status:
+    description: Status of building permit
+    notes: Expected values are open (if expiration date is in future) and closed (if expiration date is in past)
+    type: date
+    required: yes
+  Between:
+    description: Additional context related to site address
+    notes: Expected value is a street segment
+    type: text
+    required: yes
+  Parcel Number:
+    description: Parcel number associated with site address
+    notes:
+    type: text
+    required: no
+  Lot Number:
+    description: Lot number associated with site address
+    notes:
+    type: text
+    required: no
+  Subdivision: 
+    description: Legal subdivision description associated with site address
+    notes: 
+    type: text
+    required: no
+  Case Type:
+    description: Case type abbreviation as classified by BSEED
+    notes: Expected value is BLD
+    type: text
+    required: yes
+  Case Description: 
+    description: Text description of case type
+    notes: Expected value is building permit
+    type: text
+    required: yes
+  Legal Use:
+    description: Legal use description of parcel associated with site address
+    notes:
+    type: Text
+    required: no
+  Estimated Cost:
+    description: Estimated cost of work to be performed under permit
+    notes:
+    type: number
+    required: no
+  Parcel Size:
+    description: Size of parcel associated with site address in square feet
+    notes:
+    type: number
+    required: no
+  Stories:
+    description: Number of stories in building associated with site address
+    notes:
+    type: number
+    required: no
+  Parcel Floor Area: 
+    description: 
+    notes:
+    type: number
+    required: no
+  Parcel Ground Area:
+    description:
+    notes:
+    type: number
+    required: no
+  Common Name:
+    description: Common name of buiding or entity associated with site address
+    notes:
+    type: text
+    required: no
+  Building Permit Type: 
+    description: Type of work performed under building permit
+    notes: Common values are new, alterations, alterations revised, repairs, dismantle (demolition), additions, erection of signs, change of use, repair after fire and use vacant land.
+    type: text
+    required: yes
+  Building Permit Description:
+    description: Long description of work performed under building permit
+    notes:
+    type: text
+    required: yes
+  FDICN Description:
+    description: 
+    notes:
+    type: text
+    required: yes
+  Building Type Use:
+    description: Use of building associated with site address
+    notes: Common values are warehouse, retail, one- or two-family dwelling, multiple dwelling, private garage, assembly building, and facilities
+    type: text
+    required: yes
+  Residential:
+    description: Whether the building at the site address is residential or non
+    notes: Expected values are residential or non-residential
+    type: text
+    required: yes
+  Buiding Type Construction Code:
+    description:
+    notes:
+    type:
+    required:
+  Building Zoning District:
+    description:
+    notes:
+    type:
+    required:
+  Building Use Group:
+    description:
+    notes:
+    type:
+    required:
+  Building Basement:
+    description: Whether the building at the site address has a basement
+    notes: Expected values are Y (yes), N (no) or null (unknown)
+    type: text
+    required: no
+  Fee Type:
+    description:
+    notes:
+    type:
+    required:
+  Sequence Number:
+    description:
+    notes:
+    type:
+    required:
+  PCF_AMT_DUE:
+    description:
+    notes:
+    type:
+    required:
+  Owner Last Name: 
+    description: Last name or business name of property owner
+    notes: 
+    type: text
+    required: yes
+  Owner First Name:
+    description: First name of property owner
+    notes:
+    type: text
+    required: no
+  Owner Address 1:
+    description: Street address of property owner
+    notes: May differ than the permit site address
+    type: text
+    required: yes
+  Owner Address 2:
+    description: Second street address of property owner
+    notes: 
+    type: text
+    required: no
+  Owner City:
+    description: City of property owner
+    notes:
+    type: text
+    required: no
+  Owner State: 
+    description: State of property owner
+    notes:
+    type: text
+    required: no
+  Owner Zip Code: 
+    description: Zip code of property owner
+    notes: 
+    type: text
+    required: no
+  Contractor Last Name:
+    description:  Last name or business name of contractor performing permit work
+    notes:
+    type: text
+    required: yes
+  Contractor First Name:
+    description: First name of contractor performing permit work
+    notes:
+    type: text
+    required: no
+  Contractor Address 1:
+    description: Street address of contractor
+    notes: 
+    type: text
+    required: no
+  Contractor Address 2:
+    description: Second street address of contractor
+    notes:
+    type: text
+    required: no
+  Contractor City:
+    description: City of contractor
+    notes: 
+    type: text
+    required: no
+  Contractor State:
+    description: State of contractor
+    notes: 
+    type: text
+    required: no
+  Contractor Zip: 
+    description: Zip code of contractor
+    notes: 
+    type: text
+    required: no
+  Permit Location:
+    description: Latitude, longitude coordinate associated with permit site address
+    notes: Provided in EPSG Projection 4326 - WGS 84
+    type: text
+    required: yes 
+  CSM Case Number:
+    description: Main case number assigned by BSEED
+    notes:
+    type: text
+    required: yes
+  Dwelling Units:
+    description: Number of units in building at site address
+    notes:
+    type: number
+    required: no
+links:
+  - https://cityofdetroit.github.io/permits/

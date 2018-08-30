@@ -1,0 +1,67 @@
+- to: Socrata
+  id: u5fu-jb97
+  name: Dismantle Permits
+  table: bseed.dismantle_permits_socrata
+  method: replace
+  row_identifier:
+  columns:
+    Unique ID:
+      field: unique_id
+      type: text
+    CSA ID:
+      field: csa_id
+      type: text
+    Tidemark Parcel No:
+      field: prc_parcel_no
+      type: text
+    Clean Parcel No:
+      field: parcel_number
+      type: text
+    Street Address:
+      field: street_address
+      type: text
+    CSM Case No:
+      field: csm_caseno
+      type: text
+    Case Type:
+      field: case_type
+      type: text
+    Action Description:
+      field: action_description
+      type: text
+    CSA Date 3 (Inspection Date):
+      field: csa_date3
+      type: calendar_date
+    CSA Disposition (Inspection Pass/Fail):
+      field: csa_disp
+      type: text
+    CSA Notes:
+      field: csa_notes
+      type: text
+    Action Menu ID:
+      field: actn_menu_id
+      type: text
+    Action Code:
+      field: actn_code
+      type: text
+    CSA Creation Date:
+      field: csa_creation_date
+      type: calendar_date
+    CSA Date 1:
+      field: csa_date1
+      type: calendar_date
+    CSA Date 2:
+      field: csa_date2
+      type: calendar_date
+    CSA Updated At:
+      field: csa_updated
+      type: calendar_date
+    CSA Updated By:
+      field: csa_updated_by
+      type: text
+    CSA Assigned To:
+      field: csa_assigned_to
+      type: text
+    CSA Done By:
+      field: csa_done_by
+      type: text

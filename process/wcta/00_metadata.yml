@@ -1,3 +1,5 @@
-name: Wayne County Tax Auction Results 2017
+name: Wayne County Tax Auction
 schema: wcta
-notify: true
+notify: True
+datasets:
+  - wcta_2017

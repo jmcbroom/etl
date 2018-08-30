@@ -1,8 +1,0 @@
-- airtable:
-    base: app95tQ21fD4aeFgh
-    table: RFPs
-    destination: projects.rfp_attributes
-- mapbox:
-    dataset: cjf9yq5e20m872qmhyrip5tkc
-    destination: projects.rfp_shapes
-

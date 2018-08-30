@@ -1,0 +1,5 @@
+name: Health
+schema: health
+datasets:
+  - restaurant_inspections
+  

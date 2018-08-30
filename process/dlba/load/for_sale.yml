@@ -1,0 +1,33 @@
+- to: Socrata
+  name: DLBA Properties for Sale
+  id: gfhb-f4i5
+  table: dlba.for_sale_socrata
+  method: replace
+  columns:
+    Address:
+      field: address
+      type: text
+    Parcel ID:
+      field: parcel_id
+      type: text
+    Program:
+      field: program
+      type: text
+    Listing Date:
+      field: listing_date
+      type: calendar_date
+    Council District:
+      field: council_district
+      type: number
+    Neighborhood:
+      field: neighborhood
+      type: text
+    Latitude:
+      field: latitude
+      type: number
+    Longitude:
+      field: longitude
+      type: number
+    Location:
+      field: location
+      type: location

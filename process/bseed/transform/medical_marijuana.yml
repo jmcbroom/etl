@@ -1,0 +1,27 @@
+- type: sql
+  statements:
+    - delete from bseed.mmcc where action is null
+
+- type: geocode
+  table: bseed.mmcc
+  add_col: location
+  geom_col: geom
+
+- type: create_view
+  view_name: mmcc_socrata
+  as: select
+        trim(mmcc_business_name) as name,
+        location as address,
+        action,
+        (select makeSocrataLocation(geom)) as location
+      from bseed.mmcc
+
+- type: create_view
+  view_name: mmcc_arcgis
+  as: select
+        trim(mmcc_business_name) as name,
+        location as address,
+        action,
+        geom
+      from bseed.mmcc 
+      where geom is not null

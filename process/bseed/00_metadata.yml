@@ -1,3 +1,17 @@
-name: BSEED datasets
+name: BSEED
 schema: bseed
 notify: True
+datasets:
+  - annual_inspections
+  - building_permits
+  - business_licenses
+  - coo_plan_reviews
+  - dismantle_permits
+  - dng_cases
+  - medical_marijuana
+  - rental_certifications
+  - rental_inspections
+  - rental_registrations
+  - row_permits
+  - third_party_rental_inspections
+  - trades_permits

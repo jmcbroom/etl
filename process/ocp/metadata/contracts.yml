@@ -1,0 +1,83 @@
+title: Procurement Contracts
+category: Administration & Finance
+agency: OCP
+description: >
+  Open contracts between the City of Detroit and its' suppliers.
+notes: >
+  Includes initial and amended contracts with suppliers. Purchase orders may be generated separately to pay suppliers for work completed under one of the contracts listed in this dataset.
+tags:
+  - contracts
+  - suppliers
+  - finance
+  - procurement
+  - purchasing
+license: 
+  name: Public Domain
+  url: 
+time_period: Open contracts to date
+update_frequency: Daily
+row_label: Contract
+columns:
+  Contract NIGP Code:
+    description: National Institute of Governmental Purchasings' (NIGP) Commodity/Services Codes are used to classify products and services procured by state and local governments in North America.
+    notes: Comma-separated list of many codes if applicable
+    type: text
+    required: no
+  Contract ID:
+    description: Identification number assigned to contract by Office of Contracting and Procurement
+    notes:
+    type: text
+    required: yes
+  Company Name:
+    description: Business name of supplier or name of individual if personal consulting services contract
+    notes:
+    type: text
+    required: yes
+  Company City:
+    description: Supplier's city
+    notes: 
+    type: text
+    required: no
+  Company State:
+    description: Supplier's state
+    notes:
+    type: no
+    required: no
+  Contract Purpose:
+    description: Purpose of contract
+    notes:
+    type: text
+    required: no
+  Contract Amount: 
+    description: Amount of contract
+    notes:
+    type: number
+    required: yes
+  Contract Effective Date:
+    description: Start date of contract
+    notes:
+    type: date
+    required: yes
+  Contract Expiration Date:
+    description: Expiration date of contract
+    notes:
+    type: date
+    required: yes
+  Contract Status:
+    description: Status of contract
+    notes: Expected value is "Open & Posted"
+    type: text
+    required: yes
+  Contract Agreement Type:
+    description: Type of contract agreement
+    notes: Expected values are "Original" or "Amendment"
+    type: text
+    required: yes
+  Contract Document Link:
+    description: Link to full text PDF contract
+    notes:
+    type: text
+    required: no
+links:
+  - http://www.detroitmi.gov/Purchasing
+  

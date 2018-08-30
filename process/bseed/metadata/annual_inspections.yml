@@ -1,0 +1,65 @@
+title: Annual Inspections
+category: Housing & Buildings
+agency: BSEED
+description: >
+  All inspections of commercial buildings conducted and scheduled by BSEED.
+notes: >
+  null
+tags:
+  - commercial
+  - inspection
+  - bseed
+license: 
+  name: Public Domain
+  url: 
+time_period: 1/1/2015 - present
+update_frequency: Daily
+row_label: Inspection
+columns:
+  Case Number:
+    description: Case number assigned by BSEED
+    notes:
+    type: text
+    required: yes
+  Parcel Number:
+    description: Parcel number associated with property address
+    notes:
+    type: text
+    required: no
+  Address:
+    description: Street address of property
+    notes:
+    type: text
+    required: yes
+  Owner:
+    description: Owner of property
+    notes:
+    type: text
+    required: yes
+  Project Name:
+    description: Project name assigned by BSEED that is associated with a group of properties if applicable
+    notes:
+    type: text
+    required: no
+  Action Date:
+    description: Date of inspection
+    notes: Past dates are completed inspections; future dates are scheduled inspections and not expected to have a result yet
+    type: date
+    required: yes
+  Action Description:
+    description: Description of inspection
+    notes: 
+    type: text
+    required: yes
+  Result:
+    description: Outcome of inspection
+    notes: Only applies to completed inspections (Action Date is in the past)
+    type: text
+    required: no
+  Location:
+    description: Latitude, longitude coordinate associated with property address
+    notes: Provided in EPSG Projection 4326 - WGS 84
+    type: text
+    required: yes 
+links:
+  - null
