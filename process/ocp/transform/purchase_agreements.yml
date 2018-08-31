@@ -8,7 +8,11 @@
   as: select 
         agreement_number,
         handleNan(agreement_limit::numeric) as agreement_limit,
-        handleNan(cod_agency::numeric) as cod_agency,
+        case
+          when cod_agency = 'NaN'
+          then null
+          else cod_agency
+        end as cod_agency,
         upper(description) as description,
         agreement_status_description,
         upper(replace(rtrim(trim(supplier), '.'), ',', '')) as supplier,
