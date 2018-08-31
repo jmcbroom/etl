@@ -69,7 +69,11 @@
         id,
         status,
         request_type_title,
-        (select handleNan(description)) end as description,
+        case 
+          when description = 'NaN'
+          then null
+          else description
+        end as description,
         case
           when id is null
           then null
@@ -129,7 +133,7 @@
         id,
         status,
         request_type_title,
-        case
+        case 
           when description = 'NaN'
           then null
           else description
