@@ -89,6 +89,11 @@ class Dataset(object):
         m = MapboxUpload(d)
         m.upload()
 
+      elif destination == 'internal':
+        from .database import DbDestination
+        dest = DbDestination(d)
+        dest.insert()
+
       else:
         print("I don't know this destination type: {}".format(destination))
 
