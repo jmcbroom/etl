@@ -40,6 +40,7 @@
   file: project_greenlight.json
   table: pubsafe.greenlight_arcgis
   title: Project Greenlight Locations
+  type: geojson
   description:
   tags:
     - police
