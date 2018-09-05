@@ -4,9 +4,10 @@
   - drop table if exists gql.parcels
   - create table gql.parcels as (select * from assessor.parcels_socrata)
   - alter table gql.parcels rename column parcelnum to parcelno
-  - create index parcels_pid_idx on gql.parcels (parcelno)
-  - delete from gql.parcels p using gql.parcels q where q.objectid < p.objectid and q.parcelno = p.parcelno
-  - alter table gql.parcels add constraint parcels_uniq unique(parcelno)
+  - alter table gql.parcels add column uniq serial primary key;
+  - delete from gql.parcels p using gql.parcels q where q.uniq < p.uniq and q.parcelno = p.parcelno;
+  - alter table gql.parcels add constraint parcels_uniq unique(parcelno);
+  - alter table gql.parcels drop column uniq;
   # get building permits at known parcels, add indexes and foreign key constraint
   - drop table if exists gql.permits
   - create table gql.permits as (select * from bseed.building_permits_socrata bp where bp.parcel_no in (select parcelno from gql.parcels))
