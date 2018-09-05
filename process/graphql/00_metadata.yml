@@ -1,0 +1,10 @@
+name: GraphQL 
+schema: gql
+notify: True
+datasets: 
+  - all_demos
+  - bldg_permits
+  - blight_tickets
+  - parcels
+  - prop_sales
+  
