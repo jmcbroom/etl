@@ -1,0 +1,4 @@
+name: Department of Appeals and Hearings
+schema: dah
+datasets: 
+  - blight_violations

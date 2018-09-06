@@ -1,0 +1,79 @@
+- to: Socrata
+  id: wn8n-5a4d
+  name: All Schools 2017/2018
+  table: base.schools_socrata
+  method: replace
+  row_identifier: bcode
+  columns:
+    Building Code:
+      field: bcode
+      type: text
+    Building Name:
+      field: bname
+      type: text
+    ISD Code:
+      field: isdcode
+      type: text
+    ISD Name:
+      field: isdname
+      type: text
+    District Code:
+      field: dcode
+      type: text
+    District Name:
+      field: dname
+      type: text
+    Entity Type:
+      field: entity_type
+      type: text
+    Entity County:
+      field: entity_county
+      type: text
+    Chartering Agency Code:
+      field: chartering_agency_code
+      type: text
+    Chartering Agency Authorizer:
+      field: chartering_agency_authorizer
+      type: text
+    Charter Management Organization:
+      field: charter_management_organization
+      type: text
+    Entity Authorized Grades:
+      field: entity_authorized_grades
+      type: text
+    Entity Actual Grades:
+      field: entity_actual_grades
+      type: text
+    Address:
+      field: address
+      type: text
+    City:
+      field: city
+      type: text
+    State:
+      field: state
+      type: text
+    Zip:
+      field: zip
+      type: text
+    Elementary (K-5) Student Count:
+      field: elem_k_5_student_count
+      type: number
+    Middle (6-8) Student Count:
+      field: middle_6_8_student_count
+      type: number
+    High School (9-12) Student Count:
+      field: high_9_12_student_count
+      type: number
+    elementary:
+      field: elementary
+      type: text
+    middle:
+      field: middle
+      type: text
+    high:
+      field: high
+      type: text
+    location:
+      field: location
+      type: location

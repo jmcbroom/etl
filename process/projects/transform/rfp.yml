@@ -1,0 +1,15 @@
+- type: create_view
+  view_name: rfp_arcgis
+  as: select
+        ra.description, 
+        ra.name, 
+        ra.development_team, 
+        ra.image, 
+        ra.link, 
+        ra.location, 
+        ra.rfp_issuer, 
+        ra.status_public, 
+        rs.wkb_geometry 
+      from projects.rfp_shapes rs 
+        inner join projects.rfp_attributes ra on rs.airtable_id = ra.id
+      where ra.status in ('Completed', 'In Construction', 'Pre-Development')

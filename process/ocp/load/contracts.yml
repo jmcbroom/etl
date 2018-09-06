@@ -1,0 +1,42 @@
+- to: Socrata
+  id: itv9-b6jk
+  name: City of Detroit Contracts
+  table: ocp.contracts_socrata
+  method: replace
+  columns:
+    Contract_NIGP_Code:
+      field: contract_nigp_code
+      type: text
+    Contract ID:
+      field: contract_contract_id
+      type: text
+    Company Name:
+      field: company_company_name
+      type: text
+    Company City:
+      field: company_city
+      type: text
+    Company State:
+      field: company_state
+      type: text
+    Contract Purpose:
+      field: contract_contract_purpose
+      type: text
+    Contract Amount:
+      field: contract_value
+      type: money
+    Contract Effective Date:
+      field: contract_effective_date
+      type: calendar_date
+    Contract Expiration Date:
+      field: contract_contract_expiration_date
+      type: calendar_date
+    Contract Status:
+      field: contract_status
+      type: text
+    Contract Agreement Type:
+      field: contract_contract_agreement_type
+      type: text
+    Contract Document Link:
+      field: contract_document
+      type: text

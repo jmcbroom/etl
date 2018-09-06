@@ -1,0 +1,42 @@
+- to: Socrata
+  name: Detroit Demolitions
+  id: rv44-e9di
+  table: dlba.completed_demos_socrata
+  method: replace
+  columns:
+    Address:
+      field: address
+      type: text
+    Parcel ID:
+      field: parcel_id
+      type: text
+    Contractor Name:
+      field: contractor_name
+      type: text
+    Price:
+      field: price
+      type: money
+    Funding Source:
+      field: funding_source
+      type: text
+    Demolition Date:
+      field: demolition_date
+      type: calendar_date
+    Commercial Building:
+      field: commercial
+      type: text
+    Council District:
+      field: council_district
+      type: number
+    Neighborhood:
+      field: neighborhood
+      type: text
+    Latitude:
+      field: latitude
+      type: number
+    Longitude:
+      field: longitude
+      type: number
+    Location:
+      field: location
+      type: location

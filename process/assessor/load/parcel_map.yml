@@ -1,0 +1,7 @@
+- to: Mapbox
+  name: Assessor Parcels
+  table: assessor.parcels_mapbox
+  tileset: assessor_parcels
+  flags:
+    - "-Z13"
+    - "-z19"

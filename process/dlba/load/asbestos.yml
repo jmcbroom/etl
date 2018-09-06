@@ -1,0 +1,93 @@
+- to: Socrata
+  name: Asbestos Abatement (Private)
+  id: vnrt-n46x
+  table: dlba.asbestos_socrata
+  method: replace
+  columns:
+    Address:
+      field: address
+      type: text
+    Parcel ID:
+      field: parcel_id
+      type: text
+    Demo Contractor Proceed Date:
+      field: demo_contractor_proceed_date
+      type: calendar_date
+    Demo Planned Knock Down Date:
+      field: demo_planned_knock_down_date
+      type: calendar_date
+    Socrata Projected Knock Down Date:
+      field: socrata_projected_knocked_by_date
+      type: calendar_date
+    Demo Knock Down Date:
+      field: demo_knock_down_date
+      type: calendar_date
+    Demo Final Grade Approved:
+      field: demo_final_grade_approved_date
+      type: text
+    BSEED Final Grade Approved:
+      field: bseed_final_grade_approved
+      type: text
+    Demo Batch Contractor Name:
+      field: demo_batch_contractor_name_del1_name
+      type: text
+    Demo ASB Abatement Contractor Name:
+      field: demo_asb_abatement_contractor_name
+      type: text
+    Abatement Sub Contractor:
+      field: abatement_sub_contractor
+      type: text
+    Demo ASB Survey Contractor Name:
+      field: demo_asb_survey_contractor_name
+      type: text
+    ASB Inspectors Name:
+      field: asb_inspectors_name
+      type: text
+    ASB Verifiers Name:
+      field: asb_verifier_name
+      type: text
+    ASB Abatement Verification Contractor Name:
+      field: demo_asb_abatement_verification_contractor_name
+      type: text
+    ASB Abatement Start Date:
+      field: asb_abatement_start_date
+      type: calendar_date
+    Demo ASB Abatement Date:
+      field: demo_asb_abatement_date
+      type: calendar_date
+    ASB Document URL:
+      field: asb_document_url
+      type: text
+    ASB Post Abatement Inspection Date:
+      field: asb_post_abatement_insp_date
+      type: calendar_date
+    ASB Post Abatement Inspection Approval Date:
+      field: demo_asb_post_abatement_approval_date
+      type: calendar_date
+    ASB Post Abatement Inspection Failed Date:
+      field: demo_asb_post_abatement_failed_date
+      type: calendar_date
+    ASB Post Abatement Times Failed:
+      field: asb_post_abatement_times_failed
+      type: number
+    ASB Post Abatement Verification Status:
+      field: asb_post_abatement_verification_status
+      type: text
+    ASB Post Abatement Notes:
+      field: asb_post_abatement_notes
+      type: text
+    ASB Post Abatement Document URL:
+      field: asb_post_abatement_document_url
+      type: text
+    Zip Code:
+      field: property_zip_code
+      type: text
+    Latitude:
+      field: property_latitude
+      type: number
+    Longitude:
+      field: property_longitude
+      type: number
+    Location:
+      field: location
+      type: location

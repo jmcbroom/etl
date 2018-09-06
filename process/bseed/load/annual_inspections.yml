@@ -1,0 +1,40 @@
+- to: Socrata
+  id: 3eiz-c5du
+  name: Annual Inspections
+  table: bseed.annual_inspections_socrata
+  method: replace
+  row_identifier:
+  columns:
+    Address:
+      field: address
+      type: text
+    Action Date:
+      field: action_date
+      type: calendar_date
+    Action Description:
+      field: action_description
+      type: text
+    Result:
+      field: result
+      type: text
+    Case Number:
+      field: case_number
+      type: text
+    Parcel Number:
+      field: parcel_assess
+      type: text
+    Owner:
+      field: owner
+      type: text
+    Project Name:
+      field: project_name
+      type: text
+    Certificate of Compliance Issued Date:
+      field: cert_compliance_date
+      type: calendar_date
+    Date Referred to DAH:
+      field: date_referred_to_dah
+      type: calendar_date
+    Location:
+      field: location
+      type: location

@@ -1,0 +1,97 @@
+- to: Socrata
+  id: y7ap-7nd5
+  name: Trades Permits
+  table: bseed.trades_permits_socrata
+  method: upsert
+  row_identifier: unique_id
+  columns:
+    Unique ID:
+      field: unique_id
+      type: number
+    Permit Number:
+      field: permit_no
+      type: text
+    Permit Issued:
+      field: permit_issued
+      type: calendar_date
+    Permit Expires:
+      field: permit_expire
+      type: calendar_date
+    Permit Completed:
+      field: permit_completed
+      type: calendar_date
+    Permit Status:
+      field: permit_status
+      type: text
+    Address:
+      field: site_address
+      type: text
+    Between:
+      field: between1
+      type: text
+    Lot:
+      field: prc_lot
+      type: text
+    Subdivision:
+      field: prc_subdiv
+      type: text
+    Case Type:
+      field: case_type
+      type: text
+    Case Description:
+      field: case_description
+      type: text
+    Type Use:
+      field: type_of_use
+      type: text
+    Type Use Description:
+      field: type_use_desc
+      type: text
+    Permit Type:
+      field: permit_type
+      type: text
+    Permit Type Description:
+      field: permit_type_desc
+      type: text
+    FDICN Description:
+      field: fdicn_description
+      type: text
+    Fee Type:
+      field: fee_type
+      type: text
+    Parcel Size:
+      field: parcel_size
+      type: number
+    Sector:
+      field: parcel_cluster_sector
+      type: text
+    Parcel Floor Area:
+      field: parcel_floor_area
+      type: number
+    Parcel Ground Area:
+      field: parcel_ground_area
+      type: number
+    AKA Address:
+      field: prc_aka_address
+      type: text
+    Seq No:
+      field: seq_no
+      type: number
+    Amount Due:
+      field: pcf_amt_due
+      type: money
+    Owner Name:
+      field: owner_name
+      type: text
+    Owner Address:
+      field: owner_address
+      type: text
+    Contractor Name:
+      field: contractor_name
+      type: text
+    Contractor Address:
+      field: contractor_address
+      type: text
+    Permit Location:
+      field: location
+      type: location

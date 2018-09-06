@@ -1,3 +1,7 @@
 name: degc
 schema: degc
-notify:
+notify: True
+datasets: 
+  - motor_city_match
+  - motor_city_restore
+  

@@ -1,0 +1,47 @@
+- to: Socrata
+  id: ajxy-mcqp
+  name: Third-Party Rental Inspections
+  table: bseed.third_party_insps_all_socrata
+  method: replace
+  row_identifier:
+  columns:
+    Inspection Company Name:
+      field: insp_company_name
+      type: text
+    Address:
+      field: address
+      type: text
+    Zip Code:
+      field: zip_code
+      type: text
+    1st Inspection Date:
+      field: first_inspection_date
+      type: text
+    1st Inspection Disposition:
+      field: first_inspection_disposition
+      type: text
+    2nd Inspection Date:
+      field: second_inspection_date
+      type: text
+    2nd Inspection Disposition:
+      field: second_inspection_disposition
+      type: text
+    3rd or Subsequent Inspection Date:
+      field: third_or_subsequent_inspection_date
+      type: text
+    3rd of Subsequent Inspection Disposition:
+      field: third_or_subsequent_inspection_disposition
+      type: text
+    Date Correction Order Posted:
+      field: date_correction_order_posted
+      type: text
+    Date Certificate of Compliance Issued:
+      field: date_c_of_c_issued_to_be_completed_by_clerk
+      type: text
+    Date Lead Docs Attached:
+      field: date_lead_docs_attached
+      type: text
+    Location:
+      field: location
+      type: location
+      

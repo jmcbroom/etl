@@ -1,0 +1,27 @@
+- to: Socrata
+  id: sae4-fmvc
+  name: Motor City Match Cash Awardees
+  table: degc.mc_cash_socrata
+  method: replace
+  columns:
+    Address:
+      field: business_address
+      type: text
+    Business:
+      field: business
+      type: text
+    Round:
+      field: round
+      type: text
+    Description:
+      field: description
+      type: text
+    URL:
+      field: url
+      type: text
+    Parcel Number:
+      field: parcelno
+      type: text
+    Location:
+      field: location
+      type: location

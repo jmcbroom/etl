@@ -1,0 +1,30 @@
+- to: Socrata
+  id: 8nby-8bd9
+  name: Fire Stations
+  table: fire.dfd_locations_socrata
+  method: replace
+  columns:
+    Address:
+      field: address
+      type: text
+    Engine:
+      field: engine
+      type: text
+    Ladder:
+      field: ladder
+      type: text
+    Squad:
+      field: squad
+      type: text
+    Chief:
+      field: chief
+      type: text
+    Medic:
+      field: medic
+      type: text
+    Special:
+      field: special
+      type: text
+    Location:
+      field: location
+      type: location

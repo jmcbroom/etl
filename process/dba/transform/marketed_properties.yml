@@ -1,0 +1,20 @@
+- type: sql
+  statements:
+    - alter table dba.marketed_properties add column pid text
+
+- type: geocode
+  table: dba.marketed_properties
+  add_col: address
+  geom_col: geom
+  parcel_col: pid
+
+- type: create_view
+  view_name: marketed_properties_socrata
+  as: select
+        ownership, 
+        address, 
+        zip_code, 
+        property_type, 
+        pid,
+        (select makeSocrataLocation(geom)) as location
+      from dba.marketed_properties

@@ -1,0 +1,247 @@
+- to: Socrata
+  id: uwua-576f
+  name: Commercial Corridors All (Private)
+  table: corridors.all_socrata
+  method: replace
+  row_identifier:
+  columns:
+    corridor:
+      field: corridor
+      type: text
+    direction:
+      field: direction
+      type: text
+    street_address_aka:
+      field: street_address_aka
+      type: text
+    owner_name:
+      field: owner_name
+      type: text
+    owner_address:
+      field: owner_address
+      type: text
+    owner_city:
+      field: owner_city
+      type: text
+    owner_state:
+      field: owner_state
+      type: text
+    owner_zip:
+      field: owner_zip
+      type: text
+    owner_info_revised_from_original:
+      field: owner_info_revised_from_original
+      type: text
+    owner_info_revised_by_who:
+      field: owner_info_revised_by_who
+      type: text
+    owner_info_revised_date:
+      field: owner_info_revised_date
+      type: text
+    dba_dlba_program:
+      field: dba_dlba_program
+      type: text
+    dba_dlba_pipeline:
+      field: dba_dlba_pipeline
+      type: text
+    old_survey:
+      field: old_survey
+      type: text
+    new_survey:
+      field: new_survey
+      type: text
+    blight_tickets:
+      field: blight_tickets
+      type: text
+    surveyor:
+      field: surveyor
+      type: text
+    common_name:
+      field: common_name
+      type: text
+    status:
+      field: status
+      type: text
+    parcel:
+      field: parcel
+      type: text
+    bseed_inspector:
+      field: bseed_inspector
+      type: text
+    bseed_inspection_date:
+      field: bseed_inspection_date
+      type: text
+    bseed_overgrown_grass_trees_weeds_etc_gsd:
+      field: bseed_overgrown_grass_trees_weeds_etc_gsd
+      type: text
+    bseed_graffiti_gsd:
+      field: bseed_graffiti_gsd
+      type: text
+    bseed_trash_and_debris_gsd:
+      field: bseed_trash_and_debris_gsd
+      type: text
+    bseed_exterior_wall_damage_dba:
+      field: bseed_exterior_wall_damage_dba
+      type: text
+    bseed_needs_board_up_gsd:
+      field: bseed_needs_board_up_gsd
+      type: text
+    bseed_needs_demo_dba:
+      field: bseed_needs_demo_dba
+      type: text
+    bseed_awnings_signs_gsd:
+      field: bseed_awnings_signs_gsd
+      type: text
+    bseed_paint_fence_gsd:
+      field: bseed_paint_fence_gsd
+      type: text
+    bseed_remove_fence_gsd:
+      field: bseed_remove_fence_gsd
+      type: text
+    bseed_make_safe_dba:
+      field: bseed_make_safe_dba
+      type: text
+    bseed_sidewalk_replacement_dpw:
+      field: bseed_sidewalk_replacement_dpw
+      type: text
+    bseed_road_repairs_dpw:
+      field: bseed_road_repairs_dpw
+      type: text
+    bseed_abandoned_vehicle_dpd:
+      field: bseed_abandoned_vehicle_dpd
+      type: text
+    bseed_violation_condition_text:
+      field: bseed_violation_condition_text
+      type: text
+    bseed_violations_found_calc:
+      field: bseed_violations_found_calc
+      type: text
+    bseed_co_posted_date:
+      field: bseed_co_posted_date
+      type: text
+    bseed_correction_compliance_reqd_date:
+      field: bseed_correction_compliance_reqd_date
+      type: text
+    bseed_ticket_issued_date:
+      field: bseed_ticket_issued_date
+      type: text
+    bseed_cost_of_ticket:
+      field: bseed_cost_of_ticket
+      type: text
+    bseed_ticket_number:
+      field: bseed_ticket_number
+      type: text
+    bseed_court_date:
+      field: bseed_court_date
+      type: text
+    bseed_notes:
+      field: bseed_notes
+      type: text
+    bseed_reinspection_date:
+      field: bseed_reinspection_date
+      type: text
+    bseed_violation_complied_by_owner:
+      field: bseed_violation_complied_by_owner
+      type: text
+    gsd_clean_up_count:
+      field: gsd_clean_up_count
+      type: text
+    gsd_graffiti_completed_date:
+      field: gsd_graffiti_completed_date
+      type: text
+    gsd_cleanup_completed_date:
+      field: gsd_cleanup_completed_date
+      type: text
+    gsd_awnings_signs_completed_date:
+      field: gsd_awnings_signs_completed_date
+      type: text
+    gsd_board_up_completed_date:
+      field: gsd_board_up_completed_date
+      type: text
+    gsd_fence_painted_date:
+      field: gsd_fence_painted_date
+      type: text
+    gsd_fence_removed_date:
+      field: gsd_fence_removed_date
+      type: text
+    gsd_costs:
+      field: gsd_costs
+      type: text
+    gsd_bulk_pickup_requested_date_dpw:
+      field: gsd_bulk_pickup_requested_date_dpw
+      type: text
+    gsd_notes:
+      field: gsd_notes
+      type: text
+    all_agencies_checked_additional_violation_box:
+      field: all_agencies_checked_additional_violation_box
+      type: text
+    dpw_repair_road_completed_date:
+      field: dpw_repair_road_completed_date
+      type: text
+    dpw_sidewalk_replaced_date:
+      field: dpw_sidewalk_replaced_date
+      type: text
+    dpw_bulk_pickup_competed_date:
+      field: dpw_bulk_pickup_competed_date
+      type: text
+    dpw_notes:
+      field: dpw_notes
+      type: text
+    dba_make_safe_completed_date:
+      field: dba_make_safe_completed_date
+      type: text
+    dba_exterior_wall_damage_completed:
+      field: dba_exterior_wall_damage_completed
+      type: text
+    dba_board_up_cost_corp_counsel:
+      field: dba_board_up_cost_corp_counsel
+      type: text
+    dba_demo_scheduled_or_completed_date:
+      field: dba_demo_scheduled_or_completed_date
+      type: text
+    dba_demo_cost_corp_counsel:
+      field: dba_demo_cost_corp_counsel
+      type: text
+    dba_notes:
+      field: dba_notes
+      type: text
+    dpd_vehicles_removed_date:
+      field: dpd_vehicles_removed_date
+      type: text
+    dpd_notes:
+      field: dpd_notes
+      type: text
+    law_nuisance_identified:
+      field: law_nuisance_identified
+      type: text
+    law_certified_letter_date:
+      field: law_certified_letter_date
+      type: text
+    law_nuisance_abated_date:
+      field: law_nuisance_abated_date
+      type: text
+    law_lawsuit_filed_date:
+      field: law_lawsuit_filed_date
+      type: text
+    law_judgment:
+      field: law_judgment
+      type: text
+    law_notes:
+      field: law_notes
+      type: text
+    dupchk:
+      field: dupchk
+      type: text
+    gsd_extract_done:
+      field: gsd_extract_done
+      type: text
+    uid:
+      field: uid
+      type: text
+    address:
+      field: address
+      type: text
+    location:
+      field: location
+      type: location  

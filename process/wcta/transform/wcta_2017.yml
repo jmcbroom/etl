@@ -1,0 +1,27 @@
+- type: geocode
+  table: wcta.wcta2017
+  add_col: prop_address
+  geom_col: geom
+
+- type: create_view
+  view_name: wcta_2017_socrata
+  as: select
+        parcel_id,
+        prop_address,
+        prop_city,
+        prop_zip,
+        sept_starting_bid,
+        final_bid_amt,
+        deed_name,
+        deed_address,
+        deed_city_state,
+        deed_zip,
+        deed_date,
+        biddernbr,
+        bidder_name,
+        bidder_address,
+        bidder_city_state,
+        bidder_zip,
+        (select makeSocrataLocation(geom)) as location
+      from wcta.wcta2017 
+      where trim(prop_city) = 'DETROIT MI'

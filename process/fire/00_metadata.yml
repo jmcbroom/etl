@@ -1,0 +1,7 @@
+name: Fire
+schema: fire
+notify: True
+datasets:
+  - angels_night
+  - stations
+  
