@@ -35,5 +35,7 @@
         parcel_assess,
         owner,
         project_name,
+        (select makeSocrataDate(cert_compliance_date)) as cert_compliance_date,
+        (select makeSocrataDate(date_referred_to_dah)) as date_referred_to_dah,
         (select makeSocrataLocation(geom)) as location
       from bseed.annual_inspections
