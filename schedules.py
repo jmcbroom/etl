@@ -33,3 +33,5 @@ run('dba', dataset=None, notify=True, emoji='dollar')
 # `cad`, `rms`, `project_greenlight` run under here now
 run('pubsafe', dataset=None, notify=True, emoji= 'police_car')
 
+run('graphql', dataset=None, notify=True, emoji='graphql')
+

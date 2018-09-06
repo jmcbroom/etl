@@ -1,0 +1,34 @@
+- type: sql
+  statements:
+  # get current parcel points, remove duplicate pnums, add constraint to ensure uniqueness
+  - drop table if exists gql.parcels cascade
+  - create table gql.parcels as (select parcelnum, geom as wkb_geometry, address from assessor.parcels_socrata)
+  - alter table gql.parcels rename column parcelnum to parcelno
+  - alter table gql.parcels add column uniq serial primary key;
+  - delete from gql.parcels p using gql.parcels q where q.uniq < p.uniq and q.parcelno = p.parcelno;
+  - alter table gql.parcels add constraint parcels_uniq unique(parcelno);
+  - alter table gql.parcels drop column uniq;
+  # # get building permits at known parcels, add indexes and foreign key constraint
+  - drop table if exists gql.permits cascade
+  - create table gql.permits as (select * from bseed.bldg_permits_socrata bp where bp.parcel_no in (select parcelno from gql.parcels))
+  - alter table gql.permits rename column parcel_no to parcelno
+  - create index permits_pid_idx on gql.permits (parcelno)
+  - alter table gql.permits add constraint permits_to_pid foreign key (parcelno) references gql.parcels(parcelno)
+  # repeat for demos
+  - drop table if exists gql.demos cascade
+  - create table gql.demos as (select * from dlba.all_demos_gql d where d.parcel_id in (select parcelno from gql.parcels))
+  - alter table gql.demos rename column parcel_id to parcelno
+  - create index demos_pid_idx on gql.demos (parcelno)
+  - alter table gql.demos add constraint demos_to_pid foreign key (parcelno) references gql.parcels(parcelno)
+  # repeat for blight tickets
+  - drop table if exists gql.blight_tickets cascade
+  - create table gql.blight_tickets as (select * from dah.bvn_socrata b where b.parcelno in (select parcelno from gql.parcels))
+  - create index bvn_pid_idx on gql.blight_tickets (parcelno)
+  - alter table gql.blight_tickets add constraint bvn_to_pid foreign key (parcelno) references gql.parcels(parcelno)
+  # repeat for property sales
+  - drop table if exists gql.sales cascade
+  - create table gql.sales as (select * from assessor.sales_history_socrata sh where sh.parcel_no in (select parcelno from gql.parcels))
+  - alter table gql.sales rename column parcel_no to parcelno
+  - create index sales_pid_idx on gql.sales (parcelno)
+  - alter table gql.sales add constraint sales_to_pid foreign key (parcelno) references gql.parcels(parcelno)
+  
