@@ -46,4 +46,9 @@
     Location:
       field: location
       type: location
+
+# - to: Mapbox
+#   name: BSEED All Permits
+#   table: bseed.all_permits_mapbox
+#   tileset: parcels_with_lots_of_permits
       

@@ -54,26 +54,3 @@
       from bseed.bldg_permits bp
         inner join bseed.pnum_lookup pn on bp.parcel_no = pn.dirty
         left outer join bseed.tm_casepmb pm on pm.csm_caseno = bp.csm_caseno
-
-# Bldg permits plus COOs & PRVs tileset
-- type: create_view
-  view_name: all_permits_mapbox
-  as: with all_permits as 
-      (
-        select 
-          parcel_no, 
-          sum(estimated_cost::bigint) as total_cost 
-          from bseed.bldg_permits_socrata where parcel_no is not null and estimated_cost > 50000 group by parcel_no
-        union all
-        select 
-          parcel_no, 
-          sum(est_cost::bigint) as total_cost 
-        from bseed.coo_planrev_socrata where parcel_no is not null and est_cost > 50000 group by parcel_no
-      )
-        select 
-          parcel_no, 
-          sum(total_cost::bigint) as cost, 
-          st_transform(ap.shape, 4326) 
-        from all_permits pa 
-          inner join assessor.parcels_050318 ap on pa.parcel_no = ap.parcelno 
-          group by parcel_no, ap.shape

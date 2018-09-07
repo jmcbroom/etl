@@ -1,3 +1,9 @@
+- type: sql
+  statements:
+    - create index if not exists bseed_inspections_caseno_idx on bseed.tm_inspections using btree(csm_caseno)
+    - create index if not exists bseed_casemain_idx on bseed.tm_casemain using btree(csm_caseno)
+    - create index if not exists bseed_caseaction_caseno_idx on bseed.tm_caseaction using btree(csm_caseno)
+
 - type: create_table
   table_name: annual_inspections
   as: select
