@@ -46,6 +46,7 @@
 - type: sql
   statements:
     - update bseed.rental_registrations set parcel_geom = geocode_geom where parcel_geom is null and geocode_geom is not null
+    - create index bseed_rental_reg_geom_idx on bseed.rental_registrations using gist(parcel_geom)
 
 - type: create_view
   view_name: rental_registrations_socrata
@@ -71,6 +72,6 @@
         case_type,
         z.zipcode as prc_zip_code,
         cd.districts::integer as council_district
-      from bseed.rental_inspections_table
+      from bseed.rental_registrations
         left outer join base.zip_codes z on st_contains(st_transform(z.wkb_geometry, 4326), parcel_geom)
         left outer join base.council_districts cd on st_contains(st_transform(cd.wkb_geometry, 4326), parcel_geom)
