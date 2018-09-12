@@ -35,6 +35,9 @@
     Date Referred to DAH:
       field: date_referred_to_dah
       type: calendar_date
+    Legal Use:
+      field: legal_use
+      type: text
     Location:
       field: location
       type: location

@@ -7,8 +7,11 @@
         trim(concat_ws(' ', csm_st_nmbr, csm_st_pfx, csm_st_name)) as address,
         bus_name,
         business_description,
-        bus_own
-      from bseed.business_licenses
+        bus_own,
+        v.vlv_desc as license_description
+      from bseed.business_licenses bl
+        inner join bseed.tm_casebussch cbs on bl.case_a = cbs.csm_caseno
+        inner join bseed.validation_values v on v.valid_value = cbs.sch_description
 
 - type: geocode
   table: bseed.business_licenses_geo
@@ -24,6 +27,7 @@
         address,
         bus_name,
         business_description,
+        license_description,
         bus_own,
         (select makeSocrataLocation(geom)) as location
       from bseed.business_licenses_geo

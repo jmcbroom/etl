@@ -16,10 +16,12 @@
         cm.csm_projname as project_name,
         concat_ws(' ', i.csm_st_nmbr, i.csm_st_pfx, i.csm_st_name) as address,
         (select ca.csa_date3 from bseed.tm_caseaction ca where i.csm_caseno = ca.csm_caseno and ca.actn_menu_id = 'C' and ca.actn_code = '50' order by ca.csa_date3 desc limit 1) as cert_compliance_date,
-        (select ca.csa_date3 from bseed.tm_caseaction ca where i.csm_caseno = ca.csm_caseno and ca.actn_menu_id = 'D' and ca.actn_code = '05' order by ca.csa_date3 desc limit 1) as date_referred_to_dah
+        (select ca.csa_date3 from bseed.tm_caseaction ca where i.csm_caseno = ca.csm_caseno and ca.actn_menu_id = 'D' and ca.actn_code = '05' order by ca.csa_date3 desc limit 1) as date_referred_to_dah,
+        b.legal_use
       from bseed.tm_inspections i
         inner join bseed.tm_casemain cm on i.csm_caseno = cm.csm_caseno
         inner join bseed.pnum_lookup pn on cm.prc_parcel_no = pn.dirty
+        left outer join bseed.bldg_permits b on pn.dirty = b.parcel_no
 
 - type: sql
   statements:
@@ -43,5 +45,6 @@
         project_name,
         (select makeSocrataDate(cert_compliance_date)) as cert_compliance_date,
         (select makeSocrataDate(date_referred_to_dah)) as date_referred_to_dah,
+        legal_use,
         (select makeSocrataLocation(geom)) as location
       from bseed.annual_inspections
