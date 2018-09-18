@@ -1,5 +1,5 @@
 - to: Socrata
-  id: 
+  id: 5u83-aqk7
   name: Lead Clearances
   table: bseed.lead_clearances_socrata
   method: replace
