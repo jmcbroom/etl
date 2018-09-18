@@ -40,7 +40,6 @@
 #       - DEMO_ASB_Survey_Status__c
 #       - Demo_ASB_Post_Abatement_Failed_Date__c
 #       - DEMO_Batch_Contractor_Name_del1__r.Name
-#       - DEMO_Final_Grade_Approved_Date__c
 #       - DEMO_Knock_Down_Date__c
 #       - DEMO_NTP_Date__c
 #       - DEMO_Planned_Knock_Down_Date__c
@@ -95,9 +94,9 @@
     destination: dlba.dba_commercial_demo
     fields:
       - ASB_Post_Abatement_Passed_Date__c
-      - BSEED_COM_Final_Grade_Approved__c
-      - BSEED_COM_Open_Hole_Approved__c
-      - BSEED_COM_Winter_Grade_Approved__c
+      # - BSEED_COM_Final_Grade_Approved__c
+      # - BSEED_COM_Open_Hole_Approved__c
+      # - BSEED_COM_Winter_Grade_Approved__c
       - Commercial_Demo_Status__c
       - DBA_COM_Property__r.Council_District__c
       - DBA_COM_Property__r.Latitude__c
@@ -116,6 +115,6 @@
       - Final_Grade_Approved_Dt__c
       - Knock_Start_Dt__c
       - Name
-      - Open_Hole_Approved_Dt__c
+      # - Open_Hole_Approved_Dt__c
       - Related_Case__c
-      - Winter_Grade_Approved_Dt__c
+      # - Winter_Grade_Approved_Dt__c

@@ -4,7 +4,7 @@
         c.address,
         c.parcel_id,
         c.bseed_final_grade_approved,
-        c.demo_final_grade_approved_date,
+        null as demo_final_grade_approved_date,
         c.demo_batch_contractor_name_del1_name,
         c.abatement_sub_contractor,
         c.demo_asb_abatement_contractor_name,
@@ -45,4 +45,4 @@
       where c.asb_abatement_verification_contractor_name is not null
         and c.demo_contractor_proceed_date is not null
         and c.bseed_final_grade_approved is null
-        and c.demo_final_grade_approved_date is null
+        # and c.demo_final_grade_approved_date is null

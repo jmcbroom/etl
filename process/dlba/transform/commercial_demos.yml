@@ -15,21 +15,9 @@
         dba_com_property_longitude as longitude,
         dba_com_property_neighborhood as neighborhood,
         dba_com_property_council_district as council_district,
-        case 
-          when bseed_com_final_grade_approved is null 
-          then (select makeSocrataDate(final_grade_approved_dt::timestamp)) 
-          else (select makeSocrataDate(bseed_com_final_grade_approved::timestamp))
-        end as final_grade_date,
-        case 
-          when bseed_com_open_hole_approved is null 
-          then (select makeSocrataDate(open_hole_approved_dt::timestamp)) 
-          else (select makeSocrataDate(bseed_com_open_hole_approved::timestamp))
-        end as open_hole_date,
-        case 
-          when bseed_com_winter_grade_approved is null 
-          then (select makeSocrataDate(winter_grade_approved_dt::timestamp)) 
-          else (select makeSocrataDate(bseed_com_winter_grade_approved::timestamp))
-        end as winter_grade_date,
+        null as final_grade_date,
+        null as open_hole_date,
+        null as winter_grade_date,
         case 
           when (demo_cost_abatement+demo_cost_knock) = 'NaN' then null 
           else (demo_cost_abatement+demo_cost_knock)
