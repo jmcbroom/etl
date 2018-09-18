@@ -32,4 +32,7 @@
     Location:
       field: location
       type: location
+    Parcel Number:
+      field: parcelnum
+      type: text
       

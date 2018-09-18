@@ -8,10 +8,13 @@
         bus_name,
         business_description,
         bus_own,
-        v.vlv_desc as license_description
+        v.vlv_desc as license_description,
+        pl.cleaned as parcelnum
       from bseed.business_licenses bl
         inner join bseed.tm_casebussch cbs on bl.case_a = cbs.csm_caseno
         inner join bseed.validation_values v on v.valid_value = cbs.sch_description
+        left outer join bseed.tm_casemain cm on cm.csm_caseno = bl.case_a,
+        left outer join bseed.pnum_lookup pl on pl.dirty = cm.prc_parcel_no
 
 - type: geocode
   table: bseed.business_licenses_geo
@@ -29,5 +32,6 @@
         business_description,
         license_description,
         bus_own,
+        parcelnum,
         (select makeSocrataLocation(geom)) as location
       from bseed.business_licenses_geo
