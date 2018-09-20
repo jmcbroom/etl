@@ -121,6 +121,6 @@
       field: location
       type: location
 
-- to: SFTP
-  host: crimescape
-  file: /tmp/311.csv
+# - to: SFTP
+#   host: crimescape
+#   file: /tmp/311.csv
