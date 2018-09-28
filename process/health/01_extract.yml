@@ -1,35 +1,35 @@
-- database:
-    type: 
-    prefix: 
-    source: EstInfo
+- flatfile:
+    sys: swordsolutions
+    name: EstInfo.TXT
+    delimiter: /t
     destination: health.estinfo
-- database:
-    type:
-    prefix:
-    source: ESTLIC
+- flatfile:
+    sys: swordsolutions
+    name: ESTLIC.TXT
+    delimiter: /t
     destination: health.estlic
-- database:
-    type: 
-    prefix:
-    source: IHeader
+- flatfile:
+    sys: swordsolutions
+    name: IHeader.TXT
+    delimiter: /t
     destination: health.iheader
-- database:
-    type:
-    prefix:
-    source: IDetail
+- flatfile:
+    sys: swordsolutions    
+    name: IDetail.TXT
+    delimiter: /t
     destination: health.idetail
-- database:
-    type:
-    prefix:
-    source: Instype
-    destination: health.instype
-- database:
-    type: 
-    prefix:
-    source: ZIPCODE
+- flatfile:
+    sys: swordsolutions    
+    name: Inssys.TXT
+    delimiter: /t
+    destination: health.inssys
+-swordsolutions flatfile:
+    sys: swordsolutions
+    name: ZIPCODE.TXT
+    delimiter: /t
     destination: health.zipcode
-- database:
-    type:
-    prefix:
-    source: RiskCategory
+- flatfile:
+    sys: swordsolutions    
+    name: RiskCategory.TXT
+    delimiter: /t
     destination: health.riskcategory
