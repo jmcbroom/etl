@@ -9,11 +9,14 @@ class Flatfile(object):
     def to_postgres(self):
         if self.config['source'] == 'swordsolutions':
             path = '/home/gisteam/ExpData'
+            delimiter = '/t'
+            lineterminator = '/n'
+            encoding = 'ISO-8859-1'
         else:
             pass
 
       filename = '{}/{}'.format(path, self.config['name'])
-      df = pandas.read_csv(filename, sep='{}', lineterminator='\r', encoding = "ISO-8859-1").format(self.config['delimiter'])
+      df = pandas.read_csv(filename, sep=delimiter, lineterminator=lineterminator, encoding=encoding)
       df = df.where((pandas.notnull(df)), None)
       schema, table = self.config['destination'].split('.')
       df_to_pg(df, schema, table)
