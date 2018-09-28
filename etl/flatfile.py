@@ -8,10 +8,10 @@ class Flatfile(object):
 
     def to_postgres(self):
         if self.config['source'] == 'swordsolutions':
-            path = '/home/gisteam/ExpData'
-            delimiter = '/t'
-            lineterminator = '/n'
-            encoding = 'ISO-8859-1'
+            path = "/home/gisteam/ExpData"
+            delimiter = "/t"
+            lineterminator = "/n"
+            encoding = "ISO-8859-1"
         else:
             pass
 
