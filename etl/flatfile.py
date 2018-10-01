@@ -11,7 +11,7 @@ class Flatfile(object):
             filepath = '{}/{}'.format(path, self.config['name'])
             
             # read file into df, clean column names, change null values to None for postgres
-            df = pandas.read_csv(filepath, sep="\t", lineterminator="\n", encoding="ISO-8859-1")
+            df = pandas.read_csv(filepath, sep="\t", lineterminator="\n", encoding="ISO-8859-1", low_memory=False)
             df.rename(columns=lambda x: clean_column(x), inplace=True)
             df.where((pandas.notnull(df)), None)
             print(df.columns)
