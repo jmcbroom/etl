@@ -1,0 +1,17 @@
+- type: create_table
+  table_name: violations
+  as: select 
+        inspectionid,
+        establishmentid,
+        date::timestamp,
+        timein,
+        timeout,
+        sanitarian,
+        criticalcount,
+        noncritical,
+        compliance,
+        pcount,
+        pfcount,
+        ccount
+      from health.iheader
+      where date::timestamp > date '2016-01-01'
