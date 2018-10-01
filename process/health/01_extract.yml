@@ -14,10 +14,10 @@
     sys: swordsolutions
     name: IDetail.TXT
     destination: health.idetail
-# - flatfile:
-#     sys: swordsolutions
-#     name: Inssys.TXT
-#     destination: health.inssys
+- flatfile:
+    sys: swordsolutions
+    name: Instype.TXT
+    destination: health.instype
 - flatfile:
     sys: swordsolutions
     name: ZIPCODE.TXT
@@ -26,3 +26,11 @@
     sys: swordsolutions
     name: RiskCategory.TXT
     destination: health.riskcategory
+- flatfile:
+    sys: swordsolutions
+    name: ESTATUS.TXT
+    destination: health.estatus
+- flatfile:
+    sys: swordsolutions
+    name: ETYPE.TXT
+    destination: health.etype

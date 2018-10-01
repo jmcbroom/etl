@@ -1,35 +1,25 @@
 - type: create_table
-  table_name: restaurants
+  table_name: establishments
   as: select 
-        recordid,
+        e.recordid,
         license,
-        name,
-        address1,
-        phone,
-        owner,
-        type,
-        status,
-        class,
-        begindate,
-        enddate,
-        opendate,
-        reviewfrequency,
-        taxid,
-        seasonal,
-        lastinspection,
-        nextinspection,
-        followupdate,
-        reinspectdate,
         lictype,
-        dateclosed,
-        statefacid,
-        riskfactor,
-        facilityid
-      from health.estinfo
+        name,
+        trim(trailing '.' from regexp_replace(address1, '\.','')) as address,
+        (select z.zipcode from health.zipcode z where z.recordid::text = (select substring(e.zip, 1, 3))) as zipcode,
+        owner,
+        status,
+        lastinspection::timestamp,
+        type,
+        nextinspection::timestamp,
+        reviewfrequency,
+        (select r.description from health.riskcategory r where r.recordid::text = (select substring(e.riskfactor, 1, 1))) as complexitycode
+      from health.estinfo e
+      where lastinspection::timestamp >= date '2016-01-01'
 
 - type: geocode
-  table: health.restaurants
-  add_col: address1
+  table: health.establishments
+  add_col: address
   geom_col: geom
 
 - type: create_view
