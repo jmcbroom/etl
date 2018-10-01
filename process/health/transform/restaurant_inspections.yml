@@ -43,9 +43,9 @@
         establishment_type,
         establishment_status,
         case
-          when complexity == 'Z' then 'High risk'
-          when complexity == 'Y' then 'Medium risk'
-          when complexity == 'X' then 'Low risk'
+          when complexity = 'Z' then 'High risk'
+          when complexity = 'Y' then 'Medium risk'
+          when complexity = 'X' then 'Low risk'
           else null
         end as risk_category,
         (select makeSocrataLocation(geom)) as location
