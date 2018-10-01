@@ -1,35 +1,28 @@
 - flatfile:
     sys: swordsolutions
     name: EstInfo.TXT
-    delimiter: /t
     destination: health.estinfo
 - flatfile:
     sys: swordsolutions
     name: ESTLIC.TXT
-    delimiter: /t
     destination: health.estlic
 - flatfile:
     sys: swordsolutions
     name: IHeader.TXT
-    delimiter: /t
     destination: health.iheader
 - flatfile:
-    sys: swordsolutions    
+    sys: swordsolutions
     name: IDetail.TXT
-    delimiter: /t
     destination: health.idetail
+# - flatfile:
+#     sys: swordsolutions
+#     name: Inssys.TXT
+#     destination: health.inssys
 - flatfile:
-    sys: swordsolutions    
-    name: Inssys.TXT
-    delimiter: /t
-    destination: health.inssys
--swordsolutions flatfile:
     sys: swordsolutions
     name: ZIPCODE.TXT
-    delimiter: /t
     destination: health.zipcode
 - flatfile:
-    sys: swordsolutions    
+    sys: swordsolutions
     name: RiskCategory.TXT
-    delimiter: /t
     destination: health.riskcategory
