@@ -1,19 +1,27 @@
+- type: sql
+  statements: 
+  - create index estinfo_recordid_idx on health.estinfo (recordid)
+  - create index zip_recordid_idx on health.zipcode (recordid)
+  - create index etype_recordid_idx on health.etype (recordid)
+  - create index estatus_recordid_idx on health.estatus (recordid)
+  - create index riskcategory_recordid_idx on health.riskcategory (recordid)
+
 - type: create_table
   table_name: establishments
   as: select 
         e.recordid,
-        license,
-        lictype,
         name,
         trim(trailing '.' from regexp_replace(address1, '\.','')) as address,
-        (select z.zipcode from health.zipcode z where z.recordid::text = (select substring(e.zip, 1, 3))) as zipcode,
+        (select rtrim(z.zipcode, '-0000') from health.zipcode z where z.recordid::text = rtrim(e.zip, '.0')) as zipcode,
         owner,
-        status,
+        license,
+        lictype,
+        (select t.description from health.etype t where t.recordid::text = rtrim(e.type, '.0')) as establishment_type,
+        (select es.description from health.estatus es where es.recordid::text = rtrim(e.status, '.0')) as establishment_status,
+        (select r.description from health.riskcategory r where r.recordid::text = (select substring(e.riskfactor, 1, 1))) as complexity,
         lastinspection::timestamp,
-        type,
         nextinspection::timestamp,
-        reviewfrequency,
-        (select r.description from health.riskcategory r where r.recordid::text = (select substring(e.riskfactor, 1, 1))) as complexitycode
+        reviewfrequency
       from health.estinfo e
       where lastinspection::timestamp >= date '2016-01-01'
 
@@ -23,5 +31,22 @@
   geom_col: geom
 
 - type: create_view
-  view_name: restaurant_inspections_socrata
-  as: TBD
+  view_name: establishments_socrata
+  as: select
+        recordid as establishmentid,
+        name,
+        address,
+        zipcode,
+        owner,
+        license as licensenum,
+        lictype,
+        establishment_type,
+        establishment_status,
+        case
+          when complexity is 'Z' then 'High risk'
+          when complexity is 'Y' then 'Medium risk'
+          when complexity is 'X' then 'Low risk'
+          else null
+        end as risk_category,
+        (select makeSocrataLocation(geom)) as location
+      from health.establishments
