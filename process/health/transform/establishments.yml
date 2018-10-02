@@ -5,7 +5,9 @@
   - create index etype_recordid_idx on health.etype (recordid)
   - create index estatus_recordid_idx on health.estatus (recordid)
   - create index riskcategory_recordid_idx on health.riskcategory (recordid)
-
+  - create index iheader_estid_idx on health.iheader (establishmentid)
+  - create index iheader_date_idx on health.iheader (date)
+  
 - type: create_table
   table_name: establishments
   as: select 
@@ -22,10 +24,10 @@
         lastinspection::timestamp,
         nextinspection::timestamp,
         reviewfrequency,
-        i.inspectionid as last_inspectionid
+        (select i.inspectionid from health.iheader i where rtrim(i.establishmentid::text, '.0') = e.recordid::text and i.date::timestamp = e.lastinspection::timestamp order by i.date desc limit 1) as last_inspectionid,
+        (select i.compliance from health.iheader i where rtrim(i.establishmentid::text, '.0') = e.recordid::text and i.date::timestamp = e.lastinspection::timestamp order by i.date desc limit 1) as last_inspection_compliance
       from health.estinfo e
-        left outer join health.iheader i where i.establishmentid = e.recordid
-      where lastinspection::timestamp >= date '2016-01-01'
+      where lastinspection::timestamp >= date '2016-08-01'
 
 - type: geocode
   table: health.establishments
@@ -40,8 +42,8 @@
         address,
         zipcode,
         owner,
-        license as licensenum,
-        lictype,
+        license as license_number,
+        lictype as license_type,
         establishment_type,
         initcap(establishment_status),
         case
@@ -50,5 +52,10 @@
           when complexity = 'X' then 'Low risk'
           else null
         end as risk_category,
+        lastinspection as last_inspection_date,
+        last_inspectionid,
+        initcap(last_inspection_compliance),
+        nextinspection as next_inspection_date,
+        reviewfrequency as review_frequency_days,
         (select makeSocrataLocation(geom)) as location
       from health.establishments
