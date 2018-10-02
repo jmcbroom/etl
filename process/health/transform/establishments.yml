@@ -45,7 +45,7 @@
         license as license_number,
         lictype as license_type,
         establishment_type,
-        initcap(establishment_status),
+        initcap(establishment_status) as establishment_status,
         case
           when complexity = 'Z' then 'High risk'
           when complexity = 'Y' then 'Medium risk'
@@ -54,7 +54,7 @@
         end as risk_category,
         lastinspection as last_inspection_date,
         last_inspectionid,
-        initcap(last_inspection_compliance),
+        initcap(last_inspection_compliance) as last_inspection_compliance,
         nextinspection as next_inspection_date,
         reviewfrequency as review_frequency_days,
         (select makeSocrataLocation(geom)) as location
