@@ -42,7 +42,7 @@
         address,
         zipcode,
         owner,
-        license as license_number,
+        (select handleNan(license)) as license_number,
         lictype as license_type,
         establishment_type,
         initcap(establishment_status) as establishment_status,
@@ -52,10 +52,10 @@
           when complexity = 'X' then 'Low risk'
           else null
         end as risk_category,
-        lastinspection as last_inspection_date,
+        (select makeSocrataDate(lastinspection)) as last_inspection_date,
         last_inspectionid,
         initcap(last_inspection_compliance) as last_inspection_compliance,
-        nextinspection as next_inspection_date,
-        reviewfrequency as review_frequency_days,
+        (select makeSocrataDate(nextinspection)) as next_inspection_date,
+        (select handleNan(reviewfrequency)) as review_frequency_days,
         (select makeSocrataLocation(geom)) as location
       from health.establishments
