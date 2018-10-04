@@ -27,7 +27,7 @@
         (select i.inspectionid from health.iheader i where rtrim(i.establishmentid::text, '.0') = e.recordid::text and i.date::timestamp = e.lastinspection::timestamp order by i.date desc limit 1) as last_inspectionid,
         (select i.compliance from health.iheader i where rtrim(i.establishmentid::text, '.0') = e.recordid::text and i.date::timestamp = e.lastinspection::timestamp order by i.date desc limit 1) as last_inspection_compliance
       from health.estinfo e
-      where lastinspection::timestamp >= date '2016-08-01'
+      where lastinspection::timestamp between date '2016-08-01' and now() - interval '30 DAYS'
 
 - type: geocode
   table: health.establishments

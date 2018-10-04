@@ -1,6 +1,39 @@
 - to: Socrata
-  id: qqde-x6kx
-  name: Restaurant Inspections
-  table: health.restaurant_inspections
+  id: 
+  name: Restaurant Inspections - Violations by Inspection
+  table: health.violations_socrata
   method: replace
   columns:
+    Inspection ID:
+      field: inspectionid
+      type: number
+    Inspection Date:
+      field: inspection_date
+      type: calendar_date
+    Establishment ID:
+      field: establishmentid
+      type: number
+    Name:
+      field: name
+      type: text
+    Inspection Area:
+      field: inspectarea
+      type: text
+    Violation Code:
+      field: violation_code
+      type: text
+    Violation Description:
+      field: violation_description
+      type: text
+    Violation Type:
+      field: violation_type
+      type: text
+    Critical Violation Type:
+      field: critical_violation_type
+      type: text
+    Corrected:
+      field: corrected
+      type: text
+    Date Corrected: 
+      field: corrected_date
+      type: calendar_date   

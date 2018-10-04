@@ -1,17 +1,37 @@
 - type: create_table
   table_name: violations
   as: select 
+        d.inspectionid,
+        i.date as inspectiondate,
+        i.establishmentid,
+        i.name,
+        inspectarea,
+        violation,
+        case 
+          when pcf = 'P' then 'Priority'
+          when pcf = 'C' then 'Core'
+          when pcf = 'F' then 'Foundation'
+          else null
+        end as violation_type,
+        critical,
+        corrected,
+        datecorrected::timestamp
+      from health.idetail d
+        inner join health.inspections i on i.inspectionid::text = rtrim(d.inspectionid, '.0')
+      where rtrim(d.inspectionid, '.0') in (select inspectionid::text from health.inspections)
+
+- type: create_view
+  view_name: violations_socrata
+  as: select
         inspectionid,
-        establishmentid,
-        date::timestamp,
-        timein,
-        timeout,
-        sanitarian,
-        criticalcount,
-        noncritical,
-        compliance,
-        pcount,
-        pfcount,
-        ccount
-      from health.iheader
-      where date::timestamp > date '2016-01-01'
+        (select makeSocrataDate(inspectiondate)) as inspection_date,
+        establishementid,
+        name,
+        inspectarea,
+        violation as violation_code,
+        'tbd lookup' as violation_description,
+        violation_type,
+        initcap(critical) as critical_violation_type,
+        initcap(corrected) as corrected,
+        (select makeSocrataDate(datecorrected)) as corrected_date
+      from health.violations

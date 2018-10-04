@@ -1,0 +1,37 @@
+- type: create_table
+  table_name: inspections
+  as: select 
+        inspectionid,
+        establishmentid,
+        e.name,
+        date::timestamp,
+        timein,
+        timeout,
+        i.sanitarian,
+        pcount,
+        pfcount,
+        ccount,
+        criticalcount,
+        noncritical,
+        compliance
+      from health.iheader i
+        inner join health.estinfo e on e.recordid::text = rtrim(i.establishmentid, '.0')
+      where date::timestamp between date '2016-08-01' and now() - interval '30 DAYS'
+
+- type: create_view
+  view_name: inspections_socrata
+  as: select
+        inspectionid,
+        establishmentid,
+        name,
+        (select makeSocrataDate(date)) as inspection_date,
+        timein,
+        timeout,
+        sanitarian as inspectorid,
+        pcount,
+        pfcount,
+        ccount,
+        criticalcount,
+        noncritical,
+        initcap(compliance) as in_compliance
+      from health.inspections
