@@ -22,6 +22,9 @@
     Time Out: 
       field: timeout
       type: text
+    Inspection Type:
+      field: inspection_type
+      type: text
     Inspector ID:
       field: inspectorid
       type: number
