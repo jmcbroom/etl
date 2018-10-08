@@ -42,7 +42,7 @@
         address,
         zipcode,
         owner,
-        (select handleNan(license)) as license_number,
+        license as license_number,
         lictype as license_type,
         establishment_type,
         initcap(establishment_status) as establishment_status,
@@ -56,6 +56,6 @@
         last_inspectionid,
         initcap(last_inspection_compliance) as last_inspection_compliance,
         (select makeSocrataDate(nextinspection)) as next_inspection_date,
-        (select handleNan(reviewfrequency)) as review_frequency_days,
+        reviewfrequency as review_frequency_days,
         (select makeSocrataLocation(geom)) as location
       from health.establishments

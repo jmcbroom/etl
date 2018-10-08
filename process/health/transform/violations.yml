@@ -25,13 +25,13 @@
   as: select
         inspectionid,
         (select makeSocrataDate(inspectiondate)) as inspection_date,
-        establishementid,
+        establishmentid,
         name,
         inspectarea,
         violation as violation_code,
         'tbd lookup' as violation_description,
         violation_type,
-        initcap(critical) as critical_violation_type,
-        initcap(corrected) as corrected,
+        critical as critical_violation_type,
+        corrected,
         (select makeSocrataDate(datecorrected)) as corrected_date
       from health.violations

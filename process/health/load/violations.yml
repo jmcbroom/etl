@@ -1,5 +1,5 @@
 - to: Socrata
-  id: 
+  id: 6kry-5abc
   name: Restaurant Inspections - Violations by Inspection
   table: health.violations_socrata
   method: replace

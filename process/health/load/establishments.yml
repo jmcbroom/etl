@@ -1,5 +1,5 @@
 - to: Socrata
-  id: 
+  id: gr7r-43jt
   name: Restaurant Inspections - Establishments
   table: health.establishments_socrata
   method: replace
