@@ -3,9 +3,9 @@
   as: select 
         d.inspectionid,
         i.date as inspectiondate,
+        i.inspection_type,
         i.establishmentid,
         i.name,
-        inspectarea,
         violation,
         case 
           when pcf = 'P' then 'Priority'
@@ -25,9 +25,9 @@
   as: select
         inspectionid,
         (select makeSocrataDate(inspectiondate)) as inspection_date,
+        inspection_type,
         establishmentid,
         name,
-        inspectarea,
         violation as violation_code,
         'tbd lookup' as violation_description,
         violation_type,

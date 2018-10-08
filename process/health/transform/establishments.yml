@@ -47,9 +47,9 @@
         establishment_type,
         initcap(establishment_status) as establishment_status,
         case
-          when complexity = 'Z' then 'High risk'
-          when complexity = 'Y' then 'Medium risk'
-          when complexity = 'X' then 'Low risk'
+          when complexity = 'Z' then 'High'
+          when complexity = 'Y' then 'Medium'
+          when complexity = 'X' then 'Low'
           else null
         end as risk_category,
         (select makeSocrataDate(lastinspection)) as last_inspection_date,

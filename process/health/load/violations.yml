@@ -10,14 +10,14 @@
     Inspection Date:
       field: inspection_date
       type: calendar_date
+    Inspection Type:
+      field: inspection_type
+      type: text
     Establishment ID:
       field: establishmentid
       type: number
     Name:
       field: name
-      type: text
-    Inspection Area:
-      field: inspectarea
       type: text
     Violation Code:
       field: violation_code
