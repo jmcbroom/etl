@@ -8,6 +8,7 @@
         timein,
         timeout,
         (select description from health.instype t where t.recordid = rtrim(i.type, '.0')::bigint) as inspection_type,
+        i.sanitarian,
         pcount,
         pfcount,
         ccount,
