@@ -7,14 +7,23 @@
         i.establishmentid,
         i.name,
         violation,
+        (select v.description from health.violate v where rtrim(d.viorecordid, '.0')::bigint = v.recordid) as violation_description,
         case 
           when pcf = 'P' then 'Priority'
           when pcf = 'C' then 'Core'
           when pcf = 'F' then 'Foundation'
           else null
         end as violation_type,
-        critical,
-        corrected,
+        case
+          when critical::text = 'true' then 'Yes'
+          when critical::text = 'false' then 'No'
+          else null
+        end as critical,
+        case
+          when corrected::text = 'true' then 'Yes'
+          when corrected::text = 'false' then 'No'
+          else null
+        end as corrected,
         datecorrected::timestamp
       from health.idetail d
         inner join health.inspections i on i.inspectionid::text = rtrim(d.inspectionid, '.0')
@@ -29,7 +38,7 @@
         establishmentid,
         name,
         violation as violation_code,
-        'tbd lookup' as violation_description,
+        violation_description,
         violation_type,
         critical as critical_violation_type,
         corrected,

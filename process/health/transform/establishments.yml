@@ -8,6 +8,7 @@
   - create index iheader_estid_idx on health.iheader (establishmentid)
   - create index iheader_date_idx on health.iheader (date)
   - create index instype_recordid_idx on health.instype (recordid)
+  - create index violate_recordid_idx on health.violate (recordid)
   
 - type: create_table
   table_name: establishments
