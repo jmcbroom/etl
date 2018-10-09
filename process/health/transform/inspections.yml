@@ -37,8 +37,8 @@
         noncritical,
         correctedcritical,
         case
-          when criticalcount <= correctedcritical then 'Yes'
-          when criticalcount > correctedcritical then 'No'
+          when criticalcount::bigint <= correctedcritical then 'Yes'
+          when criticalcount::bigint > correctedcritical then 'No'
           else null
         end as in_compliance
       from health.inspections
