@@ -34,3 +34,7 @@
     sys: swordsolutions
     name: ETYPE.TXT
     destination: health.etype
+- flatfile:
+    sys: swordsolutions
+    name: VIOLATE.TXT
+    destination: health.violate
