@@ -37,11 +37,14 @@
     Core Violations Count:
       field: ccount
       type: number
-    Critical Violations Count:
+    Total Critical Violations:
       field: criticalcount
       type: number
-    Non Critical Violations Count:
+    Total Non Critical Violations:
       field: noncritical
+      type: number
+    Total Corrected Critical Violations:
+      field: correctedcritical
       type: number
     In Compliance:
       field: in_compliance

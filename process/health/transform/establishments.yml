@@ -7,8 +7,10 @@
   - create index riskcategory_recordid_idx on health.riskcategory (recordid)
   - create index iheader_estid_idx on health.iheader (establishmentid)
   - create index iheader_date_idx on health.iheader (date)
+  - create index iheader_inpsid_idx on health.iheader (inspectionid)
   - create index instype_recordid_idx on health.instype (recordid)
   - create index violate_recordid_idx on health.violate (recordid)
+  - create index idetail_inspid_idx on health.idetail (inspectionid)
   
 - type: create_table
   table_name: establishments
@@ -56,7 +58,11 @@
         end as risk_category,
         (select makeSocrataDate(lastinspection)) as last_inspection_date,
         last_inspectionid,
-        initcap(last_inspection_compliance) as last_inspection_compliance,
+        case
+          when last_inspection_compliance::text = 'true' then 'Yes'
+          when last_inspection_compliance::text = 'false' then 'No'
+          else null
+        end as last_inspection_compliance,
         (select makeSocrataDate(nextinspection)) as next_inspection_date,
         reviewfrequency as review_frequency_days,
         (select makeSocrataLocation(geom)) as location

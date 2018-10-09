@@ -14,7 +14,7 @@
         ccount,
         criticalcount,
         noncritical,
-        compliance
+        (select count(corrected) from health.idetail d where rtrim(d.inspectionid, '.0') = i.inspectionid::text and d.critical = 'true' and d.corrected::text = 'true') as correctedcritical
       from health.iheader i
         inner join health.estinfo e on e.recordid::text = rtrim(i.establishmentid, '.0')
       where date::timestamp between date '2016-08-01' and now() - interval '30 DAYS'
@@ -35,5 +35,10 @@
         ccount,
         criticalcount,
         noncritical,
-        initcap(compliance) as in_compliance
+        correctedcritical,
+        case
+          when criticalcount <= correctedcritical then 'Yes'
+          when criticalcount > correctedcritical then 'No'
+          else null
+        end as in_compliance
       from health.inspections
