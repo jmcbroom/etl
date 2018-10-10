@@ -43,3 +43,28 @@
         end as in_compliance
       from health.inspections
       order by date desc, name asc
+
+- type: create_table
+  table_name: inspections_gql
+  as: select
+        inspectionid,
+        replace(establishmentid, '.0', '')::bigint as establishmentid,
+        name,
+        date as inspection_date,
+        timein,
+        timeout,
+        inspection_type,
+        sanitarian as inspectorid,
+        pcount,
+        pfcount,
+        ccount,
+        criticalcount,
+        noncritical,
+        correctedcritical,
+        case
+          when criticalcount::numeric <= correctedcritical::numeric then 'Yes'
+          when criticalcount::numeric > correctedcritical::numeric then 'No'
+          else null
+        end as in_compliance
+      from health.inspections
+      order by date desc, name asc

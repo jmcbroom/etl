@@ -45,3 +45,20 @@
         (select makeSocrataDate(datecorrected)) as corrected_date
       from health.violations
       order by inspectiondate desc, name asc
+
+- type: create_table
+  table_name: violations_gql
+  as: select
+        replace(inspectionid, '.0', '')::bigint as inspectionid,
+        inspectiondate as inspection_date,
+        inspection_type,
+        replace(establishmentid, '.0', '')::bigint as establishmentid,
+        name,
+        violation as violation_code,
+        violation_description,
+        violation_type,
+        critical as critical_violation_type,
+        corrected,
+        datecorrected as corrected_date
+      from health.violations
+      order by inspectiondate desc, name asc

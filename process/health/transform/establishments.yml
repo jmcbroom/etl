@@ -68,3 +68,34 @@
         (select makeSocrataLocation(geom)) as location
       from health.establishments
       order by lastinspection desc, name asc
+
+- type: create_table
+  table_name: establishments_gql
+  as: select
+        recordid as establishmentid,
+        name,
+        address,
+        zipcode,
+        owner,
+        license as license_number,
+        lictype as license_type,
+        establishment_type,
+        initcap(establishment_status) as establishment_status,
+        case
+          when complexity = 'Z' then 'High'
+          when complexity = 'Y' then 'Medium'
+          when complexity = 'X' then 'Low'
+          else null
+        end as risk_category,
+        lastinspection as last_inspection_date,
+        last_inspectionid,
+        case
+          when last_inspection_compliance::text = 'true' then 'Yes'
+          when last_inspection_compliance::text = 'false' then 'No'
+          else null
+        end as last_inspection_compliance,
+        nextinspection as next_inspection_date,
+        reviewfrequency as review_frequency_days,
+        geom
+      from health.establishments
+      order by lastinspection desc, name asc
