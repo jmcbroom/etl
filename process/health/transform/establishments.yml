@@ -18,18 +18,18 @@
         e.recordid,
         name,
         trim(trailing '.' from regexp_replace(address1, '\.','')) as address,
-        (select rtrim(z.zipcode, '-0000') from health.zipcode z where z.recordid::text = rtrim(e.zip, '.0')) as zipcode,
+        (select rtrim(z.zipcode, '-0000') from health.zipcode z where z.recordid::text = replace(e.zip, '.0', '')) as zipcode,
         owner,
         license,
         lictype,
-        (select t.description from health.etype t where t.recordid::text = rtrim(e.type, '.0')) as establishment_type,
-        (select es.description from health.estatus es where es.recordid::text = rtrim(e.status, '.0')) as establishment_status,
+        (select t.description from health.etype t where t.recordid::text = replace(e.type, '.0', '')) as establishment_type,
+        (select es.description from health.estatus es where es.recordid::text = replace(e.status, '.0', '')) as establishment_status,
         (select r.description from health.riskcategory r where r.recordid::text = (select substring(e.riskfactor, 1, 1))) as complexity,
         lastinspection::timestamp,
         nextinspection::timestamp,
         reviewfrequency,
-        (select i.inspectionid from health.iheader i where rtrim(i.establishmentid::text, '.0') = e.recordid::text and i.date::timestamp = e.lastinspection::timestamp order by i.date desc limit 1) as last_inspectionid,
-        (select i.compliance from health.iheader i where rtrim(i.establishmentid::text, '.0') = e.recordid::text and i.date::timestamp = e.lastinspection::timestamp order by i.date desc limit 1) as last_inspection_compliance
+        (select i.inspectionid from health.iheader i where replace(i.establishmentid::text, '.0', '') = e.recordid::text and i.date::timestamp = e.lastinspection::timestamp order by i.date desc limit 1) as last_inspectionid,
+        (select i.compliance from health.iheader i where replace(i.establishmentid::text, '.0', '') = e.recordid::text and i.date::timestamp = e.lastinspection::timestamp order by i.date desc limit 1) as last_inspection_compliance
       from health.estinfo e
       where lastinspection::timestamp between date '2016-08-01' and now() - interval '30 DAYS'
 
@@ -67,3 +67,4 @@
         reviewfrequency as review_frequency_days,
         (select makeSocrataLocation(geom)) as location
       from health.establishments
+      order by lastinspection desc, name asc

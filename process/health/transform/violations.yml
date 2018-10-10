@@ -7,7 +7,7 @@
         i.establishmentid,
         i.name,
         violation,
-        (select v.description from health.violate v where rtrim(d.viorecordid, '.0')::bigint = v.recordid) as violation_description,
+        (select v.description from health.violate v where replace(d.viorecordid, '.0', '')::bigint = v.recordid) as violation_description,
         case 
           when pcf = 'P' then 'Priority'
           when pcf = 'C' then 'Core'
@@ -26,8 +26,8 @@
         end as corrected,
         datecorrected::timestamp
       from health.idetail d
-        inner join health.inspections i on i.inspectionid::text = rtrim(d.inspectionid, '.0')
-      where rtrim(d.inspectionid, '.0') in (select inspectionid::text from health.inspections)
+        inner join health.inspections i on i.inspectionid::text = replace(d.inspectionid, '.0', '')
+      where replace(d.inspectionid, '.0', '') in (select inspectionid::text from health.inspections)
 
 - type: create_view
   view_name: violations_socrata
@@ -44,3 +44,4 @@
         corrected,
         (select makeSocrataDate(datecorrected)) as corrected_date
       from health.violations
+      order by inspectiondate desc, name asc
