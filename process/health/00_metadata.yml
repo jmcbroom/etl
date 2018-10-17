@@ -1,4 +1,4 @@
-name: Health - Restaurant Inspections
+name: Health Department
 schema: health
 datasets:
   - establishments

@@ -40,9 +40,6 @@
     Last Inspection ID:
       field: last_inspectionid
       type: number
-    Last Inspection in Compliance:
-      field: last_inspection_compliance
-      type: text
     Next Inspection Date:
       field: next_inspection_date
       type: calendar_date

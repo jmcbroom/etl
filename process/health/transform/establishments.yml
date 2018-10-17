@@ -28,10 +28,9 @@
         lastinspection::timestamp,
         nextinspection::timestamp,
         reviewfrequency,
-        (select i.inspectionid from health.iheader i where replace(i.establishmentid::text, '.0', '') = e.recordid::text and i.date::timestamp = e.lastinspection::timestamp order by i.date desc limit 1) as last_inspectionid,
-        (select i.compliance from health.iheader i where replace(i.establishmentid::text, '.0', '') = e.recordid::text and i.date::timestamp = e.lastinspection::timestamp order by i.date desc limit 1) as last_inspection_compliance
+        (select i.inspectionid from health.iheader i where replace(i.establishmentid::text, '.0', '') = e.recordid::text and i.date::timestamp = e.lastinspection::timestamp order by i.date desc limit 1) as last_inspectionid
       from health.estinfo e
-      where lastinspection::timestamp between date '2016-08-01' and now() - interval '30 DAYS'
+      where lastinspection::timestamp >= '2016-08-01'
 
 - type: geocode
   table: health.establishments
@@ -58,11 +57,6 @@
         end as risk_category,
         (select makeSocrataDate(lastinspection)) as last_inspection_date,
         last_inspectionid,
-        case
-          when last_inspection_compliance::text = 'true' then 'Yes'
-          when last_inspection_compliance::text = 'false' then 'No'
-          else null
-        end as last_inspection_compliance,
         (select makeSocrataDate(nextinspection)) as next_inspection_date,
         reviewfrequency as review_frequency_days,
         (select makeSocrataLocation(geom)) as location
@@ -72,7 +66,7 @@
 - type: create_table
   table_name: establishments_gql
   as: select
-        recordid as establishmentid,
+        replace(recordid, '.0', '')::text as establishmentid,
         name,
         address,
         zipcode,
@@ -88,12 +82,7 @@
           else null
         end as risk_category,
         lastinspection as last_inspection_date,
-        last_inspectionid,
-        case
-          when last_inspection_compliance::text = 'true' then 'Yes'
-          when last_inspection_compliance::text = 'false' then 'No'
-          else null
-        end as last_inspection_compliance,
+        replace(last_inspectionid, '.0', '')::text as last_inspectionid,
         nextinspection as next_inspection_date,
         reviewfrequency as review_frequency_days,
         geom
