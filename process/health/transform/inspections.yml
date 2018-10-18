@@ -47,8 +47,8 @@
 - type: create_table
   table_name: inspections_gql
   as: select
-        replace(inspectionid, '.0', '')::text as inspectionid,
-        replace(establishmentid, '.0', '')::text as establishmentid,
+        inspectionid::text as inspectionid,
+        establishmentid::text as establishmentid,
         name,
         date as inspection_date,
         timein,

@@ -34,7 +34,7 @@
   view_name: violations_socrata
   as: select
         inspectionid,
-        (select makeSocrataDate(inspectiondate)) as inspection_date,
+        (select makeSocrataDate(inspectiondate::timestamp)) as inspection_date,
         inspection_type,
         establishmentid,
         name,
@@ -44,17 +44,17 @@
         critical as critical_violation_type,
         corrected,
         days_to_correct,
-        (select makeSocrataDate(datecorrected)) as corrected_date
+        (select makeSocrataDate(datecorrected::timestamp)) as corrected_date
       from health.violations
       order by inspectiondate desc, name asc
 
 - type: create_table
   table_name: violations_gql
   as: select
-        replace(inspectionid, '.0', '')::text as inspectionid,
+        inspectionid::text as inspectionid,
         inspectiondate as inspection_date,
         inspection_type,
-        replace(establishmentid, '.0', '')::text as establishmentid,
+        establishmentid::text as establishmentid,
         name,
         violation as violation_code,
         violation_description,
