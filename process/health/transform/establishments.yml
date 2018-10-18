@@ -66,7 +66,7 @@
 - type: create_table
   table_name: establishments_gql
   as: select
-        replace(recordid, '.0', '')::text as establishmentid,
+        recordid::text as establishmentid,
         name,
         address,
         zipcode,
@@ -82,7 +82,7 @@
           else null
         end as risk_category,
         lastinspection as last_inspection_date,
-        replace(last_inspectionid, '.0', '')::text as last_inspectionid,
+        last_inspectionid::text as last_inspectionid,
         nextinspection as next_inspection_date,
         reviewfrequency as review_frequency_days,
         geom
