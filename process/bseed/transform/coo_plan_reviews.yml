@@ -53,7 +53,8 @@
           when pl.parcel_geom is not null
           then (select makeSocrataLocation(pl.parcel_geom))
           else null
-        end as location
+        end as location,
+        p.prc_zip_code
       from bseed.tm_casemain c
         inner join bseed.tm_caseaction ca on c.csm_caseno = ca.csm_caseno
         inner join bseed.tm_caseaddress cd on c.csm_caseno = cd.csm_caseno
@@ -61,10 +62,11 @@
         left outer join bseed.tm_casebld cb on c.csm_caseno = cb.csm_caseno
         left outer join bseed.tm_caseprv cp on c.csm_caseno = cp.csm_caseno
         inner join bseed.paid_case_fee pcf on c.csm_caseno = pcf.csm_caseno
+        left outer join bseed.tm_parcel p on c.prc_parcel_no = p.prc_parcel_no
       where c.case_type in ('PRV', 'BLD')
         and ca.csa_date3 > '2014-01-01'
         and ca.actn_code in ('020', '030', '385')
-      group by c.csm_caseno, ca.csa_date3, cd.csm_st_nmbr, pl.cleaned, cd.csm_st_pfx, cd.csm_st_name, ca.action_description, c.case_type, pl.parcel_geom
+      group by c.csm_caseno, ca.csa_date3, cd.csm_st_nmbr, pl.cleaned, cd.csm_st_pfx, cd.csm_st_name, ca.action_description, c.case_type, pl.parcel_geom, p.prc_zip_code
       order by ca.csa_date3 desc
 
 # # Bldg permits plus COOs & PRVs tileset
