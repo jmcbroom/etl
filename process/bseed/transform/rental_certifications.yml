@@ -28,7 +28,7 @@
         inner join bseed.tm_caseaddress cadd on cadd.csm_caseno = cm.csm_caseno
         inner join bseed.tm_parcel p on p.prc_parcel_no = cm.prc_parcel_no
       where 
-        cm.case_type in ('PMB','VPO')
+        cm.case_type = 'PMB'
         and ca.csa_date3 > CURRENT_DATE - INTERVAL '1 year'
         and cp.csp_primary = 'Y'
         and ca.actn_menu_id in ('B','C','D')
