@@ -1,5 +1,5 @@
 - to: Socrata
-  id: e2yp-fxn3
+  id: futm-xtvg
   name: Rental Registrations - Vacant Property Ordinance (VPO) Cases
   table: bseed.rental_registrations_vpos_socrata
   method: replace
@@ -64,7 +64,7 @@
       type: number
 
 - to: Socrata
-  id: d343-emyz
+  id: 8vfc-77i7
   name: Rental Certifications - Vacant Property Ordinance (VPO) Cases
   table: bseed.rental_certifications_vpos_socrata  
   method: replace
