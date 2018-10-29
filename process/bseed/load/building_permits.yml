@@ -1,9 +1,3 @@
-
-- to: Mapbox
-  name: BSEED All Permits
-  table: bseed.all_permits_mapbox
-  tileset: parcels_with_lots_of_permits
-
 # - to: Mapbox
 #   name: BSEED Building Permits
 #   table: bseed.bldg_permits_mapbox

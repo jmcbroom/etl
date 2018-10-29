@@ -49,7 +49,11 @@
           when max(pcf.pcf_amt_due) is null then null 
           else max(pcf.pcf_amt_due) 
         end as amt_due,
-        (select makeSocrataLocation(pl.parcel_geom)) as location
+        case
+          when pl.parcel_geom is not null
+          then (select makeSocrataLocation(pl.parcel_geom))
+          else null
+        end as location
       from bseed.tm_casemain c
         inner join bseed.tm_caseaction ca on c.csm_caseno = ca.csm_caseno
         inner join bseed.tm_caseaddress cd on c.csm_caseno = cd.csm_caseno
@@ -62,3 +66,26 @@
         and ca.actn_code in ('020', '030', '385')
       group by c.csm_caseno, ca.csa_date3, cd.csm_st_nmbr, pl.cleaned, cd.csm_st_pfx, cd.csm_st_name, ca.action_description, c.case_type, pl.parcel_geom
       order by ca.csa_date3 desc
+
+# # Bldg permits plus COOs & PRVs tileset
+# - type: create_view
+#   view_name: all_permits_mapbox
+#   as: with all_permits as 
+#       (
+#         select 
+#           parcel_no, 
+#           sum(estimated_cost::bigint) as total_cost 
+#           from bseed.bldg_permits_socrata where parcel_no is not null and estimated_cost > 50000 group by parcel_no
+#         union all
+#         select 
+#           parcel_no, 
+#           sum(est_cost::bigint) as total_cost 
+#         from bseed.coo_planrev_socrata where parcel_no is not null and est_cost > 50000 group by parcel_no
+#       )
+#         select 
+#           parcel_no, 
+#           sum(total_cost::bigint) as cost, 
+#           st_transform(ap.shape, 4326) 
+#         from all_permits pa 
+#           inner join assessor.parcels_050318 ap on pa.parcel_no = ap.parcelno 
+#           group by parcel_no, ap.shape

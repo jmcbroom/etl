@@ -1,7 +1,7 @@
 - to: Socrata
   id: dxgi-9s8s
   name: Parcel Points Ownership
-  table: assessor.parcel_points
+  table: assessor.parcel_points_socrata
   method: upsert
   row_identifier: objectid
   columns:

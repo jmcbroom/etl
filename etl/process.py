@@ -112,6 +112,8 @@ class Process(object):
       self.e = yaml.load(f)
 
   def extract(self):
+    if self.e == None:
+      return None
     for source in self.e:
       for srctype, params in source.items():
 
@@ -181,6 +183,22 @@ class Process(object):
           
         else:
           print("I don't know this source type: {}".format(srctype))
+
+  def transform(self, dataset=None):
+    for d in self.datasets:
+      if dataset and d != dataset:
+        pass
+      else:
+        ds = Dataset(d, self.basedir, self.schema)
+        ds.transform()
+
+  def load(self, dataset=None):
+    for d in self.datasets:
+      if dataset and d != dataset:
+        pass
+      else:
+        ds = Dataset(d, self.basedir, self.schema)
+        ds.load()
 
   def update(self, dataset=None):
     # Extract our data that the Datasets require

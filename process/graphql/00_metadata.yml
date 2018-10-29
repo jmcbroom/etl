@@ -1,0 +1,6 @@
+name: GraphQL 
+schema: gql
+notify: True
+datasets: 
+  - main
+  

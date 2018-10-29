@@ -26,7 +26,13 @@
     Business Description:
       field: business_description
       type: text
+    License Description:
+      field: license_description
+      type: text
     Location:
       field: location
       type: location
+    Parcel Number:
+      field: parcelnum
+      type: text
       

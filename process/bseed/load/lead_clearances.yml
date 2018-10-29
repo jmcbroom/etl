@@ -1,0 +1,50 @@
+- to: Socrata
+  id: 5u83-aqk7
+  name: Lead Clearances
+  table: bseed.lead_clearances_socrata
+  method: replace
+  row_identifier:
+  columns:
+    Case Number:
+      field: csm_caseno
+      type: text
+    Address:
+      field: address
+      type: text
+    Parcel Number:
+      field: parcelnum
+      type: text
+    Location:
+      field: location
+      type: location
+    Action Description:
+      field: action_description
+      type: text
+    Action Menu ID:
+      field: actn_menu_id
+      type: text
+    Action Code:
+      field: actn_code
+      type: text
+    CSA Creation Date:
+      field: csa_creation_date
+      type: calendar_date
+    CSA Date 1:
+      field: csa_date1
+      type: calendar_date
+    CSA Date 2:
+      field: csa_date2
+      type: calendar_date
+    CSA Date 3:
+      field: csa_date3
+      type: calendar_date
+    CSA Disposition:
+      field: csa_disp
+      type: text
+    Case Type:
+      field: case_type
+      type: text
+    Zip Code:
+      field: prc_zip_code
+      type: text
+      

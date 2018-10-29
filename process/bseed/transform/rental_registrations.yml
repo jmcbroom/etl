@@ -46,6 +46,7 @@
 - type: sql
   statements:
     - update bseed.rental_registrations set parcel_geom = geocode_geom where parcel_geom is null and geocode_geom is not null
+    - create index bseed_rental_reg_geom_idx on bseed.rental_registrations using gist(parcel_geom)
 
 - type: create_view
   view_name: rental_registrations_socrata
