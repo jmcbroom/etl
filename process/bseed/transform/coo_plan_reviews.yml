@@ -51,7 +51,7 @@
         end as amt_due,
         case
           when pl.parcel_geom is not null
-          then (select makeSocrataLocation(pl.parcel_geom))
+          then (select makeSocrataLocation(st_centroid(pl.parcel_geom)))
           else null
         end as location,
         p.prc_zip_code
