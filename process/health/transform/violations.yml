@@ -47,7 +47,7 @@
         violation_type,
         critical as critical_violation_type,
         corrected,
-        days_to_correct,
+        days_to_correct::text,
         (select makeSocrataDate(datecorrected::timestamp)) as corrected_date,
         itemid,
         item_description,
