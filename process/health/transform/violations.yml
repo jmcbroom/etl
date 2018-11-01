@@ -48,7 +48,11 @@
         critical as critical_violation_type,
         corrected,
         days_to_correct,
-        (select makeSocrataDate(datecorrected::timestamp)) as corrected_date
+        (select makeSocrataDate(datecorrected::timestamp)) as corrected_date,
+        itemid,
+        item_description,
+        problemid,
+        problem_description
       from health.violations
       order by inspectiondate desc, name asc
 
@@ -66,6 +70,10 @@
         critical as critical_violation_type,
         corrected,
         days_to_correct,
-        datecorrected as corrected_date
+        datecorrected as corrected_date,
+        itemid,
+        item_description,
+        problemid,
+        problem_description
       from health.violations
       order by inspectiondate desc, name asc
