@@ -22,9 +22,9 @@ def run(process, dataset=None, notify=False, emoji=None):
     msg.comment("Error: *{}*\n > ```{}```".format(process, e))
 
 # daily run; these do not use schedule
+run('bseed', dataset=None, notify=True, emoji='nut_and_bolt')
 run('dlba', dataset=None, notify=True, emoji='bank')
 run('assessor', dataset=None, notify=True, emoji='ledger')
-run('bseed', dataset=None, notify=True, emoji='nut_and_bolt')
 run('ocp', dataset=None, notify=True, emoji='money_with_wings')
 run('dah', dataset=None, notify=True, emoji='warning')
 run('crio', dataset=None, notify=True, emoji='briefcase')
