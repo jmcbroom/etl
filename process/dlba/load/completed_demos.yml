@@ -1,3 +1,13 @@
+- to: ArcGIS Online
+  file: completed_demos.json
+  table: dlba.completed_demos_ago
+  title: Completed Residential Demolitions
+  id: 5c5783282f11499ab82da107af532ac9
+  type: geojson
+  description: Completed residential demolitions since 1/1/2014.
+  tags:
+    - demolitions
+    - dlba
 - to: Socrata
   name: Detroit Demolitions
   id: rv44-e9di

@@ -1,94 +1,95 @@
-# - salesforce:
-#     object: Account
-#     destination: dlba.account
-#     fields:
-#       - Council_District__c
-#       - Current_Status__c
-#       - Id
-#       - Latitude__c
-#       - Longitude__c
-#       - Name
-#       - Neighborhood__c
-#       - RecordTypeId
-#       - Related_Property_Case__r.Id
-#       - Property_Ownership__c
-#       - Parcel_ID__c
-#       - Inventory_Status_Socrata__c
-# - salesforce:
-#     object: Case
-#     destination: dlba.case
-#     fields:
-#       - ACCT_Latitude__c
-#       - ACCT_Longitude__c
-#       - ASB_Abatement_Start_Date__c
-#       - ASB_Abatement_Verification_Contractor__r.Name
-#       - ASB_Document_URL__c
-#       - ASB_Inspectors_Name__c
-#       - ASB_Post_Abatement_Document_URL__c
-#       - ASB_Post_Abatement_Insp_Date__c
-#       - ASB_Post_Abatement_Notes__c
-#       - ASB_Post_Abatement_Times_Failed__c
-#       - ASB_Post_Abatement_Verification_Status__c
-#       - ASB_Verifier_Name__c
-#       - Abatement_Sub_Contractor__c
-#       - Address__c
-#       - BSEED_Final_Grade_Approved__c
-#       - Council_District__c
-#       - DEMO_ASB_Abatement_Contractor__r.Name
-#       - DEMO_ASB_Abatement_Date__c
-#       - DEMO_ASB_Survey_Contractor__r.Name
-#       - DEMO_ASB_Survey_Status__c
-#       - Demo_ASB_Post_Abatement_Failed_Date__c
-#       - DEMO_Batch_Contractor_Name_del1__r.Name
-#       - DEMO_Knock_Down_Date__c
-#       - DEMO_NTP_Date__c
-#       - DEMO_Planned_Knock_Down_Date__c
-#       - DEMO_Pulled_Date__c
-#       - Demo_Contractor_Proceed_Date__c
-#       - Demo_Contractor_TEXT_ONLY__c
-#       - Demo_Primarily_Funded_By__c
-#       - Id
-#       - Neighborhood__c
-#       - Non_HHF_Commercial_Demo__c
-#       - Parcel_ID__c
-#       - Program__c
-#       - Property__r.Latitude__c
-#       - Property__r.Longitude__c
-#       - Property__r.ZIP_Code__c
-#       - RecordTypeId
-#       - Socrata_Price_Type__c
-#       - Socrata_Projected_Knocked_By_Date__c
-#       - Socrata_Reported_Price__c
-#       - Status
-# - salesforce:
-#     object: DLBA_Activity__c
-#     destination: dlba.activity
-#     fields:
-#       - Actual_Closing_Date__c
-#       - Case__c
-#       - DLBA_Activity_Type__c
-#       - Id
-#       - Listing_Date__c
-#       - Name
-#       - RecordTypeId
-#       - Sale_Status__c
-# - salesforce:
-#     object: Prospective_Buyer__c
-#     destination: dlba.prospective_buyer
-#     fields:
-#       - Buyer_Status__c
-#       - DLBA_Activity__c
-#       - Final_Sale_Price__c
-#       - Id
-#       - Name
-#       - Purchaser_Type__c
-# - salesforce:
-#     object: RecordType
-#     destination: dlba.record_type
-#     fields:
-#       - Description
-#       - Id
-#       - Name
+- salesforce:
+    object: Account
+    destination: dlba.account
+    fields:
+      - Council_District__c
+      - Current_Status__c
+      - Id
+      - Latitude__c
+      - Longitude__c
+      - Name
+      - Neighborhood__c
+      - Property_Class__c
+      - RecordTypeId
+      - Related_Property_Case__r.Id
+      - Property_Ownership__c
+      - Parcel_ID__c
+      - Inventory_Status_Socrata__c
+- salesforce:
+    object: Case
+    destination: dlba.case
+    fields:
+      - ACCT_Latitude__c
+      - ACCT_Longitude__c
+      - ASB_Abatement_Start_Date__c
+      - ASB_Abatement_Verification_Contractor__r.Name
+      - ASB_Document_URL__c
+      - ASB_Inspectors_Name__c
+      - ASB_Post_Abatement_Document_URL__c
+      - ASB_Post_Abatement_Insp_Date__c
+      - ASB_Post_Abatement_Notes__c
+      - ASB_Post_Abatement_Times_Failed__c
+      - ASB_Post_Abatement_Verification_Status__c
+      - ASB_Verifier_Name__c
+      - Abatement_Sub_Contractor__c
+      - Address__c
+      - BSEED_Final_Grade_Approved__c
+      - Council_District__c
+      - DEMO_ASB_Abatement_Contractor__r.Name
+      - DEMO_ASB_Abatement_Date__c
+      - DEMO_ASB_Survey_Contractor__r.Name
+      - DEMO_ASB_Survey_Status__c
+      - Demo_ASB_Post_Abatement_Failed_Date__c
+      - DEMO_Batch_Contractor_Name_del1__r.Name
+      - DEMO_Knock_Down_Date__c
+      - DEMO_NTP_Date__c
+      - DEMO_Planned_Knock_Down_Date__c
+      - DEMO_Pulled_Date__c
+      - Demo_Contractor_Proceed_Date__c
+      - Demo_Contractor_TEXT_ONLY__c
+      - Demo_Primarily_Funded_By__c
+      - Id
+      - Neighborhood__c
+      - Non_HHF_Commercial_Demo__c
+      - Parcel_ID__c
+      - Program__c
+      - Property__r.Latitude__c
+      - Property__r.Longitude__c
+      - Property__r.ZIP_Code__c
+      - RecordTypeId
+      - Socrata_Price_Type__c
+      - Socrata_Projected_Knocked_By_Date__c
+      - Socrata_Reported_Price__c
+      - Status
+- salesforce:
+    object: DLBA_Activity__c
+    destination: dlba.activity
+    fields:
+      - Actual_Closing_Date__c
+      - Case__c
+      - DLBA_Activity_Type__c
+      - Id
+      - Listing_Date__c
+      - Name
+      - RecordTypeId
+      - Sale_Status__c
+- salesforce:
+    object: Prospective_Buyer__c
+    destination: dlba.prospective_buyer
+    fields:
+      - Buyer_Status__c
+      - DLBA_Activity__c
+      - Final_Sale_Price__c
+      - Id
+      - Name
+      - Purchaser_Type__c
+- salesforce:
+    object: RecordType
+    destination: dlba.record_type
+    fields:
+      - Description
+      - Id
+      - Name
 - salesforce:
     object: DBA_Commercial_Demo__c
     destination: dlba.dba_commercial_demo
