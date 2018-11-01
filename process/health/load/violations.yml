@@ -58,3 +58,6 @@
     Correction Description:
       field: correction_description
       type: text
+    Repeated Violation:
+      field: repeat
+      type: text
