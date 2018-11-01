@@ -55,10 +55,10 @@
 - type: create_table
   table_name: violations_gql
   as: select
-        inspectionid::text as inspectionid,
+        replace(inspectionid::text, '.0', '') as inspectionid,
         inspectiondate as inspection_date,
         inspection_type,
-        establishmentid::text as establishmentid,
+        replace(establishmentid::text, '.0', '') as establishmentid,
         name,
         violation as violation_code,
         violation_description,

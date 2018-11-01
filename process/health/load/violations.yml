@@ -36,7 +36,7 @@
       type: text
     Days to Correct:
       field: days_to_correct
-      type: number
+      type: text
     Date Corrected: 
       field: corrected_date
       type: calendar_date
