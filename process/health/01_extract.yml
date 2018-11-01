@@ -50,3 +50,8 @@
     sys: swordsolutions
     name: PROBLEMS.TXT
     destination: health.problems
+- flatfile:
+    sys: swordsolutions
+    name: ITEMLIST.TXT
+    destination: health.itemlist
+    

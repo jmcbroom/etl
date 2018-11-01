@@ -25,7 +25,11 @@
           else null
         end as corrected,
         (select v.correctiondays from health.violate v where replace(d.viorecordid, '.0', '')::bigint = v.recordid)::numeric as days_to_correct,
-        datecorrected::timestamp
+        datecorrected::timestamp,
+        (select it.itemid from health.items it where violation = it.violationcode limit 1) as itemid,
+        'TBD' as item_description,
+        (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) as problemid,
+        (select p.description from health.problems p where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = p.problemid limit 1) as problem_description
       from health.idetail d
         inner join health.iheader i on i.inspectionid::text = replace(d.inspectionid, '.0', '')
       where i.date::timestamp between date '2016-08-01' and now() - interval '30 days'
