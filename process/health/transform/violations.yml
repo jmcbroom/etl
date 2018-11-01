@@ -27,7 +27,7 @@
         (select v.correctiondays from health.violate v where replace(d.viorecordid, '.0', '')::bigint = v.recordid)::numeric as days_to_correct,
         datecorrected::timestamp,
         (select it.itemid from health.items it where violation = it.violationcode limit 1) as itemid,
-        'TBD' as item_description,
+        (select il.description from health.itemlist il where (select it.itemid from health.items it where violation = it.violationcode limit 1) = il.recordid limit 1) as item_description,
         (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) as problemid,
         (select p.description from health.problems p where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = p.problemid limit 1) as problem_description
       from health.idetail d
