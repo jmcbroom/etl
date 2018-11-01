@@ -30,8 +30,8 @@
         (select il.description from health.itemlist il where (select it.itemid from health.items it where violation = it.violationcode limit 1) = il.recordid limit 1) as item_description,
         (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) as problemid,
         (select p.description from health.problems p where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = p.problemid limit 1) as problem_description,
-        (select c.correctionid from health.corrects where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = c.problemid limit 1) as correctionid,
-        (select c.description from health.corrects c where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = c.problemid limit 1) as correction_description
+        (select c.correctionid from health.corrects c where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = replace(c.problemid, '.0', '')::bigint limit 1) as correctionid,
+        (select c.description from health.corrects c where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = replace(c.problemid, '.0', '')::bigint limit 1) as correction_description
       from health.idetail d
         inner join health.iheader i on i.inspectionid::text = replace(d.inspectionid, '.0', '')
       where i.date::timestamp between date '2016-08-01' and now() - interval '30 days'
@@ -54,7 +54,9 @@
         itemid,
         item_description,
         problemid,
-        problem_description
+        problem_description,
+        correctionid,
+        correction_description
       from health.violations
       order by inspectiondate desc, name asc
 
@@ -76,6 +78,8 @@
         itemid,
         item_description,
         problemid,
-        problem_description
+        problem_description,
+        correctionid,
+        correction_description
       from health.violations
       order by inspectiondate desc, name asc
