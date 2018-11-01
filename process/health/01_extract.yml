@@ -38,3 +38,15 @@
     sys: swordsolutions
     name: VIOLATE.TXT
     destination: health.violate
+- flatfile:
+    sys: swordsolutions
+    name: ITEMS.TXT
+    destination: health.items
+- flatfile:
+    sys: swordsolutions
+    name: ITEMPROB.TXT
+    destination: health.itemprob
+- flatfile:
+    sys: swordsolutions
+    name: PROBLEMS.TXT
+    destination: health.problems
