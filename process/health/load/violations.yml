@@ -52,3 +52,9 @@
     Problem Description:
       field: problem_description
       type: text
+    Correction ID:
+      field: correctionid
+      type: text
+    Correction Description:
+      field: correction_description
+      type: text

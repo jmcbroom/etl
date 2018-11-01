@@ -54,4 +54,7 @@
     sys: swordsolutions
     name: ITEMLIST.TXT
     destination: health.itemlist
-    
+- flatfile:
+    sys: swordsolutions
+    name: CORRECTS.TXT
+    destination: health.corrects
