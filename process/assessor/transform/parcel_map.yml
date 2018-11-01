@@ -1,6 +1,7 @@
 - type: create_view
   view_name: parcels_mapbox
   as: select st_transform(shape, 4326) as wkb_geometry, parcelno from assessor.parcels_050318
+
 - type: create_view
   view_name: parcels_socrata
   as: select 
