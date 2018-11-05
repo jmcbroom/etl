@@ -43,10 +43,10 @@ class AgoLayer(object):
     if 'id' not in self.params.keys() or self.params['id'] is None:
       print(self.params['file'])
       item = upload(gis, self.params['file'], self.params)
-      self.item = item.publish()
+      item.publish()
       # to do: write back new item id to .yml file
     else:
       overwrite(gis, self.params['id'], self.params['file'])
     # remove GeoJSON file
-    os.system("rm {}".format(self.params['file']))
+    os.system("rm {}.*".format(self.params['file']))
 
