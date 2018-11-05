@@ -15,6 +15,7 @@
       - Property_Ownership__c
       - Parcel_ID__c
       - Inventory_Status_Socrata__c
+      - Occupancy_Model_Probability_Pct__c
 - salesforce:
     object: Case
     destination: dlba.case
@@ -95,9 +96,9 @@
     destination: dlba.dba_commercial_demo
     fields:
       - ASB_Post_Abatement_Passed_Date__c
-      # - BSEED_COM_Final_Grade_Approved__c
-      # - BSEED_COM_Open_Hole_Approved__c
-      # - BSEED_COM_Winter_Grade_Approved__c
+      - BSEED_Final_Grade_Approved__c
+      - BSEED_Open_Hole_Approved__c
+      - BSEED_Winter_Grade_Approved__c
       - Commercial_Demo_Status__c
       - DBA_COM_Property__r.Council_District__c
       - DBA_COM_Property__r.Latitude__c
@@ -110,12 +111,10 @@
       - Demo_NtP_Dt__c
       - Demo_Proj_Demo_Dt__c
       - Demo_Pulled_Date__c
-      - Demolition_Contractor__c
+      - Demolition_Contractor__r.Name
       - ENV_Demo_Proceed_Dt__c
       - ENV_Group_Number__c
       - Final_Grade_Approved_Dt__c
       - Knock_Start_Dt__c
       - Name
-      # - Open_Hole_Approved_Dt__c
       - Related_Case__c
-      # - Winter_Grade_Approved_Dt__c

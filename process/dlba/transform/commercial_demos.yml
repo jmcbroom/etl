@@ -10,14 +10,14 @@
         (select makeSocrataDate(demo_proj_demo_dt::timestamp)) as projected_demo_date,
         env_group_number,
         (select makeSocrataDate(knock_start_dt::timestamp)) as demo_date,
-        demolition_contractor,
+        demolition_contractor_name,
         dba_com_property_latitude as latitude,
         dba_com_property_longitude as longitude,
         dba_com_property_neighborhood as neighborhood,
         dba_com_property_council_district as council_district,
-        null as final_grade_date,
-        null as open_hole_date,
-        null as winter_grade_date,
+        bseed_final_grade_approved as final_grade_date,
+        bseed_open_hole_approved as open_hole_date,
+        bseed_winter_grade_approved as winter_grade_date,
         case 
           when (demo_cost_abatement+demo_cost_knock) = 'NaN' then null 
           else (demo_cost_abatement+demo_cost_knock)
