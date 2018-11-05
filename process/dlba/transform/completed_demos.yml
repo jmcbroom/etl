@@ -32,7 +32,7 @@
         non_hhf_commercial_demo as commercial,
         council_district,
         neighborhood,
-        st_setsrid(st_makepoint(property_longitude::double precision, property_latitude::double precision), 4326) as geom,
+        st_setsrid(st_makepoint(property_longitude::double precision, property_latitude::double precision), 4326) as geom
       from dlba.case
       where demo_knock_down_date::timestamp >= date '2014-01-01'
         and socrata_reported_price > 0
