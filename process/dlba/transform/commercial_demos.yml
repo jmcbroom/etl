@@ -10,7 +10,7 @@
         (select makeSocrataDate(demo_proj_demo_dt::timestamp)) as projected_demo_date,
         env_group_number,
         (select makeSocrataDate(knock_start_dt::timestamp)) as demo_date,
-        demolition_contractor_name,
+        demolition_contractor_name as demolition_contractor,
         dba_com_property_latitude as latitude,
         dba_com_property_longitude as longitude,
         dba_com_property_neighborhood as neighborhood,
