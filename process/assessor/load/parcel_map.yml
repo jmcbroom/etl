@@ -15,3 +15,13 @@
   tags:
     - assessor
     - parcels
+- to: ArcGIS Online
+  file: survey_parcels.zip
+  table: assessor.survey_parcels_ago
+  title: Survey Parcels
+  id: bd9f561e63314d4d91b64e79487f3003
+  type: shapefile
+  description: Survey parcels
+  tags:
+    - parcels
+    - survey

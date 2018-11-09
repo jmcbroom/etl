@@ -48,5 +48,5 @@ class AgoLayer(object):
     else:
       overwrite(gis, self.params['id'], self.params['file'])
     # remove GeoJSON file
-    os.system("rm {}.*".format(self.params['file']))
+    os.system("rm {}.*".format(self.params['file'].split('.')[0]))
 

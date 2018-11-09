@@ -94,3 +94,37 @@
         left outer join assessor.parcelmaster pm on sh.parcelno = pm.pnum
         left outer join assessor.nezlist nez on sh.parcelno = nez."LAND_PARCEL"
         left outer join base.council_districts cd on st_contains(cd.wkb_geometry, st_centroid(sh.shape))
+
+- type: create_view
+  view_name: survey_parcels_ago
+  as: >-
+    select
+        sh.parcelno as pnum,
+        pm.propstreetcombined as address,
+        ao.inventory_status_socrata as dlba,
+        case 
+         when da.occupancy_model_probability_pct = 'NaN' then null 
+         else round(da.occupancy_model_probability_pct) end 
+         as occp_pct,
+        pm.ownername1 as owner1,
+        pm.ownername2 as owner2,
+        pm.tax_send_to_name as taxpayer,
+        pm.ownerstreetaddr as own_str,
+        pm.ownercity as own_city,
+        pm.ownerstate as own_st,
+        pm.ownerzip as own_zip,
+        round(st_x(st_transform(st_centroid(sh.shape), 4326))::numeric, 6) as lat,
+        round(st_y(st_transform(st_centroid(sh.shape), 4326))::numeric, 6) as lon,
+        (select 
+          count(*) from dah.bvn where sh.parcelno = bvn.parcelno and violation_date > now() - interval '5 years') 
+         as bvn_5yr_ct,
+        (select 
+          concat(bvn.ticket_number, ' (', to_char(bvn.violation_date, 'MM-DD-YY'), ') ', bvn.violation_description) 
+          from dah.bvn where sh.parcelno = bvn.parcelno and violation_date > now() - interval '5 years' order by violation_date desc limit 1) 
+         as last_bvn,
+        st_transform(sh.shape, 4326) as geom
+    from assessor.parcels_050318 sh 
+        left outer join dlba.account da on da.parcel_id = sh.parcelno
+        left outer join dlba.all_ownership_socrata ao on ao.parcel_id = sh.parcelno
+        left outer join assessor.parcels pa on sh.parcelno = pa.pnum
+        left outer join assessor.parcelmaster pm on sh.parcelno = pm.pnum
