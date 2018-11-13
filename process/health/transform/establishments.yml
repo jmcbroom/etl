@@ -27,7 +27,11 @@
         (select r.description from health.riskcategory r where r.recordid::text = (select substring(e.riskfactor, 1, 1))) as complexity,
         lastinspection::timestamp,
         nextinspection::timestamp,
-        reviewfrequency,
+        case 
+          when reviewfrequency = '150.0' then '180.0',
+          when reveiwfrequency = '335.0' then '365.0',
+          else reviewfrequency
+        end as reviewfrequency,
         (select i.inspectionid from health.iheader i where replace(i.establishmentid::text, '.0', '') = e.recordid::text and i.date::timestamp = e.lastinspection::timestamp order by i.date desc limit 1) as last_inspectionid
       from health.estinfo e
       where lastinspection::timestamp >= '2016-08-01'
