@@ -1,8 +1,20 @@
 - type: sql
   statements:
-    - create index if not exists bseed_inspections_caseno_idx on bseed.tm_inspections using btree(csm_caseno)
-    - create index if not exists bseed_casemain_idx on bseed.tm_casemain using btree(csm_caseno)
+    - create index if not exists bseed_casemain_caseno_idx on bseed.tm_casemain using btree(csm_caseno)
+    - create index if not exists bseed_casemain_parcel_idx on bseed.tm_casemain using btree(prc_parcel_no)
     - create index if not exists bseed_caseaction_caseno_idx on bseed.tm_caseaction using btree(csm_caseno)
+    - create index if not exists bseed_inspections_caseno_idx on bseed.tm_inspections using btree(csm_caseno)
+    - create index if not exists bseed_tmparcel_parcel_idx on bseed.tm_parcel using btree(prc_parcel_no)
+    - create index if not exists bseed_pnumlookup_dirty_idx on bseed.pnum_lookup using btree(dirty)
+    - create index if not exists bseed_casepmb_caseno_idx on bseed.tm_casepmb using btree(csm_caseno)
+    - create index if not exists bseed_bldpermits_parcel_idx on bseed.bldg_permits using btree(parcel_no)
+    - create index if not exists bseed_casebussch_caseno_idx on bseed.tm_casebussch using btree(csm_caseno)
+    - create index if not exists bseed_caseaddress_caseno_idx on bseed.tm_caseaddress using btree(csm_caseno)
+    - create index if not exists bseed_casebld_caseno_idx on bseed.tm_casebld using btree(csm_caseno)
+    - create index if not exists bseed_caseprv_caseno_idx on bseed.tm_caseprv using btree(csm_caseno)
+    - create index if not exists bseed_paidcasefee_caseno_idx on bseed.paid_case_fee using btree(csm_caseno)
+    - create index if not exists bseed_casepeople_caseno_idx on bseed.tm_casepeople using btree(csm_caseno)
+    - create index if not exists bseed_caseeng_caseno_idx on bseed.tm_caseeng using btree(csm_caseno)
 
 - type: create_table
   table_name: annual_inspections
