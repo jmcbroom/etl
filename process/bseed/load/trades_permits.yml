@@ -95,3 +95,6 @@
     Permit Location:
       field: location
       type: location
+    Parcel Number:
+      field: parcel_no
+      type: text
