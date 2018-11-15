@@ -1,0 +1,73 @@
+- to: Socrata
+  id:
+  name: Annual Inspection Dates
+  table: bseed.annual_inspection_dates_socrata
+  method: replace
+  row_identifier:
+  columns:
+    Name:
+      description: Name of establishment
+      field: name
+      notes:
+      type: text
+      required: yes
+    Occupancy:
+      description: Type of establishment
+      field: occupancy
+      notes:
+      type: text
+      required: yes
+    Case Number:
+      description: Establishment case number
+      field: case_number
+      notes:
+      type: text
+      required: yes
+    Parcel Number:
+      description: Parcel number associated with property address
+      field: parcel_number
+      notes:
+      type: text
+      required: no
+    Address:
+      description: Street address of property
+      field: address
+      notes:
+      type: text
+      required: yes
+    Next Annual Inspection Due Date:
+      description: next annual inspection due date
+      field: next_annual_inspection_due_date
+      notes:
+      type: date
+      required: yes
+    Reinspection Date:
+      description: reinspection date
+      field: reinspection_date
+      notes:
+      type: date
+      required: yes
+    Annual Called Inspection Date:
+      description: annual called inspection date
+      field: annual_called_inspection_date
+      notes:
+      type: date
+      required: yes
+    Date Of Annual Called Reinspection:
+      description: date of annual called reinspection
+      field: date_of_annual_called_reinspection
+      notes:
+      type: date
+      required: yes
+    Date Correction Order Owner Was Issued:
+      description: date correction order owner was issued
+      field: date_correction_order_owner_was_issued
+      notes:
+      type: date
+      required: yes
+    Location:
+      description: Latitude, longitude coordinate associated with property address
+      field: location
+      notes: Provided in EPSG Projection 4326 - WGS 84
+      type: text
+      required: yes 

@@ -1,0 +1,43 @@
+- type: create_table
+  table_name: annual_inspection_dates
+  as: select
+        cn.ann_bldg_name as name,
+        trim(cn.ann_occupancy) as occupancy,
+        cm.csm_caseno as case_number,
+        pn.cleaned as parcel_number,
+        concat_ws(' ', ca.csm_st_nmbr, ca.csm_st_name) as address,
+        (select csa_date2 from bseed.tm_caseaction ca where ca.csm_caseno = cm.csm_caseno and ca.actn_menu_id = 'B' and ca.actn_code = '10' order by csa_date2 desc limit 1) as next_annual_inspection_due_date,
+        (select csa_date3 from bseed.tm_caseaction ca where ca.csm_caseno = cm.csm_caseno and ca.actn_menu_id = 'B' and ca.actn_code = '20' order by csa_date3 desc limit 1) as reinspection_date,
+        (select csa_date3 from bseed.tm_caseaction ca where ca.csm_caseno = cm.csm_caseno and ca.actn_menu_id = 'B' and ca.actn_code = '25' order by csa_date3 desc limit 1) as annual_called_inspection_date,
+        (select csa_date3 from bseed.tm_caseaction ca where ca.csm_caseno = cm.csm_caseno and ca.actn_menu_id = 'B' and ca.actn_code = '27' order by csa_date3 desc limit 1) as date_of_annual_called_reinspection,
+        (select csa_date3 from bseed.tm_caseaction ca where ca.csm_caseno = cm.csm_caseno and ca.actn_menu_id = 'C' and ca.actn_code = '20' order by csa_date3 desc limit 1) as date_correction_order_owner_was_issued
+      from bseed.tm_casemain cm
+        inner join bseed.tm_caseaddress ca on ca.csm_caseno = cm.csm_caseno
+        inner join bseed.tm_caseann cn on cn.csm_caseno = cm.csm_caseno
+        inner join bseed.pnum_lookup pn on pn.dirty = cm.prc_parcel_no
+      where cm.case_type = 'ANN'
+
+- type: sql
+  statements:
+    - create index if not exists bseed_annual_inspection_dates_address_idx on bseed.annual_inspection_dates using btree(address)
+
+- type: geocode
+  table: bseed.annual_inspection_dates
+  add_col: address
+  geom_col: geom
+
+- type: create_view
+  view_name: annual_inspection_dates_socrata
+  as: select
+        name,
+        occupancy,
+        case_number,
+        parcel_number,
+        address,
+        makeSocrataDate(next_annual_inspection_due_date) as next_annual_inspection_due_date,
+        makeSocrataDate(reinspection_date) as reinspection_date,
+        makeSocrataDate(annual_called_inspection_date) as annual_called_inspection_date,
+        makeSocrataDate(date_of_annual_called_reinspection) as date_of_annual_called_reinspection,
+        makeSocrataDate(date_correction_order_owner_was_issued) as date_correction_order_owner_was_issued,
+        makeSocrataLocation(geom) as location
+      from bseed.annual_inspection_dates

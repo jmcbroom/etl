@@ -1,0 +1,75 @@
+title: Annual Inspection Dates
+category: Housing & Buildings
+agency: BSEED
+description: >
+  Relevant dates for annual BSEED inspections.
+notes: >
+  null
+tags:
+  - commercial
+  - inspection
+  - bseed
+license: 
+  name: Public Domain
+  url: 
+time_period: 1/1/2006 - present
+update_frequency: Daily
+row_label: Inspection
+columns:
+  Name:
+    description: Name of establishment
+    notes:
+    type: text
+    required: yes
+  Occupancy:
+    description: Type of establishment
+    notes:
+    type: text
+    required: yes
+  Case Number:
+    description: Establishment case number
+    notes:
+    type: text
+    required: yes
+  Parcel Number:
+    description: Parcel number associated with property address
+    notes:
+    type: text
+    required: no
+  Address:
+    description: Street address of property
+    notes:
+    type: text
+    required: yes
+  Next Annual Inspection Due Date:
+    description: next annual inspection due date
+    notes:
+    type: date
+    required: yes
+  Reinspection Date:
+    description: reinspection date
+    notes:
+    type: date
+    required: yes
+  Annual Called Inspection Date:
+    description: annual called inspection date
+    notes:
+    type: date
+    required: yes
+  Date Of Annual Called Reinspection:
+    description: date of annual called reinspection
+    notes:
+    type: date
+    required: yes
+  Date Correction Order Owner Was Issued:
+    description: date correction order owner was issued
+    notes:
+    type: date
+    required: yes
+  Location:
+    description: Latitude, longitude coordinate associated with property address
+    notes: Provided in EPSG Projection 4326 - WGS 84
+    type: text
+    required: yes 
+links:
+  - null

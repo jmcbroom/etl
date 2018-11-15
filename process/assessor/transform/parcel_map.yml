@@ -97,7 +97,7 @@
 
 - type: create_view
   view_name: survey_parcels_ago
-  as: >-
+  as: >- 
     select
         sh.parcelno as pnum,
         pm.propstreetcombined as address,
@@ -113,18 +113,23 @@
         pm.ownercity as own_city,
         pm.ownerstate as own_st,
         pm.ownerzip as own_zip,
+        mz.council_di as council,
+        mz.zone as mow_zone,
+        nh.nhood_name as nhood,
         round(st_x(st_transform(st_centroid(sh.shape), 4326))::numeric, 6) as lat,
         round(st_y(st_transform(st_centroid(sh.shape), 4326))::numeric, 6) as lon,
         (select 
           count(*) from dah.bvn where sh.parcelno = bvn.parcelno and violation_date > now() - interval '5 years') 
          as bvn_5yr_ct,
         (select 
-          concat(bvn.ticket_number, ' (', to_char(bvn.violation_date, 'MM-DD-YY'), ') ', bvn.violation_description) 
+          concat(bvn.ticket_number, ' (', to_char(bvn.violation_date, 'MM/DD/YY'), ') ', bvn.violation_description) 
           from dah.bvn where sh.parcelno = bvn.parcelno and violation_date > now() - interval '5 years' order by violation_date desc limit 1) 
          as last_bvn,
         st_transform(sh.shape, 4326) as geom
-    from assessor.parcels_050318 sh 
+      from assessor.parcels_050318 sh 
         left outer join dlba.account da on da.parcel_id = sh.parcelno
         left outer join dlba.all_ownership_socrata ao on ao.parcel_id = sh.parcelno
         left outer join assessor.parcels pa on sh.parcelno = pa.pnum
+        left outer join base.mow_zones mz on st_contains(st_transform(mz.wkb_geometry, 2898), st_centroid(sh.shape))
+        left outer join base.neighborhoods nh on st_contains(st_transform(nh.wkb_geometry, 2898), st_centroid(sh.shape))
         left outer join assessor.parcelmaster pm on sh.parcelno = pm.pnum
