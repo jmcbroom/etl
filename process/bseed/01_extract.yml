@@ -140,6 +140,21 @@
 - smartsheet: 
     id: 3079873704028036
     table: mmcc
+- database:
+    type: oracle
+    prefix: tm
+    source: CURRENT_LICENSE
+    destination: bseed.current_license
+- database:
+    type: oracle
+    prefix: tm
+    source: CASE_LIC
+    destination: bseed.case_lic
+- database:
+    type: oracle
+    prefix: tm
+    source: PEOPLE_COMM
+    destination: bseed.people_comm
 
 # # # 
 # This was just for the parcel clean up

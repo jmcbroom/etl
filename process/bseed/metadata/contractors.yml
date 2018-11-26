@@ -1,0 +1,15 @@
+- type: create_view
+  view_name: registered_contractors_socrata
+  as: select
+        cl.role_type,
+        cl.license_type,
+        cl.crl_exp_date,
+        l.lic_manname as name,
+        l.lic_prico as company_name,
+        l.csm_caseno,
+        pc.pco_comm_detail,
+        pc.pco_comm_desc
+      from bseed.current_license cl
+        inner join bseed.case_lic l on cl.crl_license_no = l.csm_caseno
+        inner join bseed.people_comm pc on cl.people_id = pc.people_id
+      where pc.pco_comm_type in ('PH1', 'EML')
