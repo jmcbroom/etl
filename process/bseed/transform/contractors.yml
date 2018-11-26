@@ -3,8 +3,8 @@
   as: select
         cl.role_type,
         cl.license_type,
-        (select lt.license_description from bseed.license_type lt where cl.license_type = lt.license_type) as license_type_desc,
-        cl.crl_exp_date,
+        (select lt.license_desc from bseed.license_type lt where cl.license_type = lt.license_type) as license_type_desc,
+        (select makeSocrataDate(cl.crl_exp_date)) as crl_exp_date,
         l.lic_masname,
         l.lic_prico,
         l.csm_caseno,

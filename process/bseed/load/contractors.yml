@@ -1,5 +1,5 @@
 - to: Socrata
-  id: 
+  id: jmxt-73rk
   name: BSEED Registered Contractors
   table: bseed.registered_contractors_socrata
   method: replace
