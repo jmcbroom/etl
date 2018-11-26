@@ -17,3 +17,4 @@ datasets:
   - trades_permits
   - vpos
   - lead_clearances
+  - contractors

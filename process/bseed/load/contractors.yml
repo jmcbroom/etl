@@ -1,0 +1,28 @@
+- to: Socrata
+  id: jmxt-73rk
+  name: BSEED Registered Contractors
+  table: bseed.registered_contractors_socrata
+  method: replace
+  row_identifier:
+  columns:
+    Case Number:
+      field: csm_caseno
+      type: text
+    License Type:
+      field: license_type
+      type: text
+    License Description:
+      field: license_type_desc
+      type: text
+    Contractor Name: 
+      field: lic_masname
+      type: text
+    Contractor Company:
+      field: lic_prico
+      type: text
+    Contractor Phone:
+      field: pco_comm_detail
+      type: text
+    Expiration Date:
+      field: crl_exp_date
+      type: calendar_date
