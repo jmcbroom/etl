@@ -29,7 +29,7 @@ run('ocp', dataset=None, notify=True, emoji='money_with_wings')
 run('dah', dataset=None, notify=True, emoji='warning')
 run('crio', dataset=None, notify=True, emoji='briefcase')
 run('pubsafe', dataset=None, notify=True, emoji='police_car')
-run('graphql', dataset=None, notify=True, emoji='graphql')
+#run('graphql', dataset=None, notify=True, emoji='graphql')
 run('scf', dataset=None, notify=True, emoji='telephone_receiver')
 #run('dba', dataset=None, notify=True, emoji='dollar')
 
