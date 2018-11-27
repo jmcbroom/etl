@@ -6,11 +6,11 @@
         (select lt.license_desc from bseed.license_type lt where cl.license_type = lt.license_type) as license_type_desc,
         (select makeSocrataDate(cl.crl_exp_date)) as crl_exp_date,
         l.lic_masname,
-        l.lic_prico,
+        (select textcat(textcat(cp.csp_first_name,text ' '),cp.csp_last_name) from bseed.tm_casepeople cp where cp.people_id = cl.people_id and cp.role_type = 'CON' and cp.csp_primary = 'Y' order by cp.csp_updated desc limit 1) as lic_prico,
         l.csm_caseno,
-        pc.pco_comm_detail,
-        pc.pco_comm_desc
+        pc.pco_comm_detail
       from bseed.current_license cl
         inner join bseed.case_lic l on cl.crl_license_no = l.csm_caseno
         inner join bseed.people_comm pc on cl.people_id = pc.people_id
-      where pc.pco_comm_type in ('PH1', 'EML')
+      where pc.pco_comm_type = 'PH1'
+        and cl.crl_exp_date >= now()
