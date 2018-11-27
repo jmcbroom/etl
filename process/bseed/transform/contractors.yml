@@ -1,3 +1,11 @@
+- type: sql
+  statements:
+    - create index if not exists bseed_casepeople_peopleid_idx on bseed.tm_casepeople using btree(people_id)
+    - create index if not exists bseed_currentlicense_crllicenseno_idx on bseed.current_license using btree(crl_license_no)
+    - create index if not exists bseed_currentlicense_peopleid_idx on bseed.current_license using btree(people_id)
+    - create index if not exists bseed_caselic_caseno_idx on bseed.case_lic using btree(csm_caseno)
+    - create index if not exists bseed_peoplecomm_peopleid_idx on bseed.people_comm using btree(people_id)
+
 - type: create_view
   view_name: registered_contractors_socrata
   as: select
@@ -6,7 +14,7 @@
         (select lt.license_desc from bseed.license_type lt where cl.license_type = lt.license_type) as license_type_desc,
         (select makeSocrataDate(cl.crl_exp_date)) as crl_exp_date,
         l.lic_masname,
-        (select textcat(textcat(cp.csp_first_name,text ' '),cp.csp_last_name) from bseed.tm_casepeople cp where cp.people_id = cl.people_id and cp.role_type = 'CON' and cp.csp_primary = 'Y' order by cp.csp_updated desc limit 1) as lic_prico,
+        (select concat_ws(', ', cp.csp_first_name, cp.csp_last_name) as company_name from bseed.tm_casepeople cp where cp.people_id = cl.people_id and cp.role_type = 'CON' and cp.csp_primary = 'Y' order by cp.csp_updated desc limit 1) as company_name,
         l.csm_caseno,
         pc.pco_comm_detail
       from bseed.current_license cl

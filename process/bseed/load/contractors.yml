@@ -18,7 +18,7 @@
       field: lic_masname
       type: text
     Contractor Company:
-      field: lic_prico
+      field: company_name
       type: text
     Contractor Phone:
       field: pco_comm_detail
