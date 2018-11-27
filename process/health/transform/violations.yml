@@ -1,0 +1,92 @@
+- type: create_table
+  table_name: violations
+  as: select 
+        d.inspectionid,
+        i.date as inspectiondate,
+        (select description from health.instype t where t.recordid = replace(i.type, '.0', '')::bigint) as inspection_type,
+        i.establishmentid,
+        (select name from health.estinfo e where e.recordid::text = replace(i.establishmentid, '.0', '')) as name,
+        violation,
+        (select v.description from health.violate v where replace(d.viorecordid, '.0', '')::bigint = v.recordid) as violation_description,
+        case 
+          when pcf = 'P' then 'Priority'
+          when pcf = 'C' then 'Core'
+          when pcf = 'F' then 'Foundation'
+          else null
+        end as violation_type,
+        case
+          when critical::text = 'true' then 'Yes'
+          when critical::text = 'false' then 'No'
+          else null
+        end as critical,
+        case
+          when corrected::text = 'true' then 'Yes'
+          when corrected::text = 'false' then 'No'
+          else null
+        end as corrected,
+        (select v.correctiondays from health.violate v where replace(d.viorecordid, '.0', '')::bigint = v.recordid)::numeric as days_to_correct,
+        datecorrected::timestamp,
+        (select it.itemid from health.items it where violation = it.violationcode limit 1) as itemid,
+        (select il.description from health.itemlist il where (select it.itemid from health.items it where violation = it.violationcode limit 1) = il.recordid limit 1) as item_description,
+        (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) as problemid,
+        (select p.description from health.problems p where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = p.problemid limit 1) as problem_description,
+        (select c.correctionid from health.corrects c where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = replace(c.problemid, '.0', '')::bigint limit 1) as correctionid,
+        (select c.description from health.corrects c where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = replace(c.problemid, '.0', '')::bigint limit 1) as correction_description,
+        case 
+          when repeated = '1.0' then 'Yes'
+          when repeated = '0.0' then 'No'
+          else null
+        end as repeat
+      from health.idetail d
+        inner join health.iheader i on i.inspectionid::text = replace(d.inspectionid, '.0', '')
+      where i.date::timestamp between date '2016-08-01' and now() - interval '30 days'
+
+- type: create_view
+  view_name: violations_socrata
+  as: select
+        inspectionid,
+        (select makeSocrataDate(inspectiondate::timestamp)) as inspection_date,
+        inspection_type,
+        establishmentid,
+        name,
+        violation as violation_code,
+        violation_description,
+        violation_type,
+        critical as critical_violation_type,
+        corrected,
+        days_to_correct::text,
+        (select makeSocrataDate(datecorrected::timestamp)) as corrected_date,
+        itemid,
+        item_description,
+        problemid,
+        problem_description,
+        correctionid,
+        correction_description,
+        repeat
+      from health.violations
+      order by inspectiondate desc, name asc
+
+- type: create_table
+  table_name: violations_gql
+  as: select
+        replace(inspectionid::text, '.0', '') as inspectionid,
+        inspectiondate as inspection_date,
+        inspection_type,
+        replace(establishmentid::text, '.0', '') as establishmentid,
+        name,
+        violation as violation_code,
+        violation_description,
+        violation_type,
+        critical as critical_violation_type,
+        corrected,
+        days_to_correct,
+        datecorrected as corrected_date,
+        itemid,
+        item_description,
+        problemid,
+        problem_description,
+        correctionid,
+        correction_description,
+        repeat
+      from health.violations
+      order by inspectiondate desc, name asc

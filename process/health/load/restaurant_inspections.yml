@@ -1,6 +1,0 @@
-- to: Socrata
-  id: qqde-x6kx
-  name: Restaurant Inspections
-  table: health.restaurant_inspections
-  method: replace
-  columns:

@@ -179,8 +179,12 @@ class Process(object):
           drop_table_if_exists(connection, params['destination'])
           a.to_postgres()
 
+        elif srctype == 'flatfile':
+          from .flatfile import Flatfile
+          f = Flatfile(params)
+          drop_table_if_exists(connection, params['destination'])
+          f.to_postgres()
 
-          
         else:
           print("I don't know this source type: {}".format(srctype))
 

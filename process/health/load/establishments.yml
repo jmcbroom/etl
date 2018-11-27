@@ -1,0 +1,52 @@
+- to: Socrata
+  id: gr7r-43jt
+  name: Restaurant Inspections - Establishments
+  table: health.establishments_socrata
+  method: replace
+  columns:
+    Establishment ID:
+      field: establishmentid
+      type: number
+    Name:
+      field: name
+      type: text
+    Address: 
+      field: address
+      type: text
+    Zip Code:
+      field: zipcode
+      type: text
+    Owner:
+      field: owner
+      type: text
+    License Number:
+      field: license_number
+      type: number
+    License Type: 
+      field: license_type
+      type: text
+    Establishment Type: 
+      field: establishment_type
+      type: text
+    Status:
+      field: establishment_status
+      type: text
+    Risk Category:
+      field: risk_category
+      type: text
+    Last Inspection Date:
+      field: last_inspection_date
+      type: calendar_date
+    Last Inspection ID:
+      field: last_inspectionid
+      type: number
+    Next Inspection Date:
+      field: next_inspection_date
+      type: calendar_date
+    Review Frequency in Days:
+      field: review_frequency_days
+      type: number
+    Location:
+      field: location
+      type: location
+    

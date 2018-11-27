@@ -1,0 +1,94 @@
+- type: sql
+  statements: 
+  - create index estinfo_recordid_idx on health.estinfo (recordid)
+  - create index zip_recordid_idx on health.zipcode (recordid)
+  - create index etype_recordid_idx on health.etype (recordid)
+  - create index estatus_recordid_idx on health.estatus (recordid)
+  - create index riskcategory_recordid_idx on health.riskcategory (recordid)
+  - create index iheader_estid_idx on health.iheader (establishmentid)
+  - create index iheader_date_idx on health.iheader (date)
+  - create index iheader_inpsid_idx on health.iheader (inspectionid)
+  - create index instype_recordid_idx on health.instype (recordid)
+  - create index violate_recordid_idx on health.violate (recordid)
+  - create index idetail_inspid_idx on health.idetail (inspectionid)
+  
+- type: create_table
+  table_name: establishments
+  as: select 
+        e.recordid,
+        name,
+        trim(trailing '.' from regexp_replace(address1, '\.','')) as address,
+        (select rtrim(z.zipcode, '-0000') from health.zipcode z where z.recordid::text = replace(e.zip, '.0', '')) as zipcode,
+        owner,
+        license,
+        lictype,
+        (select t.description from health.etype t where t.recordid::text = replace(e.type, '.0', '')) as establishment_type,
+        (select es.description from health.estatus es where es.recordid::text = replace(e.status, '.0', '')) as establishment_status,
+        (select r.description from health.riskcategory r where r.recordid::text = (select substring(e.riskfactor, 1, 1))) as complexity,
+        lastinspection::timestamp,
+        nextinspection::timestamp,
+        case 
+          when e.reviewfrequency = '150.0' then '180.0'
+          when e.reviewfrequency = '335.0' then '365.0'
+          else e.reviewfrequency
+        end as reviewfrequency,
+        (select i.inspectionid from health.iheader i where replace(i.establishmentid::text, '.0', '') = e.recordid::text and i.date::timestamp = e.lastinspection::timestamp order by i.date desc limit 1) as last_inspectionid
+      from health.estinfo e
+      where lastinspection::timestamp >= '2016-08-01'
+
+- type: geocode
+  table: health.establishments
+  add_col: address
+  geom_col: geom
+
+- type: create_view
+  view_name: establishments_socrata
+  as: select
+        recordid as establishmentid,
+        name,
+        address,
+        zipcode,
+        owner,
+        license as license_number,
+        lictype as license_type,
+        establishment_type,
+        initcap(establishment_status) as establishment_status,
+        case
+          when complexity = 'Z' then 'High'
+          when complexity = 'Y' then 'Medium'
+          when complexity = 'X' then 'Low'
+          else null
+        end as risk_category,
+        (select makeSocrataDate(lastinspection)) as last_inspection_date,
+        last_inspectionid,
+        (select makeSocrataDate(nextinspection)) as next_inspection_date,
+        reviewfrequency as review_frequency_days,
+        (select makeSocrataLocation(geom)) as location
+      from health.establishments
+      order by lastinspection desc, name asc
+
+- type: create_table
+  table_name: establishments_gql
+  as: select
+        recordid::text as establishmentid,
+        name,
+        address,
+        zipcode,
+        owner,
+        license as license_number,
+        lictype as license_type,
+        establishment_type,
+        initcap(establishment_status) as establishment_status,
+        case
+          when complexity = 'Z' then 'High'
+          when complexity = 'Y' then 'Medium'
+          when complexity = 'X' then 'Low'
+          else null
+        end as risk_category,
+        lastinspection as last_inspection_date,
+        last_inspectionid::text as last_inspectionid,
+        nextinspection as next_inspection_date,
+        reviewfrequency as review_frequency_days,
+        geom
+      from health.establishments
+      order by lastinspection desc, name asc
