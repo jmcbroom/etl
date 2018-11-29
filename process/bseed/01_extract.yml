@@ -164,6 +164,11 @@
     prefix: tm
     source: LICENSE_TYPE
     destination: bseed.license_type
+- database: 
+    type: oracle
+    prefix: tm
+    source: CASE_LIC_REG
+    destination: bseed.case_lic_reg
 
 # # # 
 # This was just for the parcel clean up
