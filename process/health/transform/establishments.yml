@@ -1,16 +1,16 @@
 - type: sql
   statements: 
-  - create index estinfo_recordid_idx on health.estinfo (recordid)
-  - create index zip_recordid_idx on health.zipcode (recordid)
-  - create index etype_recordid_idx on health.etype (recordid)
-  - create index estatus_recordid_idx on health.estatus (recordid)
-  - create index riskcategory_recordid_idx on health.riskcategory (recordid)
-  - create index iheader_estid_idx on health.iheader (establishmentid)
-  - create index iheader_date_idx on health.iheader (date)
-  - create index iheader_inpsid_idx on health.iheader (inspectionid)
-  - create index instype_recordid_idx on health.instype (recordid)
-  - create index violate_recordid_idx on health.violate (recordid)
-  - create index idetail_inspid_idx on health.idetail (inspectionid)
+  - create index if not exists estinfo_recordid_idx on health.estinfo using btree(recordid)
+  - create index if not exists zip_recordid_idx on health.zipcode using btree(recordid)
+  - create index if not exists etype_recordid_idx on health.etype using btree(recordid)
+  - create index if not exists estatus_recordid_idx on health.estatus using btree(recordid)
+  - create index if not exists riskcategory_recordid_idx on health.riskcategory using btree(recordid)
+  - create index if not exists iheader_estid_idx on health.iheader using btree(establishmentid)
+  - create index if not exists iheader_date_idx on health.iheader using btree(date)
+  - create index if not exists iheader_inpsid_idx on health.iheader using btree(inspectionid)
+  - create index if not exists instype_recordid_idx on health.instype using btree(recordid)
+  - create index if not exists violate_recordid_idx on health.violate using btree(recordid)
+  - create index if not exists idetail_inspid_idx on health.idetail using btree(inspectionid)
   
 - type: create_table
   table_name: establishments
@@ -28,9 +28,8 @@
         lastinspection::timestamp,
         nextinspection::timestamp,
         case 
-          when e.reviewfrequency = '150.0' then '180.0'
-          when e.reviewfrequency = '335.0' then '365.0'
-          else e.reviewfrequency
+          when e.reviewfrequency is null then '90.0'
+          else (e.reviewfrequency::numeric + 30)::text
         end as reviewfrequency,
         (select i.inspectionid from health.iheader i where replace(i.establishmentid::text, '.0', '') = e.recordid::text and i.date::timestamp = e.lastinspection::timestamp order by i.date desc limit 1) as last_inspectionid
       from health.estinfo e

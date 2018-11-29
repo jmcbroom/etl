@@ -8,7 +8,7 @@
   - delete from gql.parcels p using gql.parcels q where q.uniq < p.uniq and q.parcelno = p.parcelno;
   - alter table gql.parcels add constraint parcels_uniq unique(parcelno);
   - alter table gql.parcels drop column uniq;
-  # # get building permits at known parcels, add indexes and foreign key constraint
+  # get building permits at known parcels, add indexes and foreign key constraint
   - drop table if exists gql.permits cascade
   - create table gql.permits as (select * from bseed.bldg_permits_socrata bp where bp.parcel_no in (select parcelno from gql.parcels))
   - alter table gql.permits rename column parcel_no to parcelno
@@ -31,4 +31,9 @@
   - alter table gql.sales rename column parcel_no to parcelno
   - create index sales_pid_idx on gql.sales (parcelno)
   - alter table gql.sales add constraint sales_to_pid foreign key (parcelno) references gql.parcels(parcelno)
-  
+  # repeat for parcel points ownership
+  - drop table if exists gql.ownership cascade
+  - create table gql.ownership as (select * from assessor.parcel_points_socrata pp were pp.parcelnum in (select parcelno from gql.parcels))
+  - alter table gql.ownership rename column parcelnum to parcelno
+  - create index ownership_pid_idx on gql.ownership (parcelno)
+  - alter table gql.ownership add constraint ownership_to_pid foreign key (parcelno) references gql.parcels(parcelno)

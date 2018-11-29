@@ -17,23 +17,23 @@
       field: location
       type: location
 
-- to: internal
-  prefix: CRIMEINCIDENTS
-  dbType: sql-server
-  schema: pubsafe
-  table: applications
-  destination: project_greenlight_applications
-  if_exists: replace
-  name: Project Greenlight Applications
+# - to: internal
+#   prefix: CRIMEINCIDENTS
+#   dbType: sql-server
+#   schema: pubsafe
+#   table: applications
+#   destination: project_greenlight_applications
+#   if_exists: replace
+#   name: Project Greenlight Applications
 
-- to: internal
-  prefix: CRIMEINCIDENTS
-  dbType: sql-server
-  schema: pubsafe
-  table: greenlight_unanon
-  destination: project_greenlight_master
-  if_exists: replace
-  name: Project Greenlight Master
+# - to: internal
+#   prefix: CRIMEINCIDENTS
+#   dbType: sql-server
+#   schema: pubsafe
+#   table: greenlight_unanon
+#   destination: project_greenlight_master
+#   if_exists: replace
+#   name: Project Greenlight Master
 
 - to: ArcGIS Online
   id: b827c82731294708b500f7c10b3240b1

@@ -5,3 +5,13 @@
   flags:
     - "-Z13"
     - "-z19"
+- to: ArcGIS Online
+  file: assessor_parcels_opendata.zip
+  table: assessor.parcels_ago
+  title: Parcels
+  id: a79a16f9fa5d4c0c84957cb96d7250ce
+  type: shapefile
+  description: Assessor's parcels
+  tags:
+    - assessor
+    - parcels

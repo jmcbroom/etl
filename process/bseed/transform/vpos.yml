@@ -1,0 +1,150 @@
+# separate VPO cases from rental registrations and rental certifications into own dataset per bseed request 10/22
+- type: create_table
+  table_name: rental_registrations_vpos
+  as: select 
+        distinct on (cm.csm_caseno)
+        cm.csm_caseno,
+        cm.csm_name_first,
+        cm.csm_name_last,
+        cm.csm_name_mi,
+        cm.csm_recd_by,
+        (select makeSocrataDate(cm.csm_recd_date)) as csm_recd_date,
+        pl.cleaned as parcelnum,
+        st_centroid(pl.parcel_geom) as parcel_geom,
+        concat(cadd.csm_st_nmbr, ' ', cadd.csm_st_name) as address,
+        ca.action_description,
+        (select makeSocrataDate(ca.csa_creation_date)) as csa_creation_date,
+        (select makeSocrataDate(ca.csa_date1)) as csa_date1,
+        (select makeSocrataDate(ca.csa_date2)) as csa_date2,
+        (select makeSocrataDate(ca.csa_date3)) as csa_date3,
+        ca.csa_disp,
+        (select handleNan(pm.pmb_dwelling_units)) as pmb_dwelling_units,
+        pm.pmb_type_use,
+        cm.csm_status,
+        cm.case_type
+      from bseed.tm_casemain cm
+        inner join bseed.tm_caseaction ca on cm.csm_caseno = ca.csm_caseno
+        inner join bseed.tm_casepeople cp on cp.csm_caseno = cm.csm_caseno
+        left outer join bseed.tm_casepmb pm on pm.csm_caseno = cm.csm_caseno
+        left outer join bseed.pnum_lookup pl on pl.dirty = cm.prc_parcel_no
+        inner join bseed.tm_caseaddress cadd on cadd.csm_caseno = cm.csm_caseno
+        inner join bseed.tm_parcel p on p.prc_parcel_no = cm.prc_parcel_no
+      where 
+        ca.case_type = 'VPO'
+        and ca.csa_date3 > CURRENT_DATE - INTERVAL '1 year'
+        and ca.actn_menu_id in ('B', 'D') 
+        and ca.actn_code in ('80', '90', '200', '202', '60')
+        and ca.csa_calendar_tag in ('ISSD', 'VREG')
+        and cp.csp_primary = 'Y'
+        and cm.csm_status != 'FRZ'
+
+- type: geocode
+  table: bseed.rental_registrations_vpos
+  add_col: address
+  geom_col: geocode_geom
+  where_clause: parcel_geom is null
+
+- type: sql
+  statements:
+    - update bseed.rental_registrations_vpos set parcel_geom = geocode_geom where parcel_geom is null and geocode_geom is not null
+
+- type: create_view
+  view_name: rental_registrations_vpos_socrata
+  as: select
+        csm_caseno,
+        csm_name_first,
+        csm_name_last,
+        csm_name_mi,
+        csm_recd_by,
+        csm_recd_date,
+        parcelnum,
+        (select makeSocrataLocation(parcel_geom)) as location,
+        address,
+        action_description,
+        csa_creation_date,
+        csa_date1,
+        csa_date2,
+        csa_date3,
+        csa_disp,
+        pmb_dwelling_units,
+        pmb_type_use,
+        csm_status,
+        case_type,
+        z.zipcode as prc_zip_code,
+        cd.districts::integer as council_district
+      from bseed.rental_registrations_vpos
+        left outer join base.zip_codes z on st_contains(st_transform(z.wkb_geometry, 4326), parcel_geom)
+        left outer join base.council_districts cd on st_contains(st_transform(cd.wkb_geometry, 4326), parcel_geom)
+
+- type: create_table
+  table_name: rental_certifications_vpos
+  as: select
+        distinct on (cm.csm_caseno)
+        cm.csm_caseno,
+        cm.csm_name_first,
+        cm.csm_name_last,
+        cm.csm_name_mi,
+        cm.csm_recd_by,
+        makeSocrataDate(cm.csm_recd_date) as csm_recd_date,
+        pl.cleaned as parcelnum,
+        st_centroid(pl.parcel_geom) as parcel_geom,
+        concat(cadd.csm_st_nmbr, ' ', cadd.csm_st_name) as address,
+        ca.action_description,
+        makeSocrataDate(ca.csa_creation_date) as csa_creation_date,
+        makeSocrataDate(ca.csa_date1) as csa_date1,
+        makeSocrataDate(ca.csa_date2) as csa_date2,
+        makeSocrataDate(ca.csa_date3) as csa_date3,
+        ca.csa_disp,
+        handleNan(pm.pmb_dwelling_units) as pmb_dwelling_units,
+        pm.pmb_type_use,
+        cm.csm_status
+      from bseed.tm_casemain cm
+        inner join bseed.tm_caseaction ca on cm.csm_caseno = ca.csm_caseno
+        inner join bseed.tm_casepeople cp on cp.csm_caseno = cm.csm_caseno
+        left outer join bseed.tm_casepmb pm on pm.csm_caseno = cm.csm_caseno
+        left outer join bseed.pnum_lookup pl on pl.dirty = cm.prc_parcel_no
+        inner join bseed.tm_caseaddress cadd on cadd.csm_caseno = cm.csm_caseno
+        inner join bseed.tm_parcel p on p.prc_parcel_no = cm.prc_parcel_no
+      where 
+        cm.case_type = 'VPO'
+        and ca.csa_date3 > CURRENT_DATE - INTERVAL '1 year'
+        and cp.csp_primary = 'Y'
+        and ca.actn_menu_id in ('B','C','D')
+        and ca.actn_code in ('220', '221', '222', '120', '225','600','55','70')
+        and ca.action_description like any (array['%C of C%', '%Cert%', '%COC%'])
+        and cm.csm_status != 'FRZ'
+
+- type: geocode
+  table: bseed.rental_certifications_vpos
+  add_col: address
+  geom_col: geocode_geom
+  where_clause: parcel_geom is null
+
+- type: sql
+  statements: 
+    - update bseed.rental_certifications_vpos set parcel_geom = geocode_geom where parcel_geom is null and geocode_geom is not null
+
+- type: create_view
+  view_name: rental_certifications_vpos_socrata
+  as: select
+        csm_caseno,
+        csm_name_first,
+        csm_name_last,
+        csm_name_mi,
+        csm_recd_by,
+        csm_recd_date,
+        parcelnum,
+        (select makeSocrataLocation(parcel_geom)) as location,
+        address,
+        action_description,
+        csa_creation_date,
+        csa_date1,
+        csa_date2,
+        csa_date3,
+        csa_disp,
+        pmb_dwelling_units,
+        pmb_type_use,
+        csm_status,
+        z.zipcode as prc_zip_code
+      from bseed.rental_certifications_vpos
+        left outer join base.zip_codes z on st_contains(st_transform(z.wkb_geometry, 4326), parcel_geom) 

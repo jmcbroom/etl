@@ -140,6 +140,30 @@
 - smartsheet: 
     id: 3079873704028036
     table: mmcc
+- database:
+    type: oracle
+    prefix: tm
+    source: CURRENT_LICENSE
+    destination: bseed.current_license
+    where: >-
+        ((date '1980-01-01' < CRL_UPDATED and CRL_UPDATED < date '2025-01-01') or CRL_UPDATED is null)
+        and
+        ((date '1980-01-01' < CRL_EXP_DATE and CRL_EXP_DATE < date '2025-01-01') or CRL_EXP_DATE is null)
+- database:
+    type: oracle
+    prefix: tm
+    source: CASE_LIC
+    destination: bseed.case_lic
+- database:
+    type: oracle
+    prefix: tm
+    source: PEOPLE_COMM
+    destination: bseed.people_comm
+- database:
+    type: oracle
+    prefix: tm
+    source: LICENSE_TYPE
+    destination: bseed.license_type
 
 # # # 
 # This was just for the parcel clean up

@@ -46,6 +46,9 @@
     Location:
       field: location
       type: location
+    Zip Code:
+      field: prc_zip_code
+      type: text
 
 # - to: Mapbox
 #   name: BSEED All Permits

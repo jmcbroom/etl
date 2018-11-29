@@ -230,6 +230,7 @@
 - type: create_view
   view_name: trades_permits_socrata
   as: select
+        parcel_no,
         uniq as unique_id, 
         permit_no as permit_no,
         (select makeSocrataDate(permit_issued)) as permit_issued,

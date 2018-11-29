@@ -1,0 +1,8 @@
+# - to: internal
+#   prefix: CRIMEINCIDENTS
+#   dbType: sql-server
+#   schema: pubsafe
+#   table: gun_stat
+#   destination: gun_stat
+#   if_exists: replace
+#   name: Gun Stat
