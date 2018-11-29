@@ -1,23 +1,23 @@
-# - type: create_table
-#   table_name: inspections
-#   as: select 
-#         inspectionid,
-#         establishmentid,
-#         e.name,
-#         date::timestamp,
-#         timein,
-#         timeout,
-#         (select description from health.instype t where t.recordid = replace(i.type, '.0', '')::bigint) as inspection_type,
-#         i.sanitarian,
-#         (select count(pcf) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.pcf = 'P') as pcount,
-#         (select count(pcf) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.pcf = 'F') as pfcount,
-#         (select count(pcf) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.pcf = 'C') as ccount,
-#         (select count(critical) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.critical::text = 'true') as criticalcount,
-#         (select count(critical) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.critical::text = 'false') as noncritical,
-#         (select count(corrected) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.critical = 'true' and d.corrected::text = 'true') as correctedcritical
-#       from health.iheader i
-#         inner join health.estinfo e on e.recordid::text = replace(i.establishmentid, '.0', '')
-#       where date::timestamp between date '2016-08-01' and now() - interval '30 DAYS'
+- type: create_table
+  table_name: inspections
+  as: select 
+        inspectionid,
+        establishmentid,
+        e.name,
+        date::timestamp,
+        timein,
+        timeout,
+        (select description from health.instype t where t.recordid = replace(i.type, '.0', '')::bigint) as inspection_type,
+        i.sanitarian,
+        (select count(pcf) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.pcf = 'P') as pcount,
+        (select count(pcf) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.pcf = 'F') as pfcount,
+        (select count(pcf) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.pcf = 'C') as ccount,
+        (select count(critical) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.critical::text = 'true') as criticalcount,
+        (select count(critical) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.critical::text = 'false') as noncritical,
+        (select count(corrected) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.critical = 'true' and d.corrected::text = 'true') as correctedcritical
+      from health.iheader i
+        inner join health.estinfo e on e.recordid::text = replace(i.establishmentid, '.0', '')
+      where date::timestamp between date '2016-08-01' and now() - interval '30 DAYS'
 
 - type: create_view
   view_name: inspections_socrata
@@ -42,6 +42,7 @@
           else null
         end as in_compliance
       from health.inspections
+      where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending')
       order by date desc, name asc
 
 - type: create_table
@@ -67,4 +68,5 @@
           else null
         end as in_compliance
       from health.inspections
+      where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending')
       order by date desc, name asc

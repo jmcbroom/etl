@@ -64,6 +64,7 @@
         correction_description,
         repeat
       from health.violations
+      where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending')
       order by inspectiondate desc, name asc
 
 - type: create_table
@@ -89,4 +90,5 @@
         correction_description,
         repeat
       from health.violations
+      where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending')
       order by inspectiondate desc, name asc
