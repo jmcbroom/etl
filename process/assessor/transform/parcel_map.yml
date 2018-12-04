@@ -116,8 +116,8 @@
         mz.council_di as council,
         mz.zone as mow_zone,
         nh.nhood_name as nhood,
-        round(st_x(st_transform(st_centroid(sh.shape), 4326))::numeric, 6) as lat,
-        round(st_y(st_transform(st_centroid(sh.shape), 4326))::numeric, 6) as lon,
+        round(st_x(st_transform(st_centroid(sh.shape), 4326))::numeric, 6) as lon,
+        round(st_y(st_transform(st_centroid(sh.shape), 4326))::numeric, 6) as lat,
         (select 
           count(*) from dah.bvn where sh.parcelno = bvn.parcelno and violation_date > now() - interval '5 years') 
          as bvn_5yr_ct,

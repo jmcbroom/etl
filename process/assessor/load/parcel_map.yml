@@ -1,20 +1,20 @@
-# - to: Mapbox
-#   name: Assessor Parcels
-#   table: assessor.parcels_mapbox
-#   tileset: assessor_parcels
-#   flags:
-#     - "-Z13"
-#     - "-z19"
-# - to: ArcGIS Online
-#   file: assessor_parcels_opendata.zip
-#   table: assessor.parcels_ago
-#   title: Parcels
-#   id: a79a16f9fa5d4c0c84957cb96d7250ce
-#   type: shapefile
-#   description: Assessor's parcels
-#   tags:
-#     - assessor
-#     - parcels
+- to: Mapbox
+  name: Assessor Parcels
+  table: assessor.parcels_mapbox
+  tileset: assessor_parcels
+  flags:
+    - "-Z13"
+    - "-z19"
+- to: ArcGIS Online
+  file: assessor_parcels_opendata.zip
+  table: assessor.parcels_ago
+  title: Parcels
+  id: a79a16f9fa5d4c0c84957cb96d7250ce
+  type: shapefile
+  description: Assessor's parcels
+  tags:
+    - assessor
+    - parcels
 - to: ArcGIS Online
   file: survey_parcels.zip
   table: assessor.survey_parcels_ago
