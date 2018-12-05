@@ -7,7 +7,7 @@
         date::timestamp,
         timein,
         timeout,
-        (select description from health.instype t where t.recordid = replace(i.type, '.0', '')::bigint) as inspection_type,
+        (select description from health.instype t where t.recordid::text = replace(i.type, '.0', '')) as inspection_type,
         i.sanitarian,
         (select count(pcf) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.pcf = 'P') as pcount,
         (select count(pcf) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.pcf = 'F') as pfcount,
@@ -16,7 +16,7 @@
         (select count(critical) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.critical::text = 'false') as noncritical,
         (select count(corrected) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.critical = 'true' and d.corrected::text = 'true') as correctedcritical
       from health.iheader i
-        inner join health.estinfo e on e.recordid::text = replace(i.establishmentid, '.0', '')
+        inner join health.estinfo e on e.recordid = i.establishmentid
       where date::timestamp between date '2016-08-01' and now() - interval '30 DAYS'
 
 - type: create_view
@@ -49,7 +49,7 @@
   table_name: inspections_gql
   as: select
         inspectionid::text as inspectionid,
-        replace(establishmentid, '.0', '')::text as establishmentid,
+        replace(establishmentid::text, '.0', '') as establishmentid,
         name,
         date as inspection_date,
         timein,

@@ -3,9 +3,9 @@
   as: select 
         d.inspectionid,
         i.date as inspectiondate,
-        (select description from health.instype t where t.recordid = replace(i.type, '.0', '')::bigint) as inspection_type,
+        (select description from health.instype t where t.recordid::text = replace(i.type, '.0', '')) as inspection_type,
         i.establishmentid,
-        (select name from health.estinfo e where e.recordid::text = replace(i.establishmentid, '.0', '')) as name,
+        (select name from health.estinfo e where e.recordid = i.establishmentid) as name,
         violation,
         (select v.description from health.violate v where replace(d.viorecordid, '.0', '')::bigint = v.recordid) as violation_description,
         case 
@@ -24,7 +24,7 @@
           when corrected::text = 'false' then 'No'
           else null
         end as corrected,
-        (select v.correctiondays from health.violate v where replace(d.viorecordid, '.0', '')::bigint = v.recordid)::numeric as days_to_correct,
+        (select v.correctiondays from health.violate v where replace(d.viorecordid, '.0', '') = v.recordid::text)::numeric as days_to_correct,
         datecorrected::timestamp,
         (select it.itemid from health.items it where violation = it.violationcode limit 1) as itemid,
         (select il.description from health.itemlist il where (select it.itemid from health.items it where violation = it.violationcode limit 1) = il.recordid limit 1) as item_description,
