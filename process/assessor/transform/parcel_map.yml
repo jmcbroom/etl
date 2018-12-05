@@ -101,7 +101,7 @@
     select
         sh.parcelno as pnum,
         pm.propstreetcombined as address,
-        ao.inventory_status_socrata as dlba,
+        da.current_status as dlba,
         case 
          when da.occupancy_model_probability_pct = 'NaN' then null 
          else round(da.occupancy_model_probability_pct) end 
@@ -128,7 +128,6 @@
         st_transform(sh.shape, 4326) as geom
       from assessor.parcels_050318 sh 
         left outer join dlba.account da on da.parcel_id = sh.parcelno
-        left outer join dlba.all_ownership_socrata ao on ao.parcel_id = sh.parcelno
         left outer join assessor.parcels pa on sh.parcelno = pa.pnum
         left outer join base.mow_zones mz on st_contains(st_transform(mz.wkb_geometry, 2898), st_centroid(sh.shape))
         left outer join base.neighborhoods nh on st_contains(st_transform(nh.wkb_geometry, 2898), st_centroid(sh.shape))
