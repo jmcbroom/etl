@@ -99,23 +99,23 @@
   view_name: survey_parcels_ago
   as: >- 
     select
-        sh.parcelno as pnum,
-        pm.propstreetcombined as address,
-        da.current_status as dlba,
+        sh.parcelno::varchar(100) as pnum,
+        pm.propstreetcombined::varchar(100) as address,
+        da.current_status::varchar(100) as dlba,
         case 
          when da.occupancy_model_probability_pct = 'NaN' then null 
          else round(da.occupancy_model_probability_pct) end 
          as occp_pct,
-        pm.ownername1 as owner1,
-        pm.ownername2 as owner2,
-        pm.tax_send_to_name as taxpayer,
-        pm.ownerstreetaddr as own_str,
-        pm.ownercity as own_city,
-        pm.ownerstate as own_st,
-        pm.ownerzip as own_zip,
-        mz.council_di as council,
-        mz.zone as mow_zone,
-        nh.nhood_name as nhood,
+        pm.ownername1::varchar(100) as owner1,
+        pm.ownername2::varchar(100) as owner2,
+        pm.tax_send_to_name::varchar(100) as taxpayer,
+        pm.ownerstreetaddr::varchar(100) as own_str,
+        pm.ownercity::varchar(100) as own_city,
+        pm.ownerstate::varchar(100) as own_st,
+        pm.ownerzip::varchar(100) as own_zip,
+        mz.council_di::varchar(100) as council,
+        mz.zone::varchar(100) as mow_zone,
+        nh.nhood_name::varchar(100) as nhood,
         round(st_x(st_transform(st_centroid(sh.shape), 4326))::numeric, 6) as lon,
         round(st_y(st_transform(st_centroid(sh.shape), 4326))::numeric, 6) as lat,
         (select 
@@ -123,7 +123,7 @@
          as bvn_5yr_ct,
         (select 
           concat(bvn.ticket_number, ' (', to_char(bvn.violation_date, 'MM/DD/YY'), ') ', bvn.violation_description) 
-          from dah.bvn where sh.parcelno = bvn.parcelno and violation_date > now() - interval '5 years' order by violation_date desc limit 1) 
+          from dah.bvn where sh.parcelno = bvn.parcelno and violation_date > now() - interval '5 years' order by violation_date desc limit 1)::varchar(100) 
          as last_bvn,
         st_transform(sh.shape, 4326) as geom
       from assessor.parcels_050318 sh 
