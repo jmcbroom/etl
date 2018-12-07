@@ -24,7 +24,11 @@
         owner,
         license,
         case
-          when lictype = 'SFE' then 'Standard Fixed Establishment (SFE)'
+          when lictype = 'SFE' then 'Fixed Establishment'
+          when upper(lictype) = 'SMF' then 'Mobile Food Establishment'
+          when lictype = 'SMC' then 'Mobile Food Commissary'
+          when lictype = 'SST' then 'Special Transitory Food Unit'
+          when lictype in ('SRF', 'Tes') then null
           else lictype
         end as license_type,
         (select l.date2 from health.estlic l where l.licensenumber = e.license order by l.year desc limit 1) as most_recent_license_date,
@@ -37,6 +41,7 @@
         end as reviewfrequency
       from health.estinfo e
       where lastinspection::timestamp >= '2016-08-01'
+        and lictype != 'SVN'
 
 - type: geocode
   table: health.establishments
