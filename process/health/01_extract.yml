@@ -1,35 +1,60 @@
-- database:
-    type: 
-    prefix: 
-    source: EstInfo
+- flatfile:
+    sys: swordsolutions
+    name: EstInfo.TXT
     destination: health.estinfo
-- database:
-    type:
-    prefix:
-    source: ESTLIC
+- flatfile:
+    sys: swordsolutions
+    name: ESTLIC.TXT
     destination: health.estlic
-- database:
-    type: 
-    prefix:
-    source: IHeader
+- flatfile:
+    sys: swordsolutions
+    name: IHeader.TXT
     destination: health.iheader
-- database:
-    type:
-    prefix:
-    source: IDetail
+- flatfile:
+    sys: swordsolutions
+    name: IDetail.TXT
     destination: health.idetail
-- database:
-    type:
-    prefix:
-    source: Instype
+- flatfile:
+    sys: swordsolutions
+    name: Instype.TXT
     destination: health.instype
-- database:
-    type: 
-    prefix:
-    source: ZIPCODE
+- flatfile:
+    sys: swordsolutions
+    name: ZIPCODE.TXT
     destination: health.zipcode
-- database:
-    type:
-    prefix:
-    source: RiskCategory
+- flatfile:
+    sys: swordsolutions
+    name: RiskCategory.TXT
     destination: health.riskcategory
+- flatfile:
+    sys: swordsolutions
+    name: ESTATUS.TXT
+    destination: health.estatus
+- flatfile:
+    sys: swordsolutions
+    name: ETYPE.TXT
+    destination: health.etype
+- flatfile:
+    sys: swordsolutions
+    name: VIOLATE.TXT
+    destination: health.violate
+- flatfile:
+    sys: swordsolutions
+    name: ITEMS.TXT
+    destination: health.items
+- flatfile:
+    sys: swordsolutions
+    name: ITEMPROB.TXT
+    destination: health.itemprob
+- flatfile:
+    sys: swordsolutions
+    name: PROBLEMS.TXT
+    destination: health.problems
+- flatfile:
+    sys: swordsolutions
+    name: ITEMLIST.TXT
+    destination: health.itemlist
+- flatfile:
+    sys: swordsolutions
+    name: CORRECTS.TXT
+    destination: health.corrects

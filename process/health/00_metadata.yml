@@ -1,5 +1,7 @@
-name: Health
+name: Health Department
 schema: health
 datasets:
-  - restaurant_inspections
+  - establishments
+  - inspections
+  - violations
   

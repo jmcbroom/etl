@@ -1,0 +1,52 @@
+- to: Socrata
+  id: kpnp-cx36
+  name: Restaurant Inspections - All Inspections
+  table: health.inspections_socrata
+  method: replace
+  columns:
+    Inspection ID:
+      field: inspectionid
+      type: number
+    Establishment ID:
+      field: establishmentid
+      type: number
+    Name:
+      field: name
+      type: text
+    Inspection Date:
+      field: inspection_date
+      type: calendar_date
+    Time In:
+      field: timein
+      type: text
+    Time Out: 
+      field: timeout
+      type: text
+    Inspection Type:
+      field: inspection_type
+      type: text
+    Inspector ID:
+      field: inspectorid
+      type: number
+    Priority Violations Count:
+      field: pcount
+      type: number
+    Foundation Violations Count:
+      field: pfcount
+      type: number
+    Core Violations Count:
+      field: ccount
+      type: number
+    Total Critical Violations:
+      field: criticalcount
+      type: number
+    Total Non Critical Violations:
+      field: noncritical
+      type: number
+    Total Corrected Critical Violations:
+      field: correctedcritical
+      type: number
+    In Compliance:
+      field: in_compliance
+      type: text
+      

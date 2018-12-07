@@ -1,0 +1,63 @@
+- to: Socrata
+  id: 6kry-5abc
+  name: Restaurant Inspections - Violations by Inspection
+  table: health.violations_socrata
+  method: replace
+  columns:
+    Inspection ID:
+      field: inspectionid
+      type: number
+    Inspection Date:
+      field: inspection_date
+      type: calendar_date
+    Inspection Type:
+      field: inspection_type
+      type: text
+    Establishment ID:
+      field: establishmentid
+      type: number
+    Name:
+      field: name
+      type: text
+    Violation Code:
+      field: violation_code
+      type: text
+    Violation Description:
+      field: violation_description
+      type: text
+    Violation Type:
+      field: violation_type
+      type: text
+    Critical Violation Type:
+      field: critical_violation_type
+      type: text
+    Corrected:
+      field: corrected
+      type: text
+    Days to Correct:
+      field: days_to_correct
+      type: text
+    Date Corrected: 
+      field: corrected_date
+      type: calendar_date
+    Item ID:
+      field: itemid
+      type: text
+    Item Description:
+      field: item_description
+      type: text
+    Problem ID:
+      field: problemid
+      type: text
+    Problem Description:
+      field: problem_description
+      type: text
+    Correction ID:
+      field: correctionid
+      type: text
+    Correction Description:
+      field: correction_description
+      type: text
+    Repeated Violation:
+      field: repeat
+      type: text

@@ -1,0 +1,19 @@
+title: Restaurant Inspections - Establishments
+category: Public Health
+agency: DHD
+description: >
+  All food establishments that have been inspected by the Detroit Health Department since August 2016.
+notes: >
+  Includes 
+tags:
+  - restaurants
+  - inspections
+  - food safety
+  - health
+license: 
+  name: Public Domain
+  url: 
+time_period: 8/1/2016 through 30 days ago from today
+update_frequency: Daily
+row_label: Establishment
+columns:

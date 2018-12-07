@@ -18,10 +18,7 @@
         bseed_final_grade_approved as final_grade_date,
         bseed_open_hole_approved as open_hole_date,
         bseed_winter_grade_approved as winter_grade_date,
-        case 
-          when (demo_cost_abatement+demo_cost_knock) = 'NaN' then null 
-          else (demo_cost_abatement+demo_cost_knock)
-        end as total_demo_cost,
+        demo_total_all_costs as total_demo_cost,
         case 
           when dba_com_property_latitude is null then null 
           else

@@ -1,0 +1,72 @@
+- type: create_table
+  table_name: inspections
+  as: select 
+        inspectionid,
+        establishmentid,
+        e.name,
+        date::timestamp,
+        timein,
+        timeout,
+        (select description from health.instype t where t.recordid::text = replace(i.type, '.0', '')) as inspection_type,
+        i.sanitarian,
+        (select count(pcf) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.pcf = 'P') as pcount,
+        (select count(pcf) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.pcf = 'F') as pfcount,
+        (select count(pcf) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.pcf = 'C') as ccount,
+        (select count(critical) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.critical::text = 'true') as criticalcount,
+        (select count(critical) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.critical::text = 'false') as noncritical,
+        (select count(corrected) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.critical = 'true' and d.corrected::text = 'true') as correctedcritical
+      from health.iheader i
+        inner join health.estinfo e on e.recordid = i.establishmentid
+      where date::timestamp between date '2016-08-01' and now() - interval '30 DAYS'
+
+- type: create_view
+  view_name: inspections_socrata
+  as: select
+        inspectionid,
+        establishmentid,
+        name,
+        (select makeSocrataDate(date)) as inspection_date,
+        timein,
+        timeout,
+        inspection_type,
+        sanitarian as inspectorid,
+        pcount,
+        pfcount,
+        ccount,
+        criticalcount,
+        noncritical,
+        correctedcritical,
+        case
+          when criticalcount::numeric <= correctedcritical::numeric then 'Yes'
+          when criticalcount::numeric > correctedcritical::numeric then 'No'
+          else null
+        end as in_compliance
+      from health.inspections
+      where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending')
+      order by date desc, name asc
+
+- type: create_table
+  table_name: inspections_gql
+  as: select
+        inspectionid::text as inspectionid,
+        replace(establishmentid::text, '.0', '') as establishmentid,
+        name,
+        date as inspection_date,
+        timein,
+        timeout,
+        inspection_type,
+        sanitarian as inspectorid,
+        pcount,
+        pfcount,
+        ccount,
+        criticalcount,
+        noncritical,
+        correctedcritical,
+        case
+          when criticalcount::numeric <= correctedcritical::numeric then 'Yes'
+          when criticalcount::numeric > correctedcritical::numeric then 'No'
+          else null
+        end as in_compliance
+      from health.inspections
+      where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending')
+      order by date desc, name asc
