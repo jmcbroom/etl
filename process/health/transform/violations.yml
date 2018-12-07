@@ -31,12 +31,7 @@
         (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) as problemid,
         (select p.description from health.problems p where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = p.problemid limit 1) as problem_description,
         (select c.correctionid from health.corrects c where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = replace(c.problemid, '.0', '')::bigint limit 1) as correctionid,
-        (select c.description from health.corrects c where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = replace(c.problemid, '.0', '')::bigint limit 1) as correction_description,
-        case 
-          when repeated = '1.0' then 'Yes'
-          when repeated = '0.0' then 'No'
-          else null
-        end as repeat
+        (select c.description from health.corrects c where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = replace(c.problemid, '.0', '')::bigint limit 1) as correction_description
       from health.idetail d
         inner join health.iheader i on i.inspectionid::text = replace(d.inspectionid, '.0', '')
       where i.date::timestamp between date '2016-08-01' and now() - interval '30 days'
@@ -46,7 +41,10 @@
   as: select
         inspectionid,
         (select makeSocrataDate(inspectiondate::timestamp)) as inspection_date,
-        inspection_type,
+        case 
+          when inspection_type like any (array['%FBI%', '%Food Borne%']) then 'Complaint'
+          else inspection_type
+        end as inspection_type,
         establishmentid,
         name,
         violation as violation_code,
@@ -61,18 +59,20 @@
         problemid,
         problem_description,
         correctionid,
-        correction_description,
-        repeat
+        correction_description
       from health.violations
       where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending')
-      order by inspectiondate desc, name asc
+      order by inspectiondate::timestamp desc, name asc
 
 - type: create_table
   table_name: violations_gql
   as: select
         replace(inspectionid::text, '.0', '') as inspectionid,
         inspectiondate as inspection_date,
-        inspection_type,
+        case 
+          when inspection_type like any (array['%FBI%', '%Food Borne%']) then 'Complaint'
+          else inspection_type
+        end as inspection_type,
         replace(establishmentid::text, '.0', '') as establishmentid,
         name,
         violation as violation_code,
@@ -87,8 +87,7 @@
         problemid,
         problem_description,
         correctionid,
-        correction_description,
-        repeat
+        correction_description
       from health.violations
       where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending')
-      order by inspectiondate desc, name asc
+      order by inspectiondate::timestamp desc, name asc

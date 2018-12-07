@@ -5,8 +5,6 @@
         establishmentid,
         e.name,
         date::timestamp,
-        timein,
-        timeout,
         (select description from health.instype t where t.recordid::text = replace(i.type, '.0', '')) as inspection_type,
         i.sanitarian,
         (select count(pcf) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.pcf = 'P') as pcount,
@@ -26,9 +24,10 @@
         establishmentid,
         name,
         (select makeSocrataDate(date)) as inspection_date,
-        timein,
-        timeout,
-        inspection_type,
+        case 
+          when inspection_type like any (array['%FBI%', '%Food Borne%']) then 'Complaint'
+          else inspection_type
+        end as inspection_type,
         sanitarian as inspectorid,
         pcount,
         pfcount,
@@ -52,9 +51,10 @@
         replace(establishmentid::text, '.0', '') as establishmentid,
         name,
         date as inspection_date,
-        timein,
-        timeout,
-        inspection_type,
+        case 
+          when inspection_type like any (array['%FBI%', '%Food Borne%']) then 'Complaint'
+          else inspection_type
+        end as inspection_type,
         sanitarian as inspectorid,
         pcount,
         pfcount,
