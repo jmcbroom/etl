@@ -11,6 +11,8 @@
   - create index if not exists instype_recordid_idx on health.instype using btree(recordid)
   - create index if not exists violate_recordid_idx on health.violate using btree(recordid)
   - create index if not exists idetail_inspid_idx on health.idetail using btree(inspectionid)
+  - create index if not exists estinfo_license_idx on health.estinfo using btree(license)
+  - create index if not exists estlic_licensenum_idx on health.estlic using btree(licensenumber)
   
 - type: create_table
   table_name: establishments
@@ -21,17 +23,18 @@
         (select rtrim(z.zipcode, '-0000') from health.zipcode z where z.recordid::text = replace(e.zip, '.0', '')) as zipcode,
         owner,
         license,
-        lictype,
+        case
+          when lictype = 'SFE' then 'Standard Fixed Establishment (SFE)'
+          else lictype
+        end as license_type,
+        (select l.date2 from health.estlic l where l.licensenumber = e.license order by l.year desc limit 1) as most_recent_license_date,
         (select t.description from health.etype t where t.recordid::text = replace(e.type, '.0', '')) as establishment_type,
         (select es.description from health.estatus es where es.recordid::text = replace(e.status, '.0', '')) as establishment_status,
         (select r.description from health.riskcategory r where r.recordid::text = (select substring(e.riskfactor, 1, 1))) as complexity,
-        lastinspection::timestamp,
-        nextinspection::timestamp,
         case 
           when e.reviewfrequency is null then '90.0'
           else (e.reviewfrequency::numeric + 30)::text
-        end as reviewfrequency,
-        (select i.inspectionid from health.iheader i where replace(i.establishmentid::text, '.0', '') = e.recordid::text and i.date::timestamp = e.lastinspection::timestamp order by i.date desc limit 1) as last_inspectionid
+        end as reviewfrequency
       from health.estinfo e
       where lastinspection::timestamp >= '2016-08-01'
 
@@ -49,7 +52,8 @@
         zipcode,
         owner,
         license as license_number,
-        lictype as license_type,
+        license_type,
+        (select makeSocrataDate(most_recent_license_date::timestamp)) as most_recent_license_date,
         establishment_type,
         initcap(establishment_status) as establishment_status,
         case
@@ -58,13 +62,10 @@
           when complexity = 'X' then 'Low'
           else null
         end as risk_category,
-        (select makeSocrataDate(lastinspection)) as last_inspection_date,
-        last_inspectionid,
-        (select makeSocrataDate(nextinspection)) as next_inspection_date,
         reviewfrequency as review_frequency_days,
         (select makeSocrataLocation(geom)) as location
       from health.establishments
-      order by lastinspection desc, name asc
+      order by name asc
 
 - type: create_table
   table_name: establishments_gql
@@ -75,7 +76,8 @@
         zipcode,
         owner,
         license as license_number,
-        lictype as license_type,
+        license_type,
+        most_recent_license_date,
         establishment_type,
         initcap(establishment_status) as establishment_status,
         case
@@ -84,10 +86,7 @@
           when complexity = 'X' then 'Low'
           else null
         end as risk_category,
-        lastinspection as last_inspection_date,
-        last_inspectionid::text as last_inspectionid,
-        nextinspection as next_inspection_date,
         reviewfrequency as review_frequency_days,
         geom
       from health.establishments
-      order by lastinspection desc, name asc
+      order by name asc
