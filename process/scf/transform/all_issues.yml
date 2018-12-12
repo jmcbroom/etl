@@ -128,6 +128,75 @@
       where request_type_title not in ('Abandoned Vehicle', 'Illegal Dumping In Progress', 'Squatters Issue')
 
 - type: create_view
+  view_name: issues_socrata_redact_test
+  as: select
+        id,
+        status,
+        request_type_title,
+        case 
+          when description = 'NaN' then null
+          when request_type_title in ('Abandoned Vehicle', 'Illegal Dumping In Progress', 'Squatters Issue') then 'Redacted'
+          else description
+        end as description,
+        case
+          when id is null
+          then null
+          else concat('https://seeclickfix.com/issues/', id)
+        end as web_url,
+        report_method,
+        priority_code,
+        case
+          when created_at = 'NaN'
+          then null
+          else (select makeSocrataDate(created_at::timestamp))
+        end as created_at,
+        case
+          when acknowledged_at = 'NaN'
+          then null 
+          else (select makeSocrataDate(acknowledged_at::timestamp))
+        end as acknowledged_at,
+        case
+          when closed_at = 'NaN'
+          then null
+          else (select makeSocrataDate(closed_at::timestamp))
+        end as closed_at,
+        case
+          when reopened_at = 'NaN'
+          then null 
+          else (select makeSocrataDate(reopened_at::timestamp))
+        end as reopened_at,
+        case
+          when updated_at = 'NaN'
+          then null
+          else (select makeSocrataDate(updated_at::timestamp))
+        end as updated_at,
+        case
+          when days_to_close is null
+          then null
+          else (extract(epoch FROM days_to_close)/86400)::double precision
+        end as days_to_close,
+        (select handleNan(canonical_issue_id)) as canonical_issue_id,
+        case 
+          when request_type_title in ('Abandoned Vehicle', 'Illegal Dumping In Progress', 'Squatters Issue') then 'Redacted'
+          else address
+        end as address,
+        neighborhood,
+        council_district,
+        case 
+          when lat is null then null 
+          when request_type_title in ('Abandoned Vehicle', 'Illegal Dumping In Progress', 'Squatters Issue') then 'Redacted'
+          else
+            concat(
+              'location (',
+              lat,
+              ',',
+              lng,
+              ')'
+            )
+        end as location
+      from scf.issues
+
+- type: create_view
   view_name: issues_socrata_private
   as: select
         id,
@@ -195,6 +264,6 @@
     - drop table if exists scf.issues_update cascade
 
 # Copy view to a csv
-- type: sql
-  statements:
-    - copy ( select * from scf.issues_socrata_private ) to '/tmp/311.csv' delimiter ',' csv header
+# - type: sql
+#   statements:
+#     - copy ( select * from scf.issues_socrata_private ) to '/tmp/311.csv' delimiter ',' csv header

@@ -61,6 +61,68 @@
       type: location
 
 - to: Socrata
+  name: Improve Detroit Issues - Redaction test
+  id: 
+  table: scf.issues_socrata_redact_test
+  method: replace
+  rowIdentifier: id
+  columns:
+    Ticket ID:
+      field: id
+      type: text
+    Ticket Status:
+      field: status
+      type: text
+    Issue Type:
+      field: request_type_title
+      type: text
+    Issue Description:
+      field: description
+      type: text
+    Created At:
+      field: created_at
+      type: calendar_date
+    Acknowledged At:
+      field: acknowledged_at
+      type: calendar_date
+    Closed At:
+      field: closed_at
+      type: calendar_date
+    Reopened At:
+      field: reopened_at
+      type: calendar_date
+    Updated At:
+      field: updated_at
+      type: calendar_date
+    Days to Close:
+      field: days_to_close
+      type: number
+    Report Method:
+      field: report_method
+      type: text
+    Priority Code:
+      field: priority_code
+      type: number
+    Canonical Issue Id:
+      field: canonical_issue_id
+      type: number
+    Web Link:
+      field: web_url
+      type: text
+    Address:
+      field: address
+      type: text
+    Neighborhood:
+      field: neighborhood
+      type: text
+    Council District:
+      field: council_district
+      type: number
+    Location:
+      field: location
+      type: location
+
+- to: Socrata
   name: Improve Detroit Issues (Private View)
   id: 3nvs-wxfi
   table: scf.issues_socrata_private
