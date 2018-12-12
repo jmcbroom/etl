@@ -62,10 +62,10 @@
 
 - to: Socrata
   name: Improve Detroit Issues - Redaction test
-  id: 
+  id: g9xt-fw9i
   table: scf.issues_socrata_redact_test
   method: replace
-  rowIdentifier: id
+  rowIdentifier:
   columns:
     Ticket ID:
       field: id

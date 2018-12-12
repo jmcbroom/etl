@@ -183,8 +183,7 @@
         neighborhood,
         council_district,
         case 
-          when lat is null then null 
-          when request_type_title in ('Abandoned Vehicle', 'Illegal Dumping In Progress', 'Squatters Issue') then 'Redacted'
+          when lat is null or request_type_title in ('Abandoned Vehicle', 'Illegal Dumping In Progress', 'Squatters Issue') then null
           else
             concat(
               'location (',
