@@ -22,3 +22,13 @@
 - smartsheet:
     id: 4929316954892164
     table: gun_stat
+- database:
+    type: sql-server
+    prefix: cad
+    source: vw_DP_CAD_NoDup
+    destination: pubsafe.cad_nodupe_update
+    where:
+        field: inci_id
+        condition: ">"
+        value: max(inci_id)
+        table: pubsafe.cad_nodupe
