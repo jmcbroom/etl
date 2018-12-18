@@ -27,8 +27,6 @@
     prefix: cad
     source: vw_DP_CAD_NoDup
     destination: pubsafe.cad_nodupe_update
-    where:
-        field: inci_id
-        condition: ">"
-        value: max(inci_id)
-        table: pubsafe.cad_nodupe
+    where: >-
+        inci_id > (select max(inci_id) from pubsafe.cad_nodupe)
+        and calldate::timestamp < timestamp 'yesterday'
