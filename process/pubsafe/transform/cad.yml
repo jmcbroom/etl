@@ -1,7 +1,7 @@
 # Initial address string clean up
 - type: sql
   statements:
-    - delete from pubsafe.cad_update where calldate::timestamp > timestamp 'yesterday'
+    - delete from pubsafe.cad_update where calldate::timestamp >= timestamp 'yesterday'
     - alter table pubsafe.cad_update add column if not exists is_anon boolean
     - update pubsafe.cad_update set is_anon = 'f'
     - update pubsafe.cad_update set incident_address = trim(regexp_replace(incident_address, 'DETROIT$', ''))
