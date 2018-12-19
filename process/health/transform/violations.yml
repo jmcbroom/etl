@@ -19,7 +19,6 @@
           when critical::text = 'false' then 'No'
           else null
         end as critical,
-        (select v.description from health.violate v where replace(d.viorecordid, '.0', '')::bigint = v.recordid) as violation_description,
         (select ml.description from health.mstrlist ml where replace((select ii.item from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as item1,
         (select ml.description from health.mstrlist ml where replace((select ii.itemdt from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as item2,
         (select ml.description from health.mstrlist ml where replace((select ii.itemdtii from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as item3,
