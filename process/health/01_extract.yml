@@ -58,3 +58,11 @@
     sys: swordsolutions
     name: CORRECTS.TXT
     destination: health.corrects
+- flatfile:
+    sys: swordsolutions
+    name: IITEM.TXT
+    destination: health.iitem
+- flatfile:
+    sys: swordsolutions
+    name: MSTRLIST.TXT
+    destination: health.mstrlist
