@@ -19,6 +19,15 @@
           when critical::text = 'false' then 'No'
           else null
         end as critical,
+        (select v.description from health.violate v where replace(d.viorecordid, '.0', '')::bigint = v.recordid) as violation_description,
+        (select ml.description from health.mstrlist ml where replace((select ii.item from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as item1,
+        (select ml.description from health.mstrlist ml where replace((select ii.itemdt from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as item2,
+        (select ml.description from health.mstrlist ml where replace((select ii.itemdtii from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as item3,
+        (select ml.description from health.mstrlist ml where replace((select ii.problem from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as problem1,
+        (select ml.description from health.mstrlist ml where replace((select ii.probdt from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as problem2,
+        (select ml.description from health.mstrlist ml where replace((select ii.probdtii from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as problem3,
+        (select ml.description from health.mstrlist ml where replace((select ii.location from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as location1,
+        (select ml.description from health.mstrlist ml where replace((select ii.locdet from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as location2,
         case
           when corrected::text = 'true' then 'Yes'
           when corrected::text = 'false' then 'No'
@@ -26,11 +35,6 @@
         end as corrected,
         (select v.correctiondays from health.violate v where replace(d.viorecordid, '.0', '') = v.recordid::text)::numeric as days_to_correct,
         datecorrected::timestamp,
-        (select it.itemid from health.items it where violation = it.violationcode limit 1) as itemid,
-        (select il.description from health.itemlist il where (select it.itemid from health.items it where violation = it.violationcode limit 1) = il.recordid limit 1) as item_description,
-        (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) as problemid,
-        (select p.description from health.problems p where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = p.problemid limit 1) as problem_description,
-        (select c.correctionid from health.corrects c where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = replace(c.problemid, '.0', '')::bigint limit 1) as correctionid,
         (select c.description from health.corrects c where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = replace(c.problemid, '.0', '')::bigint limit 1) as correction_description
       from health.idetail d
         inner join health.iheader i on i.inspectionid::text = replace(d.inspectionid, '.0', '')
@@ -51,14 +55,14 @@
         violation_description,
         violation_type,
         critical as critical_violation_type,
+        item1 as item_description,
+        concat_ws(' ', item2, item3) as sub_item,
+        problem1 as problem_description,
+        concat_ws(' ', problem2, problem3) as sub_problem,
+        concat_ws(' ', location1, location2) as location,
         corrected,
         days_to_correct::text,
         (select makeSocrataDate(datecorrected::timestamp)) as corrected_date,
-        itemid,
-        item_description,
-        problemid,
-        problem_description,
-        correctionid,
         correction_description
       from health.violations
       where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending')
@@ -79,14 +83,14 @@
         violation_description,
         violation_type,
         critical as critical_violation_type,
+        item1 as item_description,
+        concat_ws(' ', item2, item3) as sub_item,
+        problem1 as problem_description,
+        concat_ws(' ', problem2, problem3) as sub_problem,
+        concat_ws(' ', location1, location2) as location,
         corrected,
         days_to_correct,
         datecorrected as corrected_date,
-        itemid,
-        item_description,
-        problemid,
-        problem_description,
-        correctionid,
         correction_description
       from health.violations
       where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending')

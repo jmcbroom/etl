@@ -13,6 +13,8 @@
   - create index if not exists idetail_inspid_idx on health.idetail using btree(inspectionid)
   - create index if not exists estinfo_license_idx on health.estinfo using btree(license)
   - create index if not exists estlic_licensenum_idx on health.estlic using btree(licensenumber)
+  - create index if not exists mstrlist_recordid_idx on health.mstrlist using btree(recordid)
+  - create index if not exists iitem_idetail_idx on health.iitem using btree(idetailid)
   
 - type: create_table
   table_name: establishments
