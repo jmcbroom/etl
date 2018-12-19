@@ -40,20 +40,20 @@
     Date Corrected: 
       field: corrected_date
       type: calendar_date
-    Item ID:
-      field: itemid
-      type: text
     Item Description:
       field: item_description
       type: text
-    Problem ID:
-      field: problemid
+    Sub Item:
+      field: sub_item
       type: text
     Problem Description:
       field: problem_description
       type: text
-    Correction ID:
-      field: correctionid
+    Sub Problem:
+      field: sub_problem
+      type: text
+    Location:
+      field: location
       type: text
     Correction Description:
       field: correction_description
