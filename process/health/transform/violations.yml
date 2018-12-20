@@ -34,7 +34,7 @@
         end as corrected,
         (select v.correctiondays from health.violate v where replace(d.viorecordid, '.0', '') = v.recordid::text)::numeric as days_to_correct,
         datecorrected::timestamp,
-        (select c.description from health.corrects c where (select ip.problemid from health.itemprob ip where (select it.itemid from health.items it where violation = it.violationcode limit 1) = ip.itemid limit 1) = replace(c.problemid, '.0', '')::bigint limit 1) as correction_description
+        (select ml.description from health.mstrlist ml where replace((select ii.correction from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as correction_description
       from health.idetail d
         inner join health.iheader i on i.inspectionid::text = replace(d.inspectionid, '.0', '')
       where i.date::timestamp between date '2016-08-01' and now() - interval '30 days'
