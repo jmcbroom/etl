@@ -27,6 +27,7 @@
         (select ml.description from health.mstrlist ml where replace((select ii.probdtii from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as problem3,
         (select ml.description from health.mstrlist ml where replace((select ii.location from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as location1,
         (select ml.description from health.mstrlist ml where replace((select ii.locdet from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as location2,
+        (select ml.description from health.mstrlist ml where replace(d.inspectarea, '.0', '') = ml.recordid::text limit 1) as inspectarea,
         case
           when corrected::text = 'true' then 'Yes'
           when corrected::text = 'false' then 'No'
@@ -58,7 +59,8 @@
         concat_ws(' ', item2, item3) as sub_item,
         problem1 as problem_description,
         concat_ws(' ', problem2, problem3) as sub_problem,
-        concat_ws(' ', location1, location2) as location,
+        inspectarea as location,
+        concat_ws(' ', location1, location2) as sub_location,
         corrected,
         days_to_correct::text,
         (select makeSocrataDate(datecorrected::timestamp)) as corrected_date,
@@ -86,7 +88,8 @@
         concat_ws(' ', item2, item3) as sub_item,
         problem1 as problem_description,
         concat_ws(' ', problem2, problem3) as sub_problem,
-        concat_ws(' ', location1, location2) as location,
+        inspectarea as location,
+        concat_ws(' ', location1, location2) as sub_location,
         corrected,
         days_to_correct,
         datecorrected as corrected_date,

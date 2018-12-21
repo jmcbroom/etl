@@ -55,6 +55,9 @@
     Location:
       field: location
       type: text
+    Sub Location:
+      field: sub_location
+      type: text
     Correction Description:
       field: correction_description
       type: text
