@@ -1,3 +1,5 @@
-name:
-schema:
-notify:
+name: Escrow
+schema: pnc
+notify: True
+datasets:
+ - escrow
