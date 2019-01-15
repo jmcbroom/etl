@@ -41,7 +41,7 @@
           else null
         end as in_compliance
       from health.inspections
-      where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending')
+      where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending', 'STFU Operational', 'CoO Site Check')
       order by date desc, name asc
 
 - type: create_table
@@ -68,5 +68,5 @@
           else null
         end as in_compliance
       from health.inspections
-      where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending')
+      where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending', 'STFU Operational', 'CoO Site Check')
       order by date desc, name asc
