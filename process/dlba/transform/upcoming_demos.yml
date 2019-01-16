@@ -27,8 +27,7 @@
             )
         end as location
       from dlba.case
-      where socrata_projected_knocked_by_date is not null
-        and socrata_reported_price > 0
+      where socrata_reported_price > 0
         and demo_contractor_text_only <> ''
         and status = 'Demo Contracted'
 
