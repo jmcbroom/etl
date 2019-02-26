@@ -15,7 +15,7 @@
         (select count(corrected) from health.idetail d where replace(d.inspectionid, '.0', '') = i.inspectionid::text and d.critical = 'true' and d.corrected::text = 'true') as correctedcritical
       from health.iheader i
         inner join health.estinfo e on e.recordid = i.establishmentid
-      where date::timestamp between date '2016-08-01' and now() - interval '30 DAYS'
+      where date::timestamp between date '2016-08-01' and date_trunc('month', now()) - interval '1 DAY'
 
 - type: create_view
   view_name: inspections_socrata
