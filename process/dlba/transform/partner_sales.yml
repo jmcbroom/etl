@@ -8,7 +8,7 @@
         'Community Partner & Projects'::text as program,
         c.neighborhood,
         c.council_district,
-		    makeSocrataLocation(st_setsrid(st_makepoint(c.acct_longitude::numeric, c.acct_latitude::numeric), 4326)) as location
+        makeSocrataLocation(st_setsrid(st_makepoint(c.acct_longitude::numeric, c.acct_latitude::numeric), 4326)) as location
       from dlba.case c
         inner join dlba.dlba_activity a on a.case = c.id
         inner join dlba.account ac on ac.related_property_case_id = c.id
@@ -16,4 +16,4 @@
         and a.sale_status = 'Closed'
         and a.actual_closing_date::timestamp >= date '2016-01-01'
         and c.address not like '%Fake St%'
-	    order by a.actual_closing_date::timestamp desc
+      order by a.actual_closing_date::timestamp desc

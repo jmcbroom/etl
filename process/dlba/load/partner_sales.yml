@@ -1,6 +1,6 @@
 - to: Socrata
   name: Community Partner & Project Sales
-  id: 
+  id: 3gn4-ru82
   table: dlba.partner_sales
   method: replace
   columns:
