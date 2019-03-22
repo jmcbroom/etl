@@ -17,7 +17,7 @@
   - create index if not exists iitem_idetail_idx on health.iitem using btree(idetailid)
   - create index if not exists idetail_inspectionid_func_idx on health.idetail using btree(replace(inspectionid, '.0', ''))
   - create index if not exists iitem_idetail_func_idx on health.iitem using btree(replace(idetailid, '.0', ''))
-  - create index if not exists idetail_inspectarea_func_idx on health.idetail using btree(replace(d.inspectarea, '.0', ''))
+  - create index if not exists idetail_inspectarea_func_idx on health.idetail using btree(replace(inspectarea, '.0', ''))
   
 - type: create_table
   table_name: establishments

@@ -30,7 +30,8 @@
         (select ml.description from health.mstrlist ml where replace(d.inspectarea, '.0', '') = ml.recordid::text limit 1) as inspectarea,
         case
           when corrected::text = 'true' then 'Yes'
-          when corrected::text = 'false' then 'No'
+          when corrected::text = 'false' and pcf in ('P', 'F') then 'No'
+          when corrected::text = 'false' and pcf = 'C' then 'Not required'
           else null
         end as corrected,
         (select v.correctiondays from health.violate v where replace(d.viorecordid, '.0', '') = v.recordid::text)::numeric as days_to_correct,
@@ -38,7 +39,7 @@
         (select ml.description from health.mstrlist ml where replace((select ii.correction from health.iitem ii where d.recordid::text = replace(ii.idetailid, '.0', '') limit 1), '.0', '') = ml.recordid::text limit 1) as correction_description
       from health.idetail d
         inner join health.iheader i on i.inspectionid::text = replace(d.inspectionid, '.0', '')
-      where i.date::timestamp between date '2016-08-01' and now() - interval '30 days'
+      where i.date::timestamp between date '2016-08-01' and date_trunc('month', now()) - interval '1 DAY'
 
 - type: create_view
   view_name: violations_socrata
@@ -66,7 +67,7 @@
         (select makeSocrataDate(datecorrected::timestamp)) as corrected_date,
         correction_description
       from health.violations
-      where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending')
+      where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending', 'STFU Operational', 'CoO Site Check')
       order by inspectiondate::timestamp desc, name asc
 
 - type: create_table
@@ -95,5 +96,5 @@
         datecorrected as corrected_date,
         correction_description
       from health.violations
-      where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending')
+      where inspection_type not in ('Compliance Insp.', 'Compliance Insp./FO', 'Other', 'Site Check', 'Vending', 'STFU Operational', 'CoO Site Check')
       order by inspectiondate::timestamp desc, name asc
