@@ -108,8 +108,8 @@
       - DBA_COM_Property__r.Name
       - DBA_COM_Property__r.Neighborhood__c
       - DBA_COM_Property__r.Parcel_ID__c
-      - Demo_Cost_Abatement__c
-      - Demo_Cost_Knock__c
+      # - Demo_Cost_Abatement__c
+      # - Demo_Cost_Knock__c
       - Demo_NtP_Dt__c
       - Demo_Proj_Demo_Dt__c
       - Demo_Pulled_Date__c
@@ -122,5 +122,5 @@
       - Related_Case__c
       - Demo_Total_All_Costs__c
       - Demo_RFP_Number__c
-      - ASB_Verification_Contractor__r.Name
+      - ASB_Verification_Contractor__c
       - ASB_Post_Abatement_Verification_Status__c
