@@ -1,7 +1,7 @@
-- to: Mapbox
-  name: DLBA All Ownership Parcels
-  table: dlba.all_ownership_mapbox
-  tileset: dlba_parcels
+# - to: Mapbox
+#   name: DLBA All Ownership Parcels
+#   table: dlba.all_ownership_mapbox
+#   tileset: dlba_parcels
 
 - to: Socrata
   name: DLBA Inventory

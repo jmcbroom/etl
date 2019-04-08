@@ -29,6 +29,7 @@
       - ASB_Post_Abatement_Document_URL__c
       - ASB_Post_Abatement_Insp_Date__c
       - ASB_Post_Abatement_Notes__c
+      - ASB_Post_Abatement_Passed_Date__c
       - ASB_Post_Abatement_Times_Failed__c
       - ASB_Post_Abatement_Verification_Status__c
       - ASB_Verifier_Name__c
@@ -48,6 +49,7 @@
       - DEMO_Pulled_Date__c
       - Demo_Contractor_Proceed_Date__c
       - Demo_Contractor_TEXT_ONLY__c
+      - Demo_RFP_Group__c
       - Demo_Primarily_Funded_By__c
       - Id
       - Neighborhood__c
@@ -119,3 +121,6 @@
       - Name
       - Related_Case__c
       - Demo_Total_All_Costs__c
+      - Demo_RFP_Number__c
+      - ASB_Verification_Contractor__r.Name
+      - ASB_Post_Abatement_Verification_Status__c

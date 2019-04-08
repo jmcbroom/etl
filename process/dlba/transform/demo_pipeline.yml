@@ -14,7 +14,7 @@
         c.neighborhood
       from dlba.case c
         inner join dlba.account a on a.related_property_case_id = c.id
-      where c.asb_document_url is not null
+      where c.status in ('Demo Pipeline')
         and c.demo_contractor_proceed_date is null
         and c.demo_asb_survey_status = 'Completed'
         and c.demo_knock_down_date is null
