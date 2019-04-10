@@ -1,7 +1,7 @@
 - type: create_table
   table_name: pav_res
   as: select
-        'Residential' as type,
+        'Residential'::text as type,
         current_timestamp as posted_timestamp,
         c.address,
         c.parcel_id,
@@ -9,13 +9,15 @@
         c.asb_abatement_verification_contractor_name as contractor,
         c.asb_post_abatement_passed_date,
         c.asb_post_abatement_verification_status,
-        '' as public_access_url
+        f.tva_cfb__cloud_public_access_url as public_access_url
       from dlba.case c
+        left outer join dlba.tva_cfb__cloud_files f on c.id = f.tva_cfb__case
+      where f.tva_cfb__folder like '%PAV%'
 
 - type: create_table
   table_name: pav_comm
   as: select
-        'Commercial' as type,
+        'Commercial'::text as type,
         current_timestamp as posted_timestamp,
         d.dba_com_property_name as address,
         d.dba_com_property_parcel_id as parcel_id,
@@ -23,14 +25,50 @@
         d.asb_verification_contractor as contractor,
         d.asb_post_abatement_passed_date,
         d.asb_post_abatement_verification_status,
-        '' as public_access_url
+        f.tva_cfb__cloud_public_access_url as public_access_url
       from dlba.dba_commercial_demo d
-      where d.dba_com_property_parcel_id is not null
+        left outer join dlba.tva_cfb__cloud_files f on d.related_case = f.tva_cfb__case
+      where f.tva_cfb__folder like '%PAV%'
 
 - type: sql
   statements:
     - drop table if exists dlba.pav_all cascade;
+    # first time only, then append new rows to this master table (like where parcel id doesn't already exist?)
     - create table dlba.pav_all as 
-        select (type, address, parcel_id, rfp_group, contractor, asb_post_abatement_passed_date, asb_post_abatement_verification_status, public_access_url) from dlba.pav_res 
+        select 
+          type, 
+          address, 
+          parcel_id, 
+          rfp_group, 
+          contractor, 
+          asb_post_abatement_passed_date, 
+          asb_post_abatement_verification_status, 
+          public_access_url,
+          posted_timestamp
+        from dlba.pav_res 
       union 
-        select (type, address, parcel_id, rfp_group, contractor, asb_post_abatement_passed_date, asb_post_abatement_verification_status, public_access_url) from dlba.pav_comm;
+        select 
+          type, 
+          address, 
+          parcel_id, 
+          rfp_group, 
+          contractor, 
+          asb_post_abatement_passed_date, 
+          asb_post_abatement_verification_status, 
+          public_access_url,
+          posted_timestamp
+        from dlba.pav_comm;
+
+- type: create_view
+  view_name: pav_socrata
+  as: select
+        type,
+        address,
+        parcel_id,
+        rfp_group,
+        contractor,
+        makeSocrataDate(asb_post_abatement_passed_date) as asb_post_abatement_passed_date,
+        asb_post_abatement_verification_status, 
+        public_access_url,
+        makeSocrataDate(posted_timestamp) as posted_timestamp
+      from dlba.pav_all

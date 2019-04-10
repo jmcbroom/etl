@@ -1,0 +1,34 @@
+- to: Socrata
+  name: Post Abatement Verification Reports
+  id: 
+  table: dlba.pav_socrata
+  method: replace
+  columns:
+    Address:
+      field: address
+      type: text
+    Parcel ID:
+      field: parcel_id
+      type: text
+    Type: 
+      field: type
+      type: text
+    RFP Group:
+      field: rfp_group
+      type: text
+    Contractor: 
+      field: contractor
+      type: text
+    Passed Date:
+      field: asb_post_abatement_passed_date
+      type: calendar_date
+    Verification Status: 
+      field: asb_post_abatement_verification_status
+      type: text
+    Document URL:
+      field: public_access_url
+      type: text
+    Posted Date:
+      field: posted_timestamp
+      type: calendar_date
+    
