@@ -16,7 +16,7 @@
       - Parcel_ID__c
       - Inventory_Status_Socrata__c
       - Occupancy_Model_Probability_Pct__c
-      - Street_Directiion__c
+      - Street_Direction__c
       - Street_Name__c
       - Street_Number__c
       - Street_Type__c

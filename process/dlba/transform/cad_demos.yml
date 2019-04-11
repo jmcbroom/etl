@@ -1,0 +1,17 @@
+- type: create_view
+  view_name: cad_demos_socrata
+  as: select
+        current_status,
+        street_direction,
+        handleNan(street_number) as street_number,
+        street_name,
+        street_type,
+        block_range,
+        parcel_id,
+        latitude,
+        longitude,
+        "nad83_x",
+        "nad83_y"
+      from dlba.account
+      where current_status in ('Demo Pipeline', 'Demo Awaiting Funding', 'Demo Contracted', 'Demo Review')
+      and usps_vacancy_indicated = 'Yes'

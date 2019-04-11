@@ -1,0 +1,39 @@
+- to: Socrata
+  name: DFD Demolition Properties
+  id: b8vz-3cq4
+  table: dlba.cad_demos_socrata
+  method: replace
+  columns:
+    Current Status:
+      field: current_status
+      type: text
+    Street Direction:
+      field: street_direction
+      type: text
+    Street Number:
+      field: street_number
+      type: number
+    Street Name:
+      field: street_name
+      type: text
+    Street Type:
+      field: street_type
+      type: text
+    Block Range:
+      field: block_range
+      type: text
+    Parcel ID:
+      field: parcel_id
+      type: text
+    Latitude: 
+      field: latitude
+      type: number
+    Longitude:
+      field: longitude
+      type: number
+    NAD83 X:
+      field: nad83_x
+      type: number
+    NAD83 Y:
+      field: nad83_y
+      type: number
