@@ -4,8 +4,6 @@
         dba_com_property_name as address,
         dba_com_property_parcel_id as parcel_id,
         commercial_demo_status as status,
-        case when demo_cost_abatement = 'NaN' then 0 else demo_cost_abatement end as abatement_cost,
-        case when demo_cost_knock = 'NaN' then 0 else demo_cost_knock end as demo_cost,
         (select makeSocrataDate(demo_ntp_dt::timestamp)) as demo_proceed_date,
         (select makeSocrataDate(demo_proj_demo_dt::timestamp)) as projected_demo_date,
         env_group_number,
