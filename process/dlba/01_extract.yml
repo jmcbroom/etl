@@ -16,6 +16,14 @@
       - Parcel_ID__c
       - Inventory_Status_Socrata__c
       - Occupancy_Model_Probability_Pct__c
+      - Street_Directiion__c
+      - Street_Name__c
+      - Street_Number__c
+      - Street_Type__c
+      - Block_Range__c
+      - NAD83_X__c
+      - NAD83_Y__c
+      - USPS_Vacancy_Indicated__c
 - salesforce:
     object: Case
     destination: dlba.case

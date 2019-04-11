@@ -32,9 +32,8 @@
 
 - type: sql
   statements:
-    - drop table if exists dlba.pav_all cascade;
-    # first time only, then append new rows to this master table (like where parcel id doesn't already exist?)
-    - create table dlba.pav_all as 
+    - drop table if exists dlba.pav_update;
+    - create table dlba.pav_update as 
         select 
           type, 
           address, 
@@ -58,17 +57,19 @@
           public_access_url,
           posted_timestamp
         from dlba.pav_comm;
+    - drop table if exists dlba.pav_insert;
+    - create table dlba.pav_insert as select * from dlba.pav_update where parcel_id not in (select parcel_id from dlba.pav_all);
 
-- type: create_view
-  view_name: pav_socrata
-  as: select
-        type,
-        address,
-        parcel_id,
-        rfp_group,
-        contractor,
-        makeSocrataDate(asb_post_abatement_passed_date) as asb_post_abatement_passed_date,
-        asb_post_abatement_verification_status, 
-        public_access_url,
-        makeSocrataDate(posted_timestamp) as posted_timestamp
-      from dlba.pav_all
+# - type: create_view
+#   view_name: pav_socrata
+#   as: select
+#         type,
+#         address,
+#         parcel_id,
+#         rfp_group,
+#         contractor,
+#         makeSocrataDate(asb_post_abatement_passed_date) as asb_post_abatement_passed_date,
+#         asb_post_abatement_verification_status, 
+#         public_access_url,
+#         makeSocrataDate(posted_timestamp) as posted_timestamp
+#       from dlba.pav_all
