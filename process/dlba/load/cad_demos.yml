@@ -37,3 +37,6 @@
     NAD83 Y:
       field: nad83_y
       type: number
+    Account Name:
+      field: name
+      type: text

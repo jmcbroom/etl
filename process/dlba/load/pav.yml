@@ -1,6 +1,6 @@
 - to: Socrata
   name: Post Abatement Verification Reports
-  id: 
+  id: pqjp-zjh3
   table: dlba.pav_socrata
   method: replace
   columns:

@@ -132,6 +132,9 @@
       - Demo_RFP_Number__c
       - ASB_Verification_Contractor__c
       - ASB_Post_Abatement_Verification_Status__c
+      - Id
+      - RecordTypeId
+      - ASB_Post_Abatement_Document_URL__c
 - salesforce:
     object: TVA_CFB__Cloud_Files__c
     destination: dlba.tva_cfb__cloud_files
@@ -140,3 +143,4 @@
       - TVA_CFB__Case__c
       - TVA_CFB__Folder__c
       - TVA_CFB__Cloud_Public_Access_URL__c
+      - DBA_Commercial_Demo__c

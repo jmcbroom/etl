@@ -11,7 +11,8 @@
         latitude,
         longitude,
         "nad83_x",
-        "nad83_y"
+        "nad83_y",
+        name
       from dlba.account
       where current_status in ('Demo Pipeline', 'Demo Awaiting Funding', 'Demo Contracted', 'Demo Review')
       and usps_vacancy_indicated = 'Yes'

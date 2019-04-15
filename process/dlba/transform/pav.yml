@@ -2,14 +2,14 @@
   table_name: pav_res
   as: select
         'Residential'::text as type,
-        current_timestamp as posted_timestamp,
         c.address,
         c.parcel_id,
         c.demo_rfp_group as rfp_group,
         c.asb_abatement_verification_contractor_name as contractor,
         c.asb_post_abatement_passed_date,
         c.asb_post_abatement_verification_status,
-        f.tva_cfb__cloud_public_access_url as public_access_url
+        f.tva_cfb__cloud_public_access_url as public_access_url,
+        current_timestamp::timestamp as posted_datetime
       from dlba.case c
         left outer join dlba.tva_cfb__cloud_files f on c.id = f.tva_cfb__case
       where f.tva_cfb__folder like '%PAV%'
@@ -18,18 +18,48 @@
   table_name: pav_comm
   as: select
         'Commercial'::text as type,
-        current_timestamp as posted_timestamp,
         d.dba_com_property_name as address,
         d.dba_com_property_parcel_id as parcel_id,
         d.demo_rfp_number as rfp_group,
         d.asb_verification_contractor as contractor,
         d.asb_post_abatement_passed_date,
         d.asb_post_abatement_verification_status,
-        f.tva_cfb__cloud_public_access_url as public_access_url
+        f.tva_cfb__cloud_public_access_url as public_access_url,
+        current_timestamp::timestamp as posted_datetime
       from dlba.dba_commercial_demo d
-        left outer join dlba.tva_cfb__cloud_files f on d.related_case = f.tva_cfb__case
+        left outer join dlba.tva_cfb__cloud_files f on d.id = f.dba_commercial_demo
       where f.tva_cfb__folder like '%PAV%'
 
+# first time only
+# - type: sql
+#   statements: 
+#     - drop table if exists dlba.pav_all cascade
+#     - create table dlba.pav_all as
+#         select 
+#           type, 
+#           address, 
+#           parcel_id, 
+#           rfp_group, 
+#           contractor, 
+#           asb_post_abatement_passed_date, 
+#           asb_post_abatement_verification_status, 
+#           public_access_url,
+#           posted_datetime
+#         from dlba.pav_res 
+#       union 
+#         select 
+#           type, 
+#           address, 
+#           parcel_id, 
+#           rfp_group, 
+#           contractor, 
+#           asb_post_abatement_passed_date, 
+#           asb_post_abatement_verification_status, 
+#           public_access_url,
+#           posted_datetime
+#         from dlba.pav_comm;
+
+# daily updates
 - type: sql
   statements:
     - drop table if exists dlba.pav_update;
@@ -43,7 +73,7 @@
           asb_post_abatement_passed_date, 
           asb_post_abatement_verification_status, 
           public_access_url,
-          posted_timestamp
+          posted_datetime
         from dlba.pav_res 
       union 
         select 
@@ -55,21 +85,27 @@
           asb_post_abatement_passed_date, 
           asb_post_abatement_verification_status, 
           public_access_url,
-          posted_timestamp
+          posted_datetime
         from dlba.pav_comm;
     - drop table if exists dlba.pav_insert;
-    - create table dlba.pav_insert as select * from dlba.pav_update where parcel_id not in (select parcel_id from dlba.pav_all);
+    - create table dlba.pav_insert as 
+        select 
+          * 
+        from dlba.pav_update 
+        where public_access_url is not null and public_access_url not in (select public_access_url from dlba.pav_all);
+    # - TODO append pav_insert to pav_all
 
-# - type: create_view
-#   view_name: pav_socrata
-#   as: select
-#         type,
-#         address,
-#         parcel_id,
-#         rfp_group,
-#         contractor,
-#         makeSocrataDate(asb_post_abatement_passed_date) as asb_post_abatement_passed_date,
-#         asb_post_abatement_verification_status, 
-#         public_access_url,
-#         makeSocrataDate(posted_timestamp) as posted_timestamp
-#       from dlba.pav_all
+- type: create_view
+  view_name: pav_socrata
+  as: select
+        type,
+        address,
+        parcel_id,
+        rfp_group,
+        contractor,
+        makeSocrataDate(asb_post_abatement_passed_date::timestamp) as asb_post_abatement_passed_date,
+        asb_post_abatement_verification_status, 
+        public_access_url,
+        makeSocrataDate(posted_datetime) as posted_timestamp
+      from dlba.pav_all
+      
