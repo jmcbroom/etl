@@ -30,7 +30,7 @@
         left outer join dlba.tva_cfb__cloud_files f on d.id = f.dba_commercial_demo
       where f.tva_cfb__folder like '%PAV%'
 
-# first time only
+# first time only, create a master list of pavs
 # - type: sql
 #   statements: 
 #     - drop table if exists dlba.pav_all cascade
@@ -59,7 +59,7 @@
 #           posted_datetime
 #         from dlba.pav_comm;
 
-# daily updates
+# daily updates: union res + comm, insert into pav_all just the new rows
 - type: sql
   statements:
     - drop table if exists dlba.pav_update;
@@ -87,13 +87,9 @@
           public_access_url,
           posted_datetime
         from dlba.pav_comm;
-    - drop table if exists dlba.pav_insert;
-    - create table dlba.pav_insert as 
-        select 
-          * 
-        from dlba.pav_update 
-        where public_access_url is not null and public_access_url not in (select public_access_url from dlba.pav_all);
-    # - TODO append pav_insert to pav_all
+    - insert into dlba.pav_all
+      select * from dlba.pav_update
+        where parcel_id not in (select parcel_id from dlba.pav_all);
 
 - type: create_view
   view_name: pav_socrata
