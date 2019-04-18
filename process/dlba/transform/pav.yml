@@ -89,7 +89,7 @@
         from dlba.pav_comm;
     - insert into dlba.pav_all
       select * from dlba.pav_update
-        where parcel_id not in (select parcel_id from dlba.pav_all);
+        where public_access_url not in (select public_access_url from dlba.pav_all);
 
 - type: create_view
   view_name: pav_socrata
@@ -104,4 +104,4 @@
         public_access_url,
         makeSocrataDate(posted_datetime) as posted_timestamp
       from dlba.pav_all
-      
+      order by asb_post_abatement_passed_date desc nulls last, posted_datetime desc
