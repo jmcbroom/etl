@@ -13,6 +13,7 @@
       from dlba.case c
         left outer join dlba.tva_cfb__cloud_files f on c.id = f.tva_cfb__case
       where f.tva_cfb__folder like '%PAV%'
+        and f.tva_cfb__cloud_public_access_url is not null
 
 - type: create_table
   table_name: pav_comm
@@ -29,6 +30,7 @@
       from dlba.dba_commercial_demo d
         left outer join dlba.tva_cfb__cloud_files f on d.id = f.dba_commercial_demo
       where f.tva_cfb__folder like '%PAV%'
+         and f.tva_cfb__cloud_public_access_url is not null
 
 # first time only, create a master list of pavs
 # - type: sql
