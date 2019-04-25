@@ -1,3 +1,5 @@
+# **Note: This repository is being archived, as we've moved to Airflow: [CityOfDetroit/etl-airflow](https://github.com/CityOfDetroit/etl-airflow) is the new repo.**
+
 # etl
 
 ETL repository for DoIT work. 
